@@ -1,0 +1,114 @@
+#!/bin/bash                                                                                 
+
+START_DIR=`pwd`
+
+function init() {
+
+    if [ ! -e "$HOME/.jlrmrc" ]; then
+	echo 'Unable to find ~/.jlrmrc - Exiting...'
+	exit 1                                                 
+    fi                                                         
+    . $HOME/.jlrmrc                                 
+    
+}
+
+function create_work_dir() {
+    unset TMPDIR
+    TARGETS="$GLIDEINS_WORK_DIR "
+    for DER in $TARGETS; do
+        WORK_DIR=`/bin/mktemp -d -p $DER glidein.XXXXXXXXXX`
+        if [ $? = 0 ]; then
+            echo "Created workdir in $DER"
+            export WORK_DIR
+            return 0
+        fi
+        echo "Failed to create workdir in $DER"
+    done
+    return 1
+}
+
+
+function download_glidein_data()  {
+    if [ -e /usr/bin/uuidgen ]; then
+	export GLIDEIN_CHILD_ID=`/usr/bin/uuidgen`
+    else                                   
+	echo 'uuidgen does not exist. Exiting...'
+	exit 1                                
+    fi                                           
+    
+    echo
+    echo "Running on:" `hostname -f`
+    
+    echo
+    echo "Started in $START_DIR"
+    echo "Glidein child id is $GLIDEIN_CHILD_ID"
+    echo "WORK_DIR is $WORK_DIR"
+    
+    rm -rf $WORK_DIR
+    mkdir -p $WORK_DIR
+
+    cat condor_config | sed 's:@GLIDEIN_CHILD_ID@:'$GLIDEIN_CHILD_ID':g' > condor_config.new
+    rm condor_config; mv condor_config.new condor_config
+    cp condor_config $WORK_DIR
+    
+    cd $WORK_DIR || {
+	echo "Unable to cd to $WORK_DIR. Exiting..."
+	exit 1                                      
+    }                                               
+    
+}
+
+function start_condor() {
+
+    echo
+    echo "Contents of " `pwd` " is:"
+    echo
+    ls -la
+    
+    echo
+    echo "Condor config file:"
+    echo
+    cat $WORK_DIR/condor_config
+    
+    echo
+    echo "Starting Condor..."
+    
+    export CONDOR_CONFIG=$WORK_DIR/condor_config
+    export _condor_CONODR_CONFIG=$CONDOR_CONFIG 
+    
+    export _condor_GLIDEIN_HOST=`/bin/hostname -f`
+    export _condor_UID_DOMAIN="$_condor_GLIDEIN_HOST"
+    export _condor_FILESYSTEM_DOMAIN="$_condor_GLIDEIN_HOST"
+    
+    export _condor_LOCAL_DIR="$WORK_DIR"
+    export _condor_SBIN="$CONDOR_HOME/sbin"  
+    
+    export _condor_STARTD_NOCLAIM_SHUTDOWN="${siteMaxNoClaimTimeSecs}"
+    export _condor_DaemonStopTime="DaemonStartTime+${siteMaxRunTimeSecs}"
+    
+    ${_condor_SBIN}/condor_master -dyn -f -r ${siteMaxRunTimeMins}
+    EXIT_CODE=$?                                 
+    
+    cd $WORK_DIR/log.*
+    for LOG in `ls *Log`; do
+	echo
+	echo "Tail of $LOG:"
+	echo
+	tail -n 100 $LOG
+	echo
+    done
+
+    echo
+    echo "Running cleanup (this is part of every run)"
+    
+    cd $HOME
+    rm -rf $WORK_DIR
+    
+    exit $EXIT_CODE
+    
+}
+
+init
+create_work_dir
+download_glidein_data
+start_condor

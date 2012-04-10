@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="CONDOR-API">
+  <bannerLeft>
+    <name>CONDOR-API</name>
+  </bannerLeft>
+  <bannerRight>
+    <src></src>
+  </bannerRight>
+  <body>
+    <links>
+      <item name="gForge" href="https://code.renci.org/gf/project/launchers"/>
+      <item name="Hudson" href="https://ci-dev.renci.org/hudson"/>
+    </links>
+    <menu ref="parent"/>
+    <menu name="CONDOR-API" inherit="top">
+      <item name="Introduction" href="index.html"/>
+    </menu>
+    <menu ref="reports"/>
+  </body>
+</project>
