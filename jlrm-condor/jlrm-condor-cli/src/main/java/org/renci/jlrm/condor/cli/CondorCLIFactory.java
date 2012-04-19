@@ -2,6 +2,7 @@ package org.renci.jlrm.condor.cli;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import org.jgrapht.Graph;
 import org.renci.jlrm.LRMException;
@@ -36,6 +37,12 @@ public class CondorCLIFactory {
         this.condorHome = condorHome;
     }
 
+    public Map<String, List<ClassAdvertisement>> lookupJobsByOwner(String owner) throws LRMException {
+        logger.debug("ENTERING lookupJobsByUsername(String username)");
+        CondorLookupJobsByOwnerCallable runnable = new CondorLookupJobsByOwnerCallable(this.condorHome, owner);
+        return runnable.call();
+    }
+    
     public CondorJob submit(File submitDir, CondorJob job) throws LRMException {
         logger.debug("ENTERING submit(File, CondorJob)");
         CondorSubmitCallable runnable = new CondorSubmitCallable(this.condorHome, submitDir, job);
