@@ -1,6 +1,5 @@
 package org.renci.jlrm.lsf.ssh;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +19,7 @@ public class LSFSSHLookupStatusCallable implements Callable<LSFJobStatusType> {
 
     private final Logger logger = LoggerFactory.getLogger(LSFSSHLookupStatusCallable.class);
 
-    private File lsfHome;
+    private String LSFHome;
 
     private LSFSSHJob job;
 
@@ -32,9 +31,9 @@ public class LSFSSHLookupStatusCallable implements Callable<LSFJobStatusType> {
         super();
     }
 
-    public LSFSSHLookupStatusCallable(File lsfHome, String username, String host, LSFSSHJob job) {
+    public LSFSSHLookupStatusCallable(String LSFHome, String username, String host, LSFSSHJob job) {
         super();
-        this.lsfHome = lsfHome;
+        this.LSFHome = LSFHome;
         this.job = job;
         this.host = host;
         this.username = username;
@@ -42,9 +41,9 @@ public class LSFSSHLookupStatusCallable implements Callable<LSFJobStatusType> {
 
     @Override
     public LSFJobStatusType call() throws LRMException {
+        logger.debug("ENTERING call()");
         LSFJobStatusType ret = LSFJobStatusType.UNKNOWN;
-        String command = String.format("%s/bin/bjobs %s | tail -n+2 | awk '{print $3}'",
-                this.lsfHome.getAbsolutePath(), job.getId());
+        String command = String.format("%s/bin/bjobs %s | tail -n+2 | awk '{print $3}'", this.LSFHome, job.getId());
 
         final SSHClient ssh = new SSHClient();
         try {
@@ -92,12 +91,12 @@ public class LSFSSHLookupStatusCallable implements Callable<LSFJobStatusType> {
         return ret;
     }
 
-    public File getLsfHome() {
-        return lsfHome;
+    public String getLSFHome() {
+        return LSFHome;
     }
 
-    public void setLsfHome(File lsfHome) {
-        this.lsfHome = lsfHome;
+    public void setLSFHome(String lSFHome) {
+        LSFHome = lSFHome;
     }
 
     public LSFSSHJob getJob() {
