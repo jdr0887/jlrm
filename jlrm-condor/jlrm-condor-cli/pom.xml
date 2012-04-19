@@ -1,11 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.renci.jlrm</groupId>
     <artifactId>jlrm-condor</artifactId>
     <version>0.0.2-SNAPSHOT</version>
   </parent>
-  <name>jLRM :: CONDOR :: CLI</name>
+  <name>jLRM :: Condor :: CLI</name>
   <groupId>org.renci.jlrm.jlrm-condor</groupId>
   <artifactId>jlrm-condor-cli</artifactId>
   <version>0.0.2-SNAPSHOT</version>
