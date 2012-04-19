@@ -38,7 +38,7 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
 
     private final Logger logger = LoggerFactory.getLogger(LSFSSHSubmitCondorGlideinCallable.class);
 
-    private File lsfHome;
+    private String LSFHome;
 
     private LSFSSHJob job;
 
@@ -86,6 +86,7 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
         job.setNumberOfProcessors(8);
         job.setOutput(new File("glidein.out"));
         job.setError(new File("glidein.err"));
+        job.setWallTime(maxRunTime);
 
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("siteName", this.submitHost);
@@ -94,7 +95,7 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
 
         // note that we want a lower max run time here, so that the glidein can shut down
         // gracefully before getting kicked off by the batch scheduler
-        int maxRunTimeAdjusted = this.maxRunTime - 180;
+        int maxRunTimeAdjusted = this.maxRunTime - 20;
         if (maxRunTimeAdjusted < 0) {
             maxRunTimeAdjusted = this.maxRunTime / 2;
         }
@@ -103,6 +104,7 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
         velocityContext.put("siteMaxNoClaimTimeSecs", this.maxNoClaimTime * 60);
         velocityContext.put("requiredMemory", this.requiredMemory * 1024);
         velocityContext.put("glideinStartTime", new Date().getTime());
+        velocityContext.put("maxRunTime", maxRunTimeAdjusted);
 
         final SSHClient ssh = new SSHClient();
         try {
@@ -191,7 +193,7 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
 
                 // submit
                 session = ssh.startSession();
-                command = String.format("%s/bin/bsub < %s", this.lsfHome.getAbsolutePath(), targetFile);
+                command = String.format("%s/bin/bsub < %s", this.LSFHome, targetFile);
                 final Command submitCommand = session.exec(command);
                 submitCommand.join(5, TimeUnit.SECONDS);
                 int exitCode = submitCommand.getExitStatus();
@@ -253,12 +255,12 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
         FileUtils.writeStringToFile(file, sw.toString());
     }
 
-    public File getLsfHome() {
-        return lsfHome;
+    public String getLSFHome() {
+        return LSFHome;
     }
 
-    public void setLsfHome(File lsfHome) {
-        this.lsfHome = lsfHome;
+    public void setLSFHome(String lSFHome) {
+        LSFHome = lSFHome;
     }
 
     public LSFSSHJob getJob() {
