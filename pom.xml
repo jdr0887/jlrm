@@ -142,7 +142,7 @@
       <dependency>
 	<groupId>org.renci.commons</groupId>
 	<artifactId>commons-exec</artifactId>
-	<version>0.1.11</version>
+	<version>0.1.12</version>
       </dependency>
       <dependency>
 	<groupId>org.renci.jlrm</groupId>
