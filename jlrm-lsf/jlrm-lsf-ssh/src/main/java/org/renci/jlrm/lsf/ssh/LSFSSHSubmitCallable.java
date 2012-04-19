@@ -30,7 +30,7 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFJob> {
 
     private final Logger logger = LoggerFactory.getLogger(LSFSSHSubmitCallable.class);
 
-    private File lsfHome;
+    private String LSFHome;
 
     private LSFSSHJob job;
 
@@ -44,13 +44,13 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFJob> {
         super();
     }
 
-    public LSFSSHSubmitCallable(File lsfHome, String host, LSFSSHJob job, File submitDir) {
-        this(lsfHome, System.getProperty("user.name"), host, job, submitDir);
+    public LSFSSHSubmitCallable(String LSFHome, String host, LSFSSHJob job, File submitDir) {
+        this(LSFHome, System.getProperty("user.name"), host, job, submitDir);
     }
 
-    public LSFSSHSubmitCallable(File lsfHome, String username, String host, LSFSSHJob job, File submitDir) {
+    public LSFSSHSubmitCallable(String LSFHome, String username, String host, LSFSSHJob job, File submitDir) {
         super();
-        this.lsfHome = lsfHome;
+        this.LSFHome = LSFHome;
         this.host = host;
         this.job = job;
         this.username = username;
@@ -71,8 +71,8 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFJob> {
                 Date date = new Date();
                 Format formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-                String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s", formatter.format(date),
-                        UUID.randomUUID().toString());
+                String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s", formatter.format(date), UUID
+                        .randomUUID().toString());
                 String command = String.format("mkdir -p $HOME/%s && echo $HOME", remoteWorkDirSuffix);
                 final Command mkdirCommand = session.exec(command);
                 String remoteHome = IOUtils.readFully(mkdirCommand.getInputStream()).toString().trim();
@@ -88,20 +88,20 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFJob> {
                 // transfer submit script
                 ssh.useCompression();
                 SCPFileTransfer transfer = ssh.newSCPFileTransfer();
-                
+
                 if (job.getTransferExecutable()) {
-                    
+
                     SCPUploadClient client = transfer.newSCPUploadClient();
                     String targetFile = String.format("%s/%s", remoteWorkDir, job.getExecutable().getName());
                     logger.info(targetFile);
                     client.copy(new FileSystemFile(job.getExecutable()), targetFile);
-                    
+
                     session = ssh.startSession();
                     command = String.format("chmod 755 %s", targetFile);
                     final Command chmodCommand = session.exec(command);
                     chmodCommand.join(5, TimeUnit.SECONDS);
                     session.close();
-                    
+
                 }
 
                 if (job.getTransferInputs() && job.getInputFiles() != null && job.getInputFiles().size() > 0) {
@@ -120,7 +120,7 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFJob> {
 
                 // submit
                 session = ssh.startSession();
-                command = String.format("%s/bin/bsub < %s", this.lsfHome.getAbsolutePath(), targetFile);
+                command = String.format("%s/bin/bsub < %s", this.LSFHome, targetFile);
                 final Command submitCommand = session.exec(command);
                 submitCommand.join(5, TimeUnit.SECONDS);
                 session.close();
@@ -141,12 +141,12 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFJob> {
         return job;
     }
 
-    public File getLsfHome() {
-        return lsfHome;
+    public String getLSFHome() {
+        return LSFHome;
     }
 
-    public void setLsfHome(File lsfHome) {
-        this.lsfHome = lsfHome;
+    public void setLSFHome(String lSFHome) {
+        LSFHome = lSFHome;
     }
 
     public LSFSSHJob getJob() {
