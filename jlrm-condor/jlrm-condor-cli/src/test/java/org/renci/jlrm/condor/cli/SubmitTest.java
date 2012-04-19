@@ -10,7 +10,6 @@ import org.renci.jlrm.condor.ClassAdvertisement;
 import org.renci.jlrm.condor.ClassAdvertisementFactory;
 import org.renci.jlrm.condor.CondorJob;
 import org.renci.jlrm.condor.CondorJobEdge;
-import org.renci.jlrm.condor.CondorSubmitScriptExporter;
 import org.renci.jlrm.condor.UniverseType;
 
 public class SubmitTest {
