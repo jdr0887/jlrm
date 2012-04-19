@@ -7,7 +7,6 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.renci.common.exec.BashExecutor;
 import org.renci.common.exec.CommandInput;
@@ -50,7 +49,7 @@ public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<
             sb.append(" -format ',JLRM_USER=%s' JLRMUser");
             sb.append(" -format ',JobStatus=%s' JobStatus");
             sb.append(" -format ',Requirements=%s' Requirements");
-            sb.append(" -submitter 'Owner == \"").append(this.username).append("\"';");
+            sb.append(" -submitter 'Owner == \"").append(this.username).append("\"'");
 
             String command = String.format("(%s/bin/condor_q -global %s; echo)", this.condorHome.getAbsolutePath(),
                     sb.toString());
@@ -62,7 +61,7 @@ public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<
             int exitCode = output.getExitCode();
             LineNumberReader lnr = new LineNumberReader(new StringReader(output.getStdout().toString()));
             String line;
-            if (exitCode != 0) { // failed
+            if (exitCode != 0 && !output.getStdout().toString().contains("All queues are empty")) { 
                 logger.debug("executor.getStderr() = {}", output.getStderr().toString());
                 StringBuilder errorMessageSB = new StringBuilder();
                 while ((line = lnr.readLine()) != null) {
@@ -73,6 +72,9 @@ public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<
             }
 
             while ((line = lnr.readLine()) != null) {
+                if (line.trim().equals("All queues are empty")) {
+                    break;
+                }
                 List<ClassAdvertisement> classAdList = ClassAdvertisementFactory.parse(line);
                 classAdMap.put(classAdList.get(0).getKey(), classAdList);
             }
