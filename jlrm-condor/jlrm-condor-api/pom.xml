@@ -5,7 +5,7 @@
     <version>0.0.2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <name>jLRM :: CONDOR :: API</name>
+  <name>jLRM :: Condor :: API</name>
   <groupId>org.renci.jlrm.jlrm-condor</groupId>
   <artifactId>jlrm-condor-api</artifactId>
   <version>0.0.2-SNAPSHOT</version>
