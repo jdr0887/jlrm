@@ -17,45 +17,45 @@ public class LSFSSHFactory {
 
     private static LSFSSHFactory instance = null;
 
-    private File lsfHome;
+    private String LSFHome;
 
     private String username;
 
     private String submitHost;
 
-    public static LSFSSHFactory getInstance(File lsfHome, String submitHost) {
+    public static LSFSSHFactory getInstance(String LSFHome, String submitHost) {
         if (instance == null) {
-            instance = new LSFSSHFactory(lsfHome, System.getProperty("user.name"), submitHost);
+            instance = new LSFSSHFactory(LSFHome, System.getProperty("user.name"), submitHost);
         }
         return instance;
     }
 
-    public static LSFSSHFactory getInstance(File lsfHome, String username, String submitHost) {
+    public static LSFSSHFactory getInstance(String LSFHome, String username, String submitHost) {
         if (instance == null) {
-            instance = new LSFSSHFactory(lsfHome, username, submitHost);
+            instance = new LSFSSHFactory(LSFHome, username, submitHost);
         }
         return instance;
     }
 
-    private LSFSSHFactory(File lsfHome, String username, String submitHost) {
+    private LSFSSHFactory(String LSFHome, String username, String submitHost) {
         super();
-        this.lsfHome = lsfHome;
+        this.LSFHome = LSFHome;
         this.submitHost = submitHost;
         this.username = username;
     }
 
     public LSFSSHJob submit(File submitDir, LSFSSHJob job) throws LRMException {
         logger.debug("ENTERING submit(File)");
-        LSFSSHSubmitCallable runnable = new LSFSSHSubmitCallable(this.lsfHome, this.username, this.submitHost, job,
+        LSFSSHSubmitCallable runnable = new LSFSSHSubmitCallable(this.LSFHome, this.username, this.submitHost, job,
                 submitDir);
         return runnable.call();
     }
 
-    public LSFSSHJob submitGlidein(File submitDir, Integer maxNoClaimTime, Integer maxRunTime, Integer requireMemory, String collectorHost, String queue)
-            throws LRMException {
+    public LSFSSHJob submitGlidein(File submitDir, Integer maxNoClaimTime, Integer maxRunTime, Integer requireMemory,
+            String collectorHost, String queue) throws LRMException {
         logger.debug("ENTERING submit(File)");
         LSFSSHSubmitCondorGlideinCallable runnable = new LSFSSHSubmitCondorGlideinCallable();
-        runnable.setLsfHome(this.lsfHome);
+        runnable.setLSFHome(this.LSFHome);
         runnable.setMaxNoClaimTime(maxNoClaimTime);
         runnable.setMaxRunTime(maxRunTime);
         runnable.setRequiredMemory(requireMemory);
@@ -67,9 +67,15 @@ public class LSFSSHFactory {
         return runnable.call();
     }
 
+    public LSFSSHJob killGlidein(LSFSSHJob job) throws LRMException {
+        logger.debug("ENTERING submit(File)");
+        LSFSSHKillCallable runnable = new LSFSSHKillCallable(this.LSFHome, this.username, this.submitHost, job);
+        return runnable.call();
+    }
+
     public LSFJobStatusType lookupStatus(LSFSSHJob job) throws LRMException {
         logger.debug("ENTERING lookupStatus(job)");
-        LSFSSHLookupStatusCallable runnable = new LSFSSHLookupStatusCallable(this.lsfHome, this.username,
+        LSFSSHLookupStatusCallable runnable = new LSFSSHLookupStatusCallable(this.LSFHome, this.username,
                 this.submitHost, job);
         return runnable.call();
     }
