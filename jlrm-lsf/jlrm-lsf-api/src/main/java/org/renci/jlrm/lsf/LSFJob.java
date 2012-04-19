@@ -10,7 +10,7 @@ public class LSFJob extends Job {
 
     protected String project;
 
-    protected Long wallTime;
+    protected Integer wallTime;
 
     protected Integer hostCount;
 
@@ -40,11 +40,11 @@ public class LSFJob extends Job {
         this.project = project;
     }
 
-    public Long getWallTime() {
+    public Integer getWallTime() {
         return wallTime;
     }
 
-    public void setWallTime(Long wallTime) {
+    public void setWallTime(Integer wallTime) {
         this.wallTime = wallTime;
     }
 
