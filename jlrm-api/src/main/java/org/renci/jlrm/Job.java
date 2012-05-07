@@ -18,7 +18,7 @@ public class Job {
 
     protected Integer numberOfProcessors = 1;
 
-    protected Integer memory = 2000 * 1000 * 1024; // 2 gigs
+    protected Integer memory = 4 * 1024;
 
     public Job() {
         super();
