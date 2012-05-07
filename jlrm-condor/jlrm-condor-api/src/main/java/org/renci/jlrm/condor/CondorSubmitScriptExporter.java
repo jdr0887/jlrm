@@ -6,6 +6,7 @@ import static org.renci.jlrm.condor.ClassAdvertisementFactory.CLASS_AD_KEY_LOG;
 import static org.renci.jlrm.condor.ClassAdvertisementFactory.CLASS_AD_KEY_OUTPUT;
 import static org.renci.jlrm.condor.ClassAdvertisementFactory.CLASS_AD_KEY_REQUEST_CPUS;
 import static org.renci.jlrm.condor.ClassAdvertisementFactory.CLASS_AD_KEY_REQUEST_MEMORY;
+import static org.renci.jlrm.condor.ClassAdvertisementFactory.CLASS_AD_KEY_REQUIREMENTS;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -68,9 +69,6 @@ public class CondorSubmitScriptExporter {
 
         try {
 
-            File dagFile = new File(workDir, dagName + ".dag");
-            dagSubmitJob.setSubmitFile(dagFile);
-
             if (graph != null && graph.vertexSet().size() > 0) {
 
                 ClassAdvertisement classAd = null;
@@ -100,8 +98,19 @@ public class CondorSubmitScriptExporter {
                     classAd.setValue(String.format("%d", job.getMemory()));
                     job.getClassAdvertismentMap().put(CLASS_AD_KEY_REQUEST_MEMORY, classAd);
 
+                    classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_REQUIREMENTS).clone();
+                    // String.format("(Arch == \"X86_64\") && (OpSys == \"LINUX\") && (Memory >= 500) && (Disk >= 0) && (TARGET.FileSystemDomain != MY.FileSystemDomain) && (TARGET.JLRM_USER == \"%s\")",
+                    // System.getProperty("user.name")));
+                    String requirements = String
+                            .format("(Arch == \"X86_64\") && (OpSys == \"LINUX\") && (Memory >= 500) && (Disk >= 0) && (TARGET.JLRM_USER == \"%s\") && (TARGET.IS_GLIDEIN == True)",
+                                    System.getProperty("user.name"));
+                    classAd.setValue(requirements);
+                    job.getClassAdvertismentMap().put(CLASS_AD_KEY_REQUIREMENTS, classAd);
+
                 }
 
+                File dagFile = new File(workDir, dagName + ".dag");
+                dagSubmitJob.setSubmitFile(dagFile);
                 FileWriter dagFileWriter = new FileWriter(dagFile);
 
                 for (CondorJob job : graph.vertexSet()) {
