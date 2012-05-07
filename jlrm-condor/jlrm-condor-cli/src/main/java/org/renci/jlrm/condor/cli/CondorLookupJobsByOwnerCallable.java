@@ -46,10 +46,10 @@ public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<
 
             StringBuilder sb = new StringBuilder();
             sb.append(" -format '\\nGlobalJobId=%s' GlobalJobId");
-            sb.append(" -format ',JLRM_USER=%s' JLRMUser");
+            sb.append(" -format ',JLRM_USER=%s' JLRM_USER");
             sb.append(" -format ',JobStatus=%s' JobStatus");
             sb.append(" -format ',Requirements=%s' Requirements");
-            sb.append(" -submitter 'Owner == \"").append(this.username).append("\"'");
+            sb.append(" -submitter \"").append(this.username).append("\"");
 
             String command = String.format("(%s/bin/condor_q -global %s; echo)", this.condorHome.getAbsolutePath(),
                     sb.toString());
@@ -76,7 +76,9 @@ public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<
                     break;
                 }
                 List<ClassAdvertisement> classAdList = ClassAdvertisementFactory.parse(line);
-                classAdMap.put(classAdList.get(0).getKey(), classAdList);
+                if (classAdList.size() > 0) {
+                    classAdMap.put(classAdList.get(0).getKey(), classAdList);
+                }
             }
         } catch (NumberFormatException e) {
             e.printStackTrace();
