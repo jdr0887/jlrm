@@ -1,7 +1,11 @@
 package org.renci.jlrm.lsf.ssh;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -10,19 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import net.schmizz.sshj.SSHClient;
-import net.schmizz.sshj.connection.ConnectionException;
-import net.schmizz.sshj.connection.channel.direct.Session;
-import net.schmizz.sshj.connection.channel.direct.Session.Command;
-import net.schmizz.sshj.transport.TransportException;
-import net.schmizz.sshj.userauth.UserAuthException;
-import net.schmizz.sshj.xfer.FileSystemFile;
-import net.schmizz.sshj.xfer.scp.SCPFileTransfer;
-import net.schmizz.sshj.xfer.scp.SCPUploadClient;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -33,6 +26,13 @@ import org.renci.jlrm.LRMException;
 import org.renci.jlrm.lsf.LSFSubmitScriptExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
+import com.jcraft.jsch.SftpException;
 
 public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LSFSSHJob> {
 
@@ -106,140 +106,147 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
         velocityContext.put("glideinStartTime", new Date().getTime());
         velocityContext.put("maxRunTime", maxRunTimeAdjusted);
 
-        final SSHClient ssh = new SSHClient();
+        String home = System.getProperty("user.home");
+        String knownHostsFilename = home + "/.ssh/known_hosts";
         try {
-            ssh.loadKnownHosts();
-            ssh.connect(this.submitHost);
-            ssh.authPublickey(this.username, System.getProperty("user.home") + "/.ssh/id_rsa");
+            JSch sch = new JSch();
+            sch.addIdentity(home + "/.ssh/id_rsa");
+            sch.setKnownHosts(knownHostsFilename);
+            Session session = sch.getSession(this.username, this.submitHost, 22);
+            Properties config = new Properties();
+            config.setProperty("compression.s2c", "zlib,none");
+            config.setProperty("compression.c2s", "zlib,none");
+            config.setProperty("compression_level", "9");
+            config.setProperty("StrictHostKeyChecking", "no");
+            session.setConfig(config);
+            session.connect(30000);
+
+            Date date = new Date();
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+            String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s", formatter.format(date), UUID.randomUUID()
+                    .toString());
+            String command = String.format("(mkdir -p $HOME/%s && echo $HOME)", remoteWorkDirSuffix);
+
+            ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
+            execChannel.setInputStream(null);
+            ByteArrayOutputStream err = new ByteArrayOutputStream();
+            execChannel.setErrStream(err);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            execChannel.setOutputStream(out);
+            execChannel.setCommand(command);
+            InputStream in = execChannel.getInputStream();
+            execChannel.connect();
+            // String remoteHome = new String(out.toByteArray());
+            String remoteHome = IOUtils.toString(in).trim();
+            execChannel.disconnect();
+            logger.info("remoteHome: {}", remoteHome);
+            String remoteWorkDir = String.format("%s/%s", remoteHome, remoteWorkDirSuffix);
+            logger.info("remoteWorkDir: {}", remoteWorkDir);
+            velocityContext.put("remoteWorkDir", remoteWorkDir);
+            File localWorkDir = createWorkDirectory(submitDir, remoteWorkDir, job.getName());
+
             try {
+                String glideinScriptMacro = IOUtils.toString(this.getClass().getClassLoader()
+                        .getResourceAsStream("org/renci/jlrm/lsf/ssh/glidein.sh.vm"));
+                File glideinScript = new File(localWorkDir.getAbsolutePath(), "glidein.sh");
+                writeTemplate(velocityContext, glideinScript, glideinScriptMacro);
+                job.setExecutable(glideinScript);
 
-                // create remote job submit directory
-                Session session = ssh.startSession();
-                Date date = new Date();
-                Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+                String condorConfigLocalScriptMacro = IOUtils.toString(this.getClass().getClassLoader()
+                        .getResourceAsStream("org/renci/jlrm/lsf/ssh/condor_config.local.vm"));
+                File condorConfigLocal = new File(localWorkDir.getAbsolutePath(), "condor_config.local");
+                writeTemplate(velocityContext, condorConfigLocal, condorConfigLocalScriptMacro);
+                job.getInputFiles().add(condorConfigLocal);
 
-                String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s", formatter.format(date), UUID
-                        .randomUUID().toString());
-                String command = String.format("mkdir -p $HOME/%s && echo $HOME", remoteWorkDirSuffix);
-                final Command mkdirCommand = session.exec(command);
-                String remoteHome = net.schmizz.sshj.common.IOUtils.readFully(mkdirCommand.getInputStream()).toString()
-                        .trim();
-                mkdirCommand.join(5, TimeUnit.SECONDS);
-                session.close();
+                String condorConfigScriptMacro = IOUtils.toString(this.getClass().getClassLoader()
+                        .getResourceAsStream("org/renci/jlrm/lsf/ssh/condor_config"));
+                File condorConfig = new File(localWorkDir.getAbsolutePath(), "condor_config");
+                FileUtils.writeStringToFile(condorConfig, condorConfigScriptMacro);
+                job.getInputFiles().add(condorConfig);
 
-                // create submit script locally
-                String remoteWorkDir = String.format("%s/%s", remoteHome, remoteWorkDirSuffix);
-                velocityContext.put("remoteWorkDir", remoteWorkDir);
-                File localWorkDir = createWorkDirectory(submitDir, remoteWorkDir, job.getName());
-
-                try {
-                    String glideinScriptMacro = IOUtils.toString(this.getClass().getClassLoader()
-                            .getResourceAsStream("org/renci/jlrm/lsf/ssh/glidein.sh.vm"));
-                    File glideinScript = new File(localWorkDir.getAbsolutePath(), "glidein.sh");
-                    writeTemplate(velocityContext, glideinScript, glideinScriptMacro);
-                    job.setExecutable(glideinScript);
-
-                    String condorConfigLocalScriptMacro = IOUtils.toString(this.getClass().getClassLoader()
-                            .getResourceAsStream("org/renci/jlrm/lsf/ssh/condor_config.local.vm"));
-                    File condorConfigLocal = new File(localWorkDir.getAbsolutePath(), "condor_config.local");
-                    writeTemplate(velocityContext, condorConfigLocal, condorConfigLocalScriptMacro);
-                    job.getInputFiles().add(condorConfigLocal);
-
-                    String condorConfigScriptMacro = IOUtils.toString(this.getClass().getClassLoader()
-                            .getResourceAsStream("org/renci/jlrm/lsf/ssh/condor_config"));
-                    File condorConfig = new File(localWorkDir.getAbsolutePath(), "condor_config");
-                    FileUtils.writeStringToFile(condorConfig, condorConfigScriptMacro);
-                    job.getInputFiles().add(condorConfig);
-
-                } catch (IOException e) {
-                    logger.warn("Problem writing scripts", e);
-                    throw new LRMException(e.getMessage());
-                }
-
-                LSFSubmitScriptExporter<LSFSSHJob> exporter = new LSFSubmitScriptExporter<LSFSSHJob>();
-                this.job = exporter.export(localWorkDir, remoteWorkDir, job);
-
-                // transfer submit script
-                ssh.useCompression();
-                SCPFileTransfer transfer = ssh.newSCPFileTransfer();
-                if (job.getTransferExecutable()) {
-
-                    SCPUploadClient client = transfer.newSCPUploadClient();
-                    String targetFile = String.format("%s/%s", remoteWorkDir, job.getExecutable().getName());
-                    logger.info(targetFile);
-                    client.copy(new FileSystemFile(job.getExecutable()), targetFile);
-
-                    session = ssh.startSession();
-                    command = String.format("chmod 755 %s", targetFile);
-                    final Command chmodCommand = session.exec(command);
-                    chmodCommand.join(5, TimeUnit.SECONDS);
-                    session.close();
-
-                }
-
-                if (job.getTransferInputs() && job.getInputFiles() != null && job.getInputFiles().size() > 0) {
-                    for (File inputFile : job.getInputFiles()) {
-                        SCPUploadClient client = transfer.newSCPUploadClient();
-                        String targetFile = String.format("%s/%s", remoteWorkDir, inputFile.getName());
-                        logger.info(targetFile);
-                        client.copy(new FileSystemFile(inputFile), targetFile);
-                    }
-                }
-
-                SCPUploadClient client = transfer.newSCPUploadClient();
-                String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
-                logger.info(targetFile);
-                client.copy(new FileSystemFile(job.getSubmitFile()), targetFile);
-
-                // submit
-                session = ssh.startSession();
-                command = String.format("%s/bin/bsub < %s", this.LSFHome, targetFile);
-                final Command submitCommand = session.exec(command);
-                submitCommand.join(5, TimeUnit.SECONDS);
-                int exitCode = submitCommand.getExitStatus();
-                String submitOutput = net.schmizz.sshj.common.IOUtils.readFully(submitCommand.getInputStream())
-                        .toString().trim();
-
-                if (exitCode != 0) {
-                    String errorMessage = net.schmizz.sshj.common.IOUtils.readFully(submitCommand.getErrorStream())
-                            .toString();
-                    logger.debug("executor.getStderr() = {}", errorMessage);
-                    logger.error(errorMessage);
-                    throw new LRMException(errorMessage);
-                } else {
-                    LineNumberReader lnr = new LineNumberReader(new StringReader(submitOutput));
-
-                    String line;
-                    while ((line = lnr.readLine()) != null) {
-                        if (line.indexOf("submitted") != -1) {
-                            logger.info("line = " + line);
-                            Pattern pattern = Pattern.compile("^Job.+<(\\d*)> is submitted.+\\.$");
-                            Matcher matcher = pattern.matcher(line);
-                            if (!matcher.matches()) {
-                                throw new LRMException("failed to parse the jobid number");
-                            } else {
-                                job.setId(matcher.group(1));
-                            }
-                            break;
-                        }
-                    }
-
-                }
-                session.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                ssh.disconnect();
+            } catch (IOException e) {
+                logger.warn("Problem writing scripts", e);
+                throw new LRMException(e.getMessage());
             }
-        } catch (UserAuthException e) {
-            e.printStackTrace();
-        } catch (TransportException e) {
-            e.printStackTrace();
-        } catch (ConnectionException e) {
-            e.printStackTrace();
+
+            LSFSubmitScriptExporter<LSFSSHJob> exporter = new LSFSubmitScriptExporter<LSFSSHJob>();
+            this.job = exporter.export(localWorkDir, remoteWorkDir, job);
+
+            ChannelSftp sftpChannel = (ChannelSftp) session.openChannel("sftp");
+            sftpChannel.connect();
+            sftpChannel.cd(remoteWorkDir);
+            if (job.getTransferExecutable()) {
+                sftpChannel.put(new FileInputStream(job.getExecutable()), job.getExecutable().getName(),
+                        ChannelSftp.OVERWRITE);
+                sftpChannel.chmod(0755, job.getExecutable().getName());
+            }
+
+            if (job.getTransferInputs() && job.getInputFiles() != null && job.getInputFiles().size() > 0) {
+                for (File inputFile : job.getInputFiles()) {
+                    sftpChannel.put(new FileInputStream(inputFile), inputFile.getName(), ChannelSftp.OVERWRITE);
+                    sftpChannel.chmod(0644, inputFile.getName());
+                }
+            }
+            sftpChannel.put(new FileInputStream(job.getSubmitFile()), job.getSubmitFile().getName(),
+                    ChannelSftp.OVERWRITE);
+            sftpChannel.chmod(0644, job.getSubmitFile().getName());
+            sftpChannel.disconnect();
+            String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
+
+            command = String.format("%s/bin/bsub < %s", this.LSFHome, targetFile);
+
+            execChannel = (ChannelExec) session.openChannel("exec");
+            execChannel.setInputStream(null);
+            err = new ByteArrayOutputStream();
+            execChannel.setErrStream(err);
+            out = new ByteArrayOutputStream();
+            execChannel.setOutputStream(out);
+            execChannel.setCommand(command);
+            in = execChannel.getInputStream();
+            execChannel.connect();
+            // String submitOutput = new String(out.toByteArray());
+            String submitOutput = IOUtils.toString(in);
+            int exitCode = execChannel.getExitStatus();
+            execChannel.disconnect();
+
+            if (exitCode != 0) {
+                String errorMessage = new String(err.toByteArray());
+                logger.debug("executor.getStderr() = {}", errorMessage);
+                logger.error(errorMessage);
+                throw new LRMException(errorMessage);
+            } else {
+                LineNumberReader lnr = new LineNumberReader(new StringReader(submitOutput));
+                String line;
+                while ((line = lnr.readLine()) != null) {
+                    if (line.indexOf("submitted") != -1) {
+                        logger.info("line = " + line);
+                        Pattern pattern = Pattern.compile("^Job.+<(\\d*)> is submitted.+\\.$");
+                        Matcher matcher = pattern.matcher(line);
+                        if (!matcher.matches()) {
+                            throw new LRMException("failed to parse the jobid number");
+                        } else {
+                            job.setId(matcher.group(1));
+                        }
+                        break;
+                    }
+                }
+            }
+            session.disconnect();
+        } catch (FileNotFoundException e) {
+            logger.error("error: {}", e.getMessage());
+            throw new LRMException("JSchException: " + e.getMessage());
+        } catch (JSchException e) {
+            logger.error("error: {}", e.getMessage());
+            throw new LRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("error: {}", e.getMessage());
+            throw new LRMException("IOException: " + e.getMessage());
+        } catch (SftpException e) {
+            logger.error("error: {}", e.getMessage());
+            throw new LRMException("IOException: " + e.getMessage());
         }
+
         return job;
     }
 

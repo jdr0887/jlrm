@@ -1,20 +1,20 @@
 package org.renci.jlrm.lsf.ssh;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-
-import net.schmizz.sshj.SSHClient;
-import net.schmizz.sshj.connection.ConnectionException;
-import net.schmizz.sshj.connection.channel.direct.Session;
-import net.schmizz.sshj.connection.channel.direct.Session.Command;
-import net.schmizz.sshj.transport.TransportException;
-import net.schmizz.sshj.userauth.UserAuthException;
+import java.io.InputStream;
+import java.util.Properties;
 
 import org.renci.jlrm.AbstractSubmitCallable;
 import org.renci.jlrm.LRMException;
 import org.renci.jlrm.lsf.LSFJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
 
 public class LSFSSHKillCallable extends AbstractSubmitCallable<LSFJob> {
 
@@ -43,32 +43,44 @@ public class LSFSSHKillCallable extends AbstractSubmitCallable<LSFJob> {
     @Override
     public LSFSSHJob call() throws LRMException {
         logger.debug("ENTERING call()");
-        final SSHClient ssh = new SSHClient();
+
+        String home = System.getProperty("user.home");
+        String knownHostsFilename = home + "/.ssh/known_hosts";
+
+        JSch sch = new JSch();
         try {
-            ssh.loadKnownHosts();
-            ssh.connect(this.host);
-            ssh.authPublickey(this.username, System.getProperty("user.home") + "/.ssh/id_rsa");
-            try {
-                // kill job
-                Session session = ssh.startSession();
-                String command = String.format("%s/bin/bkill < %s", this.LSFHome, job.getId());
-                final Command killCommand = session.exec(command);
-                killCommand.join(5, TimeUnit.SECONDS);
-                session.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                ssh.disconnect();
-            }
-        } catch (UserAuthException e) {
-            e.printStackTrace();
-        } catch (TransportException e) {
-            e.printStackTrace();
-        } catch (ConnectionException e) {
-            e.printStackTrace();
+            sch.addIdentity(home + "/.ssh/id_rsa");
+            sch.setKnownHosts(knownHostsFilename);
+            Session session = sch.getSession(this.username, this.host, 22);
+            Properties config = new Properties();
+            config.setProperty("StrictHostKeyChecking", "no");
+            session.setConfig(config);
+            session.connect(30000);
+
+            String command = String.format("%s/bin/bkill < %s", this.LSFHome, job.getId());
+
+            ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
+            execChannel.setInputStream(null);
+            ByteArrayOutputStream err = new ByteArrayOutputStream();
+            execChannel.setErrStream(err);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            execChannel.setOutputStream(out);
+            execChannel.setCommand(command);
+            InputStream in = execChannel.getInputStream();
+            execChannel.connect();
+            int exitCode = execChannel.getExitStatus();
+            execChannel.disconnect();
+
+            logger.warn("exitCode: {}", exitCode);
+
+        } catch (JSchException e) {
+            logger.warn("error: {}", e.getMessage());
+            throw new LRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warn("error: {}", e.getMessage());
+            throw new LRMException("IOException: " + e.getMessage());
         }
+
         return job;
     }
 

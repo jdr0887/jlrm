@@ -1,19 +1,22 @@
 package org.renci.jlrm.lsf.ssh;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.concurrent.Callable;
-import java.util.concurrent.TimeUnit;
 
-import net.schmizz.sshj.SSHClient;
-import net.schmizz.sshj.common.IOUtils;
-import net.schmizz.sshj.connection.channel.direct.Session;
-import net.schmizz.sshj.connection.channel.direct.Session.Command;
-
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.renci.jlrm.LRMException;
 import org.renci.jlrm.lsf.LSFJobStatusType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
 
 public class LSFSSHLookupStatusCallable implements Callable<LSFJobStatusType> {
 
@@ -45,25 +48,36 @@ public class LSFSSHLookupStatusCallable implements Callable<LSFJobStatusType> {
         LSFJobStatusType ret = LSFJobStatusType.UNKNOWN;
         String command = String.format("%s/bin/bjobs %s | tail -n+2 | awk '{print $3}'", this.LSFHome, job.getId());
 
-        final SSHClient ssh = new SSHClient();
+        String home = System.getProperty("user.home");
+        String knownHostsFilename = home + "/.ssh/known_hosts";
+
+        JSch sch = new JSch();
         try {
-            ssh.loadKnownHosts();
-            ssh.connect(this.host);
-            ssh.authPublickey(this.username, System.getProperty("user.home") + "/.ssh/id_rsa");
+            sch.addIdentity(home + "/.ssh/id_rsa");
+            sch.setKnownHosts(knownHostsFilename);
+            Session session = sch.getSession(this.username, this.host, 22);
+            Properties config = new Properties();
+            config.setProperty("StrictHostKeyChecking", "no");
+            session.setConfig(config);
+            session.connect(30000);
 
-            // create remote job submit directory
-            Session session = ssh.startSession();
+            ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
+            execChannel.setInputStream(null);
+            ByteArrayOutputStream err = new ByteArrayOutputStream();
+            execChannel.setErrStream(err);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            execChannel.setOutputStream(out);
+            execChannel.setCommand(command);
+            InputStream in = execChannel.getInputStream();
+            execChannel.connect();
+            String status = IOUtils.toString(in).trim();
+            int exitCode = execChannel.getExitStatus();
+            execChannel.disconnect();
 
-            final Command bjobsCommand = session.exec(command);
-            String status = IOUtils.readFully(bjobsCommand.getInputStream()).toString().trim();
-            bjobsCommand.join(5, TimeUnit.SECONDS);
-            int exitStatus = bjobsCommand.getExitStatus();
-            session.close();
-
-            if (exitStatus != 0) {
-                String error = IOUtils.readFully(bjobsCommand.getErrorStream()).toString();
+            if (exitCode != 0) {
+                String error = new String(err.toByteArray());
                 logger.warn("error: {}", error);
-                throw new LRMException("Problem looking up status: " + bjobsCommand.getExitErrorMessage());
+                throw new LRMException("Problem looking up status");
             } else {
 
                 if (StringUtils.isNotEmpty(status)) {
@@ -81,12 +95,13 @@ public class LSFSSHLookupStatusCallable implements Callable<LSFJobStatusType> {
                 }
 
             }
-
+        } catch (JSchException e) {
+            logger.error("error: {}", e.getMessage());
+            throw new LRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("error: {}", e.getMessage());
             throw new LRMException("IOException: " + e.getMessage());
         }
-
         logger.info("JobStatus = {}", ret);
         return ret;
     }
