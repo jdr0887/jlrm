@@ -12,6 +12,15 @@
   <packaging>bundle</packaging>
   <dependencies>
     <dependency>
+      <groupId>org.apache.sshd</groupId>
+      <artifactId>sshd-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.jcraft</groupId>
+      <artifactId>jsch</artifactId>
+    </dependency>    
+    <dependency>
       <groupId>org.bouncycastle</groupId>
       <artifactId>bcprov-jdk16</artifactId>
     </dependency>
@@ -22,6 +31,7 @@
     <dependency>
       <groupId>net.schmizz</groupId>
       <artifactId>sshj</artifactId>
+      <scope>test</scope>
     </dependency>   
     <dependency>
       <groupId>commons-lang</groupId>
