@@ -90,6 +90,11 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+	<groupId>org.apache.sshd</groupId>
+	<artifactId>sshd-core</artifactId>
+	<version>0.6.0</version>
+      </dependency>
+      <dependency>
 	<groupId>org.bouncycastle</groupId>
 	<artifactId>bcprov-jdk16</artifactId>
 	<version>1.46</version>
