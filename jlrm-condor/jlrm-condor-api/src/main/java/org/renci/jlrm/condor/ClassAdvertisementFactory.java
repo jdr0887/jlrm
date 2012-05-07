@@ -24,6 +24,10 @@ public class ClassAdvertisementFactory {
 
     public static final String CLASS_AD_KEY_NOTIFICATION = "notification";
 
+    public static final String CLASS_AD_KEY_SHOULD_TRANSFER_FILES = "ShouldTransferFiles";
+
+    public static final String CLASS_AD_KEY_WHEN_TO_TRANSFER_OUTPUT = "when_to_transfer_output";
+
     public static final String CLASS_AD_KEY_TRANSFER_EXECUTABLE = "transfer_executable";
 
     public static final String CLASS_AD_KEY_QUEUE = "queue";
@@ -148,6 +152,12 @@ public class ClassAdvertisementFactory {
         classAdvertismentMap.put(CLASS_AD_KEY_REQUIREMENTS, new ClassAdvertisement(CLASS_AD_KEY_REQUIREMENTS,
                 ClassAdvertisementType.EXPRESSION, ""));
 
+        classAdvertismentMap.put(CLASS_AD_KEY_SHOULD_TRANSFER_FILES, new ClassAdvertisement(
+                CLASS_AD_KEY_SHOULD_TRANSFER_FILES, ClassAdvertisementType.EXPRESSION, "YES"));
+
+        classAdvertismentMap.put(CLASS_AD_KEY_WHEN_TO_TRANSFER_OUTPUT, new ClassAdvertisement(
+                CLASS_AD_KEY_WHEN_TO_TRANSFER_OUTPUT, ClassAdvertisementType.EXPRESSION, "ON_EXIT"));
+
     }
 
     public static ClassAdvertisement getClassAd(String key) {
@@ -188,6 +198,8 @@ public class ClassAdvertisementFactory {
         ret.add(getClassAd(CLASS_AD_KEY_REQUEST_CPUS));
         ret.add(getClassAd(CLASS_AD_KEY_REQUEST_MEMORY));
         ret.add(getClassAd(CLASS_AD_KEY_REQUEST_DISK));
+        ret.add(getClassAd(CLASS_AD_KEY_SHOULD_TRANSFER_FILES));
+        ret.add(getClassAd(CLASS_AD_KEY_WHEN_TO_TRANSFER_OUTPUT));
         return ret;
     }
 
