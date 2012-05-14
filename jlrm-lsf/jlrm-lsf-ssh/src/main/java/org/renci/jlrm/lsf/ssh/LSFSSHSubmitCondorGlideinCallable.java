@@ -225,8 +225,6 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
             String submitOutput = IOUtils.toString(in);
             int exitCode = execChannel.getExitStatus();
             execChannel.disconnect();
-            err.close();
-            out.close();
 
             try {
                 Thread.sleep(1000);
@@ -257,6 +255,8 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
                 }
             }
             session.disconnect();
+            err.close();
+            out.close();
         } catch (FileNotFoundException e) {
             logger.error("error: {}", e.getMessage());
             throw new LRMException("JSchException: " + e.getMessage());

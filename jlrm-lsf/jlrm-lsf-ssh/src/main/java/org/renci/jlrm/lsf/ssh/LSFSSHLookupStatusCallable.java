@@ -74,8 +74,6 @@ public class LSFSSHLookupStatusCallable implements Callable<LSFJobStatusType> {
             int exitCode = execChannel.getExitStatus();
             execChannel.disconnect();
             session.disconnect();
-            err.close();
-            out.close();
             
             if (exitCode != 0) {
                 String error = new String(err.toByteArray());
@@ -96,6 +94,8 @@ public class LSFSSHLookupStatusCallable implements Callable<LSFJobStatusType> {
                     ret = LSFJobStatusType.DONE;
                 }
             }
+            err.close();
+            out.close();
         } catch (JSchException e) {
             logger.error("error: {}", e.getMessage());
             throw new LRMException("JSchException: " + e.getMessage());

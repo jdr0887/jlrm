@@ -124,8 +124,6 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFSSHJob> {
                     ChannelSftp.OVERWRITE);
             sftpChannel.chmod(0644, job.getSubmitFile().getName());
             sftpChannel.disconnect();
-            err.close();
-            out.close();
             
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
@@ -170,7 +168,8 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFSSHJob> {
                     }
                 }
             }
-
+            err.close();
+            out.close();
         } catch (JSchException e) {
             logger.error("JSchException: {}", e.getMessage());
             throw new LRMException("JSchException: " + e.getMessage());

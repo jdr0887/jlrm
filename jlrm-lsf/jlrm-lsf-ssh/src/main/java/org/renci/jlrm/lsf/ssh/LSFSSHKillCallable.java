@@ -71,7 +71,9 @@ public class LSFSSHKillCallable extends AbstractSubmitCallable<LSFSSHJob> {
             execChannel.disconnect();
 
             logger.warn("exitCode: {}", exitCode);
-
+            session.disconnect();
+            err.close();
+            out.close();
         } catch (JSchException e) {
             logger.warn("error: {}", e.getMessage());
             throw new LRMException("JSchException: " + e.getMessage());
