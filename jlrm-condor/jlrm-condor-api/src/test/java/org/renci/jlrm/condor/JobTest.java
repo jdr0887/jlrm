@@ -28,7 +28,7 @@ public class JobTest {
         DirectedGraph<CondorJob, CondorJobEdge> g = new DefaultDirectedGraph<CondorJob, CondorJobEdge>(CondorJobEdge.class);
 
         File executable = new File("/bin/hostname");
-        CondorJob job = new CondorJob("a", executable, 3);
+        CondorJob job = new CondorJob("asdfasdfasdffffffffffffffasdfasdfasdfasdfasdfa", executable, 3);
 
         job.addArgument("someClassName");
         Map<String, String> defaultRSLAttributeMap = new HashMap<String, String>();
