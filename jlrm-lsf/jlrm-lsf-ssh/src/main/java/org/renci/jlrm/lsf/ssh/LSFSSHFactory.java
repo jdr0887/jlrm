@@ -1,6 +1,11 @@
 package org.renci.jlrm.lsf.ssh;
 
 import java.io.File;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.renci.jlrm.LRMException;
 import org.renci.jlrm.lsf.LSFJobStatusType;
@@ -16,6 +21,8 @@ public class LSFSSHFactory {
     private final Logger logger = LoggerFactory.getLogger(LSFSSHFactory.class);
 
     private static LSFSSHFactory instance = null;
+
+    private ThreadPoolExecutor threadPoolExecutor;
 
     private String LSFHome;
 
@@ -42,13 +49,25 @@ public class LSFSSHFactory {
         this.LSFHome = LSFHome;
         this.submitHost = submitHost;
         this.username = username;
+        this.threadPoolExecutor = new ThreadPoolExecutor(4, 8, 50000L, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>());
     }
 
     public LSFSSHJob submit(File submitDir, LSFSSHJob job) throws LRMException {
         logger.debug("ENTERING submit(File)");
         LSFSSHSubmitCallable runnable = new LSFSSHSubmitCallable(this.LSFHome, this.username, this.submitHost, job,
                 submitDir);
-        return runnable.call();
+
+        Future<LSFSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
+        try {
+            job = jobFuture.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return job;
     }
 
     public LSFSSHJob submitGlidein(File submitDir, Integer maxNoClaimTime, Integer maxRunTime, Integer requireMemory,
@@ -64,20 +83,46 @@ public class LSFSSHFactory {
         runnable.setCollectorHost(collectorHost);
         runnable.setUsername(this.username);
         runnable.setQueue(queue);
-        return runnable.call();
+        Future<LSFSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
+        LSFSSHJob job = null;
+        try {
+            job = jobFuture.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return job;
     }
 
     public LSFSSHJob killGlidein(LSFSSHJob job) throws LRMException {
         logger.debug("ENTERING submit(File)");
         LSFSSHKillCallable runnable = new LSFSSHKillCallable(this.LSFHome, this.username, this.submitHost, job);
-        return runnable.call();
+        Future<LSFSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
+        try {
+            job = jobFuture.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return job;
     }
 
     public LSFJobStatusType lookupStatus(LSFSSHJob job) throws LRMException {
         logger.debug("ENTERING lookupStatus(job)");
         LSFSSHLookupStatusCallable runnable = new LSFSSHLookupStatusCallable(this.LSFHome, this.username,
                 this.submitHost, job);
-        return runnable.call();
+        Future<LSFJobStatusType> jobFuture = this.threadPoolExecutor.submit(runnable);
+        LSFJobStatusType ret = null;
+        try {
+            ret = jobFuture.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
 }

@@ -18,7 +18,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.renci.jlrm.AbstractSubmitCallable;
 import org.renci.jlrm.LRMException;
-import org.renci.jlrm.lsf.LSFJob;
 import org.renci.jlrm.lsf.LSFSubmitScriptExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +29,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 
-public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFJob> {
+public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFSSHJob> {
 
     private final Logger logger = LoggerFactory.getLogger(LSFSSHSubmitCallable.class);
 
@@ -125,7 +124,9 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFJob> {
                     ChannelSftp.OVERWRITE);
             sftpChannel.chmod(0644, job.getSubmitFile().getName());
             sftpChannel.disconnect();
-
+            err.close();
+            out.close();
+            
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
             command = String.format("%s/bin/bsub < %s", this.LSFHome, targetFile);
@@ -143,6 +144,9 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFJob> {
             String submitOutput = IOUtils.toString(in);
             int exitCode = execChannel.getExitStatus();
             execChannel.disconnect();
+            session.disconnect();
+            err.close();
+            out.close();
 
             if (exitCode != 0) {
                 String errorMessage = new String(err.toByteArray());
@@ -166,17 +170,16 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFJob> {
                     }
                 }
             }
-            session.disconnect();
 
         } catch (JSchException e) {
-            logger.error("error: {}", e.getMessage());
+            logger.error("JSchException: {}", e.getMessage());
             throw new LRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
-            logger.error("error: {}", e.getMessage());
+            logger.error("IOException: {}", e.getMessage());
             throw new LRMException("IOException: " + e.getMessage());
         } catch (SftpException e) {
             logger.error("error: {}", e.getMessage());
-            throw new LRMException("IOException: " + e.getMessage());
+            throw new LRMException("SftpException: " + e.getMessage());
         }
         return job;
     }

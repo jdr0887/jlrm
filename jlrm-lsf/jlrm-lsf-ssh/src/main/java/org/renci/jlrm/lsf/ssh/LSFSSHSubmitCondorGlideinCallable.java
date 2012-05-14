@@ -140,6 +140,15 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
             // String remoteHome = new String(out.toByteArray());
             String remoteHome = IOUtils.toString(in).trim();
             execChannel.disconnect();
+            err.close();
+            out.close();
+            
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             logger.info("remoteHome: {}", remoteHome);
             String remoteWorkDir = String.format("%s/%s", remoteHome, remoteWorkDirSuffix);
             logger.info("remoteWorkDir: {}", remoteWorkDir);
@@ -192,6 +201,13 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
                     ChannelSftp.OVERWRITE);
             sftpChannel.chmod(0644, job.getSubmitFile().getName());
             sftpChannel.disconnect();
+            
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
             command = String.format("%s/bin/bsub < %s", this.LSFHome, targetFile);
@@ -209,6 +225,14 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
             String submitOutput = IOUtils.toString(in);
             int exitCode = execChannel.getExitStatus();
             execChannel.disconnect();
+            err.close();
+            out.close();
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             if (exitCode != 0) {
                 String errorMessage = new String(err.toByteArray());

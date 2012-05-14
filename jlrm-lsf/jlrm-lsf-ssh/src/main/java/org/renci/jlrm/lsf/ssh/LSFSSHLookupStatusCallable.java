@@ -73,27 +73,28 @@ public class LSFSSHLookupStatusCallable implements Callable<LSFJobStatusType> {
             String status = IOUtils.toString(in).trim();
             int exitCode = execChannel.getExitStatus();
             execChannel.disconnect();
-
+            session.disconnect();
+            err.close();
+            out.close();
+            
             if (exitCode != 0) {
                 String error = new String(err.toByteArray());
-                logger.warn("error: {}", error);
+                logger.error("error: {}", error);
                 throw new LRMException("Problem looking up status");
             } else {
-
                 if (StringUtils.isNotEmpty(status)) {
                     if (status.contains("is not found")) {
                         ret = LSFJobStatusType.DONE;
                     } else {
                         for (LSFJobStatusType type : LSFJobStatusType.values()) {
                             if (type.getValue().equals(status)) {
-                                return type;
+                                ret = type;
                             }
                         }
                     }
                 } else {
                     ret = LSFJobStatusType.DONE;
                 }
-
             }
         } catch (JSchException e) {
             logger.error("error: {}", e.getMessage());
@@ -102,7 +103,7 @@ public class LSFSSHLookupStatusCallable implements Callable<LSFJobStatusType> {
             logger.error("error: {}", e.getMessage());
             throw new LRMException("IOException: " + e.getMessage());
         }
-        logger.info("JobStatus = {}", ret);
+        logger.info("JobStatus for {} is {}", job.getId(), ret);
         return ret;
     }
 

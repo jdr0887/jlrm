@@ -7,7 +7,6 @@ import java.util.Properties;
 
 import org.renci.jlrm.AbstractSubmitCallable;
 import org.renci.jlrm.LRMException;
-import org.renci.jlrm.lsf.LSFJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +15,7 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
-public class LSFSSHKillCallable extends AbstractSubmitCallable<LSFJob> {
+public class LSFSSHKillCallable extends AbstractSubmitCallable<LSFSSHJob> {
 
     private final Logger logger = LoggerFactory.getLogger(LSFSSHKillCallable.class);
 
@@ -57,7 +56,7 @@ public class LSFSSHKillCallable extends AbstractSubmitCallable<LSFJob> {
             session.setConfig(config);
             session.connect(30000);
 
-            String command = String.format("%s/bin/bkill < %s", this.LSFHome, job.getId());
+            String command = String.format("%s/bin/bkill %s", this.LSFHome, job.getId());
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
