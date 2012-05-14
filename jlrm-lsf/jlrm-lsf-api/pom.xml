@@ -2,19 +2,19 @@
   <parent>
     <groupId>org.renci.jlrm</groupId>
     <artifactId>jlrm-lsf</artifactId>
-    <version>0.0.8-SNAPSHOT</version>
+    <version>0.0.8</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>jLRM :: LSF :: API</name>
   <groupId>org.renci.jlrm.jlrm-lsf</groupId>
   <artifactId>jlrm-lsf-api</artifactId>
-  <version>0.0.8-SNAPSHOT</version>
+  <version>0.0.8</version>
   <packaging>bundle</packaging>
   <dependencies>
     <dependency>
       <groupId>org.renci.jlrm</groupId>
       <artifactId>jlrm-api</artifactId>
-      <version>0.0.8-SNAPSHOT</version>      
+      <version>0.0.8</version>      
     </dependency>
     <dependency>
       <groupId>commons-lang</groupId>
