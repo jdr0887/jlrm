@@ -1,19 +1,18 @@
 package org.renci.jlrm.condor;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import org.jgrapht.DirectedGraph;
+import org.jgrapht.ext.DOTExporter;
+import org.jgrapht.ext.EdgeNameProvider;
+import org.jgrapht.ext.VertexNameProvider;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.junit.Test;
-import org.renci.jlrm.condor.ClassAdvertisement;
-import org.renci.jlrm.condor.ClassAdvertisementFactory;
-import org.renci.jlrm.condor.CondorSubmitScriptExporter;
-import org.renci.jlrm.condor.CondorJobEdge;
-import org.renci.jlrm.condor.CondorJob;
-import org.renci.jlrm.condor.UniverseType;
 
 public class JobTest {
 
@@ -25,7 +24,8 @@ public class JobTest {
     @Test
     public void testDAG() throws Exception {
 
-        DirectedGraph<CondorJob, CondorJobEdge> g = new DefaultDirectedGraph<CondorJob, CondorJobEdge>(CondorJobEdge.class);
+        DirectedGraph<CondorJob, CondorJobEdge> graph = new DefaultDirectedGraph<CondorJob, CondorJobEdge>(
+                CondorJobEdge.class);
 
         File executable = new File("/bin/hostname");
         CondorJob job = new CondorJob("asdfasdfasdffffffffffffffasdfasdfasdfasdfasdfa", executable, 3);
@@ -53,7 +53,7 @@ public class JobTest {
         job.addArgument("asdfasdf");
         job.addArgument("--foo", "bar");
         job.addArgument("--fuzz", "buzz");
-        g.addVertex(job);
+        graph.addVertex(job);
 
         CondorJob job2 = new CondorJob("b", executable, 4);
         job2.addArgument("qwerqwer");
@@ -64,9 +64,9 @@ public class JobTest {
         classAd.setValue(UniverseType.MPI.toString().toLowerCase());
         job2.getClassAdvertismentMap().put(ClassAdvertisementFactory.CLASS_AD_KEY_UNIVERSE, classAd);
 
-        g.addVertex(job2);
+        graph.addVertex(job2);
 
-        g.addEdge(job, job2);
+        graph.addEdge(job, job2);
 
         CondorJob job3 = new CondorJob("c", executable, 2);
 
@@ -88,22 +88,46 @@ public class JobTest {
 
         job3.addArgument("--foo", "bar");
         job3.addArgument("--fuzz", "buzz");
-        g.addVertex(job3);
+        graph.addVertex(job3);
 
-        g.addEdge(job, job3);
+        graph.addEdge(job, job3);
 
         CondorJob job4 = new CondorJob("d", executable, 6);
-        g.addVertex(job4);
+        graph.addVertex(job4);
 
-        g.addEdge(job2, job4);
-        g.addEdge(job3, job4);
+        graph.addEdge(job2, job4);
+        graph.addEdge(job3, job4);
 
         CondorJob job5 = new CondorJob("e", executable, 5);
-        g.addVertex(job5);
-        g.addEdge(job2, job5);
+        graph.addVertex(job5);
+        graph.addEdge(job2, job5);
 
         CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
-        exporter.export("asdfads", new File("/tmp"), g);
+        exporter.export("asdfads", new File("/tmp"), graph);
+
+        try {
+            VertexNameProvider<CondorJob> vnpId = new VertexNameProvider<CondorJob>() {
+                @Override
+                public String getVertexName(CondorJob job) {
+                    return job.getName();
+                }
+            };
+
+            VertexNameProvider<CondorJob> vnpLabel = new VertexNameProvider<CondorJob>() {
+                @Override
+                public String getVertexName(CondorJob job) {
+                    return job.getName();
+                }
+            };
+
+            DOTExporter<CondorJob, CondorJobEdge> dotExporter = new DOTExporter<CondorJob, CondorJobEdge>(vnpId,
+                    vnpLabel, null);
+
+            FileWriter fw = new FileWriter(new File("/tmp", "test.dag.dot"));
+            dotExporter.export(fw, graph);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

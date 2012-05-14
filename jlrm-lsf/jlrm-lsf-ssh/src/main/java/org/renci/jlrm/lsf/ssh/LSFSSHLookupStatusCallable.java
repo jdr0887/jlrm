@@ -3,6 +3,10 @@ package org.renci.jlrm.lsf.ssh;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.LineNumberReader;
+import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
@@ -18,13 +22,13 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
-public class LSFSSHLookupStatusCallable implements Callable<LSFJobStatusType> {
+public class LSFSSHLookupStatusCallable implements Callable<Map<String, LSFJobStatusType>> {
 
     private final Logger logger = LoggerFactory.getLogger(LSFSSHLookupStatusCallable.class);
 
     private String LSFHome;
 
-    private LSFSSHJob job;
+    private LSFSSHJob[] jobs;
 
     private String username;
 
@@ -34,23 +38,29 @@ public class LSFSSHLookupStatusCallable implements Callable<LSFJobStatusType> {
         super();
     }
 
-    public LSFSSHLookupStatusCallable(String LSFHome, String username, String host, LSFSSHJob job) {
+    public LSFSSHLookupStatusCallable(String LSFHome, String username, String host, LSFSSHJob... jobs) {
         super();
         this.LSFHome = LSFHome;
-        this.job = job;
+        this.jobs = jobs;
         this.host = host;
         this.username = username;
     }
 
     @Override
-    public LSFJobStatusType call() throws LRMException {
+    public Map<String, LSFJobStatusType> call() throws LRMException {
         logger.debug("ENTERING call()");
-        LSFJobStatusType ret = LSFJobStatusType.UNKNOWN;
-        String command = String.format("%s/bin/bjobs %s | tail -n+2 | awk '{print $3}'", this.LSFHome, job.getId());
+
+        StringBuilder sb = new StringBuilder();
+        for (LSFSSHJob job : this.jobs) {
+            sb.append(" ").append(job.getId());
+        }
+        String jobXarg = sb.toString().replaceFirst(" ", "");
+        String command = String.format("%s/bin/bjobs %s | tail -n+2 | awk '{print $1,$3}'", this.LSFHome, jobXarg);
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
 
+        Map<String, LSFJobStatusType> jobStatusMap = new HashMap<String, LSFJobStatusType>();
         JSch sch = new JSch();
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
@@ -70,28 +80,30 @@ public class LSFSSHLookupStatusCallable implements Callable<LSFJobStatusType> {
             execChannel.setCommand(command);
             InputStream in = execChannel.getInputStream();
             execChannel.connect();
-            String status = IOUtils.toString(in).trim();
+            String output = IOUtils.toString(in).trim();
             int exitCode = execChannel.getExitStatus();
             execChannel.disconnect();
             session.disconnect();
-            
-            if (exitCode != 0) {
-                String error = new String(err.toByteArray());
-                logger.error("error: {}", error);
-                throw new LRMException("Problem looking up status");
-            } else {
-                if (StringUtils.isNotEmpty(status)) {
-                    if (status.contains("is not found")) {
-                        ret = LSFJobStatusType.DONE;
+
+            LineNumberReader lnr = new LineNumberReader(new StringReader(output));
+            String line;
+            while ((line = lnr.readLine()) != null) {
+                LSFJobStatusType statusType = LSFJobStatusType.DONE;
+                if (StringUtils.isNotEmpty(line)) {
+                    if (line.contains("is not found")) {
+                        statusType = LSFJobStatusType.DONE;
                     } else {
-                        for (LSFJobStatusType type : LSFJobStatusType.values()) {
-                            if (type.getValue().equals(status)) {
-                                ret = type;
+                        String[] lineSplit = line.split(" ");
+                        if (lineSplit != null && lineSplit.length == 2) {
+                            for (LSFJobStatusType type : LSFJobStatusType.values()) {
+                                if (type.getValue().equals(lineSplit[1])) {
+                                    statusType = type;
+                                }
                             }
+                            logger.info("JobStatus for {} is {}", lineSplit[0], statusType);
+                            jobStatusMap.put(lineSplit[0], statusType);
                         }
                     }
-                } else {
-                    ret = LSFJobStatusType.DONE;
                 }
             }
             err.close();
@@ -103,8 +115,7 @@ public class LSFSSHLookupStatusCallable implements Callable<LSFJobStatusType> {
             logger.error("error: {}", e.getMessage());
             throw new LRMException("IOException: " + e.getMessage());
         }
-        logger.info("JobStatus for {} is {}", job.getId(), ret);
-        return ret;
+        return jobStatusMap;
     }
 
     public String getLSFHome() {
@@ -115,12 +126,12 @@ public class LSFSSHLookupStatusCallable implements Callable<LSFJobStatusType> {
         LSFHome = lSFHome;
     }
 
-    public LSFSSHJob getJob() {
-        return job;
+    public LSFSSHJob[] getJobs() {
+        return jobs;
     }
 
-    public void setJob(LSFSSHJob job) {
-        this.job = job;
+    public void setJobs(LSFSSHJob[] jobs) {
+        this.jobs = jobs;
     }
 
     public String getUsername() {

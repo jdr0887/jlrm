@@ -4,6 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.LineNumberReader;
+import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
@@ -69,9 +73,8 @@ public class LSFSSHFactoryTest {
     @Test
     public void testLookupStatus() {
 
-        LSFJobStatusType ret = LSFJobStatusType.UNKNOWN;
-        String command = String.format("%s/bin/bjobs %s | tail -n+2 | awk '{print $3}'",
-                "/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/", "910582");
+        String command = String.format("%s/bin/bjobs %s | tail -n+2 | awk '{print $1,$3}'",
+                "/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/", "173198 173244");
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
@@ -95,35 +98,44 @@ public class LSFSSHFactoryTest {
             execChannel.setCommand(command);
             InputStream in = execChannel.getInputStream();
             execChannel.connect();
-            String status = IOUtils.toString(in).trim();
+            String output = IOUtils.toString(in).trim();
             int exitCode = execChannel.getExitStatus();
             execChannel.disconnect();
 
-            if (exitCode != 0) {
-                String error = new String(err.toByteArray());
-            } else {
-
-                if (StringUtils.isNotEmpty(status)) {
-                    if (status.contains("is not found")) {
-                        ret = LSFJobStatusType.DONE;
+            Map<String, LSFJobStatusType> jobStatusMap = new HashMap<String, LSFJobStatusType>();
+            LineNumberReader lnr = new LineNumberReader(new StringReader(output));
+            String line;
+            while ((line = lnr.readLine()) != null) {
+                LSFJobStatusType statusType = LSFJobStatusType.DONE;
+                if (StringUtils.isNotEmpty(line)) {
+                    if (line.contains("is not found")) {
+                        statusType = LSFJobStatusType.DONE;
                     } else {
-                        for (LSFJobStatusType type : LSFJobStatusType.values()) {
-                            if (type.getValue().equals(status)) {
-                                ret = type;
+                        //System.out.println(line);
+                        String[] lineSplit = line.split(" ");
+                        if (lineSplit != null && lineSplit.length == 2) {
+                            for (LSFJobStatusType type : LSFJobStatusType.values()) {
+                                if (type.getValue().equals(lineSplit[1])) {
+                                    statusType = type;
+                                }
                             }
+                            jobStatusMap.put(lineSplit[0], statusType);
                         }
                     }
-                } else {
-                    ret = LSFJobStatusType.DONE;
                 }
-
             }
+
+            for (String id : jobStatusMap.keySet()) {
+                System.out.println("Job: " + id + " has a status of " + jobStatusMap.get(id));
+            }
+            err.close();
+            out.close();
+            session.disconnect();
         } catch (JSchException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("ret = " + ret.getValue());
     }
 
 }
