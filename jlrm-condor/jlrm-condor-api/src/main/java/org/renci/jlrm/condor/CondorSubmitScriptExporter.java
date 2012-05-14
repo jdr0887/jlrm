@@ -115,10 +115,12 @@ public class CondorSubmitScriptExporter {
 
                 for (CondorJob job : graph.vertexSet()) {
                     writeSubmitFile(workDir, job);
-                    dagFileWriter.write(String.format("%n%1$-10s%2$-30s%2$s.sub%n", "JOB", job.getName()));
+                    int nameLength = job.getName().length() + 4;
+                    String format = "%n%1$-10s%2$-" + nameLength + "s%2$s.sub%n";
+                    dagFileWriter.write(String.format(format, "JOB", job.getName()));
                     if (job.getRetry() != null && job.getRetry() > 1) {
-                        dagFileWriter.write(String.format("%1$-10s%2$-30s%3$d%n", "RETRY", job.getName(),
-                                job.getRetry()));
+                        format = "%1$-10s%2$-" + nameLength + "s%3$d%n";
+                        dagFileWriter.write(String.format(format, "RETRY", job.getName(), job.getRetry()));
                     }
                     dagFileWriter.flush();
                 }
@@ -128,8 +130,9 @@ public class CondorSubmitScriptExporter {
                 for (CondorJobEdge edge : graph.edgeSet()) {
                     CondorJob source = (CondorJob) edge.getSource();
                     CondorJob target = (CondorJob) edge.getTarget();
-                    dagFileWriter.write(String.format("%1$-10s%2$-30s%3$-10s%4$s%n", "PARENT", source.getName(),
-                            "CHILD", target.getName()));
+                    int nameLength = source.getName().length() + 4;
+                    String format = "%1$-10s%2$-" + nameLength + "s%3$-10s%4$s%n";
+                    dagFileWriter.write(String.format(format, "PARENT", source.getName(), "CHILD", target.getName()));
                     dagFileWriter.flush();
                 }
 
