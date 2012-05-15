@@ -53,7 +53,7 @@ public class CondorJob extends Job {
 	}
 
 	public void addArgument(String flag, String value) {
-		addArgument(flag, value, "=");
+		addArgument(flag, value, " ");
 	}
 
 	public void addArgument(String flag, String value, String delimiter) {
