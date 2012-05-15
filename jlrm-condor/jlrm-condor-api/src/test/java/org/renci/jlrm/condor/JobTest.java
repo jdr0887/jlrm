@@ -5,11 +5,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.jgrapht.DirectedGraph;
+import org.jgrapht.ext.ComponentAttributeProvider;
 import org.jgrapht.ext.DOTExporter;
-import org.jgrapht.ext.EdgeNameProvider;
 import org.jgrapht.ext.VertexNameProvider;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.junit.Test;
@@ -120,8 +121,10 @@ public class JobTest {
                 }
             };
 
-            DOTExporter<CondorJob, CondorJobEdge> dotExporter = new DOTExporter<CondorJob, CondorJobEdge>(vnpId,
-                    vnpLabel, null);
+            Properties props = new Properties();
+            props.setProperty("rankdir", "LR");
+            CondorDOTExporter<CondorJob, CondorJobEdge> dotExporter = new CondorDOTExporter<CondorJob, CondorJobEdge>(
+                    vnpId, vnpLabel, null, null, null, props);
 
             FileWriter fw = new FileWriter(new File("/tmp", "test.dag.dot"));
             dotExporter.export(fw, graph);
