@@ -142,9 +142,9 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
             execChannel.disconnect();
             err.close();
             out.close();
-            
+
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -175,7 +175,7 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
                 job.getInputFiles().add(condorConfig);
 
             } catch (IOException e) {
-                logger.warn("Problem writing scripts", e);
+                logger.error("Problem writing scripts", e);
                 throw new LRMException(e.getMessage());
             }
 
@@ -201,9 +201,9 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
                     ChannelSftp.OVERWRITE);
             sftpChannel.chmod(0644, job.getSubmitFile().getName());
             sftpChannel.disconnect();
-            
+
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -225,12 +225,6 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
             String submitOutput = IOUtils.toString(in);
             int exitCode = execChannel.getExitStatus();
             execChannel.disconnect();
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
             if (exitCode != 0) {
                 String errorMessage = new String(err.toByteArray());
@@ -258,17 +252,17 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
             err.close();
             out.close();
         } catch (FileNotFoundException e) {
-            logger.error("error: {}", e.getMessage());
+            logger.error("FileNotFoundException", e);
             throw new LRMException("JSchException: " + e.getMessage());
         } catch (JSchException e) {
-            logger.error("error: {}", e.getMessage());
+            logger.error("JSchException", e);
             throw new LRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
-            logger.error("error: {}", e.getMessage());
+            logger.error("IOException", e);
             throw new LRMException("IOException: " + e.getMessage());
         } catch (SftpException e) {
-            logger.error("error: {}", e.getMessage());
-            throw new LRMException("IOException: " + e.getMessage());
+            logger.error("SftpException", e);
+            throw new LRMException("SftpException: " + e.getMessage());
         }
 
         return job;
