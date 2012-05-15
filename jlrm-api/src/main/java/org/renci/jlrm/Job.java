@@ -88,4 +88,11 @@ public class Job {
         this.memory = memory;
     }
 
+    @Override
+    public String toString() {
+        return "Job [id=" + id + ", name=" + name + ", executable=" + executable + ", submitFile=" + submitFile
+                + ", output=" + output + ", error=" + error + ", numberOfProcessors=" + numberOfProcessors
+                + ", memory=" + memory + "]";
+    }
+
 }
