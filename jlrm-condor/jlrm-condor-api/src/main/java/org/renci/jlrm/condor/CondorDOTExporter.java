@@ -76,7 +76,7 @@ public class CondorDOTExporter<V, E> {
         if (this.dotProperties != null && !this.dotProperties.isEmpty()) {
             for (Object key : this.dotProperties.keySet()) {
                 Object value = this.dotProperties.get(key);
-                out.println(String.format("%s=%s", key.toString(), value.toString()));
+                out.println(String.format("%s=%s;", key.toString(), value.toString()));
             }
         }
 
