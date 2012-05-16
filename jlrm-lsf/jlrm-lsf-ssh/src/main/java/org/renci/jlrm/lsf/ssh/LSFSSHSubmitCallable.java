@@ -168,8 +168,6 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFSSHJob> {
                     }
                 }
             }
-            err.close();
-            out.close();
         } catch (JSchException e) {
             logger.error("JSchException: {}", e.getMessage());
             throw new LRMException("JSchException: " + e.getMessage());
