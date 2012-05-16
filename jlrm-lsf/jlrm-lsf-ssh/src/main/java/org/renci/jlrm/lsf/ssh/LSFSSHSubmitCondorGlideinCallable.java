@@ -87,6 +87,7 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
         job.setOutput(new File("glidein.out"));
         job.setError(new File("glidein.err"));
         job.setWallTime(maxRunTime);
+        job.setMemory(null);
 
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("siteName", this.submitHost);
@@ -130,13 +131,18 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
+
             ByteArrayOutputStream err = new ByteArrayOutputStream();
             execChannel.setErrStream(err);
+
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             execChannel.setOutputStream(out);
+
             execChannel.setCommand(command);
+
             InputStream in = execChannel.getInputStream();
             execChannel.connect();
+
             // String remoteHome = new String(out.toByteArray());
             String remoteHome = IOUtils.toString(in).trim();
             execChannel.disconnect();
@@ -214,17 +220,24 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
+
             err = new ByteArrayOutputStream();
             execChannel.setErrStream(err);
+
             out = new ByteArrayOutputStream();
             execChannel.setOutputStream(out);
+
             execChannel.setCommand(command);
+
             in = execChannel.getInputStream();
             execChannel.connect();
+
             // String submitOutput = new String(out.toByteArray());
             String submitOutput = IOUtils.toString(in);
             int exitCode = execChannel.getExitStatus();
+
             execChannel.disconnect();
+            session.disconnect();
 
             if (exitCode != 0) {
                 String errorMessage = new String(err.toByteArray());
@@ -248,9 +261,6 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
                     }
                 }
             }
-            session.disconnect();
-            err.close();
-            out.close();
         } catch (FileNotFoundException e) {
             logger.error("FileNotFoundException", e);
             throw new LRMException("JSchException: " + e.getMessage());
