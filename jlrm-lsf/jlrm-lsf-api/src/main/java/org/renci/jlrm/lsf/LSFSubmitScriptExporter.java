@@ -37,7 +37,10 @@ public class LSFSubmitScriptExporter<T extends LSFJob> {
             submitFileWriter.write(String.format("#BSUB -W %s%n", job.getWallTime()));
         }
 
-        submitFileWriter.write(String.format("#BSUB -M %s%n", job.getMemory() * 1024));
+        if (job.getMemory() != null) {
+            submitFileWriter.write(String.format("#BSUB -M %s%n", job.getMemory() * 1024));
+        }
+        
         submitFileWriter.write(String.format("#BSUB -i %s%n", "/dev/null"));
         
         job.setOutput(new File(String.format("%s/%s.out", remoteWorkDir, job.getOutput().getName())));
