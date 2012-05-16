@@ -98,9 +98,30 @@ public class LSFSSHFactoryTest {
             execChannel.setCommand(command);
             InputStream in = execChannel.getInputStream();
             execChannel.connect();
+
+            byte[] tmp = new byte[1024];
+            while (true) {
+                while (in.available() > 0) {
+                    int i = in.read(tmp, 0, 1024);
+                    if (i < 0)
+                        break;
+                    System.out.print(new String(tmp, 0, i));
+                }
+                if (execChannel.isClosed()) {
+                    System.out.println("exit-status: " + execChannel.getExitStatus());
+                    break;
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception ee) {
+                }
+            }
+
             String output = IOUtils.toString(in).trim();
+
             int exitCode = execChannel.getExitStatus();
             execChannel.disconnect();
+            session.disconnect();
 
             Map<String, LSFJobStatusType> jobStatusMap = new HashMap<String, LSFJobStatusType>();
             LineNumberReader lnr = new LineNumberReader(new StringReader(output));
@@ -111,7 +132,7 @@ public class LSFSSHFactoryTest {
                     if (line.contains("is not found")) {
                         statusType = LSFJobStatusType.DONE;
                     } else {
-                        //System.out.println(line);
+                        // System.out.println(line);
                         String[] lineSplit = line.split(" ");
                         if (lineSplit != null && lineSplit.length == 2) {
                             for (LSFJobStatusType type : LSFJobStatusType.values()) {
@@ -128,9 +149,6 @@ public class LSFSSHFactoryTest {
             for (String id : jobStatusMap.keySet()) {
                 System.out.println("Job: " + id + " has a status of " + jobStatusMap.get(id));
             }
-            err.close();
-            out.close();
-            session.disconnect();
         } catch (JSchException e) {
             e.printStackTrace();
         } catch (IOException e) {
