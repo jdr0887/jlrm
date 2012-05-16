@@ -63,9 +63,9 @@ public class LSFSSHFactory {
         try {
             job = jobFuture.get();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.error("InterruptedException", e);
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            logger.error("ExecutionException", e);
         }
 
         return job;
@@ -89,9 +89,9 @@ public class LSFSSHFactory {
         try {
             job = jobFuture.get();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.error("InterruptedException", e);
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            logger.error("ExecutionException", e);
         }
         return job;
     }
@@ -103,9 +103,9 @@ public class LSFSSHFactory {
         try {
             job = jobFuture.get();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.error("InterruptedException", e);
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            logger.error("ExecutionException", e);
         }
         return job;
     }
@@ -119,9 +119,9 @@ public class LSFSSHFactory {
         try {
             ret = jobFuture.get();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.error("InterruptedException", e);
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            logger.error("ExecutionException", e);
         }
         return ret;
     }
