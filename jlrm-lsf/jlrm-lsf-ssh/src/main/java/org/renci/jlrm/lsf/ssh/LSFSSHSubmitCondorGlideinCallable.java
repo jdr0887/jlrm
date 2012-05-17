@@ -239,26 +239,19 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
             execChannel.disconnect();
             session.disconnect();
 
-            if (exitCode != 0) {
-                String errorMessage = new String(err.toByteArray());
-                logger.debug("executor.getStderr() = {}", errorMessage);
-                logger.error(errorMessage);
-                throw new LRMException(errorMessage);
-            } else {
-                LineNumberReader lnr = new LineNumberReader(new StringReader(submitOutput));
-                String line;
-                while ((line = lnr.readLine()) != null) {
-                    if (line.indexOf("submitted") != -1) {
-                        logger.info("line = " + line);
-                        Pattern pattern = Pattern.compile("^Job.+<(\\d*)> is submitted.+\\.$");
-                        Matcher matcher = pattern.matcher(line);
-                        if (!matcher.matches()) {
-                            throw new LRMException("failed to parse the jobid number");
-                        } else {
-                            job.setId(matcher.group(1));
-                        }
-                        break;
+            LineNumberReader lnr = new LineNumberReader(new StringReader(submitOutput));
+            String line;
+            while ((line = lnr.readLine()) != null) {
+                if (line.indexOf("submitted") != -1) {
+                    logger.info("line = " + line);
+                    Pattern pattern = Pattern.compile("^Job.+<(\\d*)> is submitted.+\\.$");
+                    Matcher matcher = pattern.matcher(line);
+                    if (!matcher.matches()) {
+                        throw new LRMException("failed to parse the jobid number");
+                    } else {
+                        job.setId(matcher.group(1));
                     }
+                    break;
                 }
             }
         } catch (FileNotFoundException e) {
