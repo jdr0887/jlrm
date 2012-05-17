@@ -3,7 +3,7 @@
   <name>jLRM</name>
   <groupId>org.renci</groupId>
   <artifactId>jLRM</artifactId>
-  <version>0.0.12</version>
+  <version>0.0.13-SNAPSHOT</version>
   <packaging>pom</packaging>
   <url>https://ci-dev.renci.org/site/jLRM</url>
   <organization>
@@ -152,17 +152,17 @@
       <dependency>
 	<groupId>org.renci.jlrm</groupId>
 	<artifactId>jlrm-api</artifactId>
-	<version>0.0.12</version>
+	<version>0.0.13-SNAPSHOT</version>
       </dependency>
       <dependency>
 	<groupId>org.renci.jlrm.jlrm-condor</groupId>
 	<artifactId>jlrm-condor-api</artifactId>
-	<version>0.0.12</version>
+	<version>0.0.13-SNAPSHOT</version>
       </dependency>
       <dependency>
 	<groupId>org.renci.jlrm.jlrm-lsf</groupId>
 	<artifactId>jlrm-lsf-api</artifactId>
-	<version>0.0.12</version>
+	<version>0.0.13-SNAPSHOT</version>
       </dependency>
       <dependency>
 	<groupId>org.slf4j</groupId>
