@@ -12,5 +12,6 @@
   <packaging>pom</packaging>
   <modules>
     <module>jlrm-pbs-api</module>
+    <module>jlrm-pbs-ssh</module>
   </modules>
 </project>
