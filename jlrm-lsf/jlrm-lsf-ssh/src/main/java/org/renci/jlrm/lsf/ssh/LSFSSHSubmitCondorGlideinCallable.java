@@ -23,7 +23,6 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.renci.jlrm.AbstractSubmitCallable;
 import org.renci.jlrm.LRMException;
-import org.renci.jlrm.lsf.LSFSubmitScriptExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -159,7 +158,12 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
             String remoteWorkDir = String.format("%s/%s", remoteHome, remoteWorkDirSuffix);
             logger.info("remoteWorkDir: {}", remoteWorkDir);
             velocityContext.put("remoteWorkDir", remoteWorkDir);
-            File localWorkDir = createWorkDirectory(submitDir, remoteWorkDir, job.getName());
+            
+            File tmpDir = new File(System.getProperty("java.io.tmpdir"));
+            File myDir = new File(tmpDir, System.getProperty("user.name"));
+            File localWorkDir = new File(myDir, UUID.randomUUID().toString());
+            localWorkDir.mkdirs();
+            logger.info("localWorkDir: {}", localWorkDir);
 
             try {
                 String glideinScriptMacro = IOUtils.toString(this.getClass().getClassLoader()
