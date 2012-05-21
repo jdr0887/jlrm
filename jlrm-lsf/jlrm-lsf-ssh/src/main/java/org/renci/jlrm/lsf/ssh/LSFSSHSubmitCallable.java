@@ -18,7 +18,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.renci.jlrm.AbstractSubmitCallable;
 import org.renci.jlrm.LRMException;
-import org.renci.jlrm.lsf.LSFSubmitScriptExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,7 +99,12 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFSSHJob> {
             logger.info("remoteHome: {}", remoteHome);
             String remoteWorkDir = String.format("%s/%s", remoteHome, remoteWorkDirSuffix);
             logger.info("remoteWorkDir: {}", remoteWorkDir);
-            File localWorkDir = createWorkDirectory(submitDir, remoteWorkDir, this.job.getName());
+            
+            File tmpDir = new File(System.getProperty("java.io.tmpdir"));
+            File myDir = new File(tmpDir, System.getProperty("user.name"));
+            File localWorkDir = new File(myDir, UUID.randomUUID().toString());
+            localWorkDir.mkdirs();
+            logger.info("localWorkDir: {}", localWorkDir.getAbsolutePath());
 
             LSFSubmitScriptExporter<LSFSSHJob> exporter = new LSFSubmitScriptExporter<LSFSSHJob>();
             this.job = exporter.export(localWorkDir, remoteWorkDir, this.job);
