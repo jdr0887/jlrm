@@ -19,9 +19,7 @@ public class LSFJob extends Job {
     }
 
     public LSFJob(String name, File executable) {
-        super();
-        this.name = name;
-        this.executable = executable;
+        super(name, executable);
     }
 
     public String getQueueName() {
