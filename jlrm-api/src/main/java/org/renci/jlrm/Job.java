@@ -24,6 +24,12 @@ public class Job {
         super();
     }
 
+    public Job(String name, File executable) {
+        super();
+        this.name = name;
+        this.executable = executable;
+    }
+
     public String getId() {
         return id;
     }
