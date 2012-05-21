@@ -2,20 +2,28 @@ package org.renci.jlrm.pbs;
 
 public enum PBSJobStatusType {
 
-	QUEUED("Q"), RUNNING("R"), ENDING("E"), HELD("H");
+    QUEUED("Q"),
 
-	private String value;
+    RUNNING("R"),
 
-	private PBSJobStatusType(String value) {
-		this.value = value;
-	}
+    ENDING("E"),
 
-	public String getValue() {
-		return value;
-	}
+    HELD("H"),
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+    SUSPENDED("S");
+
+    private String value;
+
+    private PBSJobStatusType(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 
 }
