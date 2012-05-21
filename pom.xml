@@ -165,6 +165,11 @@
 	<version>0.0.13-SNAPSHOT</version>
       </dependency>
       <dependency>
+	<groupId>org.renci.jlrm.jlrm-pbs</groupId>
+	<artifactId>jlrm-pbs-api</artifactId>
+	<version>0.0.13-SNAPSHOT</version>
+      </dependency>
+      <dependency>
 	<groupId>org.slf4j</groupId>
 	<artifactId>slf4j-api</artifactId>
 	<version>1.6.2</version>
