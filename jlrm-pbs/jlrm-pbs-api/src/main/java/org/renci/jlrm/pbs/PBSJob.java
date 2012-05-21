@@ -1,10 +1,12 @@
 package org.renci.jlrm.pbs;
 
+import java.io.File;
+
 import org.renci.jlrm.Job;
 
 public class PBSJob extends Job {
 
-    protected String queueName;
+    protected String queueName = "default";
 
     protected String project;
 
@@ -14,6 +16,10 @@ public class PBSJob extends Job {
 
     public PBSJob() {
         super();
+    }
+
+    public PBSJob(String name, File executable) {
+        super(name, executable);
     }
 
     public String getQueueName() {
