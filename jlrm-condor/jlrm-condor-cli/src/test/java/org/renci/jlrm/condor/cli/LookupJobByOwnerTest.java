@@ -4,6 +4,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.LineNumberReader;
 import java.io.StringReader;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.renci.common.exec.BashExecutor;
@@ -11,6 +14,9 @@ import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
 import org.renci.jlrm.LRMException;
+import org.renci.jlrm.condor.ClassAdvertisement;
+import org.renci.jlrm.condor.ClassAdvertisementFactory;
+import org.renci.jlrm.condor.CondorJobStatusType;
 
 public class LookupJobByOwnerTest {
 
@@ -42,13 +48,35 @@ public class LookupJobByOwnerTest {
         LineNumberReader lnr = new LineNumberReader(new StringReader(output.getStdout().toString()));
         String line;
 
+        Map<String, List<ClassAdvertisement>> classAdMap = new HashMap<String, List<ClassAdvertisement>>();
         while ((line = lnr.readLine()) != null) {
             if (line.trim().equals("All queues are empty")) {
                 break;
             }
-            //should never get here when queues are empty
-            assertTrue(false);
+            List<ClassAdvertisement> classAdList = ClassAdvertisementFactory.parse(line);
+            if (classAdList.size() > 0) {
+                classAdMap.put(classAdList.get(0).getKey(), classAdList);
+            }
         }
 
+        int idleCondorJobs = 0;
+        int runningCondorJobs = 0;
+
+        for (String job : classAdMap.keySet()) {
+            List<ClassAdvertisement> classAdList = classAdMap.get(job);
+            for (ClassAdvertisement classAd : classAdList) {
+                if (ClassAdvertisementFactory.CLASS_AD_KEY_JOB_STATUS.equals(classAd.getKey())) {
+                    int statusCode = Integer.valueOf(classAd.getValue().trim());
+                    if (statusCode == CondorJobStatusType.IDLE.getCode()) {
+                        ++idleCondorJobs;
+                    }
+                    if (statusCode == CondorJobStatusType.RUNNING.getCode()) {
+                        ++runningCondorJobs;
+                    }
+                }
+            }
+        }
+        System.out.println("idleCondorJobs = " + idleCondorJobs);
+        System.out.println("runningCondorJobs = " + runningCondorJobs);
     }
 }
