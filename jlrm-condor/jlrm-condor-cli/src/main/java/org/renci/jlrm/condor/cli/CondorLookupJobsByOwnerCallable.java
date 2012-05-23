@@ -45,7 +45,7 @@ public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<
         try {
 
             StringBuilder sb = new StringBuilder();
-            sb.append(" -format '\\nGlobalJobId=%s' GlobalJobId");
+            sb.append(" -format '\\nClusterId=%s' ClusterId");
             sb.append(" -format ',JLRM_USER=%s' JLRM_USER");
             sb.append(" -format ',JobStatus=%s' JobStatus");
             sb.append(" -format ',Requirements=%s' Requirements");
@@ -77,7 +77,7 @@ public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<
                 }
                 List<ClassAdvertisement> classAdList = ClassAdvertisementFactory.parse(line);
                 if (classAdList.size() > 0) {
-                    classAdMap.put(classAdList.get(0).getKey(), classAdList);
+                    classAdMap.put(classAdList.get(0).getValue(), classAdList);
                 }
             }
         } catch (NumberFormatException e) {
