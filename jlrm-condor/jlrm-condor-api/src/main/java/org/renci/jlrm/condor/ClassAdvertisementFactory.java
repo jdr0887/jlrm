@@ -38,6 +38,10 @@ public class ClassAdvertisementFactory {
 
     public static final String CLASS_AD_KEY_PERIODIC_REMOVE = "periodic_remove";
 
+    public static final String CLASS_AD_KEY_ON_EXIT_HOLD = "on_exit_hold";
+
+    public static final String CLASS_AD_KEY_ON_EXIT_REMOVE = "on_exit_remove";
+
     public static final String CLASS_AD_KEY_TRANSFER_ERROR = "transfer_error";
 
     public static final String CLASS_AD_KEY_TRANSFER_OUTPUT = "transfer_output";
@@ -102,7 +106,13 @@ public class ClassAdvertisementFactory {
                 ClassAdvertisementType.BOOLEAN, Boolean.FALSE.toString()));
 
         classAdvertismentMap.put(CLASS_AD_KEY_PERIODIC_REMOVE, new ClassAdvertisement(CLASS_AD_KEY_PERIODIC_REMOVE,
-                ClassAdvertisementType.EXPRESSION, "(JobStatus == 5)"));
+                ClassAdvertisementType.EXPRESSION, Boolean.FALSE.toString()));
+
+        classAdvertismentMap.put(CLASS_AD_KEY_ON_EXIT_HOLD, new ClassAdvertisement(CLASS_AD_KEY_ON_EXIT_HOLD,
+                ClassAdvertisementType.EXPRESSION, "(ExitBySignal == True) || (ExitCode != 0)"));
+
+        classAdvertismentMap.put(CLASS_AD_KEY_ON_EXIT_REMOVE, new ClassAdvertisement(CLASS_AD_KEY_ON_EXIT_REMOVE,
+                ClassAdvertisementType.EXPRESSION, "(ExitBySignal == True) && (ExitStatus == 0)"));
 
         classAdvertismentMap.put(CLASS_AD_KEY_TRANSFER_ERROR, new ClassAdvertisement(CLASS_AD_KEY_TRANSFER_ERROR,
                 ClassAdvertisementType.BOOLEAN, Boolean.TRUE.toString()));
@@ -194,6 +204,8 @@ public class ClassAdvertisementFactory {
         ret.add(getClassAd(CLASS_AD_KEY_TRANSFER_OUTPUT));
         ret.add(getClassAd(CLASS_AD_KEY_PERIODIC_RELEASE));
         ret.add(getClassAd(CLASS_AD_KEY_PERIODIC_REMOVE));
+        ret.add(getClassAd(CLASS_AD_KEY_ON_EXIT_HOLD));
+        //ret.add(getClassAd(CLASS_AD_KEY_ON_EXIT_REMOVE));
         ret.add(getClassAd(CLASS_AD_KEY_UNIVERSE));
         ret.add(getClassAd(CLASS_AD_KEY_REQUEST_CPUS));
         ret.add(getClassAd(CLASS_AD_KEY_REQUEST_MEMORY));
