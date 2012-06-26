@@ -157,7 +157,7 @@ public class ClassAdvertisementFactory {
                 ClassAdvertisementType.INTEGER, "1024"));
 
         classAdvertismentMap.put(CLASS_AD_KEY_REQUEST_DISK, new ClassAdvertisement(CLASS_AD_KEY_REQUEST_DISK,
-                ClassAdvertisementType.INTEGER, "10240"));
+                ClassAdvertisementType.INTEGER, "102400"));
 
         classAdvertismentMap.put(CLASS_AD_KEY_REQUIREMENTS, new ClassAdvertisement(CLASS_AD_KEY_REQUIREMENTS,
                 ClassAdvertisementType.EXPRESSION, ""));
