@@ -73,24 +73,24 @@ public class LSFSSHLookupStatusCallable implements Callable<Map<String, LSFJobSt
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
-            
+
             ByteArrayOutputStream err = new ByteArrayOutputStream();
             execChannel.setErrStream(err);
-            
+
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             execChannel.setOutputStream(out);
-            
+
             execChannel.setCommand(command);
-            
+
             InputStream in = execChannel.getInputStream();
             execChannel.connect();
-            
+
             String output = IOUtils.toString(in).trim();
             int exitCode = execChannel.getExitStatus();
 
             execChannel.disconnect();
             session.disconnect();
-            
+
             LineNumberReader lnr = new LineNumberReader(new StringReader(output));
             String line;
             while ((line = lnr.readLine()) != null) {
@@ -118,6 +118,9 @@ public class LSFSSHLookupStatusCallable implements Callable<Map<String, LSFJobSt
         } catch (IOException e) {
             logger.error("IOException", e);
             throw new LRMException("IOException: " + e.getMessage());
+        } catch (Exception e) {
+            logger.error("Exception", e);
+            throw new LRMException("Exception: " + e.getMessage());
         }
         return jobStatusMap;
     }
