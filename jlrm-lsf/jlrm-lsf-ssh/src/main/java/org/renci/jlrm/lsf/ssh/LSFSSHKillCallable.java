@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.apache.commons.io.IOUtils;
 import org.renci.jlrm.AbstractSubmitCallable;
 import org.renci.jlrm.LRMException;
 import org.slf4j.Logger;
@@ -60,20 +61,25 @@ public class LSFSSHKillCallable extends AbstractSubmitCallable<LSFSSHJob> {
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
+            
             ByteArrayOutputStream err = new ByteArrayOutputStream();
             execChannel.setErrStream(err);
+            
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             execChannel.setOutputStream(out);
+            
             execChannel.setCommand(command);
+            
             InputStream in = execChannel.getInputStream();
             execChannel.connect();
+            
+            String output = IOUtils.toString(in).trim();
             int exitCode = execChannel.getExitStatus();
-            execChannel.disconnect();
-
             logger.warn("exitCode: {}", exitCode);
+            
+            execChannel.disconnect();
             session.disconnect();
-            err.close();
-            out.close();
+            
         } catch (JSchException e) {
             logger.warn("error: {}", e.getMessage());
             throw new LRMException("JSchException: " + e.getMessage());
