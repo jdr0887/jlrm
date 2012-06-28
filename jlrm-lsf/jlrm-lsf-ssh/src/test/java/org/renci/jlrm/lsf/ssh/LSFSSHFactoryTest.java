@@ -6,14 +6,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.renci.jlrm.LRMException;
+import org.renci.jlrm.lsf.LSFJobStatusInfo;
 import org.renci.jlrm.lsf.LSFJobStatusType;
 
 import com.jcraft.jsch.ChannelExec;
@@ -73,8 +74,8 @@ public class LSFSSHFactoryTest {
     @Test
     public void testLookupStatus() {
 
-        String command = String.format("%s/bin/bjobs %s | tail -n+2 | awk '{print $1,$3}'",
-                "/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/", "173198 173244");
+        String command = String.format("%s/bin/bjobs %s | tail -n+2 | awk '{print $1,$3,$4}'",
+                "/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/", "62104 62100");
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
@@ -123,7 +124,7 @@ public class LSFSSHFactoryTest {
             execChannel.disconnect();
             session.disconnect();
 
-            Map<String, LSFJobStatusType> jobStatusMap = new HashMap<String, LSFJobStatusType>();
+            Set<LSFJobStatusInfo> jobStatusSet = new HashSet<LSFJobStatusInfo>();
             LineNumberReader lnr = new LineNumberReader(new StringReader(output));
             String line;
             while ((line = lnr.readLine()) != null) {
@@ -134,21 +135,20 @@ public class LSFSSHFactoryTest {
                     } else {
                         // System.out.println(line);
                         String[] lineSplit = line.split(" ");
-                        if (lineSplit != null && lineSplit.length == 2) {
+                        if (lineSplit != null && lineSplit.length == 3) {
                             for (LSFJobStatusType type : LSFJobStatusType.values()) {
                                 if (type.getValue().equals(lineSplit[1])) {
                                     statusType = type;
                                 }
                             }
-                            jobStatusMap.put(lineSplit[0], statusType);
+                            LSFJobStatusInfo info = new LSFJobStatusInfo(lineSplit[0], statusType, lineSplit[2]);
+                            System.out.println(info.toString());
+                            jobStatusSet.add(info);
                         }
                     }
                 }
             }
-
-            for (String id : jobStatusMap.keySet()) {
-                System.out.println("Job: " + id + " has a status of " + jobStatusMap.get(id));
-            }
+            
         } catch (JSchException e) {
             e.printStackTrace();
         } catch (IOException e) {
