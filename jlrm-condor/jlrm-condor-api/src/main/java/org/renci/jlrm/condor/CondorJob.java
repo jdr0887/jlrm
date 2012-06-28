@@ -18,6 +18,14 @@ public class CondorJob extends Job {
 
     private Integer retry;
 
+    private File preScript;
+
+    private StringBuilder preScriptArguments = new StringBuilder();
+
+    private File postScript;
+
+    private StringBuilder postScriptArguments = new StringBuilder();
+
     public CondorJob() {
         super();
     }
@@ -92,6 +100,60 @@ public class CondorJob extends Job {
         this.jobId = jobId;
     }
 
+    public File getPreScript() {
+        return preScript;
+    }
+
+    public void setPreScript(File preScript) {
+        this.preScript = preScript;
+    }
+
+    public File getPostScript() {
+        return postScript;
+    }
+
+    public void setPostScript(File postScript) {
+        this.postScript = postScript;
+    }
+
+    public void addPreScriptArgument(String flag) {
+        addPreScriptArgument(flag, "", " ");
+    }
+
+    public void addPreScriptArgument(String flag, String value) {
+        addPreScriptArgument(flag, value, " ");
+    }
+
+    public void addPreScriptArgument(String flag, String value, String delimiter) {
+        this.preScriptArguments.append(" ").append(flag).append(delimiter).append(value);
+    }
+
+    public void addPostScriptArgument(String flag) {
+        addPostScriptArgument(flag, "", " ");
+    }
+
+    public void addPostScriptArgument(String flag, String value) {
+        addPostScriptArgument(flag, value, " ");
+    }
+
+    public void addPostScriptArgument(String flag, String value, String delimiter) {
+        this.postScriptArguments.append(" ").append(flag).append(delimiter).append(value);
+    }
+
+    public StringBuilder getPreScriptArguments() {
+        return preScriptArguments;
+    }
+
+    public StringBuilder getPostScriptArguments() {
+        return postScriptArguments;
+    }
+
+    @Override
+    public String toString() {
+        return "CondorJob [classAdvertismentMap=" + classAdvertismentMap + ", cluster=" + cluster + ", jobId=" + jobId
+                + ", retry=" + retry + ", preScript=" + preScript + ", postScript=" + postScript + "]";
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -99,6 +161,8 @@ public class CondorJob extends Job {
         result = prime * result + ((classAdvertismentMap == null) ? 0 : classAdvertismentMap.hashCode());
         result = prime * result + cluster;
         result = prime * result + jobId;
+        result = prime * result + ((postScript == null) ? 0 : postScript.hashCode());
+        result = prime * result + ((preScript == null) ? 0 : preScript.hashCode());
         result = prime * result + ((retry == null) ? 0 : retry.hashCode());
         return result;
     }
@@ -120,6 +184,16 @@ public class CondorJob extends Job {
         if (cluster != other.cluster)
             return false;
         if (jobId != other.jobId)
+            return false;
+        if (postScript == null) {
+            if (other.postScript != null)
+                return false;
+        } else if (!postScript.equals(other.postScript))
+            return false;
+        if (preScript == null) {
+            if (other.preScript != null)
+                return false;
+        } else if (!preScript.equals(other.preScript))
             return false;
         if (retry == null) {
             if (other.retry != null)
