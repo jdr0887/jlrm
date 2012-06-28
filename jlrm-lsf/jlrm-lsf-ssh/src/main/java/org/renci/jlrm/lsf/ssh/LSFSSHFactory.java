@@ -1,7 +1,7 @@
 package org.renci.jlrm.lsf.ssh;
 
 import java.io.File;
-import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.renci.jlrm.LRMException;
-import org.renci.jlrm.lsf.LSFJobStatusType;
+import org.renci.jlrm.lsf.LSFJobStatusInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,12 +110,12 @@ public class LSFSSHFactory {
         return job;
     }
 
-    public Map<String, LSFJobStatusType> lookupStatus(LSFSSHJob... jobs) throws LRMException {
+    public Set<LSFJobStatusInfo> lookupStatus(LSFSSHJob... jobs) throws LRMException {
         logger.debug("ENTERING lookupStatus(job)");
         LSFSSHLookupStatusCallable runnable = new LSFSSHLookupStatusCallable(this.LSFHome, this.username,
                 this.submitHost, jobs);
-        Future<Map<String, LSFJobStatusType>> jobFuture = this.threadPoolExecutor.submit(runnable);
-        Map<String, LSFJobStatusType> ret = null;
+        Future<Set<LSFJobStatusInfo>> jobFuture = this.threadPoolExecutor.submit(runnable);
+        Set<LSFJobStatusInfo> ret = null;
         try {
             ret = jobFuture.get();
         } catch (InterruptedException e) {
