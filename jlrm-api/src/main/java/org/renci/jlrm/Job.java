@@ -1,6 +1,7 @@
 package org.renci.jlrm;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 public class Job {
 
@@ -19,6 +20,10 @@ public class Job {
     protected Integer numberOfProcessors = 1;
 
     protected Integer memory = 4 * 1024;
+
+    protected long duration;
+
+    protected TimeUnit durationTimeUnit;
 
     public Job() {
         super();
@@ -94,17 +99,35 @@ public class Job {
         this.memory = memory;
     }
 
+    public long getDuration() {
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public TimeUnit getDurationTimeUnit() {
+        return durationTimeUnit;
+    }
+
+    public void setDurationTimeUnit(TimeUnit durationTimeUnit) {
+        this.durationTimeUnit = durationTimeUnit;
+    }
+
     @Override
     public String toString() {
         return "Job [id=" + id + ", name=" + name + ", executable=" + executable + ", submitFile=" + submitFile
                 + ", output=" + output + ", error=" + error + ", numberOfProcessors=" + numberOfProcessors
-                + ", memory=" + memory + "]";
+                + ", memory=" + memory + ", duration=" + duration + ", durationTimeUnit=" + durationTimeUnit + "]";
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + (int) (duration ^ (duration >>> 32));
+        result = prime * result + ((durationTimeUnit == null) ? 0 : durationTimeUnit.hashCode());
         result = prime * result + ((error == null) ? 0 : error.hashCode());
         result = prime * result + ((executable == null) ? 0 : executable.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
@@ -125,6 +148,10 @@ public class Job {
         if (getClass() != obj.getClass())
             return false;
         Job other = (Job) obj;
+        if (duration != other.duration)
+            return false;
+        if (durationTimeUnit != other.durationTimeUnit)
+            return false;
         if (error == null) {
             if (other.error != null)
                 return false;
