@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -149,7 +150,7 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
             out.close();
 
             try {
-                Thread.sleep(1500);
+                TimeUnit.SECONDS.sleep(2);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -213,7 +214,7 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
             sftpChannel.disconnect();
 
             try {
-                Thread.sleep(1500);
+                TimeUnit.SECONDS.sleep(2);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
