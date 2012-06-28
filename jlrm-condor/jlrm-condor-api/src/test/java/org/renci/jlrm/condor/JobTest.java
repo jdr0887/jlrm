@@ -30,6 +30,11 @@ public class JobTest {
 
         File executable = new File("/bin/hostname");
         CondorJob job = new CondorJob("asdfasdfasdffffffffffffffasdfasdfasdfasdfasdfa", executable, 3);
+        job.setPreScript(new File("asdf"));
+        job.addPreScriptArgument("--foo", "bar");
+        
+        job.setPostScript(new File("qwer"));
+        job.addPostScriptArgument("--fuzz", "buzz");
 
         job.addArgument("someClassName");
         Map<String, String> defaultRSLAttributeMap = new HashMap<String, String>();
@@ -70,6 +75,12 @@ public class JobTest {
         graph.addEdge(job, job2);
 
         CondorJob job3 = new CondorJob("c", executable, 2);
+        job3.setPreScript(new File("asdf"));
+        job3.addPreScriptArgument("--foo", "bar");
+        
+        job3.setPostScript(new File("qwer"));
+        job3.addPostScriptArgument("--foo", "bar");
+        job3.addPostScriptArgument("--fuzz", "buzz", "=");
 
         job3.addArgument("zxcvzxcv");
 
