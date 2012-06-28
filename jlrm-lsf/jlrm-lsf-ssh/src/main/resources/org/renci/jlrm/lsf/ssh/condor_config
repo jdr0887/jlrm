@@ -124,40 +124,29 @@ NEGOTIATOR_POST_JOB_RANK = $(UWCS_NEGOTIATOR_POST_JOB_RANK)
 MaxJobRetirementTime    = $(UWCS_MaxJobRetirementTime)
 CLAIM_WORKLIFE          = $(UWCS_CLAIM_WORKLIFE)
 
-UWCS_WANT_SUSPEND  = ( $(SmallJob) || $(KeyboardNotBusy) || $(IsVanilla) ) && \
-                     ( $(SUSPEND) )
+UWCS_WANT_SUSPEND  = ( $(SmallJob) || $(KeyboardNotBusy) || $(IsVanilla) ) && ( $(SUSPEND) )
 
 UWCS_WANT_VACATE   = ( $(ActivationTimer) > 10 * $(MINUTE) || $(IsVanilla) )
 
-UWCS_START	= ( (KeyboardIdle > $(StartIdleTime)) \
-                    && ( $(CPUIdle) || \
-                         (State != "Unclaimed" && State != "Owner")) )
+UWCS_START	= ( (KeyboardIdle > $(StartIdleTime)) && ( $(CPUIdle) || (State != "Unclaimed" && State != "Owner")) )
 
-UWCS_SUSPEND = ( $(KeyboardBusy) || \
-                 ( (CpuBusyTime > 2 * $(MINUTE)) \
-                   && $(ActivationTimer) > 90 ) )
+UWCS_SUSPEND = ( $(KeyboardBusy) || ( (CpuBusyTime > 2 * $(MINUTE)) && $(ActivationTimer) > 90 ) )
 
-UWCS_CONTINUE = ( $(CPUIdle) && ($(ActivityTimer) > 10) \
-                  && (KeyboardIdle > $(ContinueIdleTime)) )
+UWCS_CONTINUE = ( $(CPUIdle) && ($(ActivityTimer) > 10) && (KeyboardIdle > $(ContinueIdleTime)) )
 
-UWCS_PREEMPT = ( ((Activity == "Suspended") && \
-                  ($(ActivityTimer) > $(MaxSuspendTime))) \
-		 || (SUSPEND && (WANT_SUSPEND == False)) )
+UWCS_PREEMPT = ( ((Activity == "Suspended") && ($(ActivityTimer) > $(MaxSuspendTime))) || (SUSPEND && (WANT_SUSPEND == False)) )
 
 UWCS_MaxJobRetirementTime = 0
 
 UWCS_KILL = $(ActivityTimer) > $(MaxVacateTime) 
 
-UWCS_PERIODIC_CHECKPOINT	= $(LastCkpt) > (3 * $(HOUR) + \
-                                  $RANDOM_INTEGER(-30,30,1) * $(MINUTE) )
+UWCS_PERIODIC_CHECKPOINT	= $(LastCkpt) > (3 * $(HOUR) + $RANDOM_INTEGER(-30,30,1) * $(MINUTE) )
 
 UWCS_NEGOTIATOR_PRE_JOB_RANK = RemoteOwner =?= UNDEFINED
 
-UWCS_NEGOTIATOR_POST_JOB_RANK = \
- (RemoteOwner =?= UNDEFINED) * (KFlops - SlotID - 1.0e10*(Offline=?=True))
+UWCS_NEGOTIATOR_POST_JOB_RANK = (RemoteOwner =?= UNDEFINED) * (KFlops - SlotID - 1.0e10*(Offline=?=True))
 
-UWCS_PREEMPTION_REQUIREMENTS = ( $(StateTimer) > (1 * $(HOUR)) && \
-	RemoteUserPrio > TARGET.SubmitterUserPrio * 1.2 ) || (MY.NiceUser == True)
+UWCS_PREEMPTION_REQUIREMENTS = ( $(StateTimer) > (1 * $(HOUR)) && RemoteUserPrio > TARGET.SubmitterUserPrio * 1.2 ) || (MY.NiceUser == True)
 
 UWCS_PREEMPTION_RANK = (RemoteUserPrio * 1000000) - TARGET.ImageSize
 
