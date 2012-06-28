@@ -115,12 +115,20 @@ public class CondorSubmitScriptExporter {
 
                 for (CondorJob job : graph.vertexSet()) {
                     writeSubmitFile(workDir, job);
-                    int nameLength = job.getName().length() + 4;
-                    String format = "%n%1$-10s%2$-" + nameLength + "s%2$s.sub%n";
-                    dagFileWriter.write(String.format(format, "JOB", job.getName()));
+                    dagFileWriter.write(String.format("%n%1$-10s %2$-10s %2$s.sub", "JOB", job.getName()));
+                    if (job.getPreScript() != null) {
+                        dagFileWriter.write(String.format("%n%1$-10s %2$-10s %3$-10s %4$-10s%5$s", "SCRIPT", "PRE",
+                                job.getName(), job.getPreScript().getAbsolutePath(), job.getPreScriptArguments()
+                                        .toString()));
+                    }
+                    if (job.getPostScript() != null) {
+                        dagFileWriter.write(String.format("%n%1$-10s %2$-10s %3$-10s %4$-10s%5$s", "SCRIPT", "POST",
+                                job.getName(), job.getPostScript().getAbsolutePath(), job.getPostScriptArguments()
+                                        .toString()));
+                    }
                     if (job.getRetry() != null && job.getRetry() > 1) {
-                        format = "%1$-10s%2$-" + nameLength + "s%3$d%n";
-                        dagFileWriter.write(String.format(format, "RETRY", job.getName(), job.getRetry()));
+                        dagFileWriter.write(String.format("%n%1$-10s %2$-10s %3$d%n", "RETRY", job.getName(),
+                                job.getRetry()));
                     }
                     dagFileWriter.flush();
                 }
@@ -130,8 +138,7 @@ public class CondorSubmitScriptExporter {
                 for (CondorJobEdge edge : graph.edgeSet()) {
                     CondorJob source = (CondorJob) edge.getSource();
                     CondorJob target = (CondorJob) edge.getTarget();
-                    int nameLength = source.getName().length() + 4;
-                    String format = "%1$-10s%2$-" + nameLength + "s%3$-10s%4$s%n";
+                    String format = "%1$-10s %2$-10s %3$-10s %4$s%n";
                     dagFileWriter.write(String.format(format, "PARENT", source.getName(), "CHILD", target.getName()));
                     dagFileWriter.flush();
                 }
