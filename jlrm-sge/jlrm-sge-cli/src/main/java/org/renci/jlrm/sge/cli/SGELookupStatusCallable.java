@@ -36,7 +36,7 @@ public class SGELookupStatusCallable implements Callable<SGEJobStatusType> {
     @Override
     public SGEJobStatusType call() throws LRMException {
         SGEJobStatusType ret = SGEJobStatusType.UNKNOWN;
-        String command = String.format("%s/bin/bjobs %s | tail -n+2 | awk '{print $3}'",
+        String command = String.format("%s/bin/qstat -j %s | tail -n+2 | awk '{print $3}'",
                 this.sgeHome.getAbsolutePath(), job.getId());
         try {
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());

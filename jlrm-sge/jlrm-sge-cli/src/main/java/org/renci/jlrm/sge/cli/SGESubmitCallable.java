@@ -50,7 +50,7 @@ public class SGESubmitCallable extends AbstractSubmitCallable<SGEJob> {
             SGESubmitScriptExporter<SGEJob> exporter = new SGESubmitScriptExporter<SGEJob>();
             this.job = exporter.export(workDir, job);
 
-            String command = String.format("%s/bin/bsub < %s", this.sgeHome.getAbsolutePath(), job.getSubmitFile()
+            String command = String.format("%s/bin/qsub < %s", this.sgeHome.getAbsolutePath(), job.getSubmitFile()
                     .getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
             Executor executor = BashExecutor.getInstance();

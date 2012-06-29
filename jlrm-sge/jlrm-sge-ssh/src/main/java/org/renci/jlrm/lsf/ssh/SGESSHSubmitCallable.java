@@ -32,7 +32,7 @@ public class SGESSHSubmitCallable extends AbstractSubmitCallable<SGESSHJob> {
 
     private final Logger logger = LoggerFactory.getLogger(SGESSHSubmitCallable.class);
 
-    private String LSFHome;
+    private String SGEHome;
 
     private SGESSHJob job;
 
@@ -46,13 +46,13 @@ public class SGESSHSubmitCallable extends AbstractSubmitCallable<SGESSHJob> {
         super();
     }
 
-    public SGESSHSubmitCallable(String LSFHome, String host, SGESSHJob job, File submitDir) {
-        this(LSFHome, System.getProperty("user.name"), host, job, submitDir);
+    public SGESSHSubmitCallable(String SGEHome, String host, SGESSHJob job, File submitDir) {
+        this(SGEHome, System.getProperty("user.name"), host, job, submitDir);
     }
 
-    public SGESSHSubmitCallable(String LSFHome, String username, String host, SGESSHJob job, File submitDir) {
+    public SGESSHSubmitCallable(String SGEHome, String username, String host, SGESSHJob job, File submitDir) {
         super();
-        this.LSFHome = LSFHome;
+        this.SGEHome = SGEHome;
         this.host = host;
         this.job = job;
         this.username = username;
@@ -99,7 +99,7 @@ public class SGESSHSubmitCallable extends AbstractSubmitCallable<SGESSHJob> {
             logger.info("remoteHome: {}", remoteHome);
             String remoteWorkDir = String.format("%s/%s", remoteHome, remoteWorkDirSuffix);
             logger.info("remoteWorkDir: {}", remoteWorkDir);
-            
+
             File tmpDir = new File(System.getProperty("java.io.tmpdir"));
             File myDir = new File(tmpDir, System.getProperty("user.name"));
             File localWorkDir = new File(myDir, UUID.randomUUID().toString());
@@ -128,10 +128,10 @@ public class SGESSHSubmitCallable extends AbstractSubmitCallable<SGESSHJob> {
                     ChannelSftp.OVERWRITE);
             sftpChannel.chmod(0644, job.getSubmitFile().getName());
             sftpChannel.disconnect();
-            
+
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
-            command = String.format("%s/bin/bsub < %s", this.LSFHome, targetFile);
+            command = String.format("%s/bin/qsub < %s", this.SGEHome, targetFile);
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
@@ -185,12 +185,12 @@ public class SGESSHSubmitCallable extends AbstractSubmitCallable<SGESSHJob> {
         return job;
     }
 
-    public String getLSFHome() {
-        return LSFHome;
+    public String getSGEHome() {
+        return SGEHome;
     }
 
-    public void setLSFHome(String lSFHome) {
-        LSFHome = lSFHome;
+    public void setSGEHome(String sGEHome) {
+        SGEHome = sGEHome;
     }
 
     public SGESSHJob getJob() {
