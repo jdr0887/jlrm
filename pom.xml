@@ -165,6 +165,11 @@
 	<version>0.0.17-SNAPSHOT</version>
       </dependency>
       <dependency>
+	<groupId>org.renci.jlrm.jlrm-sge</groupId>
+	<artifactId>jlrm-sge-api</artifactId>
+	<version>0.0.17-SNAPSHOT</version>
+      </dependency>
+      <dependency>
 	<groupId>org.renci.jlrm.jlrm-pbs</groupId>
 	<artifactId>jlrm-pbs-api</artifactId>
 	<version>0.0.17-SNAPSHOT</version>
@@ -268,5 +273,6 @@
     <module>jlrm-condor</module>
     <module>jlrm-lsf</module>
     <module>jlrm-pbs</module>
+    <module>jlrm-sge</module>
   </modules>
 </project>
