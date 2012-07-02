@@ -2,36 +2,42 @@ package org.renci.jlrm.sge;
 
 public enum SGEJobStatusType {
 
-	PENDING("PEND"),
+    DELETION("d"),
 
-	SUSPENDED_FROM_PENDING("PSUSP"),
+    ERROR("E"),
 
-	RUNNING("RUN"),
+    HOLD("h"),
 
-	SUSPENDED_BY_USER("USUSP"),
+    RUNNING("r"),
 
-	SUSPENDED_BY_SYSTEM("SSUSP"),
+    RESTARTED("R"),
 
-	DONE("DONE"),
+    SUSPENDED("s"),
 
-	EXIT("EXIT"),
+    TRANSFERING("t"),
 
-	UNKNOWN("UNKWN"),
+    THRESHOLD("T"),
 
-	ZOMBIE("ZOMBI");
+    WAITING("w"),
+    
+    DONE;
 
-	private String value;
+    private String value;
 
-	private SGEJobStatusType(String value) {
-		this.value = value;
-	}
+    private SGEJobStatusType(String value) {
+        this.value = value;
+    }
 
-	public String getValue() {
-		return value;
-	}
+    private SGEJobStatusType() {
+        this.value = "";
+    }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 
 }
