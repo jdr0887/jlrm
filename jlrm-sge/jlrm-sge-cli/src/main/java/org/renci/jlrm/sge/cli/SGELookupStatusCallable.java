@@ -35,8 +35,8 @@ public class SGELookupStatusCallable implements Callable<SGEJobStatusType> {
 
     @Override
     public SGEJobStatusType call() throws LRMException {
-        SGEJobStatusType ret = SGEJobStatusType.UNKNOWN;
-        String command = String.format("%s/bin/qstat -j %s | tail -n+2 | awk '{print $3}'",
+        SGEJobStatusType ret = SGEJobStatusType.DONE;
+        String command = String.format("%s/qstat -j %s | tail -n+2 | awk '{print $3}'",
                 this.sgeHome.getAbsolutePath(), job.getId());
         try {
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
@@ -50,7 +50,7 @@ public class SGELookupStatusCallable implements Callable<SGEJobStatusType> {
 
                 if (StringUtils.isNotEmpty(stdout)) {
                     String statusValue = stdout.trim();
-                    if (statusValue.contains("is not found")) {
+                    if (statusValue.contains("do not exist")) {
                         ret = SGEJobStatusType.DONE;
                     } else {
                         for (SGEJobStatusType type : SGEJobStatusType.values()) {
