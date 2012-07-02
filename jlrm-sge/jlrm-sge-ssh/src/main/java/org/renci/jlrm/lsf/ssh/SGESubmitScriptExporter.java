@@ -51,7 +51,7 @@ public class SGESubmitScriptExporter<T extends SGESSHJob> {
 
         submitFileWriter.write(String.format("#$ -o %s%n", job.getOutput().getAbsolutePath()));
         submitFileWriter.write(String.format("#$ -e %s%n", job.getError().getAbsolutePath()));
-        submitFileWriter.write(String.format("#$ -pe smp %n", job.getHostCount()));
+        submitFileWriter.write(String.format("#$ -pe smp %d%n", job.getHostCount()));
 
         if (job.getTransferExecutable()) {
             submitFileWriter.write(remoteWorkDir + File.separator + job.getExecutable().getName());
@@ -100,7 +100,7 @@ public class SGESubmitScriptExporter<T extends SGESSHJob> {
         submitFileWriter.write(String.format("#$ -o %s%n", job.getOutput().getAbsolutePath()));
         submitFileWriter.write(String.format("#$ -e %s%n", job.getError().getAbsolutePath()));
         submitFileWriter.write(String.format("#$ -n %s%n", job.getNumberOfProcessors()));
-        submitFileWriter.write(String.format("#$ -pe smp %n", job.getNumberOfProcessors()));
+        submitFileWriter.write(String.format("#$ -pe smp %d%n", job.getNumberOfProcessors()));
 
         submitFileWriter.write(job.getExecutable().getAbsolutePath());
 
