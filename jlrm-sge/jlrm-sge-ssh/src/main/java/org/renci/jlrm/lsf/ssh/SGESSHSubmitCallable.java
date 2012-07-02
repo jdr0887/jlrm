@@ -131,7 +131,7 @@ public class SGESSHSubmitCallable extends AbstractSubmitCallable<SGESSHJob> {
 
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
-            command = String.format("%s/bin/qsub < %s", this.SGEHome, targetFile);
+            command = String.format("%s/qsub < %s", this.SGEHome, targetFile);
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);

@@ -220,7 +220,7 @@ public class SGESSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<SG
 
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
-            command = String.format("%s/bin/bsub < %s", this.LSFHome, targetFile);
+            command = String.format("%s/qsub < %s", this.LSFHome, targetFile);
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);

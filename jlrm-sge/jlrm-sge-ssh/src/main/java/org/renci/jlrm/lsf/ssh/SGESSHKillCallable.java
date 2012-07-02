@@ -57,7 +57,7 @@ public class SGESSHKillCallable extends AbstractSubmitCallable<SGESSHJob> {
             session.setConfig(config);
             session.connect(30000);
 
-            String command = String.format("%s/bin/qdel %s", this.LSFHome, job.getId());
+            String command = String.format("%s/qdel %s", this.LSFHome, job.getId());
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);

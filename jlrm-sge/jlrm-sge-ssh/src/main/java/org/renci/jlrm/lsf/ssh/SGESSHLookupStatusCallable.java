@@ -55,7 +55,7 @@ public class SGESSHLookupStatusCallable implements Callable<Map<String, SGEJobSt
             sb.append(" ").append(job.getId());
         }
         String jobXarg = sb.toString().replaceFirst(" ", "");
-        String command = String.format("%s/bin/qstat %s | tail -n+2 | awk '{print $1,$3}'", this.SGEHome, jobXarg);
+        String command = String.format("%s/qstat %s | tail -n+2 | awk '{print $1,$3}'", this.SGEHome, jobXarg);
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
