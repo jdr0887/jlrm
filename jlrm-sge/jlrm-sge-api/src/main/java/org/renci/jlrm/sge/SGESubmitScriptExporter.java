@@ -39,7 +39,10 @@ public class SGESubmitScriptExporter<T extends SGEJob> {
                     (job.getWallTime() % 60)));
         }
 
-        submitFileWriter.write(String.format("#$ -M %s%n", job.getMemory()));
+        if (job.getMemory() != null) {
+            submitFileWriter.write(String.format("#$ -l mf=%s%n", job.getMemory()));
+        }
+        
         submitFileWriter.write(String.format("#$ -i %s%n", "/dev/null"));
 
         job.setOutput(new File(String.format("%s/%s.out", workDir.getAbsolutePath(), job.getOutput().getName())));
@@ -47,11 +50,7 @@ public class SGESubmitScriptExporter<T extends SGEJob> {
 
         submitFileWriter.write(String.format("#$ -o %s%n", job.getOutput().getAbsolutePath()));
         submitFileWriter.write(String.format("#$ -e %s%n", job.getError().getAbsolutePath()));
-        submitFileWriter.write(String.format("#$ -n %s%n", job.getNumberOfProcessors()));
-
-        if (job.getHostCount() != null) {
-            submitFileWriter.write(String.format("#$ -R \"span[hosts=%d]\"%n", job.getHostCount()));
-        }
+        submitFileWriter.write(String.format("#$ -pe threads %d%n", job.getNumberOfProcessors()));
 
         submitFileWriter.write(job.getExecutable().getAbsolutePath());
 
