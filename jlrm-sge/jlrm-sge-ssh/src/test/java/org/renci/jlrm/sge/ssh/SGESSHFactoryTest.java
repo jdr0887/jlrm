@@ -14,9 +14,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.renci.jlrm.LRMException;
-import org.renci.jlrm.lsf.ssh.SGESSHFactory;
-import org.renci.jlrm.lsf.ssh.SGESSHJob;
 import org.renci.jlrm.sge.SGEJobStatusType;
+import org.renci.jlrm.sge.ssh.SGESSHFactory;
+import org.renci.jlrm.sge.ssh.SGESSHJob;
 
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
