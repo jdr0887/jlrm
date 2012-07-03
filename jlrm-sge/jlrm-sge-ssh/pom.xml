@@ -3,12 +3,12 @@
   <parent>
     <groupId>org.renci.jlrm</groupId>
     <artifactId>jlrm-sge</artifactId>
-    <version>0.0.17-SNAPSHOT</version>
+    <version>0.0.17</version>
   </parent>
   <name>jLRM :: SGE :: SSH</name>
   <groupId>org.renci.jlrm.jlrm-sge</groupId>
   <artifactId>jlrm-sge-ssh</artifactId>
-  <version>0.0.17-SNAPSHOT</version>
+  <version>0.0.17</version>
   <packaging>bundle</packaging>
   <dependencies>
     <dependency>
