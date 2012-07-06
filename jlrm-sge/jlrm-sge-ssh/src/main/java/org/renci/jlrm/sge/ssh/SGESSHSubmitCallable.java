@@ -17,7 +17,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.renci.jlrm.AbstractSubmitCallable;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,11 +33,9 @@ public class SGESSHSubmitCallable extends AbstractSubmitCallable<SGESSHJob> {
 
     private final Logger logger = LoggerFactory.getLogger(SGESSHSubmitCallable.class);
 
-    private String SGEHome;
+    private Site site;
 
     private SGESSHJob job;
-
-    private String host;
 
     private String username;
 
@@ -46,21 +45,20 @@ public class SGESSHSubmitCallable extends AbstractSubmitCallable<SGESSHJob> {
         super();
     }
 
-    public SGESSHSubmitCallable(String SGEHome, String host, SGESSHJob job, File submitDir) {
-        this(SGEHome, System.getProperty("user.name"), host, job, submitDir);
+    public SGESSHSubmitCallable(Site site, SGESSHJob job, File submitDir) {
+        this(site, System.getProperty("user.name"), job, submitDir);
     }
 
-    public SGESSHSubmitCallable(String SGEHome, String username, String host, SGESSHJob job, File submitDir) {
+    public SGESSHSubmitCallable(Site site, String username, SGESSHJob job, File submitDir) {
         super();
-        this.SGEHome = SGEHome;
-        this.host = host;
+        this.site = site;
         this.job = job;
         this.username = username;
         this.submitDir = submitDir;
     }
 
     @Override
-    public SGESSHJob call() throws LRMException {
+    public SGESSHJob call() throws JLRMException {
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
@@ -69,7 +67,7 @@ public class SGESSHSubmitCallable extends AbstractSubmitCallable<SGESSHJob> {
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.host, 22);
+            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("compression.s2c", "zlib,none");
             config.setProperty("compression.c2s", "zlib,none");
@@ -131,7 +129,7 @@ public class SGESSHSubmitCallable extends AbstractSubmitCallable<SGESSHJob> {
 
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
-            command = String.format("%s/qsub %s", this.SGEHome, targetFile);
+            command = String.format("%s/qsub %s", this.site.getLRMBinDirectory(), targetFile);
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
@@ -149,12 +147,12 @@ public class SGESSHSubmitCallable extends AbstractSubmitCallable<SGESSHJob> {
             session.disconnect();
             err.close();
             out.close();
-            
+
             if (exitCode != 0) {
                 String errorMessage = new String(err.toByteArray());
                 logger.debug("executor.getStderr() = {}", errorMessage);
                 logger.error(errorMessage);
-                throw new LRMException(errorMessage);
+                throw new JLRMException(errorMessage);
             } else {
                 LineNumberReader lnr = new LineNumberReader(new StringReader(submitOutput));
                 String line;
@@ -164,7 +162,7 @@ public class SGESSHSubmitCallable extends AbstractSubmitCallable<SGESSHJob> {
                         Pattern pattern = Pattern.compile("^.+job (\\d+) .+has been submitted$");
                         Matcher matcher = pattern.matcher(line);
                         if (!matcher.matches()) {
-                            throw new LRMException("failed to parse the jobid number");
+                            throw new JLRMException("failed to parse the jobid number");
                         } else {
                             job.setId(matcher.group(1));
                         }
@@ -174,23 +172,23 @@ public class SGESSHSubmitCallable extends AbstractSubmitCallable<SGESSHJob> {
             }
         } catch (JSchException e) {
             logger.error("JSchException: {}", e.getMessage());
-            throw new LRMException("JSchException: " + e.getMessage());
+            throw new JLRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
             logger.error("IOException: {}", e.getMessage());
-            throw new LRMException("IOException: " + e.getMessage());
+            throw new JLRMException("IOException: " + e.getMessage());
         } catch (SftpException e) {
             logger.error("error: {}", e.getMessage());
-            throw new LRMException("SftpException: " + e.getMessage());
+            throw new JLRMException("SftpException: " + e.getMessage());
         }
         return job;
     }
 
-    public String getSGEHome() {
-        return SGEHome;
+    public Site getSite() {
+        return site;
     }
 
-    public void setSGEHome(String sGEHome) {
-        SGEHome = sGEHome;
+    public void setSite(Site site) {
+        this.site = site;
     }
 
     public SGESSHJob getJob() {
@@ -199,14 +197,6 @@ public class SGESSHSubmitCallable extends AbstractSubmitCallable<SGESSHJob> {
 
     public void setJob(SGESSHJob job) {
         this.job = job;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
     }
 
     public String getUsername() {

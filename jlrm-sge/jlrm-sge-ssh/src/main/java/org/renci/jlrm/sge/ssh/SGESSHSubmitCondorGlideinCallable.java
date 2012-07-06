@@ -22,7 +22,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.renci.jlrm.AbstractSubmitCallable;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.Queue;
+import org.renci.jlrm.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +39,7 @@ public class SGESSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<SG
 
     private final Logger logger = LoggerFactory.getLogger(SGESSHSubmitCondorGlideinCallable.class);
 
-    private String LSFHome;
+    private Site site;
 
     private SGESSHJob job;
 
@@ -45,17 +47,11 @@ public class SGESSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<SG
 
     private String username;
 
-    private String submitHost;
-
     private String collectorHost;
-
-    private Integer maxRunTime;
-
-    private Integer maxNoClaimTime;
 
     private Integer requiredMemory;
 
-    private String queue;
+    private Queue queue;
 
     public SGESSHSubmitCondorGlideinCallable() {
         super();
@@ -73,35 +69,35 @@ public class SGESSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<SG
      * 
      * @return number of glide-ins submitted
      */
-    public SGESSHJob call() throws LRMException {
+    public SGESSHJob call() throws JLRMException {
         logger.debug("ENTERING call()");
 
         SGESSHJob job = new SGESSHJob();
         job.setTransferExecutable(Boolean.TRUE);
         job.setTransferInputs(Boolean.TRUE);
-        job.setQueueName(this.queue);
+        job.setQueueName(this.queue.getName());
         job.setName("glidein");
         job.setHostCount(1);
         job.setNumberOfProcessors(8);
         job.setOutput(new File("glidein.out"));
         job.setError(new File("glidein.err"));
-        job.setWallTime(maxRunTime);
+        job.setWallTime(this.queue.getRunTime());
         job.setMemory(null);
 
         VelocityContext velocityContext = new VelocityContext();
-        velocityContext.put("siteName", this.submitHost);
+        velocityContext.put("siteName", this.site.getSubmitHost());
         velocityContext.put("collectorHost", this.collectorHost);
         velocityContext.put("jlrmUser", this.username);
 
         // note that we want a lower max run time here, so that the glidein can shut down
         // gracefully before getting kicked off by the batch scheduler
-        int maxRunTimeAdjusted = this.maxRunTime - 20;
+        long maxRunTimeAdjusted = this.queue.getRunTime() - 20;
         if (maxRunTimeAdjusted < 0) {
-            maxRunTimeAdjusted = this.maxRunTime / 2;
+            maxRunTimeAdjusted = this.queue.getRunTime() / 2;
         }
         velocityContext.put("siteMaxRunTimeMins", maxRunTimeAdjusted);
         velocityContext.put("siteMaxRunTimeSecs", maxRunTimeAdjusted * 60);
-        velocityContext.put("siteMaxNoClaimTimeSecs", this.maxNoClaimTime * 60);
+        velocityContext.put("siteMaxNoClaimTimeSecs", this.site.getMaxNoClaimTime() * 60);
         velocityContext.put("requiredMemory", this.requiredMemory * 1024);
         velocityContext.put("glideinStartTime", new Date().getTime());
         velocityContext.put("maxRunTime", maxRunTimeAdjusted);
@@ -112,7 +108,7 @@ public class SGESSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<SG
             JSch sch = new JSch();
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.submitHost, 22);
+            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("compression.s2c", "zlib,none");
             config.setProperty("compression.c2s", "zlib,none");
@@ -158,7 +154,7 @@ public class SGESSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<SG
             String remoteWorkDir = String.format("%s/%s", remoteHome, remoteWorkDirSuffix);
             logger.info("remoteWorkDir: {}", remoteWorkDir);
             velocityContext.put("remoteWorkDir", remoteWorkDir);
-            
+
             File tmpDir = new File(System.getProperty("java.io.tmpdir"));
             File myDir = new File(tmpDir, System.getProperty("user.name"));
             File localWorkDir = new File(myDir, UUID.randomUUID().toString());
@@ -186,7 +182,7 @@ public class SGESSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<SG
 
             } catch (IOException e) {
                 logger.error("Problem writing scripts", e);
-                throw new LRMException(e.getMessage());
+                throw new JLRMException(e.getMessage());
             }
 
             SGESubmitScriptExporter<SGESSHJob> exporter = new SGESubmitScriptExporter<SGESSHJob>();
@@ -220,7 +216,7 @@ public class SGESSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<SG
 
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
-            command = String.format("%s/qsub < %s", this.LSFHome, targetFile);
+            command = String.format("%s/qsub < %s", this.site.getLRMBinDirectory(), targetFile);
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
@@ -251,7 +247,7 @@ public class SGESSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<SG
                     Pattern pattern = Pattern.compile("^Job.+<(\\d*)> is submitted.+\\.$");
                     Matcher matcher = pattern.matcher(line);
                     if (!matcher.matches()) {
-                        throw new LRMException("failed to parse the jobid number");
+                        throw new JLRMException("failed to parse the jobid number");
                     } else {
                         job.setId(matcher.group(1));
                     }
@@ -260,16 +256,16 @@ public class SGESSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<SG
             }
         } catch (FileNotFoundException e) {
             logger.error("FileNotFoundException", e);
-            throw new LRMException("JSchException: " + e.getMessage());
+            throw new JLRMException("JSchException: " + e.getMessage());
         } catch (JSchException e) {
             logger.error("JSchException", e);
-            throw new LRMException("JSchException: " + e.getMessage());
+            throw new JLRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
             logger.error("IOException", e);
-            throw new LRMException("IOException: " + e.getMessage());
+            throw new JLRMException("IOException: " + e.getMessage());
         } catch (SftpException e) {
             logger.error("SftpException", e);
-            throw new LRMException("SftpException: " + e.getMessage());
+            throw new JLRMException("SftpException: " + e.getMessage());
         }
 
         return job;
@@ -287,12 +283,12 @@ public class SGESSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<SG
         FileUtils.writeStringToFile(file, sw.toString());
     }
 
-    public String getLSFHome() {
-        return LSFHome;
+    public Site getSite() {
+        return site;
     }
 
-    public void setLSFHome(String lSFHome) {
-        LSFHome = lSFHome;
+    public void setSite(Site site) {
+        this.site = site;
     }
 
     public SGESSHJob getJob() {
@@ -319,36 +315,12 @@ public class SGESSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<SG
         this.username = username;
     }
 
-    public String getSubmitHost() {
-        return submitHost;
-    }
-
-    public void setSubmitHost(String submitHost) {
-        this.submitHost = submitHost;
-    }
-
     public String getCollectorHost() {
         return collectorHost;
     }
 
     public void setCollectorHost(String collectorHost) {
         this.collectorHost = collectorHost;
-    }
-
-    public Integer getMaxRunTime() {
-        return maxRunTime;
-    }
-
-    public void setMaxRunTime(Integer maxRunTime) {
-        this.maxRunTime = maxRunTime;
-    }
-
-    public Integer getMaxNoClaimTime() {
-        return maxNoClaimTime;
-    }
-
-    public void setMaxNoClaimTime(Integer maxNoClaimTime) {
-        this.maxNoClaimTime = maxNoClaimTime;
     }
 
     public Integer getRequiredMemory() {
@@ -359,11 +331,11 @@ public class SGESSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<SG
         this.requiredMemory = requiredMemory;
     }
 
-    public String getQueue() {
+    public Queue getQueue() {
         return queue;
     }
 
-    public void setQueue(String queue) {
+    public void setQueue(Queue queue) {
         this.queue = queue;
     }
 

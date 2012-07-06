@@ -8,7 +8,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.Queue;
+import org.renci.jlrm.Site;
 import org.renci.jlrm.sge.SGEJobStatusType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,40 +27,35 @@ public class SGESSHFactory {
 
     private ThreadPoolExecutor threadPoolExecutor;
 
-    private String SGEHome;
+    private Site site;
 
     private String username;
 
-    private String submitHost;
-
-    public static SGESSHFactory getInstance(String SGEHome, String submitHost) {
+    public static SGESSHFactory getInstance(Site site) {
         if (instance == null) {
-            instance = new SGESSHFactory(SGEHome, System.getProperty("user.name"), submitHost);
+            instance = new SGESSHFactory(site, System.getProperty("user.name"));
         }
         return instance;
     }
 
-    public static SGESSHFactory getInstance(String SGEHome, String username, String submitHost) {
+    public static SGESSHFactory getInstance(Site site, String username) {
         if (instance == null) {
-            instance = new SGESSHFactory(SGEHome, username, submitHost);
+            instance = new SGESSHFactory(site, username);
         }
         return instance;
     }
 
-    private SGESSHFactory(String SGEHome, String username, String submitHost) {
+    private SGESSHFactory(Site site, String username) {
         super();
-        this.SGEHome = SGEHome;
-        this.submitHost = submitHost;
+        this.site = site;
         this.username = username;
         this.threadPoolExecutor = new ThreadPoolExecutor(4, 8, 50000L, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>());
     }
 
-    public SGESSHJob submit(File submitDir, SGESSHJob job) throws LRMException {
+    public SGESSHJob submit(File submitDir, SGESSHJob job) throws JLRMException {
         logger.debug("ENTERING submit(File)");
-        SGESSHSubmitCallable runnable = new SGESSHSubmitCallable(this.SGEHome, this.username, this.submitHost, job,
-                submitDir);
-
+        SGESSHSubmitCallable runnable = new SGESSHSubmitCallable(this.site, this.username, job, submitDir);
         Future<SGESSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
         try {
             job = jobFuture.get();
@@ -67,19 +64,15 @@ public class SGESSHFactory {
         } catch (ExecutionException e) {
             logger.error("ExecutionException", e);
         }
-
         return job;
     }
 
-    public SGESSHJob submitGlidein(File submitDir, Integer maxNoClaimTime, Integer maxRunTime, Integer requireMemory,
-            String collectorHost, String queue) throws LRMException {
+    public SGESSHJob submitGlidein(File submitDir, String collectorHost, Queue queue, Integer requireMemory)
+            throws JLRMException {
         logger.debug("ENTERING submit(File)");
         SGESSHSubmitCondorGlideinCallable runnable = new SGESSHSubmitCondorGlideinCallable();
-        runnable.setLSFHome(this.SGEHome);
-        runnable.setMaxNoClaimTime(maxNoClaimTime);
-        runnable.setMaxRunTime(maxRunTime);
+        runnable.setSite(site);
         runnable.setRequiredMemory(requireMemory);
-        runnable.setSubmitHost(this.submitHost);
         runnable.setSubmitDir(submitDir);
         runnable.setCollectorHost(collectorHost);
         runnable.setUsername(this.username);
@@ -96,9 +89,9 @@ public class SGESSHFactory {
         return job;
     }
 
-    public SGESSHJob killGlidein(SGESSHJob job) throws LRMException {
+    public SGESSHJob killGlidein(SGESSHJob job) throws JLRMException {
         logger.debug("ENTERING submit(File)");
-        SGESSHKillCallable runnable = new SGESSHKillCallable(this.SGEHome, this.username, this.submitHost, job);
+        SGESSHKillCallable runnable = new SGESSHKillCallable(this.site, this.username, job);
         Future<SGESSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
         try {
             job = jobFuture.get();
@@ -110,10 +103,9 @@ public class SGESSHFactory {
         return job;
     }
 
-    public Map<String, SGEJobStatusType> lookupStatus(SGESSHJob... jobs) throws LRMException {
+    public Map<String, SGEJobStatusType> lookupStatus(SGESSHJob... jobs) throws JLRMException {
         logger.debug("ENTERING lookupStatus(job)");
-        SGESSHLookupStatusCallable runnable = new SGESSHLookupStatusCallable(this.SGEHome, this.username,
-                this.submitHost, jobs);
+        SGESSHLookupStatusCallable runnable = new SGESSHLookupStatusCallable(this.site, this.username, jobs);
         Future<Map<String, SGEJobStatusType>> jobFuture = this.threadPoolExecutor.submit(runnable);
         Map<String, SGEJobStatusType> ret = null;
         try {

@@ -12,7 +12,8 @@ import java.util.concurrent.Callable;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.Site;
 import org.renci.jlrm.sge.SGEJobStatusType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,28 +27,25 @@ public class SGESSHLookupStatusCallable implements Callable<Map<String, SGEJobSt
 
     private final Logger logger = LoggerFactory.getLogger(SGESSHLookupStatusCallable.class);
 
-    private String SGEHome;
+    private Site site;
 
     private SGESSHJob[] jobs;
 
     private String username;
 
-    private String host;
-
     public SGESSHLookupStatusCallable() {
         super();
     }
 
-    public SGESSHLookupStatusCallable(String SGEHome, String username, String host, SGESSHJob... jobs) {
+    public SGESSHLookupStatusCallable(Site site, String username, SGESSHJob... jobs) {
         super();
-        this.SGEHome = SGEHome;
         this.jobs = jobs;
-        this.host = host;
+        this.site = site;
         this.username = username;
     }
 
     @Override
-    public Map<String, SGEJobStatusType> call() throws LRMException {
+    public Map<String, SGEJobStatusType> call() throws JLRMException {
         logger.debug("ENTERING call()");
 
         StringBuilder sb = new StringBuilder();
@@ -55,7 +53,8 @@ public class SGESSHLookupStatusCallable implements Callable<Map<String, SGEJobSt
             sb.append(" ").append(job.getId());
         }
         String jobXarg = sb.toString().replaceFirst(" ", "");
-        String command = String.format("%s/qstat | tail -n+3 | awk '{print $1,$5}'", this.SGEHome, jobXarg);
+        String command = String.format("%s/qstat | tail -n+3 | awk '{print $1,$5}'", this.site.getLRMBinDirectory(),
+                jobXarg);
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
@@ -65,7 +64,7 @@ public class SGESSHLookupStatusCallable implements Callable<Map<String, SGEJobSt
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.host, 22);
+            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
@@ -114,23 +113,23 @@ public class SGESSHLookupStatusCallable implements Callable<Map<String, SGEJobSt
             }
         } catch (JSchException e) {
             logger.error("JSchException", e);
-            throw new LRMException("JSchException: " + e.getMessage());
+            throw new JLRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
             logger.error("IOException", e);
-            throw new LRMException("IOException: " + e.getMessage());
+            throw new JLRMException("IOException: " + e.getMessage());
         } catch (Exception e) {
             logger.error("Exception", e);
-            throw new LRMException("Exception: " + e.getMessage());
+            throw new JLRMException("Exception: " + e.getMessage());
         }
         return jobStatusMap;
     }
 
-    public String getSGEHome() {
-        return SGEHome;
+    public Site getSite() {
+        return site;
     }
 
-    public void setSGEHome(String SGEHome) {
-        this.SGEHome = SGEHome;
+    public void setSite(Site site) {
+        this.site = site;
     }
 
     public SGESSHJob[] getJobs() {
@@ -147,14 +146,6 @@ public class SGESSHLookupStatusCallable implements Callable<Map<String, SGEJobSt
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
     }
 
 }

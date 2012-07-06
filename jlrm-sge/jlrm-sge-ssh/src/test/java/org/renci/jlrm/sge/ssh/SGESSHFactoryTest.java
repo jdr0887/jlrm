@@ -13,10 +13,10 @@ import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.Queue;
+import org.renci.jlrm.Site;
 import org.renci.jlrm.sge.SGEJobStatusType;
-import org.renci.jlrm.sge.ssh.SGESSHFactory;
-import org.renci.jlrm.sge.ssh.SGESSHJob;
 
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
@@ -32,8 +32,16 @@ public class SGESSHFactoryTest {
     @Test
     public void testBasicSubmit() {
 
-        SGESSHFactory factory = SGESSHFactory.getInstance("/opt/gridengine/bin/lx26-amd64", "jreilly",
-                "swprod.bioinf.unc.edu");
+        Site site = new Site();
+        site.setLRMBinDirectory("/opt/gridengine/bin/lx26-amd64");
+        site.setSubmitHost("swprod.bioinf.unc.edu");
+        site.setMaxNoClaimTime(1440);
+        
+        Queue queue = new Queue();
+        queue.setName("all.q");
+        queue.setRunTime(2880);
+        
+        SGESSHFactory factory = SGESSHFactory.getInstance(site, "jreilly");
 
         SGESSHJob job = new SGESSHJob("test", new File("/bin/hostname"));
         job.setHostCount(1);
@@ -47,7 +55,7 @@ public class SGESSHFactoryTest {
         try {
             job = factory.submit(new File("/tmp"), job);
             System.out.println(job.getId());
-        } catch (LRMException e) {
+        } catch (JLRMException e) {
             e.printStackTrace();
         }
 
@@ -56,13 +64,22 @@ public class SGESSHFactoryTest {
     @Test
     public void testGlideinSubmit() {
 
-        SGESSHFactory factory = SGESSHFactory.getInstance("/opt/gridengine/bin/lx26-amd64", "jreilly",
-                "swprod.bioinf.unc.edu");
+        Site site = new Site();
+        site.setLRMBinDirectory("/opt/gridengine/bin/lx26-amd64");
+        site.setSubmitHost("swprod.bioinf.unc.edu");
+        site.setMaxNoClaimTime(1440);
+        
+        Queue queue = new Queue();
+        queue.setName("all.q");
+        queue.setRunTime(2880);
+        
+        SGESSHFactory factory = SGESSHFactory.getInstance(site, "jreilly");
+
         File submitDir = new File("/tmp");
         try {
-            SGESSHJob job = factory.submitGlidein(submitDir, 2, 30, 40, "swprod.bioinf.unc.edu", "all.q");
+            SGESSHJob job = factory.submitGlidein(submitDir, "swprod.bioinf.unc.edu", queue, 40);
             System.out.println(job.getId());
-        } catch (LRMException e) {
+        } catch (JLRMException e) {
             e.printStackTrace();
         }
 
@@ -81,7 +98,7 @@ public class SGESSHFactoryTest {
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession("jreilly", "biodev1.its.unc.edu", 22);
+            Session session = sch.getSession("jreilly", "swprod.bioinf.unc.edu", 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);

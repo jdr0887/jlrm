@@ -7,7 +7,8 @@ import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
 import org.renci.jlrm.AbstractSubmitCallable;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,11 +21,9 @@ public class SGESSHKillCallable extends AbstractSubmitCallable<SGESSHJob> {
 
     private final Logger logger = LoggerFactory.getLogger(SGESSHKillCallable.class);
 
-    private String LSFHome;
+    private Site site;
 
     private SGESSHJob job;
-
-    private String host;
 
     private String username;
 
@@ -32,16 +31,15 @@ public class SGESSHKillCallable extends AbstractSubmitCallable<SGESSHJob> {
         super();
     }
 
-    public SGESSHKillCallable(String LSFHome, String username, String host, SGESSHJob job) {
+    public SGESSHKillCallable(Site site, String username, SGESSHJob job) {
         super();
-        this.LSFHome = LSFHome;
-        this.host = host;
+        this.site = site;
         this.job = job;
         this.username = username;
     }
 
     @Override
-    public SGESSHJob call() throws LRMException {
+    public SGESSHJob call() throws JLRMException {
         logger.debug("ENTERING call()");
 
         String home = System.getProperty("user.home");
@@ -51,52 +49,52 @@ public class SGESSHKillCallable extends AbstractSubmitCallable<SGESSHJob> {
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.host, 22);
+            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
             session.connect(30000);
 
-            String command = String.format("%s/qdel %s", this.LSFHome, job.getId());
+            String command = String.format("%s/qdel %s", this.site.getLRMBinDirectory(), job.getId());
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
-            
+
             ByteArrayOutputStream err = new ByteArrayOutputStream();
             execChannel.setErrStream(err);
-            
+
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             execChannel.setOutputStream(out);
-            
+
             execChannel.setCommand(command);
-            
+
             InputStream in = execChannel.getInputStream();
             execChannel.connect();
-            
+
             String output = IOUtils.toString(in).trim();
             int exitCode = execChannel.getExitStatus();
             logger.warn("exitCode: {}", exitCode);
-            
+
             execChannel.disconnect();
             session.disconnect();
-            
+
         } catch (JSchException e) {
             logger.warn("error: {}", e.getMessage());
-            throw new LRMException("JSchException: " + e.getMessage());
+            throw new JLRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
             logger.warn("error: {}", e.getMessage());
-            throw new LRMException("IOException: " + e.getMessage());
+            throw new JLRMException("IOException: " + e.getMessage());
         }
 
         return job;
     }
 
-    public String getLSFHome() {
-        return LSFHome;
+    public Site getSite() {
+        return site;
     }
 
-    public void setLSFHome(String lSFHome) {
-        LSFHome = lSFHome;
+    public void setSite(Site site) {
+        this.site = site;
     }
 
     public SGESSHJob getJob() {
@@ -105,14 +103,6 @@ public class SGESSHKillCallable extends AbstractSubmitCallable<SGESSHJob> {
 
     public void setJob(SGESSHJob job) {
         this.job = job;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
     }
 
     public String getUsername() {
