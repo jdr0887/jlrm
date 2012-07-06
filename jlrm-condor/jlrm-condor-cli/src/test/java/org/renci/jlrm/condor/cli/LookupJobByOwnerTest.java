@@ -13,7 +13,7 @@ import org.renci.common.exec.BashExecutor;
 import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.condor.ClassAdvertisement;
 import org.renci.jlrm.condor.ClassAdvertisementFactory;
 import org.renci.jlrm.condor.CondorJobStatusType;
@@ -42,7 +42,7 @@ public class LookupJobByOwnerTest {
 
         if (exitCode != 0 && !output.getStdout().toString().contains("All queues are empty")) {
             StringBuilder errorMessageSB = new StringBuilder();
-            throw new LRMException(errorMessageSB.toString());
+            throw new JLRMException(errorMessageSB.toString());
         }
 
         LineNumberReader lnr = new LineNumberReader(new StringReader(output.getStdout().toString()));
