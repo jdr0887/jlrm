@@ -5,7 +5,7 @@ import java.io.File;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.junit.Test;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.condor.ClassAdvertisement;
 import org.renci.jlrm.condor.ClassAdvertisementFactory;
 import org.renci.jlrm.condor.CondorJob;
@@ -61,7 +61,7 @@ public class SubmitTest {
             File submitDir = new File("/tmp");
             CondorSubmitDAGCallable callable = new CondorSubmitDAGCallable(condorHome, submitDir, g, "asdfasdf");
             CondorJob result = callable.call();
-        } catch (LRMException e) {
+        } catch (JLRMException e) {
             e.printStackTrace();
         }
 
