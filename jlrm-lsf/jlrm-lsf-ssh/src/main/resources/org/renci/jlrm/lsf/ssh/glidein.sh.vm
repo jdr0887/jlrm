@@ -3,9 +3,14 @@
 set -e
 
 if [ ! -e "$HOME/.jlrmrc" ]; then
-    echo 'Unable to find ~/.jlrmrc - Exiting...'
-    exit 1                                                 
-fi                                               
+cat > $HOME/.jlrmrc <<EOF
+#!/bin/bash
+export JLRM_HOME=\$HOME/.jlrm
+export ARCH=\`uname -m\`
+export KERNEL_NAME=\`uname -s\`
+EOF
+fi
+
 . $HOME/.jlrmrc                                 
 
 # this will contain logs/execute/spool
@@ -22,7 +27,7 @@ mkdir -p $LOCAL_DIR/log
 mkdir -p $LOCAL_DIR/spool
 
 # create an env file for easy sourcing
-cat >$LOCAL_DIR/env.sh <<EOF
+cat > $LOCAL_DIR/env.sh <<EOF
 #!/bin/bash
 export PATH=$CONDOR_HOME/bin:$CONDOR_HOME/sbin:$PATH
 export CONDOR_CONFIG=$LOCAL_DIR/condor_config
