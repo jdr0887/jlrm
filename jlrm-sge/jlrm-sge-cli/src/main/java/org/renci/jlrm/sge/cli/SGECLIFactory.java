@@ -2,7 +2,7 @@ package org.renci.jlrm.sge.cli;
 
 import java.io.File;
 
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.sge.SGEJob;
 import org.renci.jlrm.sge.SGEJobStatusType;
 import org.slf4j.Logger;
@@ -32,13 +32,13 @@ public class SGECLIFactory {
         this.sgeHome = sgeHome;
     }
 
-    public SGEJob submit(File submitDir, SGEJob job) throws LRMException {
+    public SGEJob submit(File submitDir, SGEJob job) throws JLRMException {
         logger.debug("ENTERING submit(File)");
         SGESubmitCallable runnable = new SGESubmitCallable(this.sgeHome, job, submitDir);
         return runnable.call();
     }
 
-    public SGEJobStatusType lookupStatus(SGEJob job) throws LRMException {
+    public SGEJobStatusType lookupStatus(SGEJob job) throws JLRMException {
         logger.debug("ENTERING lookupStatus(job)");
         SGELookupStatusCallable runnable = new SGELookupStatusCallable(this.sgeHome, job);
         return runnable.call();
