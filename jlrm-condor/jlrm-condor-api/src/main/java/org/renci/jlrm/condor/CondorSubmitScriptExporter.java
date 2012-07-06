@@ -66,6 +66,8 @@ public class CondorSubmitScriptExporter {
 
         CondorJob dagSubmitJob = new CondorJob();
         dagSubmitJob.setName(dagName);
+        File dagFile = new File(workDir, dagName + ".dag");
+        dagSubmitJob.setSubmitFile(dagFile);
 
         try {
 
@@ -109,8 +111,6 @@ public class CondorSubmitScriptExporter {
 
                 }
 
-                File dagFile = new File(workDir, dagName + ".dag");
-                dagSubmitJob.setSubmitFile(dagFile);
                 FileWriter dagFileWriter = new FileWriter(dagFile);
 
                 for (CondorJob job : graph.vertexSet()) {

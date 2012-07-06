@@ -2,12 +2,12 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.renci.jlrm</groupId>
-    <artifactId>jlrm-pbs</artifactId>
+    <artifactId>jlrm-sge</artifactId>
     <version>0.0.18-SNAPSHOT</version>
   </parent>
-  <name>jLRM :: PBS :: SSH</name>
-  <groupId>org.renci.jlrm.jlrm-pbs</groupId>
-  <artifactId>jlrm-pbs-ssh</artifactId>
+  <name>jLRM :: SGE :: SSH</name>
+  <groupId>org.renci.jlrm.jlrm-sge</groupId>
+  <artifactId>jlrm-sge-ssh</artifactId>
   <version>0.0.18-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <dependencies>
@@ -46,8 +46,8 @@
       <artifactId>velocity</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.renci.jlrm.jlrm-pbs</groupId>
-      <artifactId>jlrm-pbs-api</artifactId>
+      <groupId>org.renci.jlrm.jlrm-sge</groupId>
+      <artifactId>jlrm-sge-api</artifactId>
     </dependency>
   </dependencies>
   <build>
@@ -57,7 +57,7 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Export-Package>org.renci.jlrm.pbs.ssh*</Export-Package>
+            <Export-Package>org.renci.jlrm.sge.ssh*</Export-Package>
             <Import-Package>*</Import-Package>
           </instructions>
         </configuration>

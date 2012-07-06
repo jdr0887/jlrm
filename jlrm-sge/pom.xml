@@ -4,14 +4,15 @@
     <artifactId>jLRM</artifactId>
     <version>0.0.18-SNAPSHOT</version>
   </parent>
-  <name>jLRM :: PBS</name>
+  <name>jLRM :: SGE</name>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.renci.jlrm</groupId>
-  <artifactId>jlrm-pbs</artifactId>
+  <artifactId>jlrm-sge</artifactId>
   <version>0.0.18-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
-    <module>jlrm-pbs-api</module>
-    <module>jlrm-pbs-ssh</module>
+    <module>jlrm-sge-api</module>
+    <module>jlrm-sge-cli</module>
+    <module>jlrm-sge-ssh</module>
   </modules>
 </project>
