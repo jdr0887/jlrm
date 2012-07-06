@@ -9,7 +9,7 @@ import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
 import org.renci.common.exec.ExecutorException;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.condor.CondorJob;
 import org.renci.jlrm.condor.CondorJobStatusType;
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ public class CondorLookupStatusCallable implements Callable<CondorJobStatusType>
     }
 
     @Override
-    public CondorJobStatusType call() throws LRMException {
+    public CondorJobStatusType call() throws JLRMException {
         CondorJobStatusType ret = CondorJobStatusType.UNEXPANDED;
         String command = String.format("%s/bin/condor_q -l %d.%d -format '%s\\n' JobStatus",
                 this.condorHome.getAbsolutePath(), job.getCluster(), job.getJobId(), "%s");
@@ -46,7 +46,7 @@ public class CondorLookupStatusCallable implements Callable<CondorJobStatusType>
             String stdout = output.getStdout().toString();
             if (output.getExitCode() != 0) {
                 logger.warn("output.getStderr() = {}", output.getStderr().toString());
-                throw new LRMException("Problem looking up status: " + output.getStderr().toString());
+                throw new JLRMException("Problem looking up status: " + output.getStderr().toString());
             }
             if (StringUtils.isNotEmpty(stdout)) {
                 String statusValue = stdout.trim();
@@ -62,7 +62,7 @@ public class CondorLookupStatusCallable implements Callable<CondorJobStatusType>
             }
         } catch (ExecutorException e) {
             logger.error("ExecutorException", e);
-            throw new LRMException("Problem running: " + command);
+            throw new JLRMException("Problem running: " + command);
         }
         logger.info("JobStatus = {}", ret);
         return ret;
