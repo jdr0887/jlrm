@@ -14,7 +14,7 @@ import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
 import org.renci.common.exec.ExecutorException;
 import org.renci.jlrm.AbstractSubmitCallable;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.condor.ClassAdvertisement;
 import org.renci.jlrm.condor.ClassAdvertisementFactory;
 import org.slf4j.Logger;
@@ -39,7 +39,7 @@ public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<
     }
 
     @Override
-    public Map<String, List<ClassAdvertisement>> call() throws LRMException {
+    public Map<String, List<ClassAdvertisement>> call() throws JLRMException {
 
         Map<String, List<ClassAdvertisement>> classAdMap = new HashMap<String, List<ClassAdvertisement>>();
         try {
@@ -68,7 +68,7 @@ public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<
                     errorMessageSB.append(String.format("%s%n", line));
                 }
                 logger.error(errorMessageSB.toString());
-                throw new LRMException(errorMessageSB.toString());
+                throw new JLRMException(errorMessageSB.toString());
             }
 
             while ((line = lnr.readLine()) != null) {
@@ -82,13 +82,13 @@ public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<
             }
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            throw new LRMException("Failed to parse cluster id: " + e.getMessage());
+            throw new JLRMException("Failed to parse cluster id: " + e.getMessage());
         } catch (ExecutorException e) {
             e.printStackTrace();
-            throw new LRMException("ExecutorException: " + e.getMessage());
+            throw new JLRMException("ExecutorException: " + e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
-            throw new LRMException("IOException: " + e.getMessage());
+            throw new JLRMException("IOException: " + e.getMessage());
         }
 
         return classAdMap;
