@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jgrapht.Graph;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.condor.ClassAdvertisement;
 import org.renci.jlrm.condor.CondorJob;
 import org.renci.jlrm.condor.CondorJobEdge;
@@ -37,31 +37,31 @@ public class CondorCLIFactory {
         this.condorHome = condorHome;
     }
 
-    public Map<String, List<ClassAdvertisement>> lookupJobsByOwner(String owner) throws LRMException {
+    public Map<String, List<ClassAdvertisement>> lookupJobsByOwner(String owner) throws JLRMException {
         logger.debug("ENTERING lookupJobsByUsername(String username)");
         CondorLookupJobsByOwnerCallable runnable = new CondorLookupJobsByOwnerCallable(this.condorHome, owner);
         return runnable.call();
     }
     
-    public CondorJob submit(File submitDir, CondorJob job) throws LRMException {
+    public CondorJob submit(File submitDir, CondorJob job) throws JLRMException {
         logger.debug("ENTERING submit(File, CondorJob)");
         CondorSubmitCallable runnable = new CondorSubmitCallable(this.condorHome, submitDir, job);
         return runnable.call();
     }
 
-    public CondorJob submit(String dagName, File submitDir, Graph<CondorJob, CondorJobEdge> graph) throws LRMException {
+    public CondorJob submit(String dagName, File submitDir, Graph<CondorJob, CondorJobEdge> graph) throws JLRMException {
         logger.debug("ENTERING submit(String dagName, File submitDir, Graph<CondorJob, CondorJobEdge> graph)");
         CondorSubmitDAGCallable runnable = new CondorSubmitDAGCallable(this.condorHome, submitDir, graph, dagName);
         return runnable.call();
     }
 
-    public CondorJobStatusType lookupStatus(CondorJob jobNode) throws LRMException {
+    public CondorJobStatusType lookupStatus(CondorJob jobNode) throws JLRMException {
         logger.debug("ENTERING lookupStatus(JobNode)");
         CondorLookupStatusCallable runnable = new CondorLookupStatusCallable(this.condorHome, jobNode);
         return runnable.call();
     }
 
-    public List<CondorJob> listGlideinJobs(List<ClassAdvertisement> classAdList) throws LRMException {
+    public List<CondorJob> listGlideinJobs(List<ClassAdvertisement> classAdList) throws JLRMException {
         logger.debug("ENTERING findJobByClassAdvertisement(List<ClassAdvertisement> classAdList)");
         return null;
     }
