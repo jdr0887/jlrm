@@ -9,7 +9,7 @@ import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
 import org.renci.common.exec.ExecutorException;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.sge.SGEJob;
 import org.renci.jlrm.sge.SGEJobStatusType;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ public class SGELookupStatusCallable implements Callable<SGEJobStatusType> {
     }
 
     @Override
-    public SGEJobStatusType call() throws LRMException {
+    public SGEJobStatusType call() throws JLRMException {
         SGEJobStatusType ret = SGEJobStatusType.DONE;
         String command = String.format("%s/qstat -j %s | tail -n+2 | awk '{print $3}'",
                 this.sgeHome.getAbsolutePath(), job.getId());
@@ -45,7 +45,7 @@ public class SGELookupStatusCallable implements Callable<SGEJobStatusType> {
             String stdout = output.getStdout().toString();
             if (output.getExitCode() != 0) {
                 logger.warn("output.getStderr() = {}", output.getStderr().toString());
-                throw new LRMException("Problem looking up status: " + output.getStderr().toString());
+                throw new JLRMException("Problem looking up status: " + output.getStderr().toString());
             } else {
 
                 if (StringUtils.isNotEmpty(stdout)) {
@@ -66,7 +66,7 @@ public class SGELookupStatusCallable implements Callable<SGEJobStatusType> {
             }
         } catch (ExecutorException e) {
             logger.error("ExecutorException", e);
-            throw new LRMException("Problem running: " + command);
+            throw new JLRMException("Problem running: " + command);
         }
         logger.info("JobStatus = {}", ret);
         return ret;
