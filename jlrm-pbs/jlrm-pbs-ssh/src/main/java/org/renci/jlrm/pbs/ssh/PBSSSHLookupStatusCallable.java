@@ -12,7 +12,8 @@ import java.util.concurrent.Callable;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.Site;
 import org.renci.jlrm.pbs.PBSJobStatusType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,28 +27,25 @@ public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobSt
 
     private final Logger logger = LoggerFactory.getLogger(PBSSSHLookupStatusCallable.class);
 
-    private String LSFHome;
+    private Site site;
 
     private PBSSSHJob[] jobs;
 
     private String username;
 
-    private String host;
-
     public PBSSSHLookupStatusCallable() {
         super();
     }
 
-    public PBSSSHLookupStatusCallable(String LSFHome, String username, String host, PBSSSHJob... jobs) {
+    public PBSSSHLookupStatusCallable(Site site, String username, PBSSSHJob... jobs) {
         super();
-        this.LSFHome = LSFHome;
         this.jobs = jobs;
-        this.host = host;
+        this.site = site;
         this.username = username;
     }
 
     @Override
-    public Map<String, PBSJobStatusType> call() throws LRMException {
+    public Map<String, PBSJobStatusType> call() throws JLRMException {
         logger.debug("ENTERING call()");
 
         StringBuilder sb = new StringBuilder();
@@ -55,7 +53,8 @@ public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobSt
             sb.append(" ").append(job.getId());
         }
         String jobXarg = sb.toString().replaceFirst(" ", "");
-        String command = String.format("%s/bin/qstat %s | tail -n+2 | awk '{print $1,$3}'", this.LSFHome, jobXarg);
+        String command = String.format("%s/qstat %s | tail -n+2 | awk '{print $1,$3}'", this.site.getLRMBinDirectory(),
+                jobXarg);
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
@@ -65,7 +64,7 @@ public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobSt
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.host, 22);
+            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
@@ -73,24 +72,24 @@ public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobSt
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
-            
+
             ByteArrayOutputStream err = new ByteArrayOutputStream();
             execChannel.setErrStream(err);
-            
+
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             execChannel.setOutputStream(out);
-            
+
             execChannel.setCommand(command);
-            
+
             InputStream in = execChannel.getInputStream();
             execChannel.connect();
-            
+
             String output = IOUtils.toString(in).trim();
             int exitCode = execChannel.getExitStatus();
 
             execChannel.disconnect();
             session.disconnect();
-            
+
             LineNumberReader lnr = new LineNumberReader(new StringReader(output));
             String line;
             while ((line = lnr.readLine()) != null) {
@@ -114,20 +113,20 @@ public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobSt
             }
         } catch (JSchException e) {
             logger.error("JSchException", e);
-            throw new LRMException("JSchException: " + e.getMessage());
+            throw new JLRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
             logger.error("IOException", e);
-            throw new LRMException("IOException: " + e.getMessage());
+            throw new JLRMException("IOException: " + e.getMessage());
         }
         return jobStatusMap;
     }
 
-    public String getLSFHome() {
-        return LSFHome;
+    public Site getSite() {
+        return site;
     }
 
-    public void setLSFHome(String lSFHome) {
-        LSFHome = lSFHome;
+    public void setSite(Site site) {
+        this.site = site;
     }
 
     public PBSSSHJob[] getJobs() {
@@ -144,14 +143,6 @@ public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobSt
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
     }
 
 }

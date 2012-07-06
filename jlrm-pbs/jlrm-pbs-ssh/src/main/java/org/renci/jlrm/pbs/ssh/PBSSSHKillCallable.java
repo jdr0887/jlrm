@@ -6,7 +6,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import org.renci.jlrm.AbstractSubmitCallable;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,11 +20,9 @@ public class PBSSSHKillCallable extends AbstractSubmitCallable<PBSSSHJob> {
 
     private final Logger logger = LoggerFactory.getLogger(PBSSSHKillCallable.class);
 
-    private String LSFHome;
+    private Site site;
 
     private PBSSSHJob job;
-
-    private String host;
 
     private String username;
 
@@ -31,16 +30,15 @@ public class PBSSSHKillCallable extends AbstractSubmitCallable<PBSSSHJob> {
         super();
     }
 
-    public PBSSSHKillCallable(String LSFHome, String username, String host, PBSSSHJob job) {
+    public PBSSSHKillCallable(Site site, String username, PBSSSHJob job) {
         super();
-        this.LSFHome = LSFHome;
-        this.host = host;
+        this.site = site;
         this.job = job;
         this.username = username;
     }
 
     @Override
-    public PBSSSHJob call() throws LRMException {
+    public PBSSSHJob call() throws JLRMException {
         logger.debug("ENTERING call()");
 
         String home = System.getProperty("user.home");
@@ -50,13 +48,13 @@ public class PBSSSHKillCallable extends AbstractSubmitCallable<PBSSSHJob> {
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.host, 22);
+            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
             session.connect(30000);
 
-            String command = String.format("%s/bin/bkill %s", this.LSFHome, job.getId());
+            String command = String.format("%s/qdel %s", this.site.getLRMBinDirectory(), job.getId());
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
@@ -76,21 +74,21 @@ public class PBSSSHKillCallable extends AbstractSubmitCallable<PBSSSHJob> {
             out.close();
         } catch (JSchException e) {
             logger.warn("error: {}", e.getMessage());
-            throw new LRMException("JSchException: " + e.getMessage());
+            throw new JLRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
             logger.warn("error: {}", e.getMessage());
-            throw new LRMException("IOException: " + e.getMessage());
+            throw new JLRMException("IOException: " + e.getMessage());
         }
 
         return job;
     }
 
-    public String getLSFHome() {
-        return LSFHome;
+    public Site getSite() {
+        return site;
     }
 
-    public void setLSFHome(String lSFHome) {
-        LSFHome = lSFHome;
+    public void setSite(Site site) {
+        this.site = site;
     }
 
     public PBSSSHJob getJob() {
@@ -99,14 +97,6 @@ public class PBSSSHKillCallable extends AbstractSubmitCallable<PBSSSHJob> {
 
     public void setJob(PBSSSHJob job) {
         this.job = job;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
     }
 
     public String getUsername() {

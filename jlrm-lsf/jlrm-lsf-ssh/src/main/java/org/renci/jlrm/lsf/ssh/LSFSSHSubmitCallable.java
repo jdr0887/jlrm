@@ -17,7 +17,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.renci.jlrm.AbstractSubmitCallable;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,11 +33,9 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFSSHJob> {
 
     private final Logger logger = LoggerFactory.getLogger(LSFSSHSubmitCallable.class);
 
-    private String LSFHome;
-
     private LSFSSHJob job;
 
-    private String host;
+    private Site site;
 
     private String username;
 
@@ -46,21 +45,20 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFSSHJob> {
         super();
     }
 
-    public LSFSSHSubmitCallable(String LSFHome, String host, LSFSSHJob job, File submitDir) {
-        this(LSFHome, System.getProperty("user.name"), host, job, submitDir);
+    public LSFSSHSubmitCallable(Site site, LSFSSHJob job, File submitDir) {
+        this(site, System.getProperty("user.name"), job, submitDir);
     }
 
-    public LSFSSHSubmitCallable(String LSFHome, String username, String host, LSFSSHJob job, File submitDir) {
+    public LSFSSHSubmitCallable(Site site, String username, LSFSSHJob job, File submitDir) {
         super();
-        this.LSFHome = LSFHome;
-        this.host = host;
+        this.site = site;
         this.job = job;
         this.username = username;
         this.submitDir = submitDir;
     }
 
     @Override
-    public LSFSSHJob call() throws LRMException {
+    public LSFSSHJob call() throws JLRMException {
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
@@ -69,7 +67,7 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFSSHJob> {
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.host, 22);
+            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("compression.s2c", "zlib,none");
             config.setProperty("compression.c2s", "zlib,none");
@@ -99,7 +97,7 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFSSHJob> {
             logger.info("remoteHome: {}", remoteHome);
             String remoteWorkDir = String.format("%s/%s", remoteHome, remoteWorkDirSuffix);
             logger.info("remoteWorkDir: {}", remoteWorkDir);
-            
+
             File tmpDir = new File(System.getProperty("java.io.tmpdir"));
             File myDir = new File(tmpDir, System.getProperty("user.name"));
             File localWorkDir = new File(myDir, UUID.randomUUID().toString());
@@ -128,10 +126,10 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFSSHJob> {
                     ChannelSftp.OVERWRITE);
             sftpChannel.chmod(0644, job.getSubmitFile().getName());
             sftpChannel.disconnect();
-            
+
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
-            command = String.format("%s/bin/bsub < %s", this.LSFHome, targetFile);
+            command = String.format("%s/bsub < %s", this.site.getLRMBinDirectory(), targetFile);
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
@@ -154,7 +152,7 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFSSHJob> {
                 String errorMessage = new String(err.toByteArray());
                 logger.debug("executor.getStderr() = {}", errorMessage);
                 logger.error(errorMessage);
-                throw new LRMException(errorMessage);
+                throw new JLRMException(errorMessage);
             } else {
                 LineNumberReader lnr = new LineNumberReader(new StringReader(submitOutput));
                 String line;
@@ -164,7 +162,7 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFSSHJob> {
                         Pattern pattern = Pattern.compile("^Job.+<(\\d*)> is submitted.+\\.$");
                         Matcher matcher = pattern.matcher(line);
                         if (!matcher.matches()) {
-                            throw new LRMException("failed to parse the jobid number");
+                            throw new JLRMException("failed to parse the jobid number");
                         } else {
                             job.setId(matcher.group(1));
                         }
@@ -174,23 +172,15 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFSSHJob> {
             }
         } catch (JSchException e) {
             logger.error("JSchException: {}", e.getMessage());
-            throw new LRMException("JSchException: " + e.getMessage());
+            throw new JLRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
             logger.error("IOException: {}", e.getMessage());
-            throw new LRMException("IOException: " + e.getMessage());
+            throw new JLRMException("IOException: " + e.getMessage());
         } catch (SftpException e) {
             logger.error("error: {}", e.getMessage());
-            throw new LRMException("SftpException: " + e.getMessage());
+            throw new JLRMException("SftpException: " + e.getMessage());
         }
         return job;
-    }
-
-    public String getLSFHome() {
-        return LSFHome;
-    }
-
-    public void setLSFHome(String lSFHome) {
-        LSFHome = lSFHome;
     }
 
     public LSFSSHJob getJob() {
@@ -201,12 +191,12 @@ public class LSFSSHSubmitCallable extends AbstractSubmitCallable<LSFSSHJob> {
         this.job = job;
     }
 
-    public String getHost() {
-        return host;
+    public Site getSite() {
+        return site;
     }
 
-    public void setHost(String host) {
-        this.host = host;
+    public void setSite(Site site) {
+        this.site = site;
     }
 
     public String getUsername() {

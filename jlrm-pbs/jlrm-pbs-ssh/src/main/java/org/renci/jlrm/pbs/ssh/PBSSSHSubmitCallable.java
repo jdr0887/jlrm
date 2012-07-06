@@ -18,7 +18,8 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.renci.jlrm.AbstractSubmitCallable;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,11 +34,9 @@ public class PBSSSHSubmitCallable extends AbstractSubmitCallable<PBSSSHJob> {
 
     private final Logger logger = LoggerFactory.getLogger(PBSSSHSubmitCallable.class);
 
-    private String LSFHome;
+    private Site site;
 
     private PBSSSHJob job;
-
-    private String host;
 
     private String username;
 
@@ -47,21 +46,20 @@ public class PBSSSHSubmitCallable extends AbstractSubmitCallable<PBSSSHJob> {
         super();
     }
 
-    public PBSSSHSubmitCallable(String LSFHome, String host, PBSSSHJob job, File submitDir) {
-        this(LSFHome, System.getProperty("user.name"), host, job, submitDir);
+    public PBSSSHSubmitCallable(Site site, PBSSSHJob job, File submitDir) {
+        this(site, System.getProperty("user.name"), job, submitDir);
     }
 
-    public PBSSSHSubmitCallable(String LSFHome, String username, String host, PBSSSHJob job, File submitDir) {
+    public PBSSSHSubmitCallable(Site site, String username, PBSSSHJob job, File submitDir) {
         super();
-        this.LSFHome = LSFHome;
-        this.host = host;
+        this.site = site;
         this.job = job;
         this.username = username;
         this.submitDir = submitDir;
     }
 
     @Override
-    public PBSSSHJob call() throws LRMException {
+    public PBSSSHJob call() throws JLRMException {
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
@@ -70,7 +68,7 @@ public class PBSSSHSubmitCallable extends AbstractSubmitCallable<PBSSSHJob> {
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.host, 22);
+            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("compression.s2c", "zlib,none");
             config.setProperty("compression.c2s", "zlib,none");
@@ -136,7 +134,7 @@ public class PBSSSHSubmitCallable extends AbstractSubmitCallable<PBSSSHJob> {
 
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
-            command = String.format("%s/bin/qsub < %s", this.LSFHome, targetFile);
+            command = String.format("%s/qsub < %s", this.site.getLRMBinDirectory(), targetFile);
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
@@ -159,7 +157,7 @@ public class PBSSSHSubmitCallable extends AbstractSubmitCallable<PBSSSHJob> {
                 String errorMessage = new String(err.toByteArray());
                 logger.debug("executor.getStderr() = {}", errorMessage);
                 logger.error(errorMessage);
-                throw new LRMException(errorMessage);
+                throw new JLRMException(errorMessage);
             } else {
                 LineNumberReader lnr = new LineNumberReader(new StringReader(submitOutput));
                 String line = lnr.readLine();
@@ -168,7 +166,7 @@ public class PBSSSHSubmitCallable extends AbstractSubmitCallable<PBSSSHJob> {
                     Pattern pattern = Pattern.compile("^(\\d+)\\..+");
                     Matcher matcher = pattern.matcher(line);
                     if (!matcher.matches()) {
-                        throw new LRMException("failed to parse the jobid number");
+                        throw new JLRMException("failed to parse the jobid number");
                     } else {
                         job.setId(matcher.group(1));
                     }
@@ -176,23 +174,23 @@ public class PBSSSHSubmitCallable extends AbstractSubmitCallable<PBSSSHJob> {
             }
         } catch (JSchException e) {
             logger.error("JSchException: {}", e.getMessage());
-            throw new LRMException("JSchException: " + e.getMessage());
+            throw new JLRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
             logger.error("IOException: {}", e.getMessage());
-            throw new LRMException("IOException: " + e.getMessage());
+            throw new JLRMException("IOException: " + e.getMessage());
         } catch (SftpException e) {
             logger.error("error: {}", e.getMessage());
-            throw new LRMException("SftpException: " + e.getMessage());
+            throw new JLRMException("SftpException: " + e.getMessage());
         }
         return job;
     }
 
-    public String getLSFHome() {
-        return LSFHome;
+    public Site getSite() {
+        return site;
     }
 
-    public void setLSFHome(String lSFHome) {
-        LSFHome = lSFHome;
+    public void setSite(Site site) {
+        this.site = site;
     }
 
     public PBSSSHJob getJob() {
@@ -201,14 +199,6 @@ public class PBSSSHSubmitCallable extends AbstractSubmitCallable<PBSSSHJob> {
 
     public void setJob(PBSSSHJob job) {
         this.job = job;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
     }
 
     public String getUsername() {

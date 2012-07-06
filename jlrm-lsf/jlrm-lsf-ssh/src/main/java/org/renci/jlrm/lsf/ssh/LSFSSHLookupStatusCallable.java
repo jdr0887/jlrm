@@ -12,7 +12,8 @@ import java.util.concurrent.Callable;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.Site;
 import org.renci.jlrm.lsf.LSFJobStatusInfo;
 import org.renci.jlrm.lsf.LSFJobStatusType;
 import org.slf4j.Logger;
@@ -27,28 +28,25 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
 
     private final Logger logger = LoggerFactory.getLogger(LSFSSHLookupStatusCallable.class);
 
-    private String LSFHome;
-
     private LSFSSHJob[] jobs;
 
     private String username;
 
-    private String host;
+    private Site site;
 
     public LSFSSHLookupStatusCallable() {
         super();
     }
 
-    public LSFSSHLookupStatusCallable(String LSFHome, String username, String host, LSFSSHJob... jobs) {
+    public LSFSSHLookupStatusCallable(Site site, String username, LSFSSHJob... jobs) {
         super();
-        this.LSFHome = LSFHome;
+        this.site = site;
         this.jobs = jobs;
-        this.host = host;
         this.username = username;
     }
 
     @Override
-    public Set<LSFJobStatusInfo> call() throws LRMException {
+    public Set<LSFJobStatusInfo> call() throws JLRMException {
         logger.debug("ENTERING call()");
 
         StringBuilder sb = new StringBuilder();
@@ -56,7 +54,8 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
             sb.append(" ").append(job.getId());
         }
         String jobXarg = sb.toString().replaceFirst(" ", "");
-        String command = String.format("%s/bin/bjobs %s | tail -n+2 | awk '{print $1,$3,$4}'", this.LSFHome, jobXarg);
+        String command = String.format("%s/bjobs %s | tail -n+2 | awk '{print $1,$3,$4}'",
+                this.site.getLRMBinDirectory(), jobXarg);
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
@@ -66,7 +65,7 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.host, 22);
+            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
@@ -116,23 +115,23 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
             }
         } catch (JSchException e) {
             logger.error("JSchException", e);
-            throw new LRMException("JSchException: " + e.getMessage());
+            throw new JLRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
             logger.error("IOException", e);
-            throw new LRMException("IOException: " + e.getMessage());
+            throw new JLRMException("IOException: " + e.getMessage());
         } catch (Exception e) {
             logger.error("Exception", e);
-            throw new LRMException("Exception: " + e.getMessage());
+            throw new JLRMException("Exception: " + e.getMessage());
         }
         return jobStatusSet;
     }
 
-    public String getLSFHome() {
-        return LSFHome;
+    public Site getSite() {
+        return site;
     }
 
-    public void setLSFHome(String lSFHome) {
-        LSFHome = lSFHome;
+    public void setSite(Site site) {
+        this.site = site;
     }
 
     public LSFSSHJob[] getJobs() {
@@ -149,14 +148,6 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
     }
 
 }
