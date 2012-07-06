@@ -13,7 +13,9 @@ import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.Queue;
+import org.renci.jlrm.Site;
 import org.renci.jlrm.pbs.PBSJobStatusType;
 import org.renci.jlrm.pbs.ssh.PBSSSHFactory;
 import org.renci.jlrm.pbs.ssh.PBSSSHJob;
@@ -32,8 +34,10 @@ public class PBSSSHFactoryTest {
     @Test
     public void testBasicSubmit() {
 
-        PBSSSHFactory factory = PBSSSHFactory.getInstance(
-                "/opt/torque", "jdr0887", "br0.renci.org");
+        Site site = new Site();
+        site.setLRMBinDirectory("/opt/torque/bin");
+        site.setSubmitHost("br0.renci.org");
+        PBSSSHFactory factory = PBSSSHFactory.getInstance(site, "jdr0887");
 
         PBSSSHJob job = new PBSSSHJob("test", new File("/bin/hostname"));
         job.setHostCount(1);
@@ -47,7 +51,7 @@ public class PBSSSHFactoryTest {
         try {
             job = factory.submit(new File("/tmp"), job);
             System.out.println(job.getId());
-        } catch (LRMException e) {
+        } catch (JLRMException e) {
             e.printStackTrace();
         }
 
@@ -56,29 +60,33 @@ public class PBSSSHFactoryTest {
     @Test
     public void testGlideinSubmit() {
 
-        PBSSSHFactory factory = PBSSSHFactory.getInstance(
-                "/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/", "jreilly", "biodev2.its.unc.edu");
+        Site site = new Site();
+        site.setLRMBinDirectory("/opt/torque/bin");
+        site.setSubmitHost("br0.renci.org");
+        site.setMaxNoClaimTime(1440);
+
+        Queue queue = new Queue();
+        queue.setName("serial");
+        queue.setRunTime(2880);
+
+        PBSSSHFactory factory = PBSSSHFactory.getInstance(site, "jdr0887");
+
         File submitDir = new File("/tmp");
 
         try {
-            // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "idle");
-            // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "debug");
-            // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "huge");
-            // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "week");
-            PBSSSHJob job = factory.submitGlidein(submitDir, 2, 30L, 40, "biodev1.its.unc.edu", "pseq_prod");
+            PBSSSHJob job = factory.submitGlidein(submitDir, "biodev1.its.unc.edu", queue, 40);
             System.out.println(job.getId());
-        } catch (LRMException e) {
+        } catch (JLRMException e) {
             e.printStackTrace();
         }
 
     }
 
-
     @Test
     public void testLookupStatus() {
 
-        String command = String.format("%s/bin/bjobs %s | tail -n+2 | awk '{print $1,$3}'",
-                "/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/", "173198 173244");
+        String command = String.format("%s/qstat %s | tail -n+2 | awk '{print $1,$3}'", "/opt/torque/bin",
+                "173198 173244");
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
@@ -87,7 +95,7 @@ public class PBSSSHFactoryTest {
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession("jreilly", "biodev1.its.unc.edu", 22);
+            Session session = sch.getSession("jreilly", "br0.renci.org", 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);

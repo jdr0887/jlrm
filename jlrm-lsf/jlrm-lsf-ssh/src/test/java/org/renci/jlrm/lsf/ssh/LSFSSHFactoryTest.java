@@ -13,7 +13,9 @@ import java.util.Set;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.Queue;
+import org.renci.jlrm.Site;
 import org.renci.jlrm.lsf.LSFJobStatusInfo;
 import org.renci.jlrm.lsf.LSFJobStatusType;
 
@@ -31,8 +33,10 @@ public class LSFSSHFactoryTest {
     @Test
     public void testBasicSubmit() {
 
-        LSFSSHFactory lsfSSHFactory = LSFSSHFactory.getInstance(
-                "/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/", "jreilly", "biodev2.its.unc.edu");
+        Site site = new Site();
+        site.setLRMBinDirectory("/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/bin");
+        site.setSubmitHost("biodev1.its.unc.edu");
+        LSFSSHFactory lsfSSHFactory = LSFSSHFactory.getInstance(site, "jreilly");
 
         LSFSSHJob job = new LSFSSHJob("test", new File("/bin/hostname"));
         job.setHostCount(1);
@@ -45,7 +49,7 @@ public class LSFSSHFactoryTest {
         try {
             job = lsfSSHFactory.submit(new File("/tmp"), job);
             System.out.println(job.getId());
-        } catch (LRMException e) {
+        } catch (JLRMException e) {
             e.printStackTrace();
         }
 
@@ -54,8 +58,16 @@ public class LSFSSHFactoryTest {
     @Test
     public void testGlideinSubmit() {
 
-        LSFSSHFactory lsfSSHFactory = LSFSSHFactory.getInstance(
-                "/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/", "jreilly", "biodev2.its.unc.edu");
+        Site site = new Site();
+        site.setLRMBinDirectory("/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/bin");
+        site.setSubmitHost("biodev1.its.unc.edu");
+        site.setMaxNoClaimTime(1440);
+        
+        Queue queue = new Queue();
+        queue.setName("pseq_prod");
+        queue.setRunTime(2880);
+        
+        LSFSSHFactory lsfSSHFactory = LSFSSHFactory.getInstance(site, "jreilly");
         File submitDir = new File("/tmp");
 
         try {
@@ -63,9 +75,9 @@ public class LSFSSHFactoryTest {
             // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "debug");
             // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "huge");
             // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "week");
-            LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "pseq_prod");
+            LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, "biodev1.its.unc.edu", queue, 40);
             System.out.println(job.getId());
-        } catch (LRMException e) {
+        } catch (JLRMException e) {
             e.printStackTrace();
         }
 
@@ -74,8 +86,9 @@ public class LSFSSHFactoryTest {
     @Test
     public void testLookupStatus() {
 
-        String command = String.format("%s/bin/bjobs %s | tail -n+2 | awk '{print $1,$3,$4}'",
-                "/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/", "62104 62100");
+        
+        String command = String.format("%s/bjobs %s | tail -n+2 | awk '{print $1,$3,$4}'",
+                "/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/bin", "62104 62100");
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
@@ -148,7 +161,7 @@ public class LSFSSHFactoryTest {
                     }
                 }
             }
-            
+
         } catch (JSchException e) {
             e.printStackTrace();
         } catch (IOException e) {
