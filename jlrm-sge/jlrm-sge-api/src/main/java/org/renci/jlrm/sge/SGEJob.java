@@ -10,7 +10,7 @@ public class SGEJob extends Job {
 
     protected String project;
 
-    protected Integer wallTime;
+    protected Long wallTime;
 
     protected Integer hostCount;
 
@@ -38,11 +38,11 @@ public class SGEJob extends Job {
         this.project = project;
     }
 
-    public Integer getWallTime() {
+    public Long getWallTime() {
         return wallTime;
     }
 
-    public void setWallTime(Integer wallTime) {
+    public void setWallTime(Long wallTime) {
         this.wallTime = wallTime;
     }
 
