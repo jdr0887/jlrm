@@ -9,7 +9,7 @@ import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
 import org.renci.common.exec.ExecutorException;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.lsf.LSFJob;
 import org.renci.jlrm.lsf.LSFJobStatusType;
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ public class LSFLookupStatusCallable implements Callable<LSFJobStatusType> {
     }
 
     @Override
-    public LSFJobStatusType call() throws LRMException {
+    public LSFJobStatusType call() throws JLRMException {
         LSFJobStatusType ret = LSFJobStatusType.UNKNOWN;
         String command = String.format("%s/bin/bjobs %s | tail -n+2 | awk '{print $3}'",
                 this.lsfHome.getAbsolutePath(), job.getId());
@@ -46,7 +46,7 @@ public class LSFLookupStatusCallable implements Callable<LSFJobStatusType> {
             String stdout = output.getStdout().toString();
             if (output.getExitCode() != 0) {
                 logger.warn("output.getStderr() = {}", output.getStderr().toString());
-                throw new LRMException("Problem looking up status: " + output.getStderr().toString());
+                throw new JLRMException("Problem looking up status: " + output.getStderr().toString());
             } else {
 
                 if (StringUtils.isNotEmpty(stdout)) {
@@ -67,7 +67,7 @@ public class LSFLookupStatusCallable implements Callable<LSFJobStatusType> {
             }
         } catch (ExecutorException e) {
             logger.error("ExecutorException", e);
-            throw new LRMException("Problem running: " + command);
+            throw new JLRMException("Problem running: " + command);
         }
         logger.info("JobStatus = {}", ret);
         return ret;
