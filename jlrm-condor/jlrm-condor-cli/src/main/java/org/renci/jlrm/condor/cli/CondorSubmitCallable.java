@@ -13,7 +13,7 @@ import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
 import org.renci.common.exec.ExecutorException;
 import org.renci.jlrm.AbstractSubmitCallable;
-import org.renci.jlrm.LRMException;
+import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.condor.CondorJob;
 import org.renci.jlrm.condor.CondorSubmitScriptExporter;
 import org.slf4j.Logger;
@@ -43,7 +43,7 @@ public class CondorSubmitCallable extends AbstractSubmitCallable<CondorJob> {
     }
 
     @Override
-    public CondorJob call() throws LRMException {
+    public CondorJob call() throws JLRMException {
 
         File workDir = createWorkDirectory(submitDir, job.getName());
         CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
@@ -70,7 +70,7 @@ public class CondorSubmitCallable extends AbstractSubmitCallable<CondorJob> {
                     sb.append(String.format("%s%n", line));
                 }
                 logger.error(sb.toString());
-                throw new LRMException(sb.toString());
+                throw new JLRMException(sb.toString());
             }
             while ((line = lnr.readLine()) != null) {
                 if (line.indexOf("submitted to cluster") != -1) {
@@ -78,7 +78,7 @@ public class CondorSubmitCallable extends AbstractSubmitCallable<CondorJob> {
                     Pattern pattern = Pattern.compile("(\\d*) job\\(s\\) submitted to cluster (\\d*)\\.");
                     Matcher matcher = pattern.matcher(line);
                     if (!matcher.matches()) {
-                        throw new LRMException("failed to parse the cluster number");
+                        throw new JLRMException("failed to parse the cluster number");
                     }
                     job.setCluster(Integer.parseInt(matcher.group(2)));
                     // jobBean.setJobId(Integer.parseInt(matcher.group(1)));
@@ -89,13 +89,13 @@ public class CondorSubmitCallable extends AbstractSubmitCallable<CondorJob> {
             return job;
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            throw new LRMException("Failed to parse cluster id: " + e.getMessage());
+            throw new JLRMException("Failed to parse cluster id: " + e.getMessage());
         } catch (ExecutorException e) {
             e.printStackTrace();
-            throw new LRMException("ExecutorException: " + e.getMessage());
+            throw new JLRMException("ExecutorException: " + e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
-            throw new LRMException("IOException: " + e.getMessage());
+            throw new JLRMException("IOException: " + e.getMessage());
         }
 
     }
