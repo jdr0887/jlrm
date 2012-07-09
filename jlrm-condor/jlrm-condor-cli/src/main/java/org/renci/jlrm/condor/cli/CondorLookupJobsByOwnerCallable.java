@@ -42,26 +42,27 @@ public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<
     public Map<String, List<ClassAdvertisement>> call() throws JLRMException {
 
         Map<String, List<ClassAdvertisement>> classAdMap = new HashMap<String, List<ClassAdvertisement>>();
+        StringBuilder sb = new StringBuilder();
+        sb.append(" -format '\\nClusterId=%s' ClusterId");
+        sb.append(" -format ',JLRM_USER=%s' JLRM_USER");
+        sb.append(" -format ',JobStatus=%s' JobStatus");
+        sb.append(" -format ',Requirements=%s' Requirements");
+        sb.append(" -submitter \"").append(this.username).append("\"");
+
+        String command = String.format("(%s/bin/condor_q -global %s; echo)", this.condorHome.getAbsolutePath(),
+                sb.toString());
+        CommandInput input = new CommandInput();
+        input.setCommand(command);
+
+        LineNumberReader lnr = null;
         try {
-
-            StringBuilder sb = new StringBuilder();
-            sb.append(" -format '\\nClusterId=%s' ClusterId");
-            sb.append(" -format ',JLRM_USER=%s' JLRM_USER");
-            sb.append(" -format ',JobStatus=%s' JobStatus");
-            sb.append(" -format ',Requirements=%s' Requirements");
-            sb.append(" -submitter \"").append(this.username).append("\"");
-
-            String command = String.format("(%s/bin/condor_q -global %s; echo)", this.condorHome.getAbsolutePath(),
-                    sb.toString());
-            CommandInput input = new CommandInput();
-            input.setCommand(command);
 
             Executor executor = BashExecutor.getInstance();
             CommandOutput output = executor.execute(input);
             int exitCode = output.getExitCode();
-            LineNumberReader lnr = new LineNumberReader(new StringReader(output.getStdout().toString()));
             String line;
-            if (exitCode != 0 && !output.getStdout().toString().contains("All queues are empty")) { 
+            if (exitCode != 0 && !output.getStdout().toString().contains("All queues are empty")) {
+                lnr = new LineNumberReader(new StringReader(output.getStderr().toString()));
                 logger.debug("executor.getStderr() = {}", output.getStderr().toString());
                 StringBuilder errorMessageSB = new StringBuilder();
                 while ((line = lnr.readLine()) != null) {
@@ -71,6 +72,7 @@ public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<
                 throw new JLRMException(errorMessageSB.toString());
             }
 
+            lnr = new LineNumberReader(new StringReader(output.getStdout().toString()));
             while ((line = lnr.readLine()) != null) {
                 if (line.trim().equals("All queues are empty")) {
                     break;

@@ -30,7 +30,7 @@ public class LookupJobByOwnerTest {
         sb.append(" -format ',Requirements=%s' Requirements");
         sb.append(" -submitter 'Owner == \"").append(System.getProperty("user.name")).append("\"'");
 
-        String command = String.format("(%s/bin/condor_q -global %s; echo)", "/usr", sb.toString());
+        String command = String.format("(%s/condor_q -global %s; echo)", "/usr/bin", sb.toString());
         CommandInput input = new CommandInput();
         input.setCommand(command);
 
@@ -39,14 +39,20 @@ public class LookupJobByOwnerTest {
         int exitCode = output.getExitCode();
         System.out.println(output.getStdout());
         assertTrue(exitCode == 1);
+        
+        LineNumberReader lnr = null;
+        String line;
 
         if (exitCode != 0 && !output.getStdout().toString().contains("All queues are empty")) {
             StringBuilder errorMessageSB = new StringBuilder();
+            lnr = new LineNumberReader(new StringReader(output.getStderr().toString()));
+            while ((line = lnr.readLine()) != null) {
+                errorMessageSB.append(String.format("%s%n", line));
+            }
             throw new JLRMException(errorMessageSB.toString());
         }
 
-        LineNumberReader lnr = new LineNumberReader(new StringReader(output.getStdout().toString()));
-        String line;
+        lnr = new LineNumberReader(new StringReader(output.getStdout().toString()));
 
         Map<String, List<ClassAdvertisement>> classAdMap = new HashMap<String, List<ClassAdvertisement>>();
         while ((line = lnr.readLine()) != null) {
