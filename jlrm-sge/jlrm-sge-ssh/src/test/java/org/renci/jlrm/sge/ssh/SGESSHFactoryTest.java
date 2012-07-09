@@ -133,7 +133,13 @@ public class SGESSHFactoryTest {
             Set<SGEJobStatusInfo> jobStatusSet = new HashSet<SGEJobStatusInfo>();
 
             String xmloutput = IOUtils.toString(in).trim();
+            int exitCode = execChannel.getExitStatus();
+            System.out.println("exitCode: " + exitCode);
+                        
+            execChannel.disconnect();
+            session.disconnect();
 
+            System.out.println(xmloutput);
             try {
                 DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
                 Document document = documentBuilder.parse(new InputSource(new StringReader(xmloutput)));
@@ -181,10 +187,6 @@ public class SGESSHFactoryTest {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            int exitCode = execChannel.getExitStatus();
-            execChannel.disconnect();
-            session.disconnect();
 
             for (SGEJobStatusInfo info : jobStatusSet) {
                 System.out.println(String.format("%1$-16s%2$-10s%3$s", info.getJobId(), info.getType().toString(),
