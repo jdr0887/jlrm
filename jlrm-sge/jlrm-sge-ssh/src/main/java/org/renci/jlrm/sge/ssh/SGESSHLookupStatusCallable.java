@@ -3,27 +3,36 @@ package org.renci.jlrm.sge.ssh;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.LineNumberReader;
 import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
+
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Site;
+import org.renci.jlrm.sge.SGEJobStatusInfo;
 import org.renci.jlrm.sge.SGEJobStatusType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
-public class SGESSHLookupStatusCallable implements Callable<Map<String, SGEJobStatusType>> {
+public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo>> {
 
     private final Logger logger = LoggerFactory.getLogger(SGESSHLookupStatusCallable.class);
 
@@ -45,21 +54,15 @@ public class SGESSHLookupStatusCallable implements Callable<Map<String, SGEJobSt
     }
 
     @Override
-    public Map<String, SGEJobStatusType> call() throws JLRMException {
+    public Set<SGEJobStatusInfo> call() throws JLRMException {
         logger.debug("ENTERING call()");
 
-        StringBuilder sb = new StringBuilder();
-        for (SGESSHJob job : this.jobs) {
-            sb.append(" ").append(job.getId());
-        }
-        String jobXarg = sb.toString().replaceFirst(" ", "");
-        String command = String.format("%s/qstat | tail -n+3 | awk '{print $1,$5}'", this.site.getLRMBinDirectory(),
-                jobXarg);
+        String command = String.format("%s/qstat -s prs -r -xml", this.site.getLRMBinDirectory());
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
 
-        Map<String, SGEJobStatusType> jobStatusMap = new HashMap<String, SGEJobStatusType>();
+        Set<SGEJobStatusInfo> jobStatusSet = new HashSet<SGEJobStatusInfo>();
         JSch sch = new JSch();
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
@@ -90,27 +93,43 @@ public class SGESSHLookupStatusCallable implements Callable<Map<String, SGEJobSt
             execChannel.disconnect();
             session.disconnect();
 
-            LineNumberReader lnr = new LineNumberReader(new StringReader(output));
-            String line;
-            while ((line = lnr.readLine()) != null) {
-                SGEJobStatusType statusType = SGEJobStatusType.DONE;
-                if (StringUtils.isNotEmpty(line)) {
-                    if (line.contains("is not found")) {
-                        statusType = SGEJobStatusType.DONE;
-                    } else {
-                        String[] lineSplit = line.split(" ");
-                        if (lineSplit != null && lineSplit.length == 2) {
+            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document document = documentBuilder.parse(new InputSource(new StringReader(output)));
+            XPath xpath = XPathFactory.newInstance().newXPath();
+            String jobListXPath = "/job_info/queue_info/job_list";
+            NodeList jobListNodeList = (NodeList) xpath.evaluate(jobListXPath, document, XPathConstants.NODESET);
+            if (jobListNodeList.getLength() > 0) {
+                for (int i = 0; i < jobListNodeList.getLength(); i++) {
+                    Node node = jobListNodeList.item(i);
+                    NodeList childNodes = node.getChildNodes();
+                    String jobId = "";
+                    String queueName = "";
+                    String status = "";
+                    SGEJobStatusType statusType = SGEJobStatusType.DONE;
+                    for (int j = 0; j < childNodes.getLength(); j++) {
+                        Node childNode = childNodes.item(j);
+                        String nodeName = childNode.getNodeName();
+                        if ("JB_job_number".equals(nodeName)) {
+                            jobId = childNode.getTextContent();
+                        }
+                        if ("state".equals(nodeName)) {
+                            status = childNode.getTextContent();
                             for (SGEJobStatusType type : SGEJobStatusType.values()) {
-                                if (type.getValue().equals(lineSplit[1])) {
+                                if (type.getValue().equals(status)) {
                                     statusType = type;
                                 }
                             }
-                            logger.info("JobStatus for {} is {}", lineSplit[0], statusType);
-                            jobStatusMap.put(lineSplit[0], statusType);
+                        }
+                        if ("hard_req_queue".equals(nodeName)) {
+                            queueName = childNode.getTextContent();
                         }
                     }
+                    SGEJobStatusInfo info = new SGEJobStatusInfo(jobId, statusType, queueName);
+                    logger.info("JobStatus is {}", info.toString());
+                    jobStatusSet.add(info);
                 }
             }
+
         } catch (JSchException e) {
             logger.error("JSchException", e);
             throw new JLRMException("JSchException: " + e.getMessage());
@@ -121,7 +140,7 @@ public class SGESSHLookupStatusCallable implements Callable<Map<String, SGEJobSt
             logger.error("Exception", e);
             throw new JLRMException("Exception: " + e.getMessage());
         }
-        return jobStatusMap;
+        return jobStatusSet;
     }
 
     public Site getSite() {
