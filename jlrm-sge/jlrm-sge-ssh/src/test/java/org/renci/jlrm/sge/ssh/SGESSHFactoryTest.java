@@ -144,7 +144,7 @@ public class SGESSHFactoryTest {
                 DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
                 Document document = documentBuilder.parse(new InputSource(new StringReader(xmloutput)));
                 XPath xpath = XPathFactory.newInstance().newXPath();
-                String jobListXPath = "/job_info/queue_info/job_list";
+                String jobListXPath = "/job_info/*/job_list";
                 NodeList jobListNodeList = (NodeList) xpath.evaluate(jobListXPath, document, XPathConstants.NODESET);
                 for (int i = 0; i < jobListNodeList.getLength(); i++) {
                     Node node = jobListNodeList.item(i);
