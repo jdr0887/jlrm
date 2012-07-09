@@ -2,13 +2,24 @@ package org.renci.jlrm.sge.ssh;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -16,7 +27,14 @@ import org.junit.Test;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Queue;
 import org.renci.jlrm.Site;
+import org.renci.jlrm.sge.SGEJobStatusInfo;
 import org.renci.jlrm.sge.SGEJobStatusType;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
@@ -36,11 +54,11 @@ public class SGESSHFactoryTest {
         site.setLRMBinDirectory("/opt/gridengine/bin/lx26-amd64");
         site.setSubmitHost("swprod.bioinf.unc.edu");
         site.setMaxNoClaimTime(1440);
-        
+
         Queue queue = new Queue();
         queue.setName("all.q");
         queue.setRunTime(2880);
-        
+
         SGESSHFactory factory = SGESSHFactory.getInstance(site, "jreilly");
 
         SGESSHJob job = new SGESSHJob("test", new File("/bin/hostname"));
@@ -68,11 +86,11 @@ public class SGESSHFactoryTest {
         site.setLRMBinDirectory("/opt/gridengine/bin/lx26-amd64");
         site.setSubmitHost("swprod.bioinf.unc.edu");
         site.setMaxNoClaimTime(1440);
-        
+
         Queue queue = new Queue();
         queue.setName("all.q");
         queue.setRunTime(2880);
-        
+
         SGESSHFactory factory = SGESSHFactory.getInstance(site, "jreilly");
 
         File submitDir = new File("/tmp");
@@ -88,8 +106,7 @@ public class SGESSHFactoryTest {
     @Test
     public void testLookupStatus() {
 
-        String command = String.format("%s/qstat -j %s | tail -n+2 | awk '{print $1,$3}'",
-                "/opt/gridengine/bin/lx26-amd64", "173198 173244");
+        String command = String.format("%s/qstat -s prs -r -xml", "/opt/gridengine/bin/lx26-amd64");
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
@@ -113,57 +130,67 @@ public class SGESSHFactoryTest {
             execChannel.setCommand(command);
             InputStream in = execChannel.getInputStream();
             execChannel.connect();
+            Set<SGEJobStatusInfo> jobStatusSet = new HashSet<SGEJobStatusInfo>();
 
-            byte[] tmp = new byte[1024];
-            while (true) {
-                while (in.available() > 0) {
-                    int i = in.read(tmp, 0, 1024);
-                    if (i < 0)
-                        break;
-                    System.out.print(new String(tmp, 0, i));
+            String xmloutput = IOUtils.toString(in).trim();
+
+            try {
+                DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                Document document = documentBuilder.parse(new InputSource(new StringReader(xmloutput)));
+                XPath xpath = XPathFactory.newInstance().newXPath();
+                String jobListXPath = "/job_info/queue_info/job_list";
+                NodeList jobListNodeList = (NodeList) xpath.evaluate(jobListXPath, document, XPathConstants.NODESET);
+                for (int i = 0; i < jobListNodeList.getLength(); i++) {
+                    Node node = jobListNodeList.item(i);
+                    NodeList childNodes = node.getChildNodes();
+                    String jobId = "";
+                    String queueName = "";
+                    String status = "";
+                    SGEJobStatusType statusType = SGEJobStatusType.DONE;
+                    for (int j = 0; j < childNodes.getLength(); j++) {
+                        Node childNode = childNodes.item(j);
+                        String nodeName = childNode.getNodeName();
+                        if ("JB_job_number".equals(nodeName)) {
+                            jobId = childNode.getTextContent();
+                        }
+                        if ("state".equals(nodeName)) {
+                            status = childNode.getTextContent();
+                            for (SGEJobStatusType type : SGEJobStatusType.values()) {
+                                if (type.getValue().equals(status)) {
+                                    statusType = type;
+                                }
+                            }
+                        }
+                        if ("hard_req_queue".equals(nodeName)) {
+                            queueName = childNode.getTextContent();
+                        }
+                    }
+                    SGEJobStatusInfo info = new SGEJobStatusInfo(jobId, statusType, queueName);
+                    jobStatusSet.add(info);
                 }
-                if (execChannel.isClosed()) {
-                    System.out.println("exit-status: " + execChannel.getExitStatus());
-                    break;
-                }
-                try {
-                    Thread.sleep(1000);
-                } catch (Exception ee) {
-                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (XPathExpressionException e) {
+                e.printStackTrace();
+            } catch (DOMException e) {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-            String output = IOUtils.toString(in).trim();
 
             int exitCode = execChannel.getExitStatus();
             execChannel.disconnect();
             session.disconnect();
 
-            Map<String, SGEJobStatusType> jobStatusMap = new HashMap<String, SGEJobStatusType>();
-            LineNumberReader lnr = new LineNumberReader(new StringReader(output));
-            String line;
-            while ((line = lnr.readLine()) != null) {
-                SGEJobStatusType statusType = SGEJobStatusType.DONE;
-                if (StringUtils.isNotEmpty(line)) {
-                    if (line.contains("is not found")) {
-                        statusType = SGEJobStatusType.DONE;
-                    } else {
-                        // System.out.println(line);
-                        String[] lineSplit = line.split(" ");
-                        if (lineSplit != null && lineSplit.length == 2) {
-                            for (SGEJobStatusType type : SGEJobStatusType.values()) {
-                                if (type.getValue().equals(lineSplit[1])) {
-                                    statusType = type;
-                                }
-                            }
-                            jobStatusMap.put(lineSplit[0], statusType);
-                        }
-                    }
-                }
+            for (SGEJobStatusInfo info : jobStatusSet) {
+                System.out.println(String.format("%1$-16s%2$-10s%3$s", info.getJobId(), info.getType().toString(),
+                        info.getQueue()));
             }
 
-            for (String id : jobStatusMap.keySet()) {
-                System.out.println("Job: " + id + " has a status of " + jobStatusMap.get(id));
-            }
         } catch (JSchException e) {
             e.printStackTrace();
         } catch (IOException e) {
