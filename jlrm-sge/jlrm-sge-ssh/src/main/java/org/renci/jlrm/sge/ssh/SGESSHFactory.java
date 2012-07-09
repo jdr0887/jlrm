@@ -1,7 +1,7 @@
 package org.renci.jlrm.sge.ssh;
 
 import java.io.File;
-import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Queue;
 import org.renci.jlrm.Site;
-import org.renci.jlrm.sge.SGEJobStatusType;
+import org.renci.jlrm.sge.SGEJobStatusInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,11 +103,11 @@ public class SGESSHFactory {
         return job;
     }
 
-    public Map<String, SGEJobStatusType> lookupStatus(SGESSHJob... jobs) throws JLRMException {
+    public Set<SGEJobStatusInfo> lookupStatus(SGESSHJob... jobs) throws JLRMException {
         logger.debug("ENTERING lookupStatus(job)");
         SGESSHLookupStatusCallable runnable = new SGESSHLookupStatusCallable(this.site, this.username, jobs);
-        Future<Map<String, SGEJobStatusType>> jobFuture = this.threadPoolExecutor.submit(runnable);
-        Map<String, SGEJobStatusType> ret = null;
+        Future<Set<SGEJobStatusInfo>> jobFuture = this.threadPoolExecutor.submit(runnable);
+        Set<SGEJobStatusInfo> ret = null;
         try {
             ret = jobFuture.get();
         } catch (InterruptedException e) {
