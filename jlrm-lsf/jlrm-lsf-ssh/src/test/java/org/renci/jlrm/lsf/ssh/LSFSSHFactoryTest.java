@@ -88,7 +88,7 @@ public class LSFSSHFactoryTest {
 
         
         String command = String.format("%s/bjobs %s | tail -n+2 | awk '{print $1,$3,$4}'",
-                "/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/bin", "62104 62100");
+                "/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/bin", "183291 183293");
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
@@ -112,24 +112,6 @@ public class LSFSSHFactoryTest {
             execChannel.setCommand(command);
             InputStream in = execChannel.getInputStream();
             execChannel.connect();
-
-            byte[] tmp = new byte[1024];
-            while (true) {
-                while (in.available() > 0) {
-                    int i = in.read(tmp, 0, 1024);
-                    if (i < 0)
-                        break;
-                    System.out.print(new String(tmp, 0, i));
-                }
-                if (execChannel.isClosed()) {
-                    System.out.println("exit-status: " + execChannel.getExitStatus());
-                    break;
-                }
-                try {
-                    Thread.sleep(1000);
-                } catch (Exception ee) {
-                }
-            }
 
             String output = IOUtils.toString(in).trim();
 
