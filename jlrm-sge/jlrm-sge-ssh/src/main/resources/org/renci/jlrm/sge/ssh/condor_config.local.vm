@@ -30,6 +30,6 @@ JLRM_USER = "${jlrmUser}"
 IS_GLIDEIN = True                    
 STARTD_ATTRS = IS_GLIDEIN,START,DaemonStopTime,GLIDEIN_START_TIME,JLRM_USER
 
-PREEMPT = (CurrentTime - JobStart) > (2 * $(HOUR) - 5 * $(MINUTE))
+PREEMPT = FALSE
 WANT_VACATE = FALSE
 
