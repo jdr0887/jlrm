@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.renci</groupId>
     <artifactId>jLRM</artifactId>
-    <version>0.1.4-SNAPSHOT</version>
+    <version>0.1.4</version>
   </parent>
   <name>jLRM :: SGE</name>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.renci.jlrm</groupId>
   <artifactId>jlrm-sge</artifactId>
-  <version>0.1.4-SNAPSHOT</version>
+  <version>0.1.4</version>
   <packaging>pom</packaging>
   <modules>
     <module>jlrm-sge-api</module>
