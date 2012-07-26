@@ -18,13 +18,9 @@ public class CondorJob extends Job {
 
     private Integer retry;
 
-    private File preScript;
+    private String preScript;
 
-    private StringBuilder preScriptArguments = new StringBuilder();
-
-    private File postScript;
-
-    private StringBuilder postScriptArguments = new StringBuilder();
+    private String postScript;
 
     public CondorJob() {
         super();
@@ -58,17 +54,17 @@ public class CondorJob extends Job {
         addArgument(flag, "", "");
     }
 
-    public void addArgument(String flag, String value) {
+    public void addArgument(String flag, Object value) {
         addArgument(flag, value, " ");
     }
 
-    public void addArgument(String flag, String value, String delimiter) {
+    public void addArgument(String flag, Object value, String delimiter) {
         try {
             if (!getClassAdvertismentMap().containsKey(CLASS_AD_KEY_ARGUMENTS)) {
                 getClassAdvertismentMap().put(CLASS_AD_KEY_ARGUMENTS,
                         ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_ARGUMENTS).clone());
             }
-            String arg = String.format("%s%s%s", flag, delimiter, value);
+            String arg = String.format("%s%s%s", flag, delimiter, value.toString());
             ClassAdvertisement classAd = getClassAdvertismentMap().get(CLASS_AD_KEY_ARGUMENTS);
             classAd.setValue(classAd.getValue() + " " + arg);
         } catch (CloneNotSupportedException e) {
@@ -100,52 +96,20 @@ public class CondorJob extends Job {
         this.jobId = jobId;
     }
 
-    public File getPreScript() {
+    public String getPreScript() {
         return preScript;
     }
 
-    public void setPreScript(File preScript) {
+    public void setPreScript(String preScript) {
         this.preScript = preScript;
     }
 
-    public File getPostScript() {
+    public String getPostScript() {
         return postScript;
     }
 
-    public void setPostScript(File postScript) {
+    public void setPostScript(String postScript) {
         this.postScript = postScript;
-    }
-
-    public void addPreScriptArgument(String flag) {
-        addPreScriptArgument(flag, "", " ");
-    }
-
-    public void addPreScriptArgument(String flag, String value) {
-        addPreScriptArgument(flag, value, " ");
-    }
-
-    public void addPreScriptArgument(String flag, String value, String delimiter) {
-        this.preScriptArguments.append(" ").append(flag).append(delimiter).append(value);
-    }
-
-    public void addPostScriptArgument(String flag) {
-        addPostScriptArgument(flag, "", " ");
-    }
-
-    public void addPostScriptArgument(String flag, String value) {
-        addPostScriptArgument(flag, value, " ");
-    }
-
-    public void addPostScriptArgument(String flag, String value, String delimiter) {
-        this.postScriptArguments.append(" ").append(flag).append(delimiter).append(value);
-    }
-
-    public StringBuilder getPreScriptArguments() {
-        return preScriptArguments;
-    }
-
-    public StringBuilder getPostScriptArguments() {
-        return postScriptArguments;
     }
 
     @Override

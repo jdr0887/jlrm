@@ -13,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,14 +118,12 @@ public class CondorSubmitScriptExporter {
                     writeSubmitFile(workDir, job);
                     dagFileWriter.write(String.format("%n%1$-10s %2$-10s %2$s.sub", "JOB", job.getName()));
                     if (job.getPreScript() != null) {
-                        dagFileWriter.write(String.format("%n%1$-10s %2$-10s %3$-10s %4$-10s%5$s", "SCRIPT", "PRE",
-                                job.getName(), job.getPreScript().getAbsolutePath(), job.getPreScriptArguments()
-                                        .toString()));
+                        dagFileWriter.write(String.format("%n%1$-10s %2$-10s %3$-10s %4$-10s", "SCRIPT", "PRE",
+                                job.getName(), job.getPreScript()));
                     }
                     if (job.getPostScript() != null) {
-                        dagFileWriter.write(String.format("%n%1$-10s %2$-10s %3$-10s %4$-10s%5$s", "SCRIPT", "POST",
-                                job.getName(), job.getPostScript().getAbsolutePath(), job.getPostScriptArguments()
-                                        .toString()));
+                        dagFileWriter.write(String.format("%n%1$-10s %2$-10s %3$-10s %4$-10s", "SCRIPT", "POST",
+                                job.getName(), job.getPostScript()));
                     }
                     if (job.getRetry() != null && job.getRetry() > 1) {
                         dagFileWriter.write(String.format("%n%1$-10s %2$-10s %3$d%n", "RETRY", job.getName(),
@@ -153,6 +152,10 @@ public class CondorSubmitScriptExporter {
         }
 
         return dagSubmitJob;
+    }
+
+    public void export(Graph<Graph<CondorJob, CondorJobEdge>, DefaultEdge> graph) {
+
     }
 
     private File writeSubmitFile(File submitDir, CondorJob job) throws IOException {

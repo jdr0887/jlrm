@@ -9,10 +9,9 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.jgrapht.DirectedGraph;
-import org.jgrapht.ext.ComponentAttributeProvider;
-import org.jgrapht.ext.DOTExporter;
 import org.jgrapht.ext.VertexNameProvider;
 import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
 import org.junit.Test;
 
 public class JobTest {
@@ -30,11 +29,8 @@ public class JobTest {
 
         File executable = new File("/bin/hostname");
         CondorJob job = new CondorJob("asdfasdfasdffffffffffffffasdfasdfasdfasdfasdfa", executable, 3);
-        job.setPreScript(new File("asdf"));
-        job.addPreScriptArgument("--foo", "bar");
-        
-        job.setPostScript(new File("qwer"));
-        job.addPostScriptArgument("--fuzz", "buzz");
+        job.setPreScript("/bin/echo asdf");
+        job.setPostScript("/bin/echo qwer");
 
         job.addArgument("someClassName");
         Map<String, String> defaultRSLAttributeMap = new HashMap<String, String>();
@@ -75,12 +71,8 @@ public class JobTest {
         graph.addEdge(job, job2);
 
         CondorJob job3 = new CondorJob("c", executable, 2);
-        job3.setPreScript(new File("asdf"));
-        job3.addPreScriptArgument("--foo", "bar");
-        
-        job3.setPostScript(new File("qwer"));
-        job3.addPostScriptArgument("--foo", "bar");
-        job3.addPostScriptArgument("--fuzz", "buzz", "=");
+        job3.setPreScript("/bin/echo bar");
+        job3.setPostScript("/bin/echo buzz");
 
         job3.addArgument("zxcvzxcv");
 
@@ -139,6 +131,45 @@ public class JobTest {
 
             FileWriter fw = new FileWriter(new File("/tmp", "test.dag.dot"));
             dotExporter.export(fw, graph);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void testNestedGraph() throws Exception {
+
+        DirectedGraph<DirectedGraph<CondorJob, CondorJobEdge>, DefaultEdge> parentGraph = new DefaultDirectedGraph<DirectedGraph<CondorJob, CondorJobEdge>, DefaultEdge>(
+                DefaultEdge.class);
+
+        DirectedGraph<CondorJob, CondorJobEdge> graph1 = new DefaultDirectedGraph<CondorJob, CondorJobEdge>(
+                CondorJobEdge.class);
+        CondorJob job = new CondorJob("asdf", new File("/bin/hostname"));
+        job.setPreScript("/bin/echo foo");
+        job.setPostScript("/bin/echo bar");
+        job.addArgument("someClassName");
+        job.addArgument("asdfasdf");
+        job.addArgument("--fuzz", "buzz");
+        graph1.addVertex(job);
+        parentGraph.addVertex(graph1);
+
+        DirectedGraph<CondorJob, CondorJobEdge> graph2 = new DefaultDirectedGraph<CondorJob, CondorJobEdge>(
+                CondorJobEdge.class);
+        job = new CondorJob("qwer", new File("/bin/hostname"));
+        job.setPreScript("/bin/echo fuzz");
+        job.setPostScript("/bin/echo buzz");
+        job.addArgument("someClassName");
+        job.addArgument("asdfasdf");
+        job.addArgument("--foo", "bar");
+        graph2.addVertex(job);
+        parentGraph.addVertex(graph2);
+        parentGraph.addEdge(graph1, graph2);
+
+        try {
+            CondorDOTExporter<DirectedGraph<CondorJob, CondorJobEdge>, DefaultEdge> dotExporter = new CondorDOTExporter<DirectedGraph<CondorJob, CondorJobEdge>, DefaultEdge>();
+            FileWriter fw = new FileWriter(new File("/tmp", "test.dag.dot"));
+            dotExporter.export(fw, parentGraph);
         } catch (IOException e) {
             e.printStackTrace();
         }
