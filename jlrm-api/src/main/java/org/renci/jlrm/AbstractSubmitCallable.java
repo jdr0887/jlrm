@@ -3,7 +3,6 @@ package org.renci.jlrm;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.Callable;
 
@@ -16,7 +15,7 @@ public abstract class AbstractSubmitCallable<T> implements Callable<T> {
     protected File createWorkDirectory(File submitDir, String jobsDirName, String name) {
         File jobsDir = new File(submitDir, jobsDirName);
         Date date = new Date();
-        Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Format formatter = PerThreadDateFormatter.getDateFormatter();
         File datedDir = new File(jobsDir, formatter.format(date));
         File jobSubmitDir = new File(datedDir, name);
         File[] runDirectories = jobSubmitDir.listFiles(new FilenameFilter() {
