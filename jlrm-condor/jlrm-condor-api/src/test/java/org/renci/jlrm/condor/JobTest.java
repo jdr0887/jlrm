@@ -3,12 +3,15 @@ package org.renci.jlrm.condor;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
 import org.jgrapht.DirectedGraph;
+import org.jgrapht.ext.EdgeNameProvider;
 import org.jgrapht.ext.VertexNameProvider;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
@@ -67,8 +70,11 @@ public class JobTest {
         job2.getClassAdvertismentMap().put(ClassAdvertisementFactory.CLASS_AD_KEY_UNIVERSE, classAd);
 
         graph.addVertex(job2);
-
-        graph.addEdge(job, job2);
+        CondorJobEdge jobEdge = graph.addEdge(job, job2);
+        List<String> edgeLabel = new ArrayList<String>();
+        edgeLabel.add("qwerqwer");
+        jobEdge.setInputLabelList(edgeLabel);
+        
 
         CondorJob job3 = new CondorJob("c", executable, 2);
         job3.setPreScript("/bin/echo bar");
@@ -93,8 +99,10 @@ public class JobTest {
         job3.addArgument("--foo", "bar");
         job3.addArgument("--fuzz", "buzz");
         graph.addVertex(job3);
-
-        graph.addEdge(job, job3);
+        jobEdge = graph.addEdge(job, job3);
+        edgeLabel = new ArrayList<String>();
+        edgeLabel.add("asdfasdf");
+        jobEdge.setInputLabelList(edgeLabel);
 
         CondorJob job4 = new CondorJob("d", executable, 6);
         graph.addVertex(job4);
@@ -124,10 +132,23 @@ public class JobTest {
                 }
             };
 
+            EdgeNameProvider<CondorJobEdge> enpLabel = new EdgeNameProvider<CondorJobEdge>() {
+                @Override
+                public String getEdgeName(CondorJobEdge edge) {
+                    StringBuilder sb = new StringBuilder();
+                    if (edge.getInputLabelList() != null) {
+                        for (String label : edge.getInputLabelList()) {
+                            sb.append(String.format(",%s", label));
+                        }
+                    }
+                    return sb.toString().replaceFirst(",", "");
+                }
+            };
+
             Properties props = new Properties();
             props.setProperty("rankdir", "LR");
             CondorDOTExporter<CondorJob, CondorJobEdge> dotExporter = new CondorDOTExporter<CondorJob, CondorJobEdge>(
-                    vnpId, vnpLabel, null, null, null, props);
+                    vnpId, vnpLabel, enpLabel, null, null, props);
 
             FileWriter fw = new FileWriter(new File("/tmp", "test.dag.dot"));
             dotExporter.export(fw, graph);
