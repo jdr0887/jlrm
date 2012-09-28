@@ -18,29 +18,26 @@ public class LSFCLIFactory {
 
     private static LSFCLIFactory instance = null;
 
-    private File lsfHome;
-
-    public static LSFCLIFactory getInstance(File lsfHome) {
+    public static LSFCLIFactory getInstance() {
         if (instance == null) {
-            instance = new LSFCLIFactory(lsfHome);
+            instance = new LSFCLIFactory();
         }
         return instance;
     }
 
-    private LSFCLIFactory(File lsfHome) {
+    private LSFCLIFactory() {
         super();
-        this.lsfHome = lsfHome;
     }
 
     public LSFJob submit(File submitDir, LSFJob job) throws JLRMException {
         logger.debug("ENTERING submit(File)");
-        LSFSubmitCallable runnable = new LSFSubmitCallable(this.lsfHome, job, submitDir);
+        LSFSubmitCallable runnable = new LSFSubmitCallable(job, submitDir);
         return runnable.call();
     }
 
     public LSFJobStatusType lookupStatus(LSFJob job) throws JLRMException {
         logger.debug("ENTERING lookupStatus(job)");
-        LSFLookupStatusCallable runnable = new LSFLookupStatusCallable(this.lsfHome, job);
+        LSFLookupStatusCallable runnable = new LSFLookupStatusCallable(job);
         return runnable.call();
     }
 

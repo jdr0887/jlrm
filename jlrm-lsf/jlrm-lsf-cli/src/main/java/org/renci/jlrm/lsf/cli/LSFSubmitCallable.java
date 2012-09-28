@@ -7,6 +7,7 @@ import java.io.StringReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.renci.common.exec.BashExecutor;
 import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
@@ -25,8 +26,6 @@ public class LSFSubmitCallable extends AbstractSubmitCallable<LSFJob> {
 
     private final Executor executor = BashExecutor.getInstance();
 
-    private File lsfHome;
-
     private LSFJob job;
 
     private File submitDir;
@@ -35,15 +34,25 @@ public class LSFSubmitCallable extends AbstractSubmitCallable<LSFJob> {
         super();
     }
 
-    public LSFSubmitCallable(File lsfHome, LSFJob job, File submitDir) {
+    public LSFSubmitCallable(LSFJob job, File submitDir) {
         super();
-        this.lsfHome = lsfHome;
         this.job = job;
         this.submitDir = submitDir;
     }
 
     @Override
     public LSFJob call() throws JLRMException {
+
+        String lsfHome = System.getenv("LSF_HOME");
+        if (StringUtils.isEmpty(lsfHome)) {
+            logger.error("LSF_HOME not set in env: {}", lsfHome);
+            return null;
+        }
+        File lsfHomeDirectory = new File(lsfHome);
+        if (!lsfHomeDirectory.exists()) {
+            logger.error("LSF_HOME does not exist: {}", lsfHomeDirectory);
+            return null;
+        }
 
         File workDir = createWorkDirectory(this.submitDir, job.getName());
 
@@ -52,7 +61,7 @@ public class LSFSubmitCallable extends AbstractSubmitCallable<LSFJob> {
             LSFSubmitScriptExporter<LSFJob> exporter = new LSFSubmitScriptExporter<LSFJob>();
             this.job = exporter.export(workDir, job);
 
-            String command = String.format("%s/bin/bsub < %s", this.lsfHome.getAbsolutePath(), job.getSubmitFile()
+            String command = String.format("%s/bin/bsub < %s", lsfHomeDirectory.getAbsolutePath(), job.getSubmitFile()
                     .getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
             CommandOutput output = executor.execute(input);
@@ -91,14 +100,6 @@ public class LSFSubmitCallable extends AbstractSubmitCallable<LSFJob> {
             throw new JLRMException("IOException: " + e.getMessage());
         }
 
-    }
-
-    public File getLsfHome() {
-        return lsfHome;
-    }
-
-    public void setLsfHome(File lsfHome) {
-        this.lsfHome = lsfHome;
     }
 
     public LSFJob getJob() {
