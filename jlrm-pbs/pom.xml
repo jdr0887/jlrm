@@ -13,5 +13,6 @@
   <modules>
     <module>jlrm-pbs-api</module>
     <module>jlrm-pbs-ssh</module>
+    <module>jlrm-pbs-cli</module>
   </modules>
 </project>
