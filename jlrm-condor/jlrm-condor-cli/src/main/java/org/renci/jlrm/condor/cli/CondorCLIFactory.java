@@ -23,41 +23,38 @@ public class CondorCLIFactory {
 
     private static CondorCLIFactory instance = null;
 
-    private File condorHome;
-
-    public static CondorCLIFactory getInstance(File condorHome) {
+    public static CondorCLIFactory getInstance() {
         if (instance == null) {
-            instance = new CondorCLIFactory(condorHome);
+            instance = new CondorCLIFactory();
         }
         return instance;
     }
 
-    private CondorCLIFactory(File condorHome) {
+    private CondorCLIFactory() {
         super();
-        this.condorHome = condorHome;
     }
 
     public Map<String, List<ClassAdvertisement>> lookupJobsByOwner(String owner) throws JLRMException {
         logger.debug("ENTERING lookupJobsByUsername(String username)");
-        CondorLookupJobsByOwnerCallable runnable = new CondorLookupJobsByOwnerCallable(this.condorHome, owner);
+        CondorLookupJobsByOwnerCallable runnable = new CondorLookupJobsByOwnerCallable(owner);
         return runnable.call();
     }
     
     public CondorJob submit(File submitDir, CondorJob job) throws JLRMException {
         logger.debug("ENTERING submit(File, CondorJob)");
-        CondorSubmitCallable runnable = new CondorSubmitCallable(this.condorHome, submitDir, job);
+        CondorSubmitCallable runnable = new CondorSubmitCallable(submitDir, job);
         return runnable.call();
     }
 
     public CondorJob submit(String dagName, File submitDir, Graph<CondorJob, CondorJobEdge> graph) throws JLRMException {
         logger.debug("ENTERING submit(String dagName, File submitDir, Graph<CondorJob, CondorJobEdge> graph)");
-        CondorSubmitDAGCallable runnable = new CondorSubmitDAGCallable(this.condorHome, submitDir, graph, dagName);
+        CondorSubmitDAGCallable runnable = new CondorSubmitDAGCallable(submitDir, graph, dagName);
         return runnable.call();
     }
 
     public CondorJobStatusType lookupStatus(CondorJob jobNode) throws JLRMException {
         logger.debug("ENTERING lookupStatus(JobNode)");
-        CondorLookupStatusCallable runnable = new CondorLookupStatusCallable(this.condorHome, jobNode);
+        CondorLookupStatusCallable runnable = new CondorLookupStatusCallable(jobNode);
         return runnable.call();
     }
 
