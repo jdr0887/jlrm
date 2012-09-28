@@ -57,9 +57,8 @@ public class SubmitTest {
             g.addEdge(job2, job4);
             g.addEdge(job3, job4);
 
-            File condorHome = new File("/usr");
             File submitDir = new File("/tmp");
-            CondorSubmitDAGCallable callable = new CondorSubmitDAGCallable(condorHome, submitDir, g, "asdfasdf");
+            CondorSubmitDAGCallable callable = new CondorSubmitDAGCallable(submitDir, g, "asdfasdf");
             CondorJob result = callable.call();
         } catch (JLRMException e) {
             e.printStackTrace();
