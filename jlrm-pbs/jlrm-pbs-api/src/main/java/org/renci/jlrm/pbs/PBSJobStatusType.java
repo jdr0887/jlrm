@@ -2,6 +2,8 @@ package org.renci.jlrm.pbs;
 
 public enum PBSJobStatusType {
 
+    COMPLETE("C"),
+
     QUEUED("Q"),
 
     RUNNING("R"),
