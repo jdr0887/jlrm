@@ -7,6 +7,7 @@ import java.io.StringReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.jgrapht.Graph;
 import org.renci.common.exec.BashExecutor;
 import org.renci.common.exec.CommandInput;
@@ -27,8 +28,6 @@ public class CondorSubmitDAGCallable extends AbstractSubmitCallable<CondorJob> {
 
     private final Executor executor = BashExecutor.getInstance();
 
-    private File condorHome;
-
     private File submitDir;
 
     private Graph<CondorJob, CondorJobEdge> graph;
@@ -39,10 +38,8 @@ public class CondorSubmitDAGCallable extends AbstractSubmitCallable<CondorJob> {
         super();
     }
 
-    public CondorSubmitDAGCallable(File condorHome, File submitDir, Graph<CondorJob, CondorJobEdge> graph,
-            String dagName) {
+    public CondorSubmitDAGCallable(File submitDir, Graph<CondorJob, CondorJobEdge> graph, String dagName) {
         super();
-        this.condorHome = condorHome;
         this.submitDir = submitDir;
         this.graph = graph;
         this.dagName = dagName;
@@ -51,13 +48,24 @@ public class CondorSubmitDAGCallable extends AbstractSubmitCallable<CondorJob> {
     @Override
     public CondorJob call() throws JLRMException {
 
+        String condorHome = System.getenv("CONDOR_HOME");
+        if (StringUtils.isEmpty(condorHome)) {
+            logger.error("CONDOR_HOME not set in env: {}", condorHome);
+            return null;
+        }
+        File condorHomeDirectory = new File(condorHome);
+        if (!condorHomeDirectory.exists()) {
+            logger.error("CONDOR_HOME does not exist: {}", condorHomeDirectory);
+            return null;
+        }
+
         File workDir = createWorkDirectory(submitDir, this.dagName);
         CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
         CondorJob dagSubmitJob = exporter.export(dagName, workDir, graph);
 
         try {
 
-            String command = String.format("%s/bin/condor_submit_dag %s", this.condorHome.getAbsolutePath(),
+            String command = String.format("%s/bin/condor_submit_dag %s", condorHomeDirectory.getAbsolutePath(),
                     dagSubmitJob.getSubmitFile().getName());
             CommandInput input = new CommandInput(command, dagSubmitJob.getSubmitFile().getParentFile());
             CommandOutput output = executor.execute(input);
@@ -106,14 +114,6 @@ public class CondorSubmitDAGCallable extends AbstractSubmitCallable<CondorJob> {
             throw new JLRMException("IOException: " + e.getMessage());
         }
 
-    }
-
-    public File getCondorHome() {
-        return condorHome;
-    }
-
-    public void setCondorHome(File condorHome) {
-        this.condorHome = condorHome;
     }
 
     public File getSubmitDir() {

@@ -21,25 +21,34 @@ public class CondorLookupStatusCallable implements Callable<CondorJobStatusType>
 
     private final Executor executor = BashExecutor.getInstance();
 
-    private File condorHome;
-
     private CondorJob job;
 
     public CondorLookupStatusCallable() {
         super();
     }
 
-    public CondorLookupStatusCallable(File condorHome, CondorJob job) {
+    public CondorLookupStatusCallable(CondorJob job) {
         super();
-        this.condorHome = condorHome;
         this.job = job;
     }
 
     @Override
     public CondorJobStatusType call() throws JLRMException {
+
+        String condorHome = System.getenv("CONDOR_HOME");
+        if (StringUtils.isEmpty(condorHome)) {
+            logger.error("CONDOR_HOME not set in env: {}", condorHome);
+            return null;
+        }
+        File condorHomeDirectory = new File(condorHome);
+        if (!condorHomeDirectory.exists()) {
+            logger.error("CONDOR_HOME does not exist: {}", condorHomeDirectory);
+            return null;
+        }
+
         CondorJobStatusType ret = CondorJobStatusType.UNEXPANDED;
         String command = String.format("%s/bin/condor_q -l %d.%d -format '%s\\n' JobStatus",
-                this.condorHome.getAbsolutePath(), job.getCluster(), job.getJobId(), "%s");
+                condorHomeDirectory.getAbsolutePath(), job.getCluster(), job.getJobId(), "%s");
         try {
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
             CommandOutput output = executor.execute(input);
@@ -67,14 +76,6 @@ public class CondorLookupStatusCallable implements Callable<CondorJobStatusType>
         logger.info("JobStatus = {}", ret);
         return ret;
 
-    }
-
-    public File getCondorHome() {
-        return condorHome;
-    }
-
-    public void setCondorHome(File condorHome) {
-        this.condorHome = condorHome;
     }
 
     public CondorJob getJob() {

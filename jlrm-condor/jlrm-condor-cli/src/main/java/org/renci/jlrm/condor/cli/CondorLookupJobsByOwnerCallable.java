@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.renci.common.exec.BashExecutor;
 import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
@@ -24,22 +25,30 @@ public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<
 
     private final Logger logger = LoggerFactory.getLogger(CondorLookupJobsByOwnerCallable.class);
 
-    private File condorHome;
-
     private String username;
 
     public CondorLookupJobsByOwnerCallable() {
         super();
     }
 
-    public CondorLookupJobsByOwnerCallable(File condorHome, String username) {
+    public CondorLookupJobsByOwnerCallable(String username) {
         super();
-        this.condorHome = condorHome;
         this.username = username;
     }
 
     @Override
     public Map<String, List<ClassAdvertisement>> call() throws JLRMException {
+
+        String condorHome = System.getenv("CONDOR_HOME");
+        if (StringUtils.isEmpty(condorHome)) {
+            logger.error("CONDOR_HOME not set in env: {}", condorHome);
+            return null;
+        }
+        File condorHomeDirectory = new File(condorHome);
+        if (!condorHomeDirectory.exists()) {
+            logger.error("CONDOR_HOME does not exist: {}", condorHomeDirectory);
+            return null;
+        }
 
         Map<String, List<ClassAdvertisement>> classAdMap = new HashMap<String, List<ClassAdvertisement>>();
         StringBuilder sb = new StringBuilder();
@@ -49,7 +58,7 @@ public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<
         sb.append(" -format ',Requirements=%s' Requirements");
         sb.append(" -submitter \"").append(this.username).append("\"");
 
-        String command = String.format("(%s/bin/condor_q -global %s; echo)", this.condorHome.getAbsolutePath(),
+        String command = String.format("(%s/bin/condor_q -global %s; echo)", condorHomeDirectory.getAbsolutePath(),
                 sb.toString());
         CommandInput input = new CommandInput();
         input.setCommand(command);
@@ -94,14 +103,6 @@ public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<
         }
 
         return classAdMap;
-    }
-
-    public File getCondorHome() {
-        return condorHome;
-    }
-
-    public void setCondorHome(File condorHome) {
-        this.condorHome = condorHome;
     }
 
     public String getUsername() {

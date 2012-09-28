@@ -7,6 +7,7 @@ import java.io.StringReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.renci.common.exec.BashExecutor;
 import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
@@ -25,8 +26,6 @@ public class CondorSubmitCallable extends AbstractSubmitCallable<CondorJob> {
 
     private final Executor executor = BashExecutor.getInstance();
 
-    private File condorHome;
-
     private File submitDir;
 
     private CondorJob job;
@@ -35,9 +34,8 @@ public class CondorSubmitCallable extends AbstractSubmitCallable<CondorJob> {
         super();
     }
 
-    public CondorSubmitCallable(File condorHome, File submitDir, CondorJob job) {
+    public CondorSubmitCallable(File submitDir, CondorJob job) {
         super();
-        this.condorHome = condorHome;
         this.submitDir = submitDir;
         this.job = job;
     }
@@ -45,13 +43,24 @@ public class CondorSubmitCallable extends AbstractSubmitCallable<CondorJob> {
     @Override
     public CondorJob call() throws JLRMException {
 
+        String condorHome = System.getenv("CONDOR_HOME");
+        if (StringUtils.isEmpty(condorHome)) {
+            logger.error("CONDOR_HOME not set in env: {}", condorHome);
+            return null;
+        }
+        File condorHomeDirectory = new File(condorHome);
+        if (!condorHomeDirectory.exists()) {
+            logger.error("CONDOR_HOME does not exist: {}", condorHomeDirectory);
+            return null;
+        }
+
         File workDir = createWorkDirectory(submitDir, job.getName());
         CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
         job = exporter.export(workDir, job);
 
         try {
 
-            String command = String.format("%s/bin/condor_submit %s", this.condorHome.getAbsolutePath(), job
+            String command = String.format("%s/bin/condor_submit %s", condorHomeDirectory.getAbsolutePath(), job
                     .getSubmitFile().getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
             CommandOutput output = executor.execute(input);
@@ -98,14 +107,6 @@ public class CondorSubmitCallable extends AbstractSubmitCallable<CondorJob> {
             throw new JLRMException("IOException: " + e.getMessage());
         }
 
-    }
-
-    public File getCondorHome() {
-        return condorHome;
-    }
-
-    public void setCondorHome(File condorHome) {
-        this.condorHome = condorHome;
     }
 
     public CondorJob getJob() {
