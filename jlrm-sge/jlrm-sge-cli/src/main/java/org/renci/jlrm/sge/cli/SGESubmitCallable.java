@@ -7,6 +7,7 @@ import java.io.StringReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.renci.common.exec.BashExecutor;
 import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
@@ -23,8 +24,6 @@ public class SGESubmitCallable extends AbstractSubmitCallable<SGEJob> {
 
     private final Logger logger = LoggerFactory.getLogger(SGESubmitCallable.class);
 
-    private File sgeHome;
-
     private SGEJob job;
 
     private File submitDir;
@@ -33,15 +32,25 @@ public class SGESubmitCallable extends AbstractSubmitCallable<SGEJob> {
         super();
     }
 
-    public SGESubmitCallable(File sgeHome, SGEJob job, File submitDir) {
+    public SGESubmitCallable(SGEJob job, File submitDir) {
         super();
-        this.sgeHome = sgeHome;
         this.job = job;
         this.submitDir = submitDir;
     }
 
     @Override
     public SGEJob call() throws JLRMException {
+
+        String sgeHome = System.getenv("SGE_HOME");
+        if (StringUtils.isEmpty(sgeHome)) {
+            logger.error("SGE_HOME not set in env: {}", sgeHome);
+            return null;
+        }
+        File sgeHomeDirectory = new File(sgeHome);
+        if (!sgeHomeDirectory.exists()) {
+            logger.error("SGE_HOME does not exist: {}", sgeHomeDirectory);
+            return null;
+        }
 
         File workDir = createWorkDirectory(this.submitDir, job.getName());
 
@@ -50,7 +59,7 @@ public class SGESubmitCallable extends AbstractSubmitCallable<SGEJob> {
             SGESubmitScriptExporter<SGEJob> exporter = new SGESubmitScriptExporter<SGEJob>();
             this.job = exporter.export(workDir, job);
 
-            String command = String.format("%s/bin/qsub < %s", this.sgeHome.getAbsolutePath(), job.getSubmitFile()
+            String command = String.format("%s/bin/qsub < %s", sgeHomeDirectory.getAbsolutePath(), job.getSubmitFile()
                     .getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
             Executor executor = BashExecutor.getInstance();
@@ -90,14 +99,6 @@ public class SGESubmitCallable extends AbstractSubmitCallable<SGEJob> {
             throw new JLRMException("IOException: " + e.getMessage());
         }
 
-    }
-
-    public File getSgeHome() {
-        return sgeHome;
-    }
-
-    public void setSgeHome(File sgeHome) {
-        this.sgeHome = sgeHome;
     }
 
     public SGEJob getJob() {

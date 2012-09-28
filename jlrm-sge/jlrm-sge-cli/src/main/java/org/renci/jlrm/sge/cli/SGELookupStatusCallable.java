@@ -19,25 +19,34 @@ public class SGELookupStatusCallable implements Callable<SGEJobStatusType> {
 
     private final Logger logger = LoggerFactory.getLogger(SGELookupStatusCallable.class);
 
-    private File sgeHome;
-
     private SGEJob job;
 
     public SGELookupStatusCallable() {
         super();
     }
 
-    public SGELookupStatusCallable(File sgeHome, SGEJob job) {
+    public SGELookupStatusCallable(SGEJob job) {
         super();
-        this.sgeHome = sgeHome;
         this.job = job;
     }
 
     @Override
     public SGEJobStatusType call() throws JLRMException {
+
+        String sgeHome = System.getenv("SGE_HOME");
+        if (StringUtils.isEmpty(sgeHome)) {
+            logger.error("SGE_HOME not set in env: {}", sgeHome);
+            return null;
+        }
+        File sgeHomeDirectory = new File(sgeHome);
+        if (!sgeHomeDirectory.exists()) {
+            logger.error("SGE_HOME does not exist: {}", sgeHomeDirectory);
+            return null;
+        }
+
         SGEJobStatusType ret = SGEJobStatusType.DONE;
         String command = String.format("%s/qstat -j %s | tail -n+2 | awk '{print $3}'",
-                this.sgeHome.getAbsolutePath(), job.getId());
+                sgeHomeDirectory.getAbsolutePath(), job.getId());
         try {
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
             Executor executor = BashExecutor.getInstance();
@@ -71,14 +80,6 @@ public class SGELookupStatusCallable implements Callable<SGEJobStatusType> {
         logger.info("JobStatus = {}", ret);
         return ret;
 
-    }
-
-    public File getSgeHome() {
-        return sgeHome;
-    }
-
-    public void setSgeHome(File sgeHome) {
-        this.sgeHome = sgeHome;
     }
 
     public SGEJob getJob() {
