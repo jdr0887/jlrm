@@ -18,29 +18,26 @@ public class SGECLIFactory {
 
     private static SGECLIFactory instance = null;
 
-    private File sgeHome;
-
-    public static SGECLIFactory getInstance(File sgeHome) {
+    public static SGECLIFactory getInstance() {
         if (instance == null) {
-            instance = new SGECLIFactory(sgeHome);
+            instance = new SGECLIFactory();
         }
         return instance;
     }
 
-    private SGECLIFactory(File sgeHome) {
+    private SGECLIFactory() {
         super();
-        this.sgeHome = sgeHome;
     }
 
     public SGEJob submit(File submitDir, SGEJob job) throws JLRMException {
         logger.debug("ENTERING submit(File)");
-        SGESubmitCallable runnable = new SGESubmitCallable(this.sgeHome, job, submitDir);
+        SGESubmitCallable runnable = new SGESubmitCallable(job, submitDir);
         return runnable.call();
     }
 
     public SGEJobStatusType lookupStatus(SGEJob job) throws JLRMException {
         logger.debug("ENTERING lookupStatus(job)");
-        SGELookupStatusCallable runnable = new SGELookupStatusCallable(this.sgeHome, job);
+        SGELookupStatusCallable runnable = new SGELookupStatusCallable(job);
         return runnable.call();
     }
 
