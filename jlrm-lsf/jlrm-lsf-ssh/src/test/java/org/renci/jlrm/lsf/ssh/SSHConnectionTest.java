@@ -51,7 +51,7 @@ public class SSHConnectionTest {
             System.out.println(commandOutput);
             command.join(5, TimeUnit.SECONDS);
             session.close();
-
+            ssh.close();
         } catch (UserAuthException e) {
             e.printStackTrace();
         } catch (TransportException e) {
