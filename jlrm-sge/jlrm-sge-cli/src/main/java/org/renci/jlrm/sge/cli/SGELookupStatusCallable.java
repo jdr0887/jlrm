@@ -36,12 +36,12 @@ public class SGELookupStatusCallable implements Callable<SGEJobStatusType> {
         String sgeHome = System.getenv("SGE_HOME");
         if (StringUtils.isEmpty(sgeHome)) {
             logger.error("SGE_HOME not set in env: {}", sgeHome);
-            return null;
+            throw new JLRMException("SGE_HOME not set in env");
         }
         File sgeHomeDirectory = new File(sgeHome);
         if (!sgeHomeDirectory.exists()) {
             logger.error("SGE_HOME does not exist: {}", sgeHomeDirectory);
-            return null;
+            throw new JLRMException("SGE_HOME does not exist");
         }
 
         SGEJobStatusType ret = SGEJobStatusType.DONE;

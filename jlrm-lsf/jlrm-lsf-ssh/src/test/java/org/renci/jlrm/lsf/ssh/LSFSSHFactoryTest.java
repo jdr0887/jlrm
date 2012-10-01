@@ -42,7 +42,7 @@ public class LSFSSHFactoryTest {
         job.setHostCount(1);
         job.setNumberOfProcessors(1);
         job.setProject("TCGA");
-        job.setQueueName("week");
+        job.setQueueName("prenci");
         job.setOutput(new File("test.out"));
         job.setError(new File("test.err"));
 
@@ -64,7 +64,7 @@ public class LSFSSHFactoryTest {
         site.setMaxNoClaimTime(1440);
         
         Queue queue = new Queue();
-        queue.setName("pseq_prod");
+        queue.setName("prenci");
         queue.setRunTime(2880);
         
         LSFSSHFactory lsfSSHFactory = LSFSSHFactory.getInstance(site, "jreilly");

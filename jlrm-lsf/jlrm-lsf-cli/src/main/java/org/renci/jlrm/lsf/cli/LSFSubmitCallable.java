@@ -46,12 +46,12 @@ public class LSFSubmitCallable extends AbstractSubmitCallable<LSFJob> {
         String lsfHome = System.getenv("LSF_HOME");
         if (StringUtils.isEmpty(lsfHome)) {
             logger.error("LSF_HOME not set in env: {}", lsfHome);
-            return null;
+            throw new JLRMException("LSF_HOME not set in env");
         }
         File lsfHomeDirectory = new File(lsfHome);
         if (!lsfHomeDirectory.exists()) {
             logger.error("LSF_HOME does not exist: {}", lsfHomeDirectory);
-            return null;
+            throw new JLRMException("LSF_HOME does not exist");
         }
 
         File workDir = createWorkDirectory(this.submitDir, job.getName());

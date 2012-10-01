@@ -38,16 +38,16 @@ public class CondorLookupStatusCallable implements Callable<CondorJobStatusType>
         String condorHome = System.getenv("CONDOR_HOME");
         if (StringUtils.isEmpty(condorHome)) {
             logger.error("CONDOR_HOME not set in env: {}", condorHome);
-            return null;
+            throw new JLRMException("CONDOR_HOME not set in env");
         }
         File condorHomeDirectory = new File(condorHome);
         if (!condorHomeDirectory.exists()) {
             logger.error("CONDOR_HOME does not exist: {}", condorHomeDirectory);
-            return null;
+            throw new JLRMException("CONDOR_HOME does not exist");
         }
 
         CondorJobStatusType ret = CondorJobStatusType.UNEXPANDED;
-        String command = String.format("%s/bin/condor_q -l %d.%d -format '%s\\n' JobStatus",
+        String command = String.format("%s/bin/condor_q %d.%d -format '%s\\n' JobStatus",
                 condorHomeDirectory.getAbsolutePath(), job.getCluster(), job.getJobId(), "%s");
         try {
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
@@ -58,8 +58,7 @@ public class CondorLookupStatusCallable implements Callable<CondorJobStatusType>
                 throw new JLRMException("Problem looking up status: " + output.getStderr().toString());
             }
             if (StringUtils.isNotEmpty(stdout)) {
-                String statusValue = stdout.trim();
-                String status = statusValue.contains("=") ? statusValue.split("=")[1].trim() : statusValue.trim();
+                String status = stdout.trim();
                 for (CondorJobStatusType js : CondorJobStatusType.values()) {
                     int code = Integer.valueOf(status);
                     if (code == js.getCode()) {

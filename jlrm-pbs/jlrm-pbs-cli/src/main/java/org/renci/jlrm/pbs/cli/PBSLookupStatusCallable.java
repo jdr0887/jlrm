@@ -38,12 +38,12 @@ public class PBSLookupStatusCallable implements Callable<PBSJobStatusType> {
         String pbsHome = System.getenv("PBS_HOME");
         if (StringUtils.isEmpty(pbsHome)) {
             logger.error("PBS_HOME not set in env: {}", pbsHome);
-            return null;
+            throw new JLRMException("PBS_HOME not set in env");
         }
         File pbsHomeDirectory = new File(pbsHome);
         if (!pbsHomeDirectory.exists()) {
             logger.error("PBS_HOME does not exist: {}", pbsHomeDirectory);
-            return null;
+            throw new JLRMException("PBS_HOME does not exist");
         }
 
         PBSJobStatusType ret = null;

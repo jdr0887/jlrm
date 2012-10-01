@@ -38,12 +38,12 @@ public class LSFLookupStatusCallable implements Callable<LSFJobStatusType> {
         String lsfHome = System.getenv("LSF_HOME");
         if (StringUtils.isEmpty(lsfHome)) {
             logger.error("LSF_HOME not set in env: {}", lsfHome);
-            return null;
+            throw new JLRMException("LSF_HOME not set in env");
         }
         File lsfHomeDirectory = new File(lsfHome);
         if (!lsfHomeDirectory.exists()) {
             logger.error("LSF_HOME does not exist: {}", lsfHomeDirectory);
-            return null;
+            throw new JLRMException("LSF_HOME does not exist");
         }
 
         LSFJobStatusType ret = LSFJobStatusType.UNKNOWN;

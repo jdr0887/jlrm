@@ -51,12 +51,12 @@ public class CondorSubmitDAGCallable extends AbstractSubmitCallable<CondorJob> {
         String condorHome = System.getenv("CONDOR_HOME");
         if (StringUtils.isEmpty(condorHome)) {
             logger.error("CONDOR_HOME not set in env: {}", condorHome);
-            return null;
+            throw new JLRMException("CONDOR_HOME not set in env");
         }
         File condorHomeDirectory = new File(condorHome);
         if (!condorHomeDirectory.exists()) {
             logger.error("CONDOR_HOME does not exist: {}", condorHomeDirectory);
-            return null;
+            throw new JLRMException("CONDOR_HOME does not exist");
         }
 
         File workDir = createWorkDirectory(submitDir, this.dagName);
