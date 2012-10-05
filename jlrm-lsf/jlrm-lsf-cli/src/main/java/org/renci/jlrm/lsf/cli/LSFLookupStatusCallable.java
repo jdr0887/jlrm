@@ -23,28 +23,20 @@ public class LSFLookupStatusCallable implements Callable<LSFJobStatusType> {
 
     private LSFJob job;
 
+    private File lsfHomeDirectory;
+
     public LSFLookupStatusCallable() {
         super();
     }
 
-    public LSFLookupStatusCallable(LSFJob job) {
+    public LSFLookupStatusCallable(File lsfHomeDirectory, LSFJob job) {
         super();
         this.job = job;
+        this.lsfHomeDirectory = lsfHomeDirectory;
     }
 
     @Override
     public LSFJobStatusType call() throws JLRMException {
-
-        String lsfHome = System.getenv("LSF_HOME");
-        if (StringUtils.isEmpty(lsfHome)) {
-            logger.error("LSF_HOME not set in env: {}", lsfHome);
-            throw new JLRMException("LSF_HOME not set in env");
-        }
-        File lsfHomeDirectory = new File(lsfHome);
-        if (!lsfHomeDirectory.exists()) {
-            logger.error("LSF_HOME does not exist: {}", lsfHomeDirectory);
-            throw new JLRMException("LSF_HOME does not exist");
-        }
 
         LSFJobStatusType ret = LSFJobStatusType.UNKNOWN;
         String command = String.format("%s/bin/bjobs %s | tail -n+2 | awk '{print $3}'",

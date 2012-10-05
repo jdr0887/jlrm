@@ -28,28 +28,20 @@ public class CondorLookupDAGStatusCallable implements Callable<Map<String, Condo
 
     private CondorJob job;
 
+    private File condorHomeDirectory;
+
     public CondorLookupDAGStatusCallable() {
         super();
     }
 
-    public CondorLookupDAGStatusCallable(CondorJob job) {
+    public CondorLookupDAGStatusCallable(File condorHomeDirectory, CondorJob job) {
         super();
         this.job = job;
+        this.condorHomeDirectory = condorHomeDirectory;
     }
 
     @Override
     public Map<String, CondorJobStatusType> call() throws JLRMException {
-
-        String condorHome = System.getenv("CONDOR_HOME");
-        if (StringUtils.isEmpty(condorHome)) {
-            logger.error("CONDOR_HOME not set in env: {}", condorHome);
-            throw new JLRMException("CONDOR_HOME not set in env");
-        }
-        File condorHomeDirectory = new File(condorHome);
-        if (!condorHomeDirectory.exists()) {
-            logger.error("CONDOR_HOME does not exist: {}", condorHomeDirectory);
-            throw new JLRMException("CONDOR_HOME does not exist");
-        }
 
         Map<String, CondorJobStatusType> jobStatusMap = new HashMap<String, CondorJobStatusType>();
 

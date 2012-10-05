@@ -30,29 +30,21 @@ public class PBSSubmitCallable extends AbstractSubmitCallable<PBSJob> {
 
     private File submitDir;
 
+    private File pbsHomeDirectory;
+
     public PBSSubmitCallable() {
         super();
     }
 
-    public PBSSubmitCallable(PBSJob job, File submitDir) {
+    public PBSSubmitCallable(File pbsHomeDirectory, PBSJob job, File submitDir) {
         super();
+        this.pbsHomeDirectory = pbsHomeDirectory;
         this.job = job;
         this.submitDir = submitDir;
     }
 
     @Override
     public PBSJob call() throws JLRMException {
-
-        String pbsHome = System.getenv("PBS_HOME");
-        if (StringUtils.isEmpty(pbsHome)) {
-            logger.error("PBS_HOME not set in env: {}", pbsHome);
-            throw new JLRMException("PBS_HOME not set in env");
-        }
-        File pbsHomeDirectory = new File(pbsHome);
-        if (!pbsHomeDirectory.exists()) {
-            logger.error("PBS_HOME does not exist: {}", pbsHomeDirectory);
-            throw new JLRMException("PBS_HOME does not exist");
-        }
 
         File workDir = createWorkDirectory(this.submitDir, job.getName());
 

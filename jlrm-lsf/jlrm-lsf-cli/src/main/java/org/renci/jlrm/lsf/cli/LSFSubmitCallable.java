@@ -7,7 +7,6 @@ import java.io.StringReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
 import org.renci.common.exec.BashExecutor;
 import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
@@ -30,29 +29,21 @@ public class LSFSubmitCallable extends AbstractSubmitCallable<LSFJob> {
 
     private File submitDir;
 
+    private File lsfHomeDirectory;
+
     public LSFSubmitCallable() {
         super();
     }
 
-    public LSFSubmitCallable(LSFJob job, File submitDir) {
+    public LSFSubmitCallable(File lsfHomeDirectory, LSFJob job, File submitDir) {
         super();
         this.job = job;
         this.submitDir = submitDir;
+        this.lsfHomeDirectory = lsfHomeDirectory;
     }
 
     @Override
     public LSFJob call() throws JLRMException {
-
-        String lsfHome = System.getenv("LSF_HOME");
-        if (StringUtils.isEmpty(lsfHome)) {
-            logger.error("LSF_HOME not set in env: {}", lsfHome);
-            throw new JLRMException("LSF_HOME not set in env");
-        }
-        File lsfHomeDirectory = new File(lsfHome);
-        if (!lsfHomeDirectory.exists()) {
-            logger.error("LSF_HOME does not exist: {}", lsfHomeDirectory);
-            throw new JLRMException("LSF_HOME does not exist");
-        }
 
         File workDir = createWorkDirectory(this.submitDir, job.getName());
 

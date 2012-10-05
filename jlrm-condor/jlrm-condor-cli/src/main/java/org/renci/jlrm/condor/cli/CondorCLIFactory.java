@@ -3,7 +3,11 @@ package org.renci.jlrm.condor.cli;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import org.apache.commons.lang.StringUtils;
 import org.jgrapht.Graph;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.condor.ClassAdvertisement;
@@ -23,43 +27,90 @@ public class CondorCLIFactory {
 
     private static CondorCLIFactory instance = null;
 
-    public static CondorCLIFactory getInstance() {
+    private File condorHomeDirectory = null;
+
+    public static CondorCLIFactory getInstance() throws JLRMException {
         if (instance == null) {
             instance = new CondorCLIFactory();
         }
         return instance;
     }
 
-    private CondorCLIFactory() {
+    private CondorCLIFactory() throws JLRMException {
         super();
+
+        String condorHome = System.getenv("CONDOR_HOME");
+        if (StringUtils.isEmpty(condorHome)) {
+            logger.error("CONDOR_HOME not set in env: {}", condorHome);
+            throw new JLRMException("CONDOR_HOME not set in env");
+        }
+        this.condorHomeDirectory = new File(condorHome);
+        if (!condorHomeDirectory.exists()) {
+            logger.error("CONDOR_HOME does not exist: {}", condorHomeDirectory);
+            throw new JLRMException("CONDOR_HOME does not exist");
+        }
+
     }
 
     public Map<String, List<ClassAdvertisement>> lookupJobsByOwner(String owner) throws JLRMException {
         logger.debug("ENTERING lookupJobsByUsername(String username)");
-        CondorLookupJobsByOwnerCallable runnable = new CondorLookupJobsByOwnerCallable(owner);
-        return runnable.call();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Map<String, List<ClassAdvertisement>> ret = null;
+        try {
+            ret = executor.submit(new CondorLookupJobsByOwnerCallable(this.condorHomeDirectory, owner)).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
-    
+
     public CondorJob submit(File submitDir, CondorJob job) throws JLRMException {
         logger.debug("ENTERING submit(File, CondorJob)");
-        CondorSubmitCallable runnable = new CondorSubmitCallable(submitDir, job);
-        return runnable.call();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        CondorJob ret = null;
+        try {
+            ret = executor.submit(new CondorSubmitCallable(this.condorHomeDirectory, submitDir, job)).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
     public CondorJob submit(String dagName, File submitDir, Graph<CondorJob, CondorJobEdge> graph) throws JLRMException {
         logger.debug("ENTERING submit(String dagName, File submitDir, Graph<CondorJob, CondorJobEdge> graph)");
-        CondorSubmitDAGCallable runnable = new CondorSubmitDAGCallable(submitDir, graph, dagName);
-        return runnable.call();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        CondorJob ret = null;
+        try {
+            ret = executor.submit(new CondorSubmitDAGCallable(this.condorHomeDirectory, submitDir, graph, dagName))
+                    .get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
     public CondorJobStatusType lookupStatus(CondorJob jobNode) throws JLRMException {
         logger.debug("ENTERING lookupStatus(JobNode)");
-        CondorLookupStatusCallable runnable = new CondorLookupStatusCallable(jobNode);
-        return runnable.call();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        CondorJobStatusType ret = null;
+        try {
+            ret = executor.submit(new CondorLookupStatusCallable(this.condorHomeDirectory, jobNode)).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
-    public List<CondorJob> listGlideinJobs(List<ClassAdvertisement> classAdList) throws JLRMException {
-        logger.debug("ENTERING findJobByClassAdvertisement(List<ClassAdvertisement> classAdList)");
+    public List<CondorJob> lookupDAGStatus(CondorJob job) throws JLRMException {
+        logger.debug("ENTERING lookupDAGStatus(CondorJob)");
         return null;
     }
 

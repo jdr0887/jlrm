@@ -23,28 +23,20 @@ public class PBSLookupStatusCallable implements Callable<PBSJobStatusType> {
 
     private PBSJob job;
 
+    private File pbsHomeDirectory;
+
     public PBSLookupStatusCallable() {
         super();
     }
 
-    public PBSLookupStatusCallable(PBSJob job) {
+    public PBSLookupStatusCallable(File pbsHomeDirectory, PBSJob job) {
         super();
+        this.pbsHomeDirectory = pbsHomeDirectory;
         this.job = job;
     }
 
     @Override
     public PBSJobStatusType call() throws JLRMException {
-
-        String pbsHome = System.getenv("PBS_HOME");
-        if (StringUtils.isEmpty(pbsHome)) {
-            logger.error("PBS_HOME not set in env: {}", pbsHome);
-            throw new JLRMException("PBS_HOME not set in env");
-        }
-        File pbsHomeDirectory = new File(pbsHome);
-        if (!pbsHomeDirectory.exists()) {
-            logger.error("PBS_HOME does not exist: {}", pbsHomeDirectory);
-            throw new JLRMException("PBS_HOME does not exist");
-        }
 
         PBSJobStatusType ret = null;
         String command = String.format("%s/bin/qstat %s | tail -n+3 | awk '{print $5}'",

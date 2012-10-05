@@ -7,7 +7,6 @@ import java.io.StringReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
 import org.renci.common.exec.BashExecutor;
 import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
@@ -28,29 +27,21 @@ public class SGESubmitCallable extends AbstractSubmitCallable<SGEJob> {
 
     private File submitDir;
 
+    private File sgeHomeDirectory;
+
     public SGESubmitCallable() {
         super();
     }
 
-    public SGESubmitCallable(SGEJob job, File submitDir) {
+    public SGESubmitCallable(File sgeHomeDirectory, SGEJob job, File submitDir) {
         super();
         this.job = job;
         this.submitDir = submitDir;
+        this.sgeHomeDirectory = sgeHomeDirectory;
     }
 
     @Override
     public SGEJob call() throws JLRMException {
-
-        String sgeHome = System.getenv("SGE_HOME");
-        if (StringUtils.isEmpty(sgeHome)) {
-            logger.error("SGE_HOME not set in env: {}", sgeHome);
-            throw new JLRMException("SGE_HOME not set in env");
-        }
-        File sgeHomeDirectory = new File(sgeHome);
-        if (!sgeHomeDirectory.exists()) {
-            logger.error("SGE_HOME does not exist: {}", sgeHomeDirectory);
-            throw new JLRMException("SGE_HOME does not exist");
-        }
 
         File workDir = createWorkDirectory(this.submitDir, job.getName());
 

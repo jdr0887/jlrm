@@ -7,7 +7,6 @@ import java.io.StringReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
 import org.renci.common.exec.BashExecutor;
 import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
@@ -30,29 +29,21 @@ public class CondorSubmitCallable extends AbstractSubmitCallable<CondorJob> {
 
     private CondorJob job;
 
+    private File condorHomeDirectory;
+
     public CondorSubmitCallable() {
         super();
     }
 
-    public CondorSubmitCallable(File submitDir, CondorJob job) {
+    public CondorSubmitCallable(File condorHomeDirectory, File submitDir, CondorJob job) {
         super();
         this.submitDir = submitDir;
         this.job = job;
+        this.condorHomeDirectory = condorHomeDirectory;
     }
 
     @Override
     public CondorJob call() throws JLRMException {
-
-        String condorHome = System.getenv("CONDOR_HOME");
-        if (StringUtils.isEmpty(condorHome)) {
-            logger.error("CONDOR_HOME not set in env: {}", condorHome);
-            throw new JLRMException("CONDOR_HOME not set in env");
-        }
-        File condorHomeDirectory = new File(condorHome);
-        if (!condorHomeDirectory.exists()) {
-            logger.error("CONDOR_HOME does not exist: {}", condorHomeDirectory);
-            throw new JLRMException("CONDOR_HOME does not exist");
-        }
 
         File workDir = createWorkDirectory(submitDir, job.getName());
         CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();

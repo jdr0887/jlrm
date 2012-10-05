@@ -20,29 +20,17 @@ public class SGELookupStatusCallable implements Callable<SGEJobStatusType> {
     private final Logger logger = LoggerFactory.getLogger(SGELookupStatusCallable.class);
 
     private SGEJob job;
+    
+    private File sgeHomeDirectory;
 
-    public SGELookupStatusCallable() {
-        super();
-    }
-
-    public SGELookupStatusCallable(SGEJob job) {
+    public SGELookupStatusCallable(File sgeHomeDirectory, SGEJob job) {
         super();
         this.job = job;
+        this.sgeHomeDirectory = sgeHomeDirectory;
     }
 
     @Override
     public SGEJobStatusType call() throws JLRMException {
-
-        String sgeHome = System.getenv("SGE_HOME");
-        if (StringUtils.isEmpty(sgeHome)) {
-            logger.error("SGE_HOME not set in env: {}", sgeHome);
-            throw new JLRMException("SGE_HOME not set in env");
-        }
-        File sgeHomeDirectory = new File(sgeHome);
-        if (!sgeHomeDirectory.exists()) {
-            logger.error("SGE_HOME does not exist: {}", sgeHomeDirectory);
-            throw new JLRMException("SGE_HOME does not exist");
-        }
 
         SGEJobStatusType ret = SGEJobStatusType.DONE;
         String command = String.format("%s/qstat -j %s | tail -n+2 | awk '{print $3}'",
