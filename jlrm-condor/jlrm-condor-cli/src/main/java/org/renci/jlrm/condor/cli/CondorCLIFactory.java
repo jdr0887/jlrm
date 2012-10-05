@@ -109,9 +109,18 @@ public class CondorCLIFactory {
         return ret;
     }
 
-    public List<CondorJob> lookupDAGStatus(CondorJob job) throws JLRMException {
+    public Map<String, CondorJobStatusType> lookupDAGStatus(CondorJob job) throws JLRMException {
         logger.debug("ENTERING lookupDAGStatus(CondorJob)");
-        return null;
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Map<String, CondorJobStatusType> ret = null;
+        try {
+            ret = executor.submit(new CondorLookupDAGStatusCallable(this.condorHomeDirectory, job)).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return ret;
     }
 
 }
