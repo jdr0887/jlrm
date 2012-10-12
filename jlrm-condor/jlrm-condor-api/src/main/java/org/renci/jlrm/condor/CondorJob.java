@@ -3,7 +3,9 @@ package org.renci.jlrm.condor;
 import static org.renci.jlrm.condor.ClassAdvertisementFactory.CLASS_AD_KEY_ARGUMENTS;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.renci.jlrm.Job;
@@ -18,9 +20,9 @@ public class CondorJob extends Job {
 
     private Integer retry;
 
-    private String preScript;
+    private List<String> preScriptList = new ArrayList<String>();
 
-    private String postScript;
+    private List<String> postScriptList = new ArrayList<String>();
 
     public CondorJob() {
         super();
@@ -96,26 +98,34 @@ public class CondorJob extends Job {
         this.jobId = jobId;
     }
 
-    public String getPreScript() {
-        return preScript;
+    public void addPreScript(String command) {
+        this.preScriptList.add(command);
     }
 
-    public void setPreScript(String preScript) {
-        this.preScript = preScript;
+    public void addPostScript(String command) {
+        this.postScriptList.add(command);
     }
 
-    public String getPostScript() {
-        return postScript;
+    public List<String> getPreScriptList() {
+        return preScriptList;
     }
 
-    public void setPostScript(String postScript) {
-        this.postScript = postScript;
+    public void setPreScriptList(List<String> preScriptList) {
+        this.preScriptList = preScriptList;
+    }
+
+    public List<String> getPostScriptList() {
+        return postScriptList;
+    }
+
+    public void setPostScriptList(List<String> postScriptList) {
+        this.postScriptList = postScriptList;
     }
 
     @Override
     public String toString() {
         return "CondorJob [classAdvertismentMap=" + classAdvertismentMap + ", cluster=" + cluster + ", jobId=" + jobId
-                + ", retry=" + retry + ", preScript=" + preScript + ", postScript=" + postScript + "]";
+                + ", retry=" + retry + ", preScriptList=" + preScriptList + ", postScriptList=" + postScriptList + "]";
     }
 
     @Override
@@ -125,8 +135,8 @@ public class CondorJob extends Job {
         result = prime * result + ((classAdvertismentMap == null) ? 0 : classAdvertismentMap.hashCode());
         result = prime * result + cluster;
         result = prime * result + jobId;
-        result = prime * result + ((postScript == null) ? 0 : postScript.hashCode());
-        result = prime * result + ((preScript == null) ? 0 : preScript.hashCode());
+        result = prime * result + ((postScriptList == null) ? 0 : postScriptList.hashCode());
+        result = prime * result + ((preScriptList == null) ? 0 : preScriptList.hashCode());
         result = prime * result + ((retry == null) ? 0 : retry.hashCode());
         return result;
     }
@@ -149,15 +159,15 @@ public class CondorJob extends Job {
             return false;
         if (jobId != other.jobId)
             return false;
-        if (postScript == null) {
-            if (other.postScript != null)
+        if (postScriptList == null) {
+            if (other.postScriptList != null)
                 return false;
-        } else if (!postScript.equals(other.postScript))
+        } else if (!postScriptList.equals(other.postScriptList))
             return false;
-        if (preScript == null) {
-            if (other.preScript != null)
+        if (preScriptList == null) {
+            if (other.preScriptList != null)
                 return false;
-        } else if (!preScript.equals(other.preScript))
+        } else if (!preScriptList.equals(other.preScriptList))
             return false;
         if (retry == null) {
             if (other.retry != null)

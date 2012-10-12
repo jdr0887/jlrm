@@ -32,8 +32,8 @@ public class JobTest {
 
         File executable = new File("/bin/hostname");
         CondorJob job = new CondorJob("asdfasdfasdffffffffffffffasdfasdfasdfasdfasdfa", executable, 3);
-        job.setPreScript("/bin/echo asdf");
-        job.setPostScript("/bin/echo qwer");
+        job.addPreScript("/bin/echo asdf");
+        job.addPostScript("/bin/echo qwer");
 
         job.addArgument("someClassName");
         Map<String, String> defaultRSLAttributeMap = new HashMap<String, String>();
@@ -77,8 +77,8 @@ public class JobTest {
         
 
         CondorJob job3 = new CondorJob("c", executable, 2);
-        job3.setPreScript("/bin/echo bar");
-        job3.setPostScript("/bin/echo buzz");
+        job3.addPreScript("/bin/echo bar");
+        job3.addPostScript("/bin/echo buzz");
 
         job3.addArgument("zxcvzxcv");
 
@@ -167,8 +167,8 @@ public class JobTest {
         DirectedGraph<CondorJob, CondorJobEdge> graph1 = new DefaultDirectedGraph<CondorJob, CondorJobEdge>(
                 CondorJobEdge.class);
         CondorJob job = new CondorJob("asdf", new File("/bin/hostname"));
-        job.setPreScript("/bin/echo foo");
-        job.setPostScript("/bin/echo bar");
+        job.addPreScript("/bin/echo foo");
+        job.addPostScript("/bin/echo bar");
         job.addArgument("someClassName");
         job.addArgument("asdfasdf");
         job.addArgument("--fuzz", "buzz");
@@ -178,8 +178,8 @@ public class JobTest {
         DirectedGraph<CondorJob, CondorJobEdge> graph2 = new DefaultDirectedGraph<CondorJob, CondorJobEdge>(
                 CondorJobEdge.class);
         job = new CondorJob("qwer", new File("/bin/hostname"));
-        job.setPreScript("/bin/echo fuzz");
-        job.setPostScript("/bin/echo buzz");
+        job.addPreScript("/bin/echo fuzz");
+        job.addPostScript("/bin/echo buzz");
         job.addArgument("someClassName");
         job.addArgument("asdfasdf");
         job.addArgument("--foo", "bar");

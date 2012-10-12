@@ -117,13 +117,17 @@ public class CondorSubmitScriptExporter {
                 for (CondorJob job : graph.vertexSet()) {
                     writeSubmitFile(workDir, job);
                     dagFileWriter.write(String.format("%n%1$-10s %2$-10s %2$s.sub", "JOB", job.getName()));
-                    if (job.getPreScript() != null) {
-                        dagFileWriter.write(String.format("%n%1$-10s %2$-10s %3$-10s %4$-10s", "SCRIPT", "PRE",
-                                job.getName(), job.getPreScript()));
+                    if (job.getPreScriptList() != null) {
+                        for (String command : job.getPreScriptList()) {
+                            dagFileWriter.write(String.format("%n%1$-10s %2$-10s %3$-10s %4$-10s", "SCRIPT", "PRE",
+                                    job.getName(), command));
+                        }
                     }
-                    if (job.getPostScript() != null) {
-                        dagFileWriter.write(String.format("%n%1$-10s %2$-10s %3$-10s %4$-10s", "SCRIPT", "POST",
-                                job.getName(), job.getPostScript()));
+                    if (job.getPostScriptList().size() > 0) {
+                        for (String command : job.getPostScriptList()) {
+                            dagFileWriter.write(String.format("%n%1$-10s %2$-10s %3$-10s %4$-10s", "SCRIPT", "POST",
+                                    job.getName(), command));
+                        }
                     }
                     if (job.getRetry() != null && job.getRetry() > 1) {
                         dagFileWriter.write(String.format("%n%1$-10s %2$-10s %3$d%n", "RETRY", job.getName(),
