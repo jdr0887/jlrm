@@ -57,7 +57,7 @@ public class CondorSubmitDAGCallable extends AbstractSubmitCallable<CondorJob> {
 
         try {
 
-            String command = String.format("%s/bin/condor_submit_dag %s", condorHomeDirectory.getAbsolutePath(),
+            String command = String.format("%s/bin/condor_submit_dag -nopostfail %s", condorHomeDirectory.getAbsolutePath(),
                     dagSubmitJob.getSubmitFile().getName());
             CommandInput input = new CommandInput(command, dagSubmitJob.getSubmitFile().getParentFile());
             CommandOutput output = executor.execute(input);
