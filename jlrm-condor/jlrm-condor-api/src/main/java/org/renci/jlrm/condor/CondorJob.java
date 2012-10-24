@@ -20,9 +20,9 @@ public class CondorJob extends Job {
 
     private Integer retry;
 
-    private List<String> preScriptList = new ArrayList<String>();
+    private String preScript;
 
-    private List<String> postScriptList = new ArrayList<String>();
+    private String postScript;
 
     public CondorJob() {
         super();
@@ -98,34 +98,26 @@ public class CondorJob extends Job {
         this.jobId = jobId;
     }
 
-    public void addPreScript(String command) {
-        this.preScriptList.add(command);
+    public String getPreScript() {
+        return preScript;
     }
 
-    public void addPostScript(String command) {
-        this.postScriptList.add(command);
+    public void setPreScript(String preScript) {
+        this.preScript = preScript;
     }
 
-    public List<String> getPreScriptList() {
-        return preScriptList;
+    public String getPostScript() {
+        return postScript;
     }
 
-    public void setPreScriptList(List<String> preScriptList) {
-        this.preScriptList = preScriptList;
-    }
-
-    public List<String> getPostScriptList() {
-        return postScriptList;
-    }
-
-    public void setPostScriptList(List<String> postScriptList) {
-        this.postScriptList = postScriptList;
+    public void setPostScript(String postScript) {
+        this.postScript = postScript;
     }
 
     @Override
     public String toString() {
         return "CondorJob [classAdvertismentMap=" + classAdvertismentMap + ", cluster=" + cluster + ", jobId=" + jobId
-                + ", retry=" + retry + ", preScriptList=" + preScriptList + ", postScriptList=" + postScriptList + "]";
+                + ", retry=" + retry + ", preScript=" + preScript + ", postScript=" + postScript + "]";
     }
 
     @Override
@@ -135,8 +127,8 @@ public class CondorJob extends Job {
         result = prime * result + ((classAdvertismentMap == null) ? 0 : classAdvertismentMap.hashCode());
         result = prime * result + cluster;
         result = prime * result + jobId;
-        result = prime * result + ((postScriptList == null) ? 0 : postScriptList.hashCode());
-        result = prime * result + ((preScriptList == null) ? 0 : preScriptList.hashCode());
+        result = prime * result + ((postScript == null) ? 0 : postScript.hashCode());
+        result = prime * result + ((preScript == null) ? 0 : preScript.hashCode());
         result = prime * result + ((retry == null) ? 0 : retry.hashCode());
         return result;
     }
@@ -159,15 +151,15 @@ public class CondorJob extends Job {
             return false;
         if (jobId != other.jobId)
             return false;
-        if (postScriptList == null) {
-            if (other.postScriptList != null)
+        if (postScript == null) {
+            if (other.postScript != null)
                 return false;
-        } else if (!postScriptList.equals(other.postScriptList))
+        } else if (!postScript.equals(other.postScript))
             return false;
-        if (preScriptList == null) {
-            if (other.preScriptList != null)
+        if (preScript == null) {
+            if (other.preScript != null)
                 return false;
-        } else if (!preScriptList.equals(other.preScriptList))
+        } else if (!preScript.equals(other.preScript))
             return false;
         if (retry == null) {
             if (other.retry != null)
