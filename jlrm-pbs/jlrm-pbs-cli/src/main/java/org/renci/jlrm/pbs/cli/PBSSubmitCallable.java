@@ -14,6 +14,7 @@ import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
 import org.renci.common.exec.ExecutorException;
 import org.renci.jlrm.AbstractSubmitCallable;
+import org.renci.jlrm.IOUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.pbs.PBSJob;
 import org.renci.jlrm.pbs.PBSSubmitScriptExporter;
@@ -46,7 +47,7 @@ public class PBSSubmitCallable extends AbstractSubmitCallable<PBSJob> {
     @Override
     public PBSJob call() throws JLRMException {
 
-        File workDir = createWorkDirectory(this.submitDir, job.getName());
+        File workDir = IOUtils.createWorkDirectory(this.submitDir, job.getName());
 
         try {
 

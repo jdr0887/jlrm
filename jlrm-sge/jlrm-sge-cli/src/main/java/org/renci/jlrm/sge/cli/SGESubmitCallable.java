@@ -13,6 +13,7 @@ import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
 import org.renci.common.exec.ExecutorException;
 import org.renci.jlrm.AbstractSubmitCallable;
+import org.renci.jlrm.IOUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.sge.SGEJob;
 import org.renci.jlrm.sge.SGESubmitScriptExporter;
@@ -43,7 +44,7 @@ public class SGESubmitCallable extends AbstractSubmitCallable<SGEJob> {
     @Override
     public SGEJob call() throws JLRMException {
 
-        File workDir = createWorkDirectory(this.submitDir, job.getName());
+        File workDir = IOUtils.createWorkDirectory(this.submitDir, job.getName());
 
         try {
 

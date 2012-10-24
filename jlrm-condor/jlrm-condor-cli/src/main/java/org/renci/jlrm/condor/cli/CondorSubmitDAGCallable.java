@@ -14,6 +14,7 @@ import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
 import org.renci.common.exec.ExecutorException;
 import org.renci.jlrm.AbstractSubmitCallable;
+import org.renci.jlrm.IOUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.condor.CondorJob;
 import org.renci.jlrm.condor.CondorJobEdge;
@@ -51,7 +52,7 @@ public class CondorSubmitDAGCallable extends AbstractSubmitCallable<CondorJob> {
     @Override
     public CondorJob call() throws JLRMException {
 
-        File workDir = createWorkDirectory(submitDir, this.dagName);
+        File workDir = IOUtils.createWorkDirectory(submitDir, this.dagName);
         CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
         CondorJob dagSubmitJob = exporter.export(dagName, workDir, graph);
 

@@ -13,6 +13,7 @@ import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
 import org.renci.common.exec.ExecutorException;
 import org.renci.jlrm.AbstractSubmitCallable;
+import org.renci.jlrm.IOUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.lsf.LSFJob;
 import org.renci.jlrm.lsf.LSFSubmitScriptExporter;
@@ -45,7 +46,7 @@ public class LSFSubmitCallable extends AbstractSubmitCallable<LSFJob> {
     @Override
     public LSFJob call() throws JLRMException {
 
-        File workDir = createWorkDirectory(this.submitDir, job.getName());
+        File workDir = IOUtils.createWorkDirectory(this.submitDir, job.getName());
 
         try {
 

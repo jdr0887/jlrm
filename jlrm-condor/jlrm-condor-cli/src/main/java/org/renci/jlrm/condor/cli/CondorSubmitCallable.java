@@ -13,6 +13,7 @@ import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
 import org.renci.common.exec.ExecutorException;
 import org.renci.jlrm.AbstractSubmitCallable;
+import org.renci.jlrm.IOUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.condor.CondorJob;
 import org.renci.jlrm.condor.CondorSubmitScriptExporter;
@@ -45,7 +46,7 @@ public class CondorSubmitCallable extends AbstractSubmitCallable<CondorJob> {
     @Override
     public CondorJob call() throws JLRMException {
 
-        File workDir = createWorkDirectory(submitDir, job.getName());
+        File workDir = IOUtils.createWorkDirectory(submitDir, job.getName());
         CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
         job = exporter.export(workDir, job);
 
