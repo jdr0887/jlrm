@@ -12,7 +12,7 @@ public abstract class AbstractSubmitCallable<T> implements Callable<T> {
         super();
     }
 
-    protected File createWorkDirectory(File submitDir, String jobsDirName, String name) {
+    protected synchronized File createWorkDirectory(File submitDir, String jobsDirName, String name) {
         File jobsDir = new File(submitDir, jobsDirName);
         Date date = new Date();
         Format formatter = PerThreadDateFormatter.getDateFormatter();
@@ -33,7 +33,7 @@ public abstract class AbstractSubmitCallable<T> implements Callable<T> {
         return runDir;
     }
 
-    protected File createWorkDirectory(File submitDir, String name) {
+    protected synchronized File createWorkDirectory(File submitDir, String name) {
         return createWorkDirectory(submitDir, "jobs", name);
     }
 
