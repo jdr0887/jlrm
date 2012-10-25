@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.StringReader;
-import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 import java.util.UUID;
@@ -18,6 +16,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.IOUtils;
 import org.renci.jlrm.AbstractSubmitCallable;
 import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.PerThreadDateFormatter;
 import org.renci.jlrm.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,11 +75,8 @@ public class SGESSHSubmitCallable extends AbstractSubmitCallable<SGESSHJob> {
             session.setConfig(config);
             session.connect(30000);
 
-            Date date = new Date();
-            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-            String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s", formatter.format(date), UUID.randomUUID()
-                    .toString());
+            String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s", PerThreadDateFormatter.getDateFormatter()
+                    .format(new Date()), UUID.randomUUID().toString());
             String command = String.format("(mkdir -p $HOME/%s && echo $HOME)", remoteWorkDirSuffix);
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");

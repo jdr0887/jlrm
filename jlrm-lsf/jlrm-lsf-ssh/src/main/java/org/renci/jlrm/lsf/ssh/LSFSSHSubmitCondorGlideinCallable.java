@@ -9,8 +9,6 @@ import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 import java.util.UUID;
@@ -24,6 +22,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.renci.jlrm.AbstractSubmitCallable;
 import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.PerThreadDateFormatter;
 import org.renci.jlrm.Queue;
 import org.renci.jlrm.Site;
 import org.slf4j.Logger;
@@ -118,11 +117,8 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
             session.setConfig(config);
             session.connect(30000);
 
-            Date date = new Date();
-            Format formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-            String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s", formatter.format(date), UUID.randomUUID()
-                    .toString());
+            String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s", PerThreadDateFormatter.getDateFormatter()
+                    .format(new Date()), UUID.randomUUID().toString());
             String command = String.format("(mkdir -p $HOME/%s && echo $HOME)", remoteWorkDirSuffix);
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
@@ -235,7 +231,7 @@ public class LSFSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<LS
 
             // String submitOutput = new String(out.toByteArray());
             String submitOutput = IOUtils.toString(in);
-            int exitCode = execChannel.getExitStatus();
+            // int exitCode = execChannel.getExitStatus();
 
             execChannel.disconnect();
             session.disconnect();
