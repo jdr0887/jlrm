@@ -27,7 +27,7 @@ public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<
     private String username;
 
     private File condorHomeDirectory;
-    
+
     public CondorLookupJobsByOwnerCallable() {
         super();
     }
@@ -42,15 +42,8 @@ public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<
     public Map<String, List<ClassAdvertisement>> call() throws JLRMException {
 
         Map<String, List<ClassAdvertisement>> classAdMap = new HashMap<String, List<ClassAdvertisement>>();
-        StringBuilder sb = new StringBuilder();
-        sb.append(" -format '\\nClusterId=%s' ClusterId");
-        sb.append(" -format ',JLRM_USER=%s' JLRM_USER");
-        sb.append(" -format ',JobStatus=%s' JobStatus");
-        sb.append(" -format ',Requirements=%s' Requirements");
-        sb.append(" -submitter \"").append(this.username).append("\"");
-
-        String command = String.format("(%s/bin/condor_q -global %s; echo)", condorHomeDirectory.getAbsolutePath(),
-                sb.toString());
+        String format = "(%1$s/bin/condor_q -global -format '\\nClusterId=%%s' ClusterId -format ',JLRM_USER=%%s' JLRM_USER -format ',JobStatus=%%s' JobStatus -format ',Requirements=%%s' Requirements -submitter \"%2$s\" -constraint 'Cmd != \"%1$s/bin/condor_dagman\"'; echo)";
+        String command = String.format(format, condorHomeDirectory.getAbsolutePath(), this.username);
         CommandInput input = new CommandInput();
         input.setCommand(command);
 
