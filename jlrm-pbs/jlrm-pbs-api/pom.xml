@@ -16,10 +16,6 @@
       <artifactId>jlrm-api</artifactId>
       <version>0.1.14-SNAPSHOT</version>      
     </dependency>
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-    </dependency>
   </dependencies>
   <build>
     <plugins>
