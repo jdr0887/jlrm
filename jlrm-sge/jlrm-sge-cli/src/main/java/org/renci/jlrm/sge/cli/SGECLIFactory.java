@@ -23,7 +23,7 @@ public class SGECLIFactory {
     private static SGECLIFactory instance = null;
 
     private File sgeHomeDirectory;
-    
+
     public static SGECLIFactory getInstance() throws JLRMException {
         if (instance == null) {
             instance = new SGECLIFactory();

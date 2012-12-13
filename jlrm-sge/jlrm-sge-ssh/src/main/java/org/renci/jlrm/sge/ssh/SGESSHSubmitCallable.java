@@ -10,13 +10,13 @@ import java.io.StringReader;
 import java.util.Date;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
-import org.renci.jlrm.AbstractSubmitCallable;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.renci.jlrm.JLRMException;
-import org.renci.jlrm.PerThreadDateFormatter;
 import org.renci.jlrm.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 
-public class SGESSHSubmitCallable extends AbstractSubmitCallable<SGESSHJob> {
+public class SGESSHSubmitCallable implements Callable<SGESSHJob> {
 
     private final Logger logger = LoggerFactory.getLogger(SGESSHSubmitCallable.class);
 
@@ -75,8 +75,8 @@ public class SGESSHSubmitCallable extends AbstractSubmitCallable<SGESSHJob> {
             session.setConfig(config);
             session.connect(30000);
 
-            String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s", PerThreadDateFormatter.getDateFormatter()
-                    .format(new Date()), UUID.randomUUID().toString());
+            String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s",
+                    DateFormatUtils.ISO_DATE_FORMAT.format(new Date()), UUID.randomUUID().toString());
             String command = String.format("(mkdir -p $HOME/%s && echo $HOME)", remoteWorkDirSuffix);
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");

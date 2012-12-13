@@ -131,7 +131,7 @@ public class SGESSHFactoryTest {
             String xmloutput = IOUtils.toString(in).trim();
             int exitCode = execChannel.getExitStatus();
             System.out.println("exitCode: " + exitCode);
-                        
+
             execChannel.disconnect();
             session.disconnect();
 

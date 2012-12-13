@@ -129,7 +129,7 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
                     jobStatusSet.add(info);
                 }
             }
-            
+
             Set<String> jobIdSet = new HashSet<String>();
             for (SGEJobStatusInfo info : jobStatusSet) {
                 jobIdSet.add(info.getJobId());
@@ -138,12 +138,12 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
             if (jobs != null) {
                 for (SGESSHJob job : jobs) {
                     if (!jobIdSet.contains(job.getId())) {
-                        //need to default the queueName for non existing jobs
+                        // need to default the queueName for non existing jobs
                         jobStatusSet.add(new SGEJobStatusInfo(job.getId(), SGEJobStatusType.DONE, "all.q"));
                     }
                 }
             }
-            
+
         } catch (JSchException e) {
             logger.error("JSchException", e);
             throw new JLRMException("JSchException: " + e.getMessage());

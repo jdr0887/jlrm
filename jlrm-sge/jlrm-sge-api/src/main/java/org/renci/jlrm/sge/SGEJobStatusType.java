@@ -19,7 +19,7 @@ public enum SGEJobStatusType {
     THRESHOLD("T"),
 
     WAITING("qw"),
-    
+
     DONE;
 
     private String value;

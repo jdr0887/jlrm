@@ -42,7 +42,7 @@ public class SGESubmitScriptExporter<T extends SGEJob> {
         if (job.getMemory() != null) {
             submitFileWriter.write(String.format("#$ -l mf=%s%n", job.getMemory()));
         }
-        
+
         submitFileWriter.write(String.format("#$ -i %s%n", "/dev/null"));
 
         job.setOutput(new File(String.format("%s/%s.out", workDir.getAbsolutePath(), job.getOutput().getName())));

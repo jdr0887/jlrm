@@ -20,7 +20,7 @@ public class SGELookupStatusCallable implements Callable<SGEJobStatusType> {
     private final Logger logger = LoggerFactory.getLogger(SGELookupStatusCallable.class);
 
     private SGEJob job;
-    
+
     private File sgeHomeDirectory;
 
     public SGELookupStatusCallable(File sgeHomeDirectory, SGEJob job) {
