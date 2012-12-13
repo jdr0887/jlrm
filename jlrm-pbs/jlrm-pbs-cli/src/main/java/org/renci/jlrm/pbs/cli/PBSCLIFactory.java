@@ -5,7 +5,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.pbs.PBSJob;
 import org.renci.jlrm.pbs.PBSJobStatusType;
