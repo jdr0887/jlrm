@@ -1,6 +1,5 @@
 package org.renci.jlrm;
 
-
 public class Queue {
 
     private String name;
