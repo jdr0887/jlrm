@@ -7,20 +7,20 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import org.renci.common.exec.BashExecutor;
 import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
 import org.renci.common.exec.ExecutorException;
-import org.renci.jlrm.AbstractSubmitCallable;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.condor.ClassAdvertisement;
 import org.renci.jlrm.condor.ClassAdvertisementFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CondorLookupJobsByOwnerCallable extends AbstractSubmitCallable<Map<String, List<ClassAdvertisement>>> {
+public class CondorLookupJobsByOwnerCallable implements Callable<Map<String, List<ClassAdvertisement>>> {
 
     private final Logger logger = LoggerFactory.getLogger(CondorLookupJobsByOwnerCallable.class);
 

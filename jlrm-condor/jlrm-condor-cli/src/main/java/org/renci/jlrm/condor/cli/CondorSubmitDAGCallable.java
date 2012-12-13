@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
+import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,7 +14,6 @@ import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
 import org.renci.common.exec.ExecutorException;
-import org.renci.jlrm.AbstractSubmitCallable;
 import org.renci.jlrm.IOUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.condor.CondorJob;
@@ -22,7 +22,7 @@ import org.renci.jlrm.condor.CondorSubmitScriptExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CondorSubmitDAGCallable extends AbstractSubmitCallable<CondorJob> {
+public class CondorSubmitDAGCallable implements Callable<CondorJob> {
 
     private final Logger logger = LoggerFactory.getLogger(CondorSubmitDAGCallable.class);
 

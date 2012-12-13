@@ -39,7 +39,7 @@ public class LookupJobByOwnerTest {
         int exitCode = output.getExitCode();
         System.out.println(output.getStdout());
         assertTrue(exitCode == 1);
-        
+
         LineNumberReader lnr = null;
         String line;
 

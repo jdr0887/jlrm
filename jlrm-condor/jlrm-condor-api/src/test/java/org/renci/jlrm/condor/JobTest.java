@@ -74,7 +74,6 @@ public class JobTest {
         List<String> edgeLabel = new ArrayList<String>();
         edgeLabel.add("qwerqwer");
         jobEdge.setInputLabelList(edgeLabel);
-        
 
         CondorJob job3 = new CondorJob("c", executable, 2);
         job3.setPreScript("/bin/echo bar");

@@ -205,7 +205,7 @@ public class ClassAdvertisementFactory {
         ret.add(getClassAd(CLASS_AD_KEY_PERIODIC_RELEASE));
         ret.add(getClassAd(CLASS_AD_KEY_PERIODIC_REMOVE));
         ret.add(getClassAd(CLASS_AD_KEY_ON_EXIT_HOLD));
-        //ret.add(getClassAd(CLASS_AD_KEY_ON_EXIT_REMOVE));
+        // ret.add(getClassAd(CLASS_AD_KEY_ON_EXIT_REMOVE));
         ret.add(getClassAd(CLASS_AD_KEY_UNIVERSE));
         ret.add(getClassAd(CLASS_AD_KEY_REQUEST_CPUS));
         ret.add(getClassAd(CLASS_AD_KEY_REQUEST_MEMORY));

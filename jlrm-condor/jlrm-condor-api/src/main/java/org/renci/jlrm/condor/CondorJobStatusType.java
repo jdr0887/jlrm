@@ -10,7 +10,7 @@ public enum CondorJobStatusType {
 
     REMOVED(3),
 
-    COMPLETED(4), 
+    COMPLETED(4),
 
     HELD(5),
 
