@@ -12,10 +12,6 @@
   <packaging>bundle</packaging>
   <dependencies>
     <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.jgrapht</groupId>
       <artifactId>jgrapht-jdk1.6</artifactId>
     </dependency>
