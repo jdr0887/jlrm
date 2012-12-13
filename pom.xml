@@ -7,6 +7,18 @@
   <packaging>pom</packaging>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.project.info.reports.plugin.version>2.4</maven.project.info.reports.plugin.version>
+    <maven.javadoc.plugin.version>2.8</maven.javadoc.plugin.version>
+    <maven.bundle.plugin.version>2.1.0</maven.bundle.plugin.version>
+    <maven.jxr.plugin.version>2.3</maven.jxr.plugin.version>
+    <maven.compiler.plugin.version>2.5</maven.compiler.plugin.version>
+    <maven.surefire.plugin.version>2.9</maven.surefire.plugin.version>
+    <maven.checkstyle.plugin.version>2.8</maven.checkstyle.plugin.version>
+    <renci.commons.version>0.1.13</renci.commons.version>
+    <commons.discovery.version>0.5</commons.discovery.version>
+    <commons.beanutils.version>1.8.3</commons.beanutils.version>
+    <commons.io.version>2.4</commons.io.version>
+    <commons.lang.version>3.1</commons.lang.version>
   </properties>
   <url>https://ci-dev.renci.org/site/jLRM</url>
   <organization>
@@ -115,27 +127,27 @@
       <dependency>
 	<groupId>commons-beanutils</groupId>
 	<artifactId>commons-beanutils</artifactId>
-	<version>1.8.3</version>
+	<version>${commons.beanutils.version}</version>
       </dependency>
       <dependency>
 	<groupId>commons-discovery</groupId>
 	<artifactId>commons-discovery</artifactId>
-	<version>0.4</version>
+	<version>${commons.discovery.version}</version>
       </dependency>
       <dependency>
 	<groupId>commons-io</groupId>
 	<artifactId>commons-io</artifactId>
-	<version>2.1</version>
+	<version>${commons.io.version}</version>
       </dependency>
       <dependency>
-	<groupId>commons-lang</groupId>
-	<artifactId>commons-lang</artifactId>
-	<version>2.4</version>
+	<groupId>org.apache.commons</groupId>
+	<artifactId>commons-lang3</artifactId>
+	<version>${commons.lang.version}</version>
       </dependency>
       <dependency>
 	<groupId>commons-logging</groupId>
 	<artifactId>commons-logging</artifactId>
-	<version>1.1</version>
+	<version>${commons.logging.version}</version>
       </dependency>
       <dependency>
 	<groupId>org.apache.velocity</groupId>
@@ -150,7 +162,7 @@
       <dependency>
 	<groupId>org.renci.commons</groupId>
 	<artifactId>commons-exec</artifactId>
-	<version>0.1.12</version>
+	<version>${renci.commons.version}</version>
       </dependency>
       <dependency>
 	<groupId>org.renci.jlrm</groupId>
@@ -231,7 +243,7 @@
       <plugin>
 	<groupId>org.apache.felix</groupId>
 	<artifactId>maven-bundle-plugin</artifactId>
-	<version>2.1.0</version>
+	<version>${maven.bundle.plugin.version}</version>
 	<extensions>true</extensions>
 	<inherited>true</inherited>
 	<configuration>
@@ -255,7 +267,7 @@
       <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-compiler-plugin</artifactId>
-	<version>2.3.1</version>
+	<version>${maven.compiler.plugin.version}</version>
 	<configuration>
 	  <source>1.6</source>
 	  <target>1.6</target>
@@ -264,7 +276,7 @@
       <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-surefire-plugin</artifactId>
-	<version>2.9</version>
+	<version>${maven.surefire.plugin.version}</version>
 	<configuration>
 	  <skip>true</skip>
 	</configuration>

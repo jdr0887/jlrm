@@ -1,6 +1,6 @@
 package org.renci.jlrm.condor;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class ClassAdvertisement implements Cloneable {
 
