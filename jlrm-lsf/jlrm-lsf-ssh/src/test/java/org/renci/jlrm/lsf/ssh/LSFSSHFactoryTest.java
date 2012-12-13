@@ -62,11 +62,11 @@ public class LSFSSHFactoryTest {
         site.setLRMBinDirectory("/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/bin");
         site.setSubmitHost("biodev1.its.unc.edu");
         site.setMaxNoClaimTime(1440);
-        
+
         Queue queue = new Queue();
         queue.setName("prenci");
         queue.setRunTime(2880);
-        
+
         LSFSSHFactory lsfSSHFactory = LSFSSHFactory.getInstance(site, "jreilly");
         File submitDir = new File("/tmp");
 
@@ -86,7 +86,6 @@ public class LSFSSHFactoryTest {
     @Test
     public void testLookupStatus() {
 
-        
         String command = String.format("%s/bjobs %s | tail -n+2 | awk '{print $1,$3,$4}'",
                 "/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/bin", "183291 183293");
 

@@ -1,6 +1,5 @@
 package org.renci.jlrm.lsf;
 
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,22 +23,22 @@ public class LSFSubmitScriptExporter<T extends LSFJob> {
 
         submitFileWriter.write("#!/bin/bash\n\n");
         submitFileWriter.write("set -e\n\n");
-        
+
         if (StringUtils.isNotEmpty(job.getQueueName())) {
             submitFileWriter.write(String.format("#BSUB -q %s%n", job.getQueueName()));
         }
-        
+
         if (StringUtils.isNotEmpty(job.getProject())) {
             submitFileWriter.write(String.format("#BSUB -P %s%n", job.getProject()));
         }
-        
+
         if (job.getWallTime() != null) {
             submitFileWriter.write(String.format("#BSUB -W %s%n", job.getWallTime()));
         }
 
         submitFileWriter.write(String.format("#BSUB -M %s%n", job.getMemory()));
         submitFileWriter.write(String.format("#BSUB -i %s%n", "/dev/null"));
-        
+
         job.setOutput(new File(String.format("%s/%s.out", workDir.getAbsolutePath(), job.getOutput().getName())));
         job.setError(new File(String.format("%s/%s.err", workDir.getAbsolutePath(), job.getError().getName())));
 

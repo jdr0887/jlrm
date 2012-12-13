@@ -148,14 +148,14 @@ public class SSHConnectionTest {
             session.connect(30000);
             com.jcraft.jsch.ChannelExec channel = (com.jcraft.jsch.ChannelExec) session.openChannel("exec");
             channel.setInputStream(null);
-            
+
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             channel.setOutputStream(out);
 
             ByteArrayOutputStream err = new ByteArrayOutputStream();
             channel.setErrStream(err);
             String command = String.format("mkdir -p $HOME/%s && echo $HOME", "asdfasdf");
-            //String command = "/bin/echo hello";
+            // String command = "/bin/echo hello";
 
             channel.setCommand(command);
             InputStream in = channel.getInputStream();

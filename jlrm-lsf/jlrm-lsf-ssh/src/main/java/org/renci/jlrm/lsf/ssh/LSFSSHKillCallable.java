@@ -4,9 +4,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.concurrent.Callable;
 
 import org.apache.commons.io.IOUtils;
-import org.renci.jlrm.AbstractSubmitCallable;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Site;
 import org.slf4j.Logger;
@@ -17,7 +17,7 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
-public class LSFSSHKillCallable extends AbstractSubmitCallable<LSFSSHJob> {
+public class LSFSSHKillCallable implements Callable<LSFSSHJob> {
 
     private final Logger logger = LoggerFactory.getLogger(LSFSSHKillCallable.class);
 
@@ -40,7 +40,7 @@ public class LSFSSHKillCallable extends AbstractSubmitCallable<LSFSSHJob> {
 
     @Override
     public LSFSSHJob call() throws JLRMException {
-        logger.debug("ENTERING call()");
+        logger.info("ENTERING call()");
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
@@ -56,6 +56,7 @@ public class LSFSSHKillCallable extends AbstractSubmitCallable<LSFSSHJob> {
             session.connect(30000);
 
             String command = String.format("%s/bkill %s", this.site.getLRMBinDirectory(), job.getId());
+            logger.debug("command: {}", command);
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
@@ -72,6 +73,7 @@ public class LSFSSHKillCallable extends AbstractSubmitCallable<LSFSSHJob> {
             execChannel.connect();
 
             String output = IOUtils.toString(in).trim();
+            logger.debug("output: {}", output);
             int exitCode = execChannel.getExitStatus();
             logger.warn("exitCode: {}", exitCode);
 
