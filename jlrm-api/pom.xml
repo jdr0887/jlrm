@@ -11,6 +11,10 @@
   <version>0.1.14-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <dependencies>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+    </dependency>    
   </dependencies>
   <build>
     <plugins>
