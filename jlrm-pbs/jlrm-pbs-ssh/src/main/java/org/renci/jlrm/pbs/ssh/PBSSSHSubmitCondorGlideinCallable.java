@@ -12,16 +12,16 @@ import java.io.StringWriter;
 import java.util.Date;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.renci.jlrm.AbstractSubmitCallable;
 import org.renci.jlrm.JLRMException;
-import org.renci.jlrm.PerThreadDateFormatter;
 import org.renci.jlrm.Queue;
 import org.renci.jlrm.Site;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 
-public class PBSSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<PBSSSHJob> {
+public class PBSSSHSubmitCondorGlideinCallable implements Callable<PBSSSHJob> {
 
     private final Logger logger = LoggerFactory.getLogger(PBSSSHSubmitCondorGlideinCallable.class);
 
@@ -116,8 +116,8 @@ public class PBSSSHSubmitCondorGlideinCallable extends AbstractSubmitCallable<PB
             session.setConfig(config);
             session.connect(30000);
 
-            String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s", PerThreadDateFormatter.getDateFormatter()
-                    .format(new Date()), UUID.randomUUID().toString());
+            String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s",
+                    DateFormatUtils.ISO_DATE_FORMAT.format(new Date()), UUID.randomUUID().toString());
             String command = String.format("(mkdir -p $HOME/%s && echo $HOME)", remoteWorkDirSuffix);
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");

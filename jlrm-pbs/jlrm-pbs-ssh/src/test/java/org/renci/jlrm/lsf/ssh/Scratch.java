@@ -9,7 +9,6 @@ import org.junit.Test;
 
 public class Scratch {
 
-
     @Test
     public void testPattern() {
         Pattern pattern = Pattern.compile("^(\\d+)\\..+");

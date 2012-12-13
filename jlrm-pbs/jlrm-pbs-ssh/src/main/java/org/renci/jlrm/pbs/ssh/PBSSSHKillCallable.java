@@ -4,8 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.concurrent.Callable;
 
-import org.renci.jlrm.AbstractSubmitCallable;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Site;
 import org.slf4j.Logger;
@@ -16,7 +16,7 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
-public class PBSSSHKillCallable extends AbstractSubmitCallable<PBSSSHJob> {
+public class PBSSSHKillCallable implements Callable<PBSSSHJob> {
 
     private final Logger logger = LoggerFactory.getLogger(PBSSSHKillCallable.class);
 
