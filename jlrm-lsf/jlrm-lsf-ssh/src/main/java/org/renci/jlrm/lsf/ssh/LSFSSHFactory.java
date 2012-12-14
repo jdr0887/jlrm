@@ -89,7 +89,7 @@ public class LSFSSHFactory {
         return job;
     }
 
-    public void killGlidein(Long jobId) throws JLRMException {
+    public void killGlidein(String jobId) throws JLRMException {
         logger.debug("ENTERING submit(File)");
         try {
             LSFSSHKillCallable runnable = new LSFSSHKillCallable(this.site, this.username, jobId);

@@ -23,7 +23,7 @@ public class LSFSSHKillCallable implements Callable<Void> {
 
     private Site site;
 
-    private Long jobId;
+    private String jobId;
 
     private String username;
 
@@ -31,7 +31,7 @@ public class LSFSSHKillCallable implements Callable<Void> {
         super();
     }
 
-    public LSFSSHKillCallable(Site site, String username, Long jobId) {
+    public LSFSSHKillCallable(Site site, String username, String jobId) {
         super();
         this.site = site;
         this.jobId = jobId;
