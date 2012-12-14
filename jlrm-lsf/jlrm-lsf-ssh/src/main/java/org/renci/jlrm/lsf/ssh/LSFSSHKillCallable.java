@@ -17,13 +17,13 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
-public class LSFSSHKillCallable implements Callable<LSFSSHJob> {
+public class LSFSSHKillCallable implements Callable<Void> {
 
     private final Logger logger = LoggerFactory.getLogger(LSFSSHKillCallable.class);
 
     private Site site;
 
-    private LSFSSHJob job;
+    private Long jobId;
 
     private String username;
 
@@ -31,15 +31,15 @@ public class LSFSSHKillCallable implements Callable<LSFSSHJob> {
         super();
     }
 
-    public LSFSSHKillCallable(Site site, String username, LSFSSHJob job) {
+    public LSFSSHKillCallable(Site site, String username, Long jobId) {
         super();
         this.site = site;
-        this.job = job;
+        this.jobId = jobId;
         this.username = username;
     }
 
     @Override
-    public LSFSSHJob call() throws JLRMException {
+    public Void call() throws JLRMException {
         logger.info("ENTERING call()");
 
         String home = System.getProperty("user.home");
@@ -55,7 +55,7 @@ public class LSFSSHKillCallable implements Callable<LSFSSHJob> {
             session.setConfig(config);
             session.connect(30000);
 
-            String command = String.format("%s/bkill %s", this.site.getLRMBinDirectory(), job.getId());
+            String command = String.format("%s/bkill %s", this.site.getLRMBinDirectory(), jobId);
             logger.debug("command: {}", command);
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
@@ -87,8 +87,7 @@ public class LSFSSHKillCallable implements Callable<LSFSSHJob> {
             logger.warn("error: {}", e.getMessage());
             throw new JLRMException("IOException: " + e.getMessage());
         }
-
-        return job;
+        return null;
     }
 
     public Site getSite() {
@@ -97,14 +96,6 @@ public class LSFSSHKillCallable implements Callable<LSFSSHJob> {
 
     public void setSite(Site site) {
         this.site = site;
-    }
-
-    public LSFSSHJob getJob() {
-        return job;
-    }
-
-    public void setJob(LSFSSHJob job) {
-        this.job = job;
     }
 
     public String getUsername() {
