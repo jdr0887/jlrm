@@ -89,18 +89,16 @@ public class LSFSSHFactory {
         return job;
     }
 
-    public LSFSSHJob killGlidein(LSFSSHJob job) throws JLRMException {
+    public void killGlidein(Long jobId) throws JLRMException {
         logger.debug("ENTERING submit(File)");
-        LSFSSHKillCallable runnable = new LSFSSHKillCallable(this.site, this.username, job);
-        Future<LSFSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
         try {
-            job = jobFuture.get();
+            LSFSSHKillCallable runnable = new LSFSSHKillCallable(this.site, this.username, jobId);
+            this.threadPoolExecutor.submit(runnable).get();
         } catch (InterruptedException e) {
             logger.error("InterruptedException", e);
         } catch (ExecutionException e) {
             logger.error("ExecutionException", e);
         }
-        return job;
     }
 
     public Set<LSFJobStatusInfo> lookupStatus(LSFSSHJob... jobs) throws JLRMException {
