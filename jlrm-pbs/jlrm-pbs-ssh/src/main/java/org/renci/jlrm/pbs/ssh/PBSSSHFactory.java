@@ -8,6 +8,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.StringUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Queue;
 import org.renci.jlrm.Site;
@@ -31,16 +32,10 @@ public class PBSSSHFactory {
 
     private Site site;
 
-    public static PBSSSHFactory getInstance(Site site) {
-        if (instance == null) {
-            instance = new PBSSSHFactory(site, System.getProperty("user.name"));
-        }
-        return instance;
-    }
-
     public static PBSSSHFactory getInstance(Site site, String username) {
         if (instance == null) {
-            instance = new PBSSSHFactory(site, username);
+            instance = new PBSSSHFactory(site, StringUtils.isNotEmpty(username) ? username
+                    : System.getProperty("user.name"));
         }
         return instance;
     }

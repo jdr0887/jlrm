@@ -8,6 +8,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.StringUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Queue;
 import org.renci.jlrm.Site;
@@ -31,16 +32,10 @@ public class LSFSSHFactory {
 
     private Site site;
 
-    public static LSFSSHFactory getInstance(Site site) {
-        if (instance == null) {
-            instance = new LSFSSHFactory(site, System.getProperty("user.name"));
-        }
-        return instance;
-    }
-
     public static LSFSSHFactory getInstance(Site site, String username) {
         if (instance == null) {
-            instance = new LSFSSHFactory(site, username);
+            instance = new LSFSSHFactory(site, StringUtils.isNotEmpty(username) ? username
+                    : System.getProperty("user.name"));
         }
         return instance;
     }
