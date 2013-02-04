@@ -14,6 +14,8 @@ public class Site {
 
     private long maxNoClaimTime;
 
+    private String username;
+
     private String name;
 
     private String project;
@@ -88,11 +90,20 @@ public class Site {
         this.maxNoClaimTime = maxNoClaimTime;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Override
     public String toString() {
         return "Site [submitHost=" + submitHost + ", LRMBinDirectory=" + LRMBinDirectory + ", maxTotalPending="
                 + maxTotalPending + ", maxTotalRunning=" + maxTotalRunning + ", maxNoClaimTime=" + maxNoClaimTime
-                + ", name=" + name + ", project=" + project + ", queueInfoMap=" + queueInfoMap + "]";
+                + ", username=" + username + ", name=" + name + ", project=" + project + ", queueInfoMap="
+                + queueInfoMap + "]";
     }
 
     @Override
@@ -107,6 +118,7 @@ public class Site {
         result = prime * result + ((project == null) ? 0 : project.hashCode());
         result = prime * result + ((queueInfoMap == null) ? 0 : queueInfoMap.hashCode());
         result = prime * result + ((submitHost == null) ? 0 : submitHost.hashCode());
+        result = prime * result + ((username == null) ? 0 : username.hashCode());
         return result;
     }
 
@@ -149,6 +161,11 @@ public class Site {
             if (other.submitHost != null)
                 return false;
         } else if (!submitHost.equals(other.submitHost))
+            return false;
+        if (username == null) {
+            if (other.username != null)
+                return false;
+        } else if (!username.equals(other.username))
             return false;
         return true;
     }
