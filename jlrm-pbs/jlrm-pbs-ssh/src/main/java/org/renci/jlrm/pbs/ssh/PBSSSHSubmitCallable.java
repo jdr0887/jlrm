@@ -37,24 +37,10 @@ public class PBSSSHSubmitCallable implements Callable<PBSSSHJob> {
 
     private PBSSSHJob job;
 
-    private String username;
-
     private File submitDir;
 
     public PBSSSHSubmitCallable() {
         super();
-    }
-
-    public PBSSSHSubmitCallable(Site site, PBSSSHJob job, File submitDir) {
-        this(site, System.getProperty("user.name"), job, submitDir);
-    }
-
-    public PBSSSHSubmitCallable(Site site, String username, PBSSSHJob job, File submitDir) {
-        super();
-        this.site = site;
-        this.job = job;
-        this.username = username;
-        this.submitDir = submitDir;
     }
 
     @Override
@@ -67,7 +53,7 @@ public class PBSSSHSubmitCallable implements Callable<PBSSSHJob> {
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
+            Session session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("compression.s2c", "zlib,none");
             config.setProperty("compression.c2s", "zlib,none");
@@ -130,7 +116,7 @@ public class PBSSSHSubmitCallable implements Callable<PBSSSHJob> {
 
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
-            command = String.format("%s/qsub < %s", this.site.getLRMBinDirectory(), targetFile);
+            command = String.format("%s/qsub < %s", getSite().getLRMBinDirectory(), targetFile);
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
@@ -195,14 +181,6 @@ public class PBSSSHSubmitCallable implements Callable<PBSSSHJob> {
 
     public void setJob(PBSSSHJob job) {
         this.job = job;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public File getSubmitDir() {

@@ -25,17 +25,8 @@ public class SGESSHKillCallable implements Callable<SGESSHJob> {
 
     private SGESSHJob job;
 
-    private String username;
-
     public SGESSHKillCallable() {
         super();
-    }
-
-    public SGESSHKillCallable(Site site, String username, SGESSHJob job) {
-        super();
-        this.site = site;
-        this.job = job;
-        this.username = username;
     }
 
     @Override
@@ -49,13 +40,13 @@ public class SGESSHKillCallable implements Callable<SGESSHJob> {
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
+            Session session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
             session.connect(30000);
 
-            String command = String.format("%s/qdel %s", this.site.getLRMBinDirectory(), job.getId());
+            String command = String.format("%s/qdel %s", getSite().getLRMBinDirectory(), job.getId());
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
@@ -103,14 +94,6 @@ public class SGESSHKillCallable implements Callable<SGESSHJob> {
 
     public void setJob(SGESSHJob job) {
         this.job = job;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
 }

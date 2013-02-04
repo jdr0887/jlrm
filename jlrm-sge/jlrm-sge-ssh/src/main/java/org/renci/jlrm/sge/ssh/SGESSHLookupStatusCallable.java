@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -38,19 +39,10 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
 
     private Site site;
 
-    private SGESSHJob[] jobs;
-
-    private String username;
+    private List<SGESSHJob> jobs;
 
     public SGESSHLookupStatusCallable() {
         super();
-    }
-
-    public SGESSHLookupStatusCallable(Site site, String username, SGESSHJob... jobs) {
-        super();
-        this.jobs = jobs;
-        this.site = site;
-        this.username = username;
     }
 
     @Override
@@ -67,7 +59,7 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
+            Session session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
@@ -165,20 +157,12 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
         this.site = site;
     }
 
-    public SGESSHJob[] getJobs() {
+    public List<SGESSHJob> getJobs() {
         return jobs;
     }
 
-    public void setJobs(SGESSHJob[] jobs) {
+    public void setJobs(List<SGESSHJob> jobs) {
         this.jobs = jobs;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
 }

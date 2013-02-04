@@ -36,8 +36,8 @@ public class LSFSSHFactoryTest {
         Site site = new Site();
         site.setLRMBinDirectory("/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/bin");
         site.setSubmitHost("biodev1.its.unc.edu");
-        LSFSSHFactory lsfSSHFactory = LSFSSHFactory.getInstance(site, "jreilly");
-
+        site.setUsername("jreilly");
+        LSFSSHFactory lsfSSHFactory = LSFSSHFactory.getInstance(site);
         LSFSSHJob job = new LSFSSHJob("test", new File("/bin/hostname"));
         job.setHostCount(1);
         job.setNumberOfProcessors(1);
@@ -62,12 +62,13 @@ public class LSFSSHFactoryTest {
         site.setLRMBinDirectory("/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/bin");
         site.setSubmitHost("biodev1.its.unc.edu");
         site.setMaxNoClaimTime(1440);
+        site.setUsername("jreilly");
 
         Queue queue = new Queue();
         queue.setName("prenci");
         queue.setRunTime(2880);
 
-        LSFSSHFactory lsfSSHFactory = LSFSSHFactory.getInstance(site, "jreilly");
+        LSFSSHFactory lsfSSHFactory = LSFSSHFactory.getInstance(site);
         File submitDir = new File("/tmp");
 
         try {

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Callable;
@@ -29,19 +30,10 @@ public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobSt
 
     private Site site;
 
-    private PBSSSHJob[] jobs;
-
-    private String username;
+    private List<PBSSSHJob> jobs;
 
     public PBSSSHLookupStatusCallable() {
         super();
-    }
-
-    public PBSSSHLookupStatusCallable(Site site, String username, PBSSSHJob... jobs) {
-        super();
-        this.jobs = jobs;
-        this.site = site;
-        this.username = username;
     }
 
     @Override
@@ -53,7 +45,7 @@ public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobSt
             sb.append(" ").append(job.getId());
         }
         String jobXarg = sb.toString().replaceFirst(" ", "");
-        String command = String.format("%s/qstat %s | tail -n+2 | awk '{print $1,$3}'", this.site.getLRMBinDirectory(),
+        String command = String.format("%s/qstat %s | tail -n+2 | awk '{print $1,$3}'", getSite().getLRMBinDirectory(),
                 jobXarg);
 
         String home = System.getProperty("user.home");
@@ -64,7 +56,7 @@ public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobSt
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
+            Session session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
@@ -129,20 +121,12 @@ public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobSt
         this.site = site;
     }
 
-    public PBSSSHJob[] getJobs() {
+    public List<PBSSSHJob> getJobs() {
         return jobs;
     }
 
-    public void setJobs(PBSSSHJob[] jobs) {
+    public void setJobs(List<PBSSSHJob> jobs) {
         this.jobs = jobs;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
 }

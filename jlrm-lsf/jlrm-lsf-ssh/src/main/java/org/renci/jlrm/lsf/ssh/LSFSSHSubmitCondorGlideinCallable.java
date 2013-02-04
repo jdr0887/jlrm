@@ -85,7 +85,7 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
         job.setMemory(null);
 
         VelocityContext velocityContext = new VelocityContext();
-        velocityContext.put("siteName", this.site.getSubmitHost());
+        velocityContext.put("siteName", getSite().getSubmitHost());
         velocityContext.put("collectorHost", this.collectorHost);
         velocityContext.put("jlrmUser", this.username);
 
@@ -97,7 +97,7 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
         }
         velocityContext.put("siteMaxRunTimeMins", maxRunTimeAdjusted);
         velocityContext.put("siteMaxRunTimeSecs", maxRunTimeAdjusted * 60);
-        velocityContext.put("siteMaxNoClaimTimeSecs", this.site.getMaxNoClaimTime() * 60);
+        velocityContext.put("siteMaxNoClaimTimeSecs", getSite().getMaxNoClaimTime() * 60);
         velocityContext.put("requiredMemory", this.requiredMemory * 1024);
         velocityContext.put("glideinStartTime", new Date().getTime());
         velocityContext.put("maxRunTime", maxRunTimeAdjusted);
@@ -108,7 +108,7 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
             JSch sch = new JSch();
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
+            Session session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("compression.s2c", "zlib,none");
             config.setProperty("compression.c2s", "zlib,none");
@@ -213,7 +213,7 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
 
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
-            command = String.format("%s/bsub < %s", this.site.getLRMBinDirectory(), targetFile);
+            command = String.format("%s/bsub < %s", getSite().getLRMBinDirectory(), targetFile);
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);

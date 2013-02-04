@@ -36,24 +36,10 @@ public class SGESSHSubmitCallable implements Callable<SGESSHJob> {
 
     private SGESSHJob job;
 
-    private String username;
-
     private File submitDir;
 
     public SGESSHSubmitCallable() {
         super();
-    }
-
-    public SGESSHSubmitCallable(Site site, SGESSHJob job, File submitDir) {
-        this(site, System.getProperty("user.name"), job, submitDir);
-    }
-
-    public SGESSHSubmitCallable(Site site, String username, SGESSHJob job, File submitDir) {
-        super();
-        this.site = site;
-        this.job = job;
-        this.username = username;
-        this.submitDir = submitDir;
     }
 
     @Override
@@ -66,7 +52,7 @@ public class SGESSHSubmitCallable implements Callable<SGESSHJob> {
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
+            Session session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("compression.s2c", "zlib,none");
             config.setProperty("compression.c2s", "zlib,none");
@@ -193,14 +179,6 @@ public class SGESSHSubmitCallable implements Callable<SGESSHJob> {
 
     public void setJob(SGESSHJob job) {
         this.job = job;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public File getSubmitDir() {

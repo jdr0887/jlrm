@@ -36,24 +36,10 @@ public class LSFSSHSubmitCallable implements Callable<LSFSSHJob> {
 
     private Site site;
 
-    private String username;
-
     private File submitDir;
 
     public LSFSSHSubmitCallable() {
         super();
-    }
-
-    public LSFSSHSubmitCallable(Site site, LSFSSHJob job, File submitDir) {
-        this(site, System.getProperty("user.name"), job, submitDir);
-    }
-
-    public LSFSSHSubmitCallable(Site site, String username, LSFSSHJob job, File submitDir) {
-        super();
-        this.site = site;
-        this.job = job;
-        this.username = username;
-        this.submitDir = submitDir;
     }
 
     @Override
@@ -66,7 +52,7 @@ public class LSFSSHSubmitCallable implements Callable<LSFSSHJob> {
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
+            Session session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("compression.s2c", "zlib,none");
             config.setProperty("compression.c2s", "zlib,none");
@@ -125,7 +111,7 @@ public class LSFSSHSubmitCallable implements Callable<LSFSSHJob> {
 
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
-            command = String.format("%s/bsub < %s", this.site.getLRMBinDirectory(), targetFile);
+            command = String.format("%s/bsub < %s", getSite().getLRMBinDirectory(), targetFile);
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
@@ -193,14 +179,6 @@ public class LSFSSHSubmitCallable implements Callable<LSFSSHJob> {
 
     public void setSite(Site site) {
         this.site = site;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public File getSubmitDir() {

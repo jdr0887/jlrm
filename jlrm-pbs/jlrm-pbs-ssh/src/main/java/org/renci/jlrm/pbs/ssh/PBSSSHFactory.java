@@ -1,6 +1,7 @@
 package org.renci.jlrm.pbs.ssh;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -28,29 +29,31 @@ public class PBSSSHFactory {
 
     private ThreadPoolExecutor threadPoolExecutor;
 
-    private String username;
-
     private Site site;
 
     public static PBSSSHFactory getInstance(Site site, String username) {
         if (instance == null) {
-            instance = new PBSSSHFactory(site, StringUtils.isNotEmpty(username) ? username
-                    : System.getProperty("user.name"));
+            instance = new PBSSSHFactory(site);
         }
         return instance;
     }
 
-    private PBSSSHFactory(Site site, String username) {
+    private PBSSSHFactory(Site site) {
         super();
         this.site = site;
-        this.username = username;
+        if (StringUtils.isEmpty(site.getUsername())) {
+            site.setUsername(System.getProperty("user.name"));
+        }
         this.threadPoolExecutor = new ThreadPoolExecutor(4, 8, 50000L, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>());
     }
 
     public PBSSSHJob submit(File submitDir, PBSSSHJob job) throws JLRMException {
         logger.debug("ENTERING submit(File)");
-        PBSSSHSubmitCallable runnable = new PBSSSHSubmitCallable(this.site, this.username, job, submitDir);
+        PBSSSHSubmitCallable runnable = new PBSSSHSubmitCallable();
+        runnable.setJob(job);
+        runnable.setSite(this.site);
+        runnable.setSubmitDir(submitDir);
         Future<PBSSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
         try {
             job = jobFuture.get();
@@ -71,7 +74,6 @@ public class PBSSSHFactory {
         runnable.setRequiredMemory(requireMemory);
         runnable.setSubmitDir(submitDir);
         runnable.setCollectorHost(collectorHost);
-        runnable.setUsername(this.username);
         runnable.setQueue(queue);
         Future<PBSSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
         PBSSSHJob job = null;
@@ -87,7 +89,9 @@ public class PBSSSHFactory {
 
     public PBSSSHJob killGlidein(PBSSSHJob job) throws JLRMException {
         logger.debug("ENTERING submit(File)");
-        PBSSSHKillCallable runnable = new PBSSSHKillCallable(this.site, this.username, job);
+        PBSSSHKillCallable runnable = new PBSSSHKillCallable();
+        runnable.setJob(job);
+        runnable.setSite(this.site);
         Future<PBSSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
         try {
             job = jobFuture.get();
@@ -99,9 +103,11 @@ public class PBSSSHFactory {
         return job;
     }
 
-    public Map<String, PBSJobStatusType> lookupStatus(PBSSSHJob... jobs) throws JLRMException {
+    public Map<String, PBSJobStatusType> lookupStatus(List<PBSSSHJob> jobs) throws JLRMException {
         logger.debug("ENTERING lookupStatus(job)");
-        PBSSSHLookupStatusCallable runnable = new PBSSSHLookupStatusCallable(this.site, this.username, jobs);
+        PBSSSHLookupStatusCallable runnable = new PBSSSHLookupStatusCallable();
+        runnable.setJobs(jobs);
+        runnable.setSite(this.site);
         Future<Map<String, PBSJobStatusType>> jobFuture = this.threadPoolExecutor.submit(runnable);
         Map<String, PBSJobStatusType> ret = null;
         try {

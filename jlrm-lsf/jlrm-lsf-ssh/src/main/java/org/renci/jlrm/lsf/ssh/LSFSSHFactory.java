@@ -1,6 +1,7 @@
 package org.renci.jlrm.lsf.ssh;
 
 import java.io.File;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -28,29 +29,31 @@ public class LSFSSHFactory {
 
     private ThreadPoolExecutor threadPoolExecutor;
 
-    private String username;
-
     private Site site;
 
-    public static LSFSSHFactory getInstance(Site site, String username) {
+    public static LSFSSHFactory getInstance(Site site) {
         if (instance == null) {
-            instance = new LSFSSHFactory(site, StringUtils.isNotEmpty(username) ? username
-                    : System.getProperty("user.name"));
+            instance = new LSFSSHFactory(site);
         }
         return instance;
     }
 
-    private LSFSSHFactory(Site site, String username) {
+    private LSFSSHFactory(Site site) {
         super();
         this.site = site;
-        this.username = username;
+        if (StringUtils.isEmpty(site.getUsername())) {
+            site.setUsername(System.getProperty("user.name"));
+        }
         this.threadPoolExecutor = new ThreadPoolExecutor(4, 8, 50000L, TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>());
     }
 
     public LSFSSHJob submit(File submitDir, LSFSSHJob job) throws JLRMException {
         logger.debug("ENTERING submit(File)");
-        LSFSSHSubmitCallable runnable = new LSFSSHSubmitCallable(this.site, this.username, job, submitDir);
+        LSFSSHSubmitCallable runnable = new LSFSSHSubmitCallable();
+        runnable.setJob(job);
+        runnable.setSite(this.site);
+        runnable.setSubmitDir(submitDir);
         Future<LSFSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
         try {
             job = jobFuture.get();
@@ -70,7 +73,6 @@ public class LSFSSHFactory {
         runnable.setRequiredMemory(requireMemory);
         runnable.setSubmitDir(submitDir);
         runnable.setCollectorHost(collectorHost);
-        runnable.setUsername(this.username);
         runnable.setQueue(queue);
         Future<LSFSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
         LSFSSHJob job = null;
@@ -87,7 +89,9 @@ public class LSFSSHFactory {
     public void killGlidein(String jobId) throws JLRMException {
         logger.debug("ENTERING submit(File)");
         try {
-            LSFSSHKillCallable runnable = new LSFSSHKillCallable(this.site, this.username, jobId);
+            LSFSSHKillCallable runnable = new LSFSSHKillCallable();
+            runnable.setJobId(jobId);
+            runnable.setSite(this.site);
             this.threadPoolExecutor.submit(runnable).get();
         } catch (InterruptedException e) {
             logger.error("InterruptedException", e);
@@ -96,9 +100,11 @@ public class LSFSSHFactory {
         }
     }
 
-    public Set<LSFJobStatusInfo> lookupStatus(LSFSSHJob... jobs) throws JLRMException {
+    public Set<LSFJobStatusInfo> lookupStatus(List<LSFSSHJob> jobs) throws JLRMException {
         logger.debug("ENTERING lookupStatus(job)");
-        LSFSSHLookupStatusCallable runnable = new LSFSSHLookupStatusCallable(this.site, this.username, jobs);
+        LSFSSHLookupStatusCallable runnable = new LSFSSHLookupStatusCallable();
+        runnable.setJobs(jobs);
+        runnable.setSite(this.site);
         Future<Set<LSFJobStatusInfo>> jobFuture = this.threadPoolExecutor.submit(runnable);
         Set<LSFJobStatusInfo> ret = null;
         try {

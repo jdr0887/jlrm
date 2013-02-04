@@ -50,12 +50,13 @@ public class SGESSHFactoryTest {
         site.setLRMBinDirectory("/opt/gridengine/bin/lx26-amd64");
         site.setSubmitHost("swprod.bioinf.unc.edu");
         site.setMaxNoClaimTime(1440);
+        site.setUsername("jreilly");
 
         Queue queue = new Queue();
         queue.setName("all.q");
         queue.setRunTime(2880);
 
-        SGESSHFactory factory = SGESSHFactory.getInstance(site, "jreilly");
+        SGESSHFactory factory = SGESSHFactory.getInstance(site);
 
         SGESSHJob job = new SGESSHJob("test", new File("/bin/hostname"));
         job.setHostCount(1);
@@ -82,12 +83,13 @@ public class SGESSHFactoryTest {
         site.setLRMBinDirectory("/opt/gridengine/bin/lx26-amd64");
         site.setSubmitHost("swprod.bioinf.unc.edu");
         site.setMaxNoClaimTime(1440);
+        site.setUsername("jreilly");
 
         Queue queue = new Queue();
         queue.setName("all.q");
         queue.setRunTime(2880);
 
-        SGESSHFactory factory = SGESSHFactory.getInstance(site, "jreilly");
+        SGESSHFactory factory = SGESSHFactory.getInstance(site);
 
         File submitDir = new File("/tmp");
         try {

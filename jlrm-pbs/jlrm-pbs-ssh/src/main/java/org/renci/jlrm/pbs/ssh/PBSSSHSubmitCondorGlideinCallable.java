@@ -46,8 +46,6 @@ public class PBSSSHSubmitCondorGlideinCallable implements Callable<PBSSSHJob> {
 
     private File submitDir;
 
-    private String username;
-
     private String collectorHost;
 
     private Integer requiredMemory;
@@ -84,9 +82,9 @@ public class PBSSSHSubmitCondorGlideinCallable implements Callable<PBSSSHJob> {
         job.setMemory(null);
 
         VelocityContext velocityContext = new VelocityContext();
-        velocityContext.put("siteName", this.site.getSubmitHost());
+        velocityContext.put("siteName", getSite().getSubmitHost());
         velocityContext.put("collectorHost", this.collectorHost);
-        velocityContext.put("jlrmUser", this.username);
+        velocityContext.put("jlrmUser", getSite().getUsername());
 
         // note that we want a lower max run time here, so that the glidein can shut down
         // gracefully before getting kicked off by the batch scheduler
@@ -96,7 +94,7 @@ public class PBSSSHSubmitCondorGlideinCallable implements Callable<PBSSSHJob> {
         }
         velocityContext.put("siteMaxRunTimeMins", maxRunTimeAdjusted);
         velocityContext.put("siteMaxRunTimeSecs", maxRunTimeAdjusted * 60);
-        velocityContext.put("siteMaxNoClaimTimeSecs", this.site.getMaxNoClaimTime() * 60);
+        velocityContext.put("siteMaxNoClaimTimeSecs", getSite().getMaxNoClaimTime() * 60);
         velocityContext.put("requiredMemory", this.requiredMemory * 1024);
         velocityContext.put("glideinStartTime", new Date().getTime());
         velocityContext.put("maxRunTime", maxRunTimeAdjusted);
@@ -107,7 +105,7 @@ public class PBSSSHSubmitCondorGlideinCallable implements Callable<PBSSSHJob> {
             JSch sch = new JSch();
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
+            Session session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("compression.s2c", "zlib,none");
             config.setProperty("compression.c2s", "zlib,none");
@@ -212,7 +210,7 @@ public class PBSSSHSubmitCondorGlideinCallable implements Callable<PBSSSHJob> {
 
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
-            command = String.format("%s/qsub < %s", this.site.getLRMBinDirectory(), targetFile);
+            command = String.format("%s/qsub < %s", getSite().getLRMBinDirectory(), targetFile);
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
@@ -309,14 +307,6 @@ public class PBSSSHSubmitCondorGlideinCallable implements Callable<PBSSSHJob> {
 
     public void setSubmitDir(File submitDir) {
         this.submitDir = submitDir;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getCollectorHost() {

@@ -25,17 +25,8 @@ public class LSFSSHKillCallable implements Callable<Void> {
 
     private String jobId;
 
-    private String username;
-
     public LSFSSHKillCallable() {
         super();
-    }
-
-    public LSFSSHKillCallable(Site site, String username, String jobId) {
-        super();
-        this.site = site;
-        this.jobId = jobId;
-        this.username = username;
     }
 
     @Override
@@ -49,13 +40,13 @@ public class LSFSSHKillCallable implements Callable<Void> {
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(this.username, this.site.getSubmitHost(), 22);
+            Session session = sch.getSession(site.getUsername(), getSite().getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
             session.connect(30000);
 
-            String command = String.format("%s/bkill %s", this.site.getLRMBinDirectory(), jobId);
+            String command = String.format("%s/bkill %s", getSite().getLRMBinDirectory(), jobId);
             logger.debug("command: {}", command);
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
@@ -98,12 +89,12 @@ public class LSFSSHKillCallable implements Callable<Void> {
         this.site = site;
     }
 
-    public String getUsername() {
-        return username;
+    public String getJobId() {
+        return jobId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
     }
 
 }
