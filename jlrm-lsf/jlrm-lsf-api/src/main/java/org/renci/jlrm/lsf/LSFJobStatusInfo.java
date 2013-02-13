@@ -8,11 +8,18 @@ public class LSFJobStatusInfo {
 
     private String queue;
 
-    public LSFJobStatusInfo(String jobId, LSFJobStatusType type, String queue) {
+    private String jobName;
+
+    public LSFJobStatusInfo() {
+        super();
+    }
+
+    public LSFJobStatusInfo(String jobId, LSFJobStatusType type, String queue, String jobName) {
         super();
         this.jobId = jobId;
         this.type = type;
         this.queue = queue;
+        this.jobName = jobName;
     }
 
     public String getJobId() {
@@ -39,9 +46,18 @@ public class LSFJobStatusInfo {
         this.queue = queue;
     }
 
+    public String getJobName() {
+        return jobName;
+    }
+
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
+    }
+
     @Override
     public String toString() {
-        return "LSFJobStatusInfo [jobId=" + jobId + ", type=" + type + ", queue=" + queue + "]";
+        return "LSFJobStatusInfo [jobId=" + jobId + ", type=" + type + ", queue=" + queue + ", jobName=" + jobName
+                + "]";
     }
 
 }
