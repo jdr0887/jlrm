@@ -3,12 +3,12 @@
   <parent>
     <groupId>org.renci.jlrm</groupId>
     <artifactId>jlrm-pbs</artifactId>
-    <version>0.2.7</version>
+    <version>0.2.8-SNAPSHOT</version>
   </parent>
   <name>jLRM :: PBS :: SSH</name>
   <groupId>org.renci.jlrm.jlrm-pbs</groupId>
   <artifactId>jlrm-pbs-ssh</artifactId>
-  <version>0.2.7</version>
+  <version>0.2.8-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <dependencies>
     <dependency>
