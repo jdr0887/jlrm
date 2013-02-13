@@ -111,7 +111,7 @@ public class LSFSSHSubmitCallable implements Callable<LSFSSHJob> {
 
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
-            command = String.format("%s/bsub < %s", getSite().getLRMBinDirectory(), targetFile);
+            command = String.format("%s/bsub -J %s < %s", getSite().getLRMBinDirectory(), job.getName(), targetFile);
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);

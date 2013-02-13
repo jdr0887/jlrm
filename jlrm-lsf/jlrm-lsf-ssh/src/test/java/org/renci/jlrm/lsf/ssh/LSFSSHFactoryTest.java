@@ -87,7 +87,7 @@ public class LSFSSHFactoryTest {
     @Test
     public void testLookupStatus() {
 
-        String command = String.format("%s/bjobs %s | tail -n+2 | awk '{print $1,$3,$4}'",
+        String command = String.format("%s/bjobs %s | tail -n+2 | awk '{print $1,$3,$4,$7}'",
                 "/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/bin", "183291 183293");
 
         String home = System.getProperty("user.home");
@@ -130,13 +130,14 @@ public class LSFSSHFactoryTest {
                     } else {
                         // System.out.println(line);
                         String[] lineSplit = line.split(" ");
-                        if (lineSplit != null && lineSplit.length == 3) {
+                        if (lineSplit != null && lineSplit.length == 4) {
                             for (LSFJobStatusType type : LSFJobStatusType.values()) {
                                 if (type.getValue().equals(lineSplit[1])) {
                                     statusType = type;
                                 }
                             }
-                            LSFJobStatusInfo info = new LSFJobStatusInfo(lineSplit[0], statusType, lineSplit[2]);
+                            LSFJobStatusInfo info = new LSFJobStatusInfo(lineSplit[0], statusType, lineSplit[2],
+                                    lineSplit[3]);
                             System.out.println(info.toString());
                             jobStatusSet.add(info);
                         }

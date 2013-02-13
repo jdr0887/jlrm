@@ -46,7 +46,7 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
             sb.append(" ").append(job.getId());
         }
         String jobXarg = sb.toString().replaceFirst(" ", "");
-        String command = String.format("%s/bjobs %s | tail -n+2 | awk '{print $1,$3,$4}'", getSite()
+        String command = String.format("%s/bjobs %s | tail -n+2 | awk '{print $1,$3,$4,$7}'", getSite()
                 .getLRMBinDirectory(), jobXarg);
 
         String home = System.getProperty("user.home");
@@ -92,13 +92,14 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
                         statusType = LSFJobStatusType.DONE;
                     } else {
                         String[] lineSplit = line.split(" ");
-                        if (lineSplit != null && lineSplit.length == 3) {
+                        if (lineSplit != null && lineSplit.length == 4) {
                             for (LSFJobStatusType type : LSFJobStatusType.values()) {
                                 if (type.getValue().equals(lineSplit[1])) {
                                     statusType = type;
                                 }
                             }
-                            LSFJobStatusInfo info = new LSFJobStatusInfo(lineSplit[0], statusType, lineSplit[2]);
+                            LSFJobStatusInfo info = new LSFJobStatusInfo(lineSplit[0], statusType, lineSplit[2],
+                                    lineSplit[3]);
                             logger.info("JobStatus is {}", info.toString());
                             jobStatusSet.add(info);
                         }
