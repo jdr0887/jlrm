@@ -47,7 +47,7 @@ public class CondorSubmitCallable implements Callable<CondorJob> {
     public CondorJob call() throws JLRMException {
 
         File workDir = IOUtils.createWorkDirectory(submitDir, job.getName());
-        CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
+        CondorSubmitScriptExporter exporter = CondorSubmitScriptExporter.getInstance();
         job = exporter.export(workDir, job);
 
         try {

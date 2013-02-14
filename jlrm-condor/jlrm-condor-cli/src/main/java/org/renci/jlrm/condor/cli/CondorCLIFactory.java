@@ -53,7 +53,7 @@ public class CondorCLIFactory {
     }
 
     public Map<String, List<ClassAdvertisement>> lookupJobsByOwner(String owner) throws JLRMException {
-        logger.debug("ENTERING lookupJobsByUsername(String username)");
+        logger.info("ENTERING lookupJobsByUsername(String username)");
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Map<String, List<ClassAdvertisement>> ret = null;
         try {
@@ -67,7 +67,7 @@ public class CondorCLIFactory {
     }
 
     public CondorJob submit(File submitDir, CondorJob job) throws JLRMException {
-        logger.debug("ENTERING submit(File, CondorJob)");
+        logger.info("ENTERING submit(File, CondorJob)");
         ExecutorService executor = Executors.newSingleThreadExecutor();
         CondorJob ret = null;
         try {
@@ -81,12 +81,23 @@ public class CondorCLIFactory {
     }
 
     public CondorJob submit(String dagName, File submitDir, Graph<CondorJob, CondorJobEdge> graph) throws JLRMException {
-        logger.debug("ENTERING submit(String dagName, File submitDir, Graph<CondorJob, CondorJobEdge> graph)");
+        logger.info("ENTERING submit(String dagName, File submitDir, Graph<CondorJob, CondorJobEdge> graph)");
+        return submit(dagName, submitDir, graph, true);
+    }
+
+    public CondorJob submit(String dagName, File submitDir, Graph<CondorJob, CondorJobEdge> graph,
+            Boolean includeGlideinRequirements) throws JLRMException {
+        logger.info("ENTERING submit(String dagName, File submitDir, Graph<CondorJob, CondorJobEdge> graph, Boolean includeGlideinRequirements)");
         ExecutorService executor = Executors.newSingleThreadExecutor();
         CondorJob ret = null;
         try {
-            ret = executor.submit(new CondorSubmitDAGCallable(this.condorHomeDirectory, submitDir, graph, dagName))
-                    .get();
+            CondorSubmitDAGCallable callable = new CondorSubmitDAGCallable();
+            callable.setCondorHomeDirectory(this.condorHomeDirectory);
+            callable.setDagName(dagName);
+            callable.setGraph(graph);
+            callable.setIncludeGlideinRequirements(includeGlideinRequirements);
+            callable.setSubmitDir(submitDir);
+            ret = executor.submit(callable).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -96,7 +107,7 @@ public class CondorCLIFactory {
     }
 
     public CondorJobStatusType lookupStatus(CondorJob jobNode) throws JLRMException {
-        logger.debug("ENTERING lookupStatus(JobNode)");
+        logger.info("ENTERING lookupStatus(JobNode)");
         ExecutorService executor = Executors.newSingleThreadExecutor();
         CondorJobStatusType ret = null;
         try {
@@ -110,7 +121,7 @@ public class CondorCLIFactory {
     }
 
     public Map<String, CondorJobStatusType> lookupDAGStatus(CondorJob job) throws JLRMException {
-        logger.debug("ENTERING lookupDAGStatus(CondorJob)");
+        logger.info("ENTERING lookupDAGStatus(CondorJob)");
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Map<String, CondorJobStatusType> ret = null;
         try {

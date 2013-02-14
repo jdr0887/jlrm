@@ -113,8 +113,8 @@ public class JobTest {
         graph.addVertex(job5);
         graph.addEdge(job2, job5);
 
-        CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
-        exporter.export("asdfads", new File("/tmp"), graph);
+        CondorSubmitScriptExporter exporter = CondorSubmitScriptExporter.getInstance();
+        exporter.export("asdfads", new File("/tmp"), graph, false);
 
         try {
             VertexNameProvider<CondorJob> vnpId = new VertexNameProvider<CondorJob>() {
@@ -207,7 +207,7 @@ public class JobTest {
         classAd.setValue(UniverseType.MPI.toString().toLowerCase());
         job2.getClassAdvertismentMap().put(ClassAdvertisementFactory.CLASS_AD_KEY_UNIVERSE, classAd);
 
-        CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
+        CondorSubmitScriptExporter exporter = CondorSubmitScriptExporter.getInstance();
         exporter.export(new File("/tmp"), job2);
 
     }

@@ -26,8 +26,6 @@ public class CondorSubmitDAGCallable implements Callable<CondorJob> {
 
     private final Logger logger = LoggerFactory.getLogger(CondorSubmitDAGCallable.class);
 
-    private final Executor executor = BashExecutor.getInstance();
-
     private File submitDir;
 
     private Graph<CondorJob, CondorJobEdge> graph;
@@ -36,24 +34,17 @@ public class CondorSubmitDAGCallable implements Callable<CondorJob> {
 
     private File condorHomeDirectory;
 
+    private Boolean includeGlideinRequirements;
+
     public CondorSubmitDAGCallable() {
         super();
-    }
-
-    public CondorSubmitDAGCallable(File condorHomeDirectory, File submitDir, Graph<CondorJob, CondorJobEdge> graph,
-            String dagName) {
-        super();
-        this.submitDir = submitDir;
-        this.graph = graph;
-        this.dagName = dagName;
-        this.condorHomeDirectory = condorHomeDirectory;
     }
 
     @Override
     public CondorJob call() throws JLRMException {
 
         File workDir = IOUtils.createWorkDirectory(submitDir, this.dagName);
-        CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
+        CondorSubmitScriptExporter exporter = CondorSubmitScriptExporter.getInstance();
         CondorJob dagSubmitJob = exporter.export(dagName, workDir, graph);
 
         try {
@@ -61,6 +52,7 @@ public class CondorSubmitDAGCallable implements Callable<CondorJob> {
             String command = String.format("%s/bin/condor_submit_dag %s", condorHomeDirectory.getAbsolutePath(),
                     dagSubmitJob.getSubmitFile().getName());
             CommandInput input = new CommandInput(command, dagSubmitJob.getSubmitFile().getParentFile());
+            Executor executor = BashExecutor.getInstance();
             CommandOutput output = executor.execute(input);
             int exitCode = output.getExitCode();
             LineNumberReader lnr = new LineNumberReader(new StringReader(output.getStdout().toString()));
@@ -131,6 +123,22 @@ public class CondorSubmitDAGCallable implements Callable<CondorJob> {
 
     public void setDagName(String dagName) {
         this.dagName = dagName;
+    }
+
+    public File getCondorHomeDirectory() {
+        return condorHomeDirectory;
+    }
+
+    public void setCondorHomeDirectory(File condorHomeDirectory) {
+        this.condorHomeDirectory = condorHomeDirectory;
+    }
+
+    public Boolean getIncludeGlideinRequirements() {
+        return includeGlideinRequirements;
+    }
+
+    public void setIncludeGlideinRequirements(Boolean includeGlideinRequirements) {
+        this.includeGlideinRequirements = includeGlideinRequirements;
     }
 
 }

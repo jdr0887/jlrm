@@ -14,7 +14,6 @@ import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +21,16 @@ public class CondorSubmitScriptExporter {
 
     private final Logger logger = LoggerFactory.getLogger(CondorSubmitScriptExporter.class);
 
-    public CondorSubmitScriptExporter() {
+    private static CondorSubmitScriptExporter instance;
+
+    public static CondorSubmitScriptExporter getInstance() {
+        if (instance == null) {
+            instance = new CondorSubmitScriptExporter();
+        }
+        return instance;
+    }
+
+    private CondorSubmitScriptExporter() {
         super();
     }
 
@@ -65,6 +73,12 @@ public class CondorSubmitScriptExporter {
 
     public CondorJob export(String dagName, File workDir, Graph<CondorJob, CondorJobEdge> graph) {
         logger.debug("ENTERING export(String dagName, File workDir, Graph<JobNode, JobEdge> graph)");
+        return export(dagName, workDir, graph, true);
+    }
+
+    public CondorJob export(String dagName, File workDir, Graph<CondorJob, CondorJobEdge> graph,
+            boolean includeGlideinRequirements) {
+        logger.debug("ENTERING export(String dagName, File workDir, Graph<JobNode, JobEdge> graph)");
 
         CondorJob dagSubmitJob = new CondorJob();
         dagSubmitJob.setName(dagName);
@@ -103,11 +117,15 @@ public class CondorSubmitScriptExporter {
                     job.getClassAdvertismentMap().put(CLASS_AD_KEY_REQUEST_MEMORY, classAd);
 
                     classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_REQUIREMENTS).clone();
-                    // String.format("(Arch == \"X86_64\") && (OpSys == \"LINUX\") && (Memory >= 500) && (Disk >= 0) && (TARGET.FileSystemDomain != MY.FileSystemDomain) && (TARGET.JLRM_USER == \"%s\")",
-                    // System.getProperty("user.name")));
-                    String requirements = String
-                            .format("(Arch == \"X86_64\") && (OpSys == \"LINUX\") && (Memory >= 500) && (Disk >= 0) && (TARGET.JLRM_USER == \"%s\") && (TARGET.IS_GLIDEIN == True)",
-                                    System.getProperty("user.name"));
+
+                    String requirements = "(Arch == \"X86_64\") && (OpSys == \"LINUX\") && (Memory >= 500) && (Disk >= 0)";
+
+                    if (includeGlideinRequirements) {
+                        requirements += String.format(
+                                " && (TARGET.JLRM_USER == \"%s\") && (TARGET.IS_GLIDEIN == True)",
+                                System.getProperty("user.name"));
+                    }
+
                     classAd.setValue(requirements);
                     job.getClassAdvertismentMap().put(CLASS_AD_KEY_REQUIREMENTS, classAd);
 
@@ -153,10 +171,6 @@ public class CondorSubmitScriptExporter {
         }
 
         return dagSubmitJob;
-    }
-
-    public void export(Graph<Graph<CondorJob, CondorJobEdge>, DefaultEdge> graph) {
-
     }
 
     private File writeSubmitFile(File submitDir, CondorJob job) throws IOException {
