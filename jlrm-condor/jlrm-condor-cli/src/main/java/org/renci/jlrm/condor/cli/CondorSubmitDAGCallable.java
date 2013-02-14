@@ -34,7 +34,7 @@ public class CondorSubmitDAGCallable implements Callable<CondorJob> {
 
     private File condorHomeDirectory;
 
-    private Boolean includeGlideinRequirements;
+    private Boolean includeGlideinRequirements = Boolean.FALSE;
 
     public CondorSubmitDAGCallable() {
         super();
@@ -45,7 +45,7 @@ public class CondorSubmitDAGCallable implements Callable<CondorJob> {
 
         File workDir = IOUtils.createWorkDirectory(submitDir, this.dagName);
         CondorSubmitScriptExporter exporter = CondorSubmitScriptExporter.getInstance();
-        CondorJob dagSubmitJob = exporter.export(dagName, workDir, graph);
+        CondorJob dagSubmitJob = exporter.export(dagName, workDir, graph, includeGlideinRequirements);
 
         try {
 
