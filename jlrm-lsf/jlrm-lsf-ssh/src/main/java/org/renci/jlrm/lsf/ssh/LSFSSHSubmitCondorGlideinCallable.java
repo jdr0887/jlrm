@@ -49,6 +49,8 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
 
     private String collectorHost;
 
+    private String jobName;
+
     private Integer requiredMemory;
 
     public LSFSSHSubmitCondorGlideinCallable() {
@@ -74,7 +76,7 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
         job.setTransferExecutable(Boolean.TRUE);
         job.setTransferInputs(Boolean.TRUE);
         job.setQueueName(this.queue.getName());
-        job.setName("glidein");
+        job.setName(this.jobName);
         job.setHostCount(1);
         job.setNumberOfProcessors(8);
         job.setOutput(new File("glidein.out"));
@@ -324,6 +326,14 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
 
     public void setQueue(Queue queue) {
         this.queue = queue;
+    }
+
+    public String getJobName() {
+        return jobName;
+    }
+
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
     }
 
 }
