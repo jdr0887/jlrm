@@ -72,6 +72,7 @@ public class LSFSSHFactory {
         runnable.setSite(this.site);
         runnable.setRequiredMemory(requireMemory);
         runnable.setSubmitDir(submitDir);
+        runnable.setJobName(jobName);
         runnable.setCollectorHost(collectorHost);
         runnable.setQueue(queue);
         Future<LSFSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
