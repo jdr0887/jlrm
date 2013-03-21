@@ -191,6 +191,11 @@
 	<version>0.2.12-SNAPSHOT</version>
       </dependency>
       <dependency>
+	<groupId>org.renci.jlrm.jlrm-slurm</groupId>
+	<artifactId>jlrm-slurm-api</artifactId>
+	<version>0.2.12-SNAPSHOT</version>
+      </dependency>
+      <dependency>
 	<groupId>org.slf4j</groupId>
 	<artifactId>slf4j-api</artifactId>
 	<version>1.6.2</version>
@@ -290,5 +295,6 @@
     <module>jlrm-lsf</module>
     <module>jlrm-pbs</module>
     <module>jlrm-sge</module>
+    <module>jlrm-slurm</module>
   </modules>
 </project>
