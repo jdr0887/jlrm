@@ -49,7 +49,7 @@ public class PBSSSHFactory {
     }
 
     public PBSSSHJob submit(File submitDir, PBSSSHJob job) throws JLRMException {
-        logger.debug("ENTERING submit(File)");
+        logger.info("ENTERING submit(File)");
         PBSSSHSubmitCallable runnable = new PBSSSHSubmitCallable();
         runnable.setJob(job);
         runnable.setSite(this.site);
@@ -68,7 +68,7 @@ public class PBSSSHFactory {
 
     public PBSSSHJob submitGlidein(File submitDir, String collectorHost, Queue queue, Integer requireMemory)
             throws JLRMException {
-        logger.debug("ENTERING submit(File)");
+        logger.info("ENTERING submit(File)");
         PBSSSHSubmitCondorGlideinCallable runnable = new PBSSSHSubmitCondorGlideinCallable();
         runnable.setSite(this.site);
         runnable.setRequiredMemory(requireMemory);
@@ -88,7 +88,7 @@ public class PBSSSHFactory {
     }
 
     public PBSSSHJob killGlidein(PBSSSHJob job) throws JLRMException {
-        logger.debug("ENTERING submit(File)");
+        logger.info("ENTERING submit(File)");
         PBSSSHKillCallable runnable = new PBSSSHKillCallable();
         runnable.setJob(job);
         runnable.setSite(this.site);
@@ -104,7 +104,7 @@ public class PBSSSHFactory {
     }
 
     public Map<String, PBSJobStatusType> lookupStatus(List<PBSSSHJob> jobs) throws JLRMException {
-        logger.debug("ENTERING lookupStatus(job)");
+        logger.info("ENTERING lookupStatus(job)");
         PBSSSHLookupStatusCallable runnable = new PBSSSHLookupStatusCallable();
         runnable.setJobs(jobs);
         runnable.setSite(this.site);

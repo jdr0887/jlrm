@@ -38,7 +38,7 @@ public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobSt
 
     @Override
     public Map<String, PBSJobStatusType> call() throws JLRMException {
-        logger.debug("ENTERING call()");
+        logger.info("ENTERING call()");
 
         StringBuilder sb = new StringBuilder();
         for (PBSSSHJob job : this.jobs) {

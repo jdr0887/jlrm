@@ -17,7 +17,7 @@ public class PBSSubmitScriptExporter<T extends PBSSSHJob> {
     }
 
     public T export(File workDir, String remoteWorkDir, T job) throws IOException {
-        logger.debug("ENTERING export(File, PBSJob)");
+        logger.info("ENTERING export(File, PBSJob)");
         File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
 
         FileWriter submitFileWriter = new FileWriter(submitFile);

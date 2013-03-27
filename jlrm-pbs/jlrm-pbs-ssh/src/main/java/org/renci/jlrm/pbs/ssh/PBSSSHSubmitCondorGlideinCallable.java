@@ -67,7 +67,7 @@ public class PBSSSHSubmitCondorGlideinCallable implements Callable<PBSSSHJob> {
      * @return number of glide-ins submitted
      */
     public PBSSSHJob call() throws JLRMException {
-        logger.debug("ENTERING call()");
+        logger.info("ENTERING call()");
 
         PBSSSHJob job = new PBSSSHJob();
         job.setTransferExecutable(Boolean.TRUE);

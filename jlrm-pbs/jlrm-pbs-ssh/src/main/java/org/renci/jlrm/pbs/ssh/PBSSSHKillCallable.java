@@ -30,7 +30,7 @@ public class PBSSSHKillCallable implements Callable<PBSSSHJob> {
 
     @Override
     public PBSSSHJob call() throws JLRMException {
-        logger.debug("ENTERING call()");
+        logger.info("ENTERING call()");
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
