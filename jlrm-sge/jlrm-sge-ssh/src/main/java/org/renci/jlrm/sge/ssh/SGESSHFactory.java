@@ -49,7 +49,7 @@ public class SGESSHFactory {
     }
 
     public SGESSHJob submit(File submitDir, SGESSHJob job) throws JLRMException {
-        logger.debug("ENTERING submit(File)");
+        logger.info("ENTERING submit(File)");
         SGESSHSubmitCallable runnable = new SGESSHSubmitCallable();
         runnable.setJob(job);
         runnable.setSite(this.site);
@@ -67,7 +67,7 @@ public class SGESSHFactory {
 
     public SGESSHJob submitGlidein(File submitDir, String collectorHost, Queue queue, Integer requireMemory)
             throws JLRMException {
-        logger.debug("ENTERING submit(File)");
+        logger.info("ENTERING submit(File)");
         SGESSHSubmitCondorGlideinCallable runnable = new SGESSHSubmitCondorGlideinCallable();
         runnable.setSite(site);
         runnable.setRequiredMemory(requireMemory);
@@ -87,7 +87,7 @@ public class SGESSHFactory {
     }
 
     public SGESSHJob killGlidein(SGESSHJob job) throws JLRMException {
-        logger.debug("ENTERING submit(File)");
+        logger.info("ENTERING submit(File)");
         SGESSHKillCallable runnable = new SGESSHKillCallable();
         runnable.setJob(job);
         runnable.setSite(this.site);
@@ -103,7 +103,7 @@ public class SGESSHFactory {
     }
 
     public Set<SGEJobStatusInfo> lookupStatus(List<SGESSHJob> jobs) throws JLRMException {
-        logger.debug("ENTERING lookupStatus(job)");
+        logger.info("ENTERING lookupStatus(job)");
         SGESSHLookupStatusCallable runnable = new SGESSHLookupStatusCallable();
         runnable.setJobs(jobs);
         runnable.setSite(this.site);

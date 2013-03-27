@@ -17,7 +17,7 @@ public class SGESubmitScriptExporter<T extends SGESSHJob> {
     }
 
     public T export(File workDir, String remoteWorkDir, T job) throws IOException {
-        logger.debug("ENTERING export(File, SGESSHJob)");
+        logger.info("ENTERING export(File, SGESSHJob)");
         File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
 
         FileWriter submitFileWriter = new FileWriter(submitFile);
@@ -67,7 +67,7 @@ public class SGESubmitScriptExporter<T extends SGESSHJob> {
     }
 
     public T export(File workDir, T job) throws IOException {
-        logger.debug("ENTERING export(File, LSFJob)");
+        logger.info("ENTERING export(File, LSFJob)");
         File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
         FileWriter submitFileWriter = new FileWriter(submitFile);
 

@@ -47,7 +47,7 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
 
     @Override
     public Set<SGEJobStatusInfo> call() throws JLRMException {
-        logger.debug("ENTERING call()");
+        logger.info("ENTERING call()");
 
         String command = String.format(". ~/.bashrc; qstat -s prs -r -xml");
 

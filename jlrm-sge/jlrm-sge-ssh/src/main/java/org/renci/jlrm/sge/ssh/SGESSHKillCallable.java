@@ -31,7 +31,7 @@ public class SGESSHKillCallable implements Callable<SGESSHJob> {
 
     @Override
     public SGESSHJob call() throws JLRMException {
-        logger.debug("ENTERING call()");
+        logger.info("ENTERING call()");
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
