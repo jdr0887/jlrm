@@ -70,7 +70,7 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
      * @return number of glide-ins submitted
      */
     public LSFSSHJob call() throws JLRMException {
-        logger.debug("ENTERING call()");
+        logger.info("ENTERING call()");
 
         LSFSSHJob job = new LSFSSHJob();
         job.setTransferExecutable(Boolean.TRUE);

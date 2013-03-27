@@ -49,7 +49,7 @@ public class LSFSSHFactory {
     }
 
     public LSFSSHJob submit(File submitDir, LSFSSHJob job) throws JLRMException {
-        logger.debug("ENTERING submit(File)");
+        logger.info("ENTERING submit(File)");
         LSFSSHSubmitCallable runnable = new LSFSSHSubmitCallable();
         runnable.setJob(job);
         runnable.setSite(this.site);
@@ -67,7 +67,7 @@ public class LSFSSHFactory {
 
     public LSFSSHJob submitGlidein(File submitDir, String collectorHost, Queue queue, Integer requireMemory,
             String jobName) throws JLRMException {
-        logger.debug("ENTERING submit(File)");
+        logger.info("ENTERING submit(File)");
         LSFSSHSubmitCondorGlideinCallable runnable = new LSFSSHSubmitCondorGlideinCallable();
         runnable.setSite(this.site);
         runnable.setRequiredMemory(requireMemory);
@@ -88,7 +88,7 @@ public class LSFSSHFactory {
     }
 
     public void killGlidein(String jobId) throws JLRMException {
-        logger.debug("ENTERING submit(File)");
+        logger.info("ENTERING submit(File)");
         try {
             LSFSSHKillCallable runnable = new LSFSSHKillCallable();
             runnable.setJobId(jobId);
@@ -102,7 +102,7 @@ public class LSFSSHFactory {
     }
 
     public Set<LSFJobStatusInfo> lookupStatus(List<LSFSSHJob> jobs) throws JLRMException {
-        logger.debug("ENTERING lookupStatus(job)");
+        logger.info("ENTERING lookupStatus(job)");
         LSFSSHLookupStatusCallable runnable = new LSFSSHLookupStatusCallable();
         runnable.setJobs(jobs);
         runnable.setSite(this.site);

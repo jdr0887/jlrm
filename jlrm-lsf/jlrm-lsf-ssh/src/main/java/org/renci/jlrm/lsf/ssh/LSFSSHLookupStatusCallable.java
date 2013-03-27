@@ -39,7 +39,7 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
 
     @Override
     public Set<LSFJobStatusInfo> call() throws JLRMException {
-        logger.debug("ENTERING call()");
+        logger.info("ENTERING call()");
 
         StringBuilder sb = new StringBuilder();
         for (LSFSSHJob job : this.jobs) {
