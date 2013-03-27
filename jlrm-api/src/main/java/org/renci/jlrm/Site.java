@@ -6,8 +6,6 @@ public class Site {
 
     private String submitHost;
 
-    private String LRMBinDirectory;
-
     private int maxTotalPending;
 
     private int maxTotalRunning;
@@ -24,14 +22,6 @@ public class Site {
 
     public Site() {
         super();
-    }
-
-    public String getLRMBinDirectory() {
-        return LRMBinDirectory;
-    }
-
-    public void setLRMBinDirectory(String lRMBinDirectory) {
-        LRMBinDirectory = lRMBinDirectory;
     }
 
     public String getSubmitHost() {
@@ -100,23 +90,20 @@ public class Site {
 
     @Override
     public String toString() {
-        return "Site [submitHost=" + submitHost + ", LRMBinDirectory=" + LRMBinDirectory + ", maxTotalPending="
-                + maxTotalPending + ", maxTotalRunning=" + maxTotalRunning + ", maxNoClaimTime=" + maxNoClaimTime
-                + ", username=" + username + ", name=" + name + ", project=" + project + ", queueInfoMap="
-                + queueInfoMap + "]";
+        return String
+                .format("Site [submitHost=%s, maxTotalPending=%s, maxTotalRunning=%s, maxNoClaimTime=%s, username=%s, name=%s, project=%s]",
+                        submitHost, maxTotalPending, maxTotalRunning, maxNoClaimTime, username, name, project);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((LRMBinDirectory == null) ? 0 : LRMBinDirectory.hashCode());
         result = prime * result + (int) (maxNoClaimTime ^ (maxNoClaimTime >>> 32));
         result = prime * result + maxTotalPending;
         result = prime * result + maxTotalRunning;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((project == null) ? 0 : project.hashCode());
-        result = prime * result + ((queueInfoMap == null) ? 0 : queueInfoMap.hashCode());
         result = prime * result + ((submitHost == null) ? 0 : submitHost.hashCode());
         result = prime * result + ((username == null) ? 0 : username.hashCode());
         return result;
@@ -131,11 +118,6 @@ public class Site {
         if (getClass() != obj.getClass())
             return false;
         Site other = (Site) obj;
-        if (LRMBinDirectory == null) {
-            if (other.LRMBinDirectory != null)
-                return false;
-        } else if (!LRMBinDirectory.equals(other.LRMBinDirectory))
-            return false;
         if (maxNoClaimTime != other.maxNoClaimTime)
             return false;
         if (maxTotalPending != other.maxTotalPending)
@@ -151,11 +133,6 @@ public class Site {
             if (other.project != null)
                 return false;
         } else if (!project.equals(other.project))
-            return false;
-        if (queueInfoMap == null) {
-            if (other.queueInfoMap != null)
-                return false;
-        } else if (!queueInfoMap.equals(other.queueInfoMap))
             return false;
         if (submitHost == null) {
             if (other.submitHost != null)
