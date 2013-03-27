@@ -72,13 +72,13 @@ public class CondorSubmitScriptExporter {
     }
 
     public CondorJob export(String dagName, File workDir, Graph<CondorJob, CondorJobEdge> graph) {
-        logger.debug("ENTERING export(String dagName, File workDir, Graph<JobNode, JobEdge> graph)");
+        logger.info("ENTERING export(String dagName, File workDir, Graph<JobNode, JobEdge> graph)");
         return export(dagName, workDir, graph, true);
     }
 
     public CondorJob export(String dagName, File workDir, Graph<CondorJob, CondorJobEdge> graph,
             boolean includeGlideinRequirements) {
-        logger.debug("ENTERING export(String dagName, File workDir, Graph<JobNode, JobEdge> graph)");
+        logger.info("ENTERING export(String dagName, File workDir, Graph<JobNode, JobEdge> graph)");
 
         CondorJob dagSubmitJob = new CondorJob();
         dagSubmitJob.setName(dagName);
