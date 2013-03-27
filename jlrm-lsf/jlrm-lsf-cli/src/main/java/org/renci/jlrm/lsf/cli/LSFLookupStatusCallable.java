@@ -23,27 +23,19 @@ public class LSFLookupStatusCallable implements Callable<LSFJobStatusType> {
 
     private LSFJob job;
 
-    private File lsfHomeDirectory;
-
-    public LSFLookupStatusCallable() {
-        super();
-    }
-
-    public LSFLookupStatusCallable(File lsfHomeDirectory, LSFJob job) {
+    public LSFLookupStatusCallable(LSFJob job) {
         super();
         this.job = job;
-        this.lsfHomeDirectory = lsfHomeDirectory;
     }
 
     @Override
     public LSFJobStatusType call() throws JLRMException {
 
         LSFJobStatusType ret = LSFJobStatusType.UNKNOWN;
-        String command = String.format("%s/bin/bjobs %s | tail -n+2 | awk '{print $3}'",
-                lsfHomeDirectory.getAbsolutePath(), job.getId());
+        String command = String.format("bjobs %s | tail -n+2 | awk '{print $1,$3,$4,$7}'", job.getId());
         try {
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
-            CommandOutput output = executor.execute(input);
+            CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             String stdout = output.getStdout().toString();
             if (output.getExitCode() != 0) {
                 logger.warn("output.getStderr() = {}", output.getStderr().toString());

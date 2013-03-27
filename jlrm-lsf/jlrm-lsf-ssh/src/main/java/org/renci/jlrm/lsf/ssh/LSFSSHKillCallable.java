@@ -46,7 +46,7 @@ public class LSFSSHKillCallable implements Callable<Void> {
             session.setConfig(config);
             session.connect(30000);
 
-            String command = String.format("%s/bkill %s", getSite().getLRMBinDirectory(), jobId);
+            String command = String.format(". ~/.bashrc; bkill %s", jobId);
             logger.debug("command: {}", command);
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");

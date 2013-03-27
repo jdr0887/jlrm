@@ -30,17 +30,10 @@ public class LSFSubmitCallable implements Callable<LSFJob> {
 
     private File submitDir;
 
-    private File lsfHomeDirectory;
-
-    public LSFSubmitCallable() {
-        super();
-    }
-
-    public LSFSubmitCallable(File lsfHomeDirectory, LSFJob job, File submitDir) {
+    public LSFSubmitCallable(LSFJob job, File submitDir) {
         super();
         this.job = job;
         this.submitDir = submitDir;
-        this.lsfHomeDirectory = lsfHomeDirectory;
     }
 
     @Override
@@ -53,10 +46,9 @@ public class LSFSubmitCallable implements Callable<LSFJob> {
             LSFSubmitScriptExporter<LSFJob> exporter = new LSFSubmitScriptExporter<LSFJob>();
             this.job = exporter.export(workDir, job);
 
-            String command = String.format("%s/bin/bsub < %s", lsfHomeDirectory.getAbsolutePath(), job.getSubmitFile()
-                    .getAbsolutePath());
+            String command = String.format("bsub < %s", job.getSubmitFile().getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
-            CommandOutput output = executor.execute(input);
+            CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             int exitCode = output.getExitCode();
             logger.debug("executor.getStdout() = {}", output.getStdout().toString());
             if (exitCode != 0) { // failed
