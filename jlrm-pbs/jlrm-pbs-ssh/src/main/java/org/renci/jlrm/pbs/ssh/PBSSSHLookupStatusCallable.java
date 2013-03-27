@@ -45,8 +45,7 @@ public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobSt
             sb.append(" ").append(job.getId());
         }
         String jobXarg = sb.toString().replaceFirst(" ", "");
-        String command = String.format("%s/qstat %s | tail -n+2 | awk '{print $1,$3}'", getSite().getLRMBinDirectory(),
-                jobXarg);
+        String command = String.format(". ~/.bashrc; qstat %s | tail -n+2 | awk '{print $1,$3}'", jobXarg);
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";

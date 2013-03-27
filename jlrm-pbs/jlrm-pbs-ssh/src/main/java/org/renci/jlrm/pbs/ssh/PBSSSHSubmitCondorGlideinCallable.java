@@ -210,7 +210,7 @@ public class PBSSSHSubmitCondorGlideinCallable implements Callable<PBSSSHJob> {
 
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
-            command = String.format("%s/qsub < %s", getSite().getLRMBinDirectory(), targetFile);
+            command = String.format(". ~/.bashrc; qsub < %s", targetFile);
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
