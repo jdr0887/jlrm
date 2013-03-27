@@ -49,7 +49,6 @@ public class SLURMSSHFactoryTest {
     public void testBasicSubmit() {
 
         Site site = new Site();
-        site.setLRMHomeDirectory("/opt/gridengine/bin/lx26-amd64");
         site.setSubmitHost("swprod.bioinf.unc.edu");
         site.setMaxNoClaimTime(1440);
         site.setUsername("jreilly");
@@ -82,7 +81,6 @@ public class SLURMSSHFactoryTest {
     public void testGlideinSubmit() {
 
         Site site = new Site();
-        site.setLRMHomeDirectory("/opt/gridengine/bin/lx26-amd64");
         site.setSubmitHost("swprod.bioinf.unc.edu");
         site.setMaxNoClaimTime(1440);
         site.setUsername("jreilly");
