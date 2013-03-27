@@ -76,7 +76,12 @@ public class ClassAdvertisementFactory {
 
     public static final String CLASS_AD_KEY_JOB_STATUS = "JobStatus";
 
+    public static final String CLASS_AD_KEY_PRIORITY = "priority";
+
     static {
+
+        classAdvertismentMap.put(CLASS_AD_KEY_PRIORITY, new ClassAdvertisement(CLASS_AD_KEY_PRIORITY,
+                ClassAdvertisementType.INTEGER, "0"));
 
         classAdvertismentMap.put(CLASS_AD_KEY_STREAM_ERROR, new ClassAdvertisement(CLASS_AD_KEY_STREAM_ERROR,
                 ClassAdvertisementType.BOOLEAN, Boolean.FALSE.toString()));
@@ -168,6 +173,9 @@ public class ClassAdvertisementFactory {
         classAdvertismentMap.put(CLASS_AD_KEY_WHEN_TO_TRANSFER_OUTPUT, new ClassAdvertisement(
                 CLASS_AD_KEY_WHEN_TO_TRANSFER_OUTPUT, ClassAdvertisementType.EXPRESSION, "ON_EXIT"));
 
+        classAdvertismentMap.put(CLASS_AD_KEY_WHEN_TO_TRANSFER_OUTPUT, new ClassAdvertisement(
+                CLASS_AD_KEY_WHEN_TO_TRANSFER_OUTPUT, ClassAdvertisementType.EXPRESSION, "ON_EXIT"));
+
     }
 
     public static ClassAdvertisement getClassAd(String key) {
@@ -199,6 +207,7 @@ public class ClassAdvertisementFactory {
         ret.add(getClassAd(CLASS_AD_KEY_NOTIFICATION));
         ret.add(getClassAd(CLASS_AD_KEY_STREAM_ERROR));
         ret.add(getClassAd(CLASS_AD_KEY_STREAM_OUTPUT));
+        ret.add(getClassAd(CLASS_AD_KEY_PRIORITY));
         ret.add(getClassAd(CLASS_AD_KEY_TRANSFER_EXECUTABLE));
         ret.add(getClassAd(CLASS_AD_KEY_TRANSFER_ERROR));
         ret.add(getClassAd(CLASS_AD_KEY_TRANSFER_OUTPUT));
