@@ -28,17 +28,10 @@ public class SGESubmitCallable implements Callable<SGEJob> {
 
     private File submitDir;
 
-    private File sgeHomeDirectory;
-
-    public SGESubmitCallable() {
-        super();
-    }
-
-    public SGESubmitCallable(File sgeHomeDirectory, SGEJob job, File submitDir) {
+    public SGESubmitCallable(SGEJob job, File submitDir) {
         super();
         this.job = job;
         this.submitDir = submitDir;
-        this.sgeHomeDirectory = sgeHomeDirectory;
     }
 
     @Override
@@ -51,11 +44,10 @@ public class SGESubmitCallable implements Callable<SGEJob> {
             SGESubmitScriptExporter<SGEJob> exporter = new SGESubmitScriptExporter<SGEJob>();
             this.job = exporter.export(workDir, job);
 
-            String command = String.format("%s/bin/qsub < %s", sgeHomeDirectory.getAbsolutePath(), job.getSubmitFile()
-                    .getAbsolutePath());
+            String command = String.format("qsub < %s", job.getSubmitFile().getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
             Executor executor = BashExecutor.getInstance();
-            CommandOutput output = executor.execute(input);
+            CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             int exitCode = output.getExitCode();
             logger.debug("executor.getStdout() = {}", output.getStdout().toString());
             if (exitCode != 0) { // failed

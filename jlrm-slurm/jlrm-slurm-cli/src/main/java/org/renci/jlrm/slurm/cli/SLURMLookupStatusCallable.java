@@ -21,24 +21,20 @@ public class SLURMLookupStatusCallable implements Callable<SLURMJobStatusType> {
 
     private SLURMJob job;
 
-    private File sgeHomeDirectory;
-
-    public SLURMLookupStatusCallable(File sgeHomeDirectory, SLURMJob job) {
+    public SLURMLookupStatusCallable(SLURMJob job) {
         super();
         this.job = job;
-        this.sgeHomeDirectory = sgeHomeDirectory;
     }
 
     @Override
     public SLURMJobStatusType call() throws JLRMException {
 
-        SLURMJobStatusType ret = SLURMJobStatusType.DONE;
-        String command = String.format("%s/qstat -j %s | tail -n+2 | awk '{print $3}'",
-                sgeHomeDirectory.getAbsolutePath(), job.getId());
+        SLURMJobStatusType ret = SLURMJobStatusType.COMPLETED;
+        String command = String.format("squeue -j %s | tail -n+2 | awk '{print $4}'", job.getId());
         try {
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
             Executor executor = BashExecutor.getInstance();
-            CommandOutput output = executor.execute(input);
+            CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             String stdout = output.getStdout().toString();
             if (output.getExitCode() != 0) {
                 logger.warn("output.getStderr() = {}", output.getStderr().toString());
@@ -48,7 +44,7 @@ public class SLURMLookupStatusCallable implements Callable<SLURMJobStatusType> {
                 if (StringUtils.isNotEmpty(stdout)) {
                     String statusValue = stdout.trim();
                     if (statusValue.contains("do not exist")) {
-                        ret = SLURMJobStatusType.DONE;
+                        ret = SLURMJobStatusType.COMPLETED;
                     } else {
                         for (SLURMJobStatusType type : SLURMJobStatusType.values()) {
                             if (type.getValue().equals(statusValue)) {
@@ -57,7 +53,7 @@ public class SLURMLookupStatusCallable implements Callable<SLURMJobStatusType> {
                         }
                     }
                 } else {
-                    ret = SLURMJobStatusType.DONE;
+                    ret = SLURMJobStatusType.COMPLETED;
                 }
 
             }

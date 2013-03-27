@@ -31,15 +31,8 @@ public class PBSSubmitCallable implements Callable<PBSJob> {
 
     private File submitDir;
 
-    private File pbsHomeDirectory;
-
-    public PBSSubmitCallable() {
+    public PBSSubmitCallable(PBSJob job, File submitDir) {
         super();
-    }
-
-    public PBSSubmitCallable(File pbsHomeDirectory, PBSJob job, File submitDir) {
-        super();
-        this.pbsHomeDirectory = pbsHomeDirectory;
         this.job = job;
         this.submitDir = submitDir;
     }
@@ -54,10 +47,9 @@ public class PBSSubmitCallable implements Callable<PBSJob> {
             PBSSubmitScriptExporter<PBSJob> exporter = new PBSSubmitScriptExporter<PBSJob>();
             this.job = exporter.export(workDir, job);
 
-            String command = String.format("%s/bin/qsub < %s", pbsHomeDirectory.getAbsolutePath(), job.getSubmitFile()
-                    .getAbsolutePath());
+            String command = String.format("qsub < %s", job.getSubmitFile().getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
-            CommandOutput output = executor.execute(input);
+            CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             int exitCode = output.getExitCode();
             logger.debug("executor.getStdout() = {}", output.getStdout().toString());
             if (exitCode != 0) { // failed

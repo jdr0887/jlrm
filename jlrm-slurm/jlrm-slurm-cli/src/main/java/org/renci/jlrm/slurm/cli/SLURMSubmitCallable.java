@@ -28,17 +28,10 @@ public class SLURMSubmitCallable implements Callable<SLURMJob> {
 
     private File submitDir;
 
-    private File sgeHomeDirectory;
-
-    public SLURMSubmitCallable() {
-        super();
-    }
-
-    public SLURMSubmitCallable(File sgeHomeDirectory, SLURMJob job, File submitDir) {
+    public SLURMSubmitCallable(SLURMJob job, File submitDir) {
         super();
         this.job = job;
         this.submitDir = submitDir;
-        this.sgeHomeDirectory = sgeHomeDirectory;
     }
 
     @Override
@@ -51,11 +44,10 @@ public class SLURMSubmitCallable implements Callable<SLURMJob> {
             SLURMSubmitScriptExporter<SLURMJob> exporter = new SLURMSubmitScriptExporter<SLURMJob>();
             this.job = exporter.export(workDir, job);
 
-            String command = String.format("%s/bin/qsub < %s", sgeHomeDirectory.getAbsolutePath(), job.getSubmitFile()
-                    .getAbsolutePath());
+            String command = String.format("sbatch %s", job.getSubmitFile().getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
             Executor executor = BashExecutor.getInstance();
-            CommandOutput output = executor.execute(input);
+            CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             int exitCode = output.getExitCode();
             logger.debug("executor.getStdout() = {}", output.getStdout().toString());
             if (exitCode != 0) { // failed
@@ -67,9 +59,9 @@ public class SLURMSubmitCallable implements Callable<SLURMJob> {
 
                 String line;
                 while ((line = lnr.readLine()) != null) {
-                    if (line.indexOf("submitted") != -1) {
+                    if (line.indexOf("batch job") != -1) {
                         logger.info("line = " + line);
-                        Pattern pattern = Pattern.compile("^Job.+<(\\d*)> is submitted.+\\.$");
+                        Pattern pattern = Pattern.compile("^.+batch job (\\d*)$");
                         Matcher matcher = pattern.matcher(line);
                         if (!matcher.matches()) {
                             throw new JLRMException("failed to parse the jobid number");

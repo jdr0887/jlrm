@@ -2,10 +2,8 @@ package org.renci.jlrm.pbs.cli;
 
 import java.io.File;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.pbs.PBSJob;
 import org.renci.jlrm.pbs.PBSJobStatusType;
@@ -22,8 +20,6 @@ public class PBSCLIFactory {
 
     private static PBSCLIFactory instance = null;
 
-    private File pbsHomeDirectory;
-
     public static PBSCLIFactory getInstance() throws JLRMException {
         if (instance == null) {
             instance = new PBSCLIFactory();
@@ -33,26 +29,13 @@ public class PBSCLIFactory {
 
     private PBSCLIFactory() throws JLRMException {
         super();
-
-        String pbsHome = System.getenv("PBS_HOME");
-        if (StringUtils.isEmpty(pbsHome)) {
-            logger.error("PBS_HOME not set in env: {}", pbsHome);
-            throw new JLRMException("PBS_HOME not set in env");
-        }
-        this.pbsHomeDirectory = new File(pbsHome);
-        if (!pbsHomeDirectory.exists()) {
-            logger.error("PBS_HOME does not exist: {}", pbsHomeDirectory);
-            throw new JLRMException("PBS_HOME does not exist");
-        }
-
     }
 
     public PBSJob submit(File submitDir, PBSJob job) throws JLRMException {
-        logger.debug("ENTERING submit(File)");
-        ExecutorService executor = Executors.newSingleThreadExecutor();
+        logger.info("ENTERING submit(File, PBSJob)");
         PBSJob ret = null;
         try {
-            ret = executor.submit(new PBSSubmitCallable(this.pbsHomeDirectory, job, submitDir)).get();
+            ret = Executors.newSingleThreadExecutor().submit(new PBSSubmitCallable(job, submitDir)).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -62,11 +45,10 @@ public class PBSCLIFactory {
     }
 
     public PBSJobStatusType lookupStatus(PBSJob job) throws JLRMException {
-        logger.debug("ENTERING lookupStatus(job)");
-        ExecutorService executor = Executors.newSingleThreadExecutor();
+        logger.info("ENTERING lookupStatus(job)");
         PBSJobStatusType ret = null;
         try {
-            ret = executor.submit(new PBSLookupStatusCallable(this.pbsHomeDirectory, job)).get();
+            ret = Executors.newSingleThreadExecutor().submit(new PBSLookupStatusCallable(job)).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

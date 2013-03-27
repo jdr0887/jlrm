@@ -21,24 +21,20 @@ public class SGELookupStatusCallable implements Callable<SGEJobStatusType> {
 
     private SGEJob job;
 
-    private File sgeHomeDirectory;
-
-    public SGELookupStatusCallable(File sgeHomeDirectory, SGEJob job) {
+    public SGELookupStatusCallable(SGEJob job) {
         super();
         this.job = job;
-        this.sgeHomeDirectory = sgeHomeDirectory;
     }
 
     @Override
     public SGEJobStatusType call() throws JLRMException {
 
         SGEJobStatusType ret = SGEJobStatusType.DONE;
-        String command = String.format("%s/qstat -j %s | tail -n+2 | awk '{print $3}'",
-                sgeHomeDirectory.getAbsolutePath(), job.getId());
+        String command = String.format("qstat -j %s | tail -n+2 | awk '{print $3}'", job.getId());
         try {
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
             Executor executor = BashExecutor.getInstance();
-            CommandOutput output = executor.execute(input);
+            CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             String stdout = output.getStdout().toString();
             if (output.getExitCode() != 0) {
                 logger.warn("output.getStderr() = {}", output.getStderr().toString());

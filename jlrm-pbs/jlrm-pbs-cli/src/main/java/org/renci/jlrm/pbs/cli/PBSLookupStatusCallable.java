@@ -23,15 +23,8 @@ public class PBSLookupStatusCallable implements Callable<PBSJobStatusType> {
 
     private PBSJob job;
 
-    private File pbsHomeDirectory;
-
-    public PBSLookupStatusCallable() {
+    public PBSLookupStatusCallable(PBSJob job) {
         super();
-    }
-
-    public PBSLookupStatusCallable(File pbsHomeDirectory, PBSJob job) {
-        super();
-        this.pbsHomeDirectory = pbsHomeDirectory;
         this.job = job;
     }
 
@@ -39,11 +32,10 @@ public class PBSLookupStatusCallable implements Callable<PBSJobStatusType> {
     public PBSJobStatusType call() throws JLRMException {
 
         PBSJobStatusType ret = null;
-        String command = String.format("%s/bin/qstat %s | tail -n+3 | awk '{print $5}'",
-                pbsHomeDirectory.getAbsolutePath(), job.getId());
+        String command = String.format("qstat %s | tail -n+3 | awk '{print $5}'", job.getId());
         try {
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
-            CommandOutput output = executor.execute(input);
+            CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             String stdout = output.getStdout().toString();
             if (output.getExitCode() != 0) {
                 logger.warn("output.getStderr() = {}", output.getStderr().toString());
