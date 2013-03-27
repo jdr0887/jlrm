@@ -2,25 +2,27 @@ package org.renci.jlrm.slurm;
 
 public enum SLURMJobStatusType {
 
-    DELETION("d"),
+    CANCELLED("CA"),
 
-    ERROR("E"),
+    COMPLETED("CD"),
 
-    HOLD("h"),
+    CONFIGURING("CF"),
 
-    RUNNING("r"),
+    COMPLETING("CG"),
 
-    RESTARTED("R"),
+    FAILED("F"),
 
-    SUSPENDED("s"),
+    NODE_FAIL("NF"),
 
-    TRANSFERING("t"),
+    PENDING("PD"),
 
-    THRESHOLD("T"),
+    PREEMPTED("PR"),
 
-    WAITING("qw"),
+    RUNNING("R"),
 
-    DONE;
+    SUSPENDED("S"),
+
+    TIMEOUT("TO");
 
     private String value;
 
