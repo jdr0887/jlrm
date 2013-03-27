@@ -16,14 +16,12 @@ ALLOW_OWNER = $(FULL_HOSTNAME), $(ALLOW_ADMINISTRATOR)
 ALLOW_READ = * 
 ALLOW_NEGOTIATOR = $(CONDOR_HOST)
 ALLOW_NEGOTIATOR_SCHEDD = $(CONDOR_HOST), $(FLOCK_NEGOTIATOR_HOSTS)
-ALLOW_WRITE_COLLECTOR = $(ALLOW_WRITE), $(FLOCK_FROM), *.its.unc.edu
-ALLOW_WRITE_STARTD    = $(ALLOW_WRITE), $(FLOCK_FROM), *.its.unc.edu
-ALLOW_READ_COLLECTOR  = $(ALLOW_READ), $(FLOCK_FROM), *.its.unc.edu
-ALLOW_READ_STARTD     = $(ALLOW_READ), $(FLOCK_FROM), *.its.unc.edu
+ALLOW_WRITE_COLLECTOR = $(ALLOW_WRITE), $(FLOCK_FROM), ${hostAllowWrite}
+ALLOW_WRITE_STARTD    = $(ALLOW_WRITE), $(FLOCK_FROM), ${hostAllowWrite}
+ALLOW_READ_COLLECTOR  = $(ALLOW_READ), $(FLOCK_FROM), ${hostAllowRead}
+ALLOW_READ_STARTD     = $(ALLOW_READ), $(FLOCK_FROM), ${hostAllowRead}
 LOCK		= $(LOG)
-GLIDEIN_SERVER_URLS = \
-  http://www.cs.wisc.edu/condor/glidein/binaries
-
+GLIDEIN_SERVER_URLS = http://www.cs.wisc.edu/condor/glidein/binaries
 
 ALL_DEBUG               =
 
