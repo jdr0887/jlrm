@@ -49,6 +49,10 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
 
     private String collectorHost;
 
+    private String hostAllowRead;
+
+    private String hostAllowWrite;
+
     private String jobName;
 
     private Integer requiredMemory;
@@ -88,6 +92,8 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
         velocityContext.put("siteName", getSite().getSubmitHost());
         velocityContext.put("collectorHost", this.collectorHost);
         velocityContext.put("jlrmUser", site.getUsername());
+        velocityContext.put("hostAllowRead", this.hostAllowRead);
+        velocityContext.put("hostAllowWrite", this.hostAllowWrite);
 
         // note that we want a lower max run time here, so that the glidein can shut down
         // gracefully before getting kicked off by the batch scheduler
@@ -334,6 +340,22 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
 
     public void setJobName(String jobName) {
         this.jobName = jobName;
+    }
+
+    public String getHostAllowRead() {
+        return hostAllowRead;
+    }
+
+    public void setHostAllowRead(String hostAllowRead) {
+        this.hostAllowRead = hostAllowRead;
+    }
+
+    public String getHostAllowWrite() {
+        return hostAllowWrite;
+    }
+
+    public void setHostAllowWrite(String hostAllowWrite) {
+        this.hostAllowWrite = hostAllowWrite;
     }
 
 }

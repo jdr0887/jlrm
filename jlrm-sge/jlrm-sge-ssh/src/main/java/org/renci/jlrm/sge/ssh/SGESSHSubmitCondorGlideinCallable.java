@@ -50,6 +50,10 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
 
     private Queue queue;
 
+    private String hostAllowRead;
+
+    private String hostAllowWrite;
+
     public SGESSHSubmitCondorGlideinCallable() {
         super();
         try {
@@ -85,6 +89,8 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
         velocityContext.put("siteName", getSite().getSubmitHost());
         velocityContext.put("collectorHost", this.collectorHost);
         velocityContext.put("jlrmUser", getSite().getUsername());
+        velocityContext.put("hostAllowRead", this.hostAllowRead);
+        velocityContext.put("hostAllowWrite", this.hostAllowWrite);
 
         // note that we want a lower max run time here, so that the glidein can shut down
         // gracefully before getting kicked off by the batch scheduler
@@ -323,6 +329,22 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
 
     public void setQueue(Queue queue) {
         this.queue = queue;
+    }
+
+    public String getHostAllowRead() {
+        return hostAllowRead;
+    }
+
+    public void setHostAllowRead(String hostAllowRead) {
+        this.hostAllowRead = hostAllowRead;
+    }
+
+    public String getHostAllowWrite() {
+        return hostAllowWrite;
+    }
+
+    public void setHostAllowWrite(String hostAllowWrite) {
+        this.hostAllowWrite = hostAllowWrite;
     }
 
 }
