@@ -7,7 +7,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jgrapht.Graph;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.condor.ClassAdvertisement;
@@ -27,8 +26,6 @@ public class CondorCLIFactory {
 
     private static CondorCLIFactory instance = null;
 
-    private File condorHomeDirectory = null;
-
     public static CondorCLIFactory getInstance() throws JLRMException {
         if (instance == null) {
             instance = new CondorCLIFactory();
@@ -38,18 +35,6 @@ public class CondorCLIFactory {
 
     private CondorCLIFactory() throws JLRMException {
         super();
-
-        String condorHome = System.getenv("CONDOR_HOME");
-        if (StringUtils.isEmpty(condorHome)) {
-            logger.error("CONDOR_HOME not set in env: {}", condorHome);
-            throw new JLRMException("CONDOR_HOME not set in env");
-        }
-        this.condorHomeDirectory = new File(condorHome);
-        if (!condorHomeDirectory.exists()) {
-            logger.error("CONDOR_HOME does not exist: {}", condorHomeDirectory);
-            throw new JLRMException("CONDOR_HOME does not exist");
-        }
-
     }
 
     public Map<String, List<ClassAdvertisement>> lookupJobsByOwner(String owner) throws JLRMException {
@@ -57,7 +42,7 @@ public class CondorCLIFactory {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Map<String, List<ClassAdvertisement>> ret = null;
         try {
-            ret = executor.submit(new CondorLookupJobsByOwnerCallable(this.condorHomeDirectory, owner)).get();
+            ret = executor.submit(new CondorLookupJobsByOwnerCallable(owner)).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -71,7 +56,7 @@ public class CondorCLIFactory {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         CondorJob ret = null;
         try {
-            ret = executor.submit(new CondorSubmitCallable(this.condorHomeDirectory, submitDir, job)).get();
+            ret = executor.submit(new CondorSubmitCallable(submitDir, job)).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -91,13 +76,8 @@ public class CondorCLIFactory {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         CondorJob ret = null;
         try {
-            CondorSubmitDAGCallable callable = new CondorSubmitDAGCallable();
-            callable.setCondorHomeDirectory(this.condorHomeDirectory);
-            callable.setDagName(dagName);
-            callable.setGraph(graph);
-            callable.setIncludeGlideinRequirements(includeGlideinRequirements);
-            callable.setSubmitDir(submitDir);
-            ret = executor.submit(callable).get();
+            ret = executor.submit(new CondorSubmitDAGCallable(submitDir, graph, dagName, includeGlideinRequirements))
+                    .get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -111,7 +91,7 @@ public class CondorCLIFactory {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         CondorJobStatusType ret = null;
         try {
-            ret = executor.submit(new CondorLookupStatusCallable(this.condorHomeDirectory, jobNode)).get();
+            ret = executor.submit(new CondorLookupStatusCallable(jobNode)).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -125,7 +105,7 @@ public class CondorCLIFactory {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Map<String, CondorJobStatusType> ret = null;
         try {
-            ret = executor.submit(new CondorLookupDAGStatusCallable(this.condorHomeDirectory, job)).get();
+            ret = executor.submit(new CondorLookupDAGStatusCallable(job)).get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

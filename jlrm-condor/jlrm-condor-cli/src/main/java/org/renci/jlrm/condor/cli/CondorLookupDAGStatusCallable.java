@@ -28,16 +28,9 @@ public class CondorLookupDAGStatusCallable implements Callable<Map<String, Condo
 
     private CondorJob job;
 
-    private File condorHomeDirectory;
-
-    public CondorLookupDAGStatusCallable() {
-        super();
-    }
-
-    public CondorLookupDAGStatusCallable(File condorHomeDirectory, CondorJob job) {
+    public CondorLookupDAGStatusCallable(CondorJob job) {
         super();
         this.job = job;
-        this.condorHomeDirectory = condorHomeDirectory;
     }
 
     @Override
@@ -46,11 +39,11 @@ public class CondorLookupDAGStatusCallable implements Callable<Map<String, Condo
         Map<String, CondorJobStatusType> jobStatusMap = new HashMap<String, CondorJobStatusType>();
 
         String command = String.format(
-                "%s/bin/condor_q -constraint \"DAGManJobId == %d\" -format '%s\t' ClusterId -format '%s\\n' JobStatus",
-                condorHomeDirectory.getAbsolutePath(), job.getCluster(), "%s");
+                "condor_q -constraint \"DAGManJobId == %d\" -format '%s\t' ClusterId -format '%s\\n' JobStatus",
+                job.getCluster(), "%s");
         try {
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
-            CommandOutput output = executor.execute(input);
+            CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             String stdout = output.getStdout().toString();
             if (output.getExitCode() != 0) {
                 logger.warn("output.getStderr() = {}", output.getStderr().toString());

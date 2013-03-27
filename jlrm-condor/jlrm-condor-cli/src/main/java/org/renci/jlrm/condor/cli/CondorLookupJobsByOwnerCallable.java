@@ -26,15 +26,8 @@ public class CondorLookupJobsByOwnerCallable implements Callable<Map<String, Lis
 
     private String username;
 
-    private File condorHomeDirectory;
-
-    public CondorLookupJobsByOwnerCallable() {
+    public CondorLookupJobsByOwnerCallable(String username) {
         super();
-    }
-
-    public CondorLookupJobsByOwnerCallable(File condorHomeDirectory, String username) {
-        super();
-        this.condorHomeDirectory = condorHomeDirectory;
         this.username = username;
     }
 
@@ -42,8 +35,8 @@ public class CondorLookupJobsByOwnerCallable implements Callable<Map<String, Lis
     public Map<String, List<ClassAdvertisement>> call() throws JLRMException {
 
         Map<String, List<ClassAdvertisement>> classAdMap = new HashMap<String, List<ClassAdvertisement>>();
-        String format = "(%1$s/bin/condor_q -global -format '\\nClusterId=%%s' ClusterId -format ',JLRM_USER=%%s' JLRM_USER -format ',JobStatus=%%s' JobStatus -format ',Requirements=%%s' Requirements -submitter \"%2$s\" -constraint 'Cmd != \"%1$s/bin/condor_dagman\"'; echo)";
-        String command = String.format(format, condorHomeDirectory.getAbsolutePath(), this.username);
+        String format = "(condor_q -global -format '\\nClusterId=%%s' ClusterId -format ',JLRM_USER=%%s' JLRM_USER -format ',JobStatus=%%s' JobStatus -format ',Requirements=%%s' Requirements -submitter \"%2$s\" -constraint '!regexp(\".+condor_dagman\", Cmd)'; echo)";
+        String command = String.format(format, this.username);
         CommandInput input = new CommandInput();
         input.setCommand(command);
 
@@ -51,7 +44,7 @@ public class CondorLookupJobsByOwnerCallable implements Callable<Map<String, Lis
         try {
 
             Executor executor = BashExecutor.getInstance();
-            CommandOutput output = executor.execute(input);
+            CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             int exitCode = output.getExitCode();
             String line;
             if (exitCode != 0 && !output.getStdout().toString().contains("All queues are empty")) {

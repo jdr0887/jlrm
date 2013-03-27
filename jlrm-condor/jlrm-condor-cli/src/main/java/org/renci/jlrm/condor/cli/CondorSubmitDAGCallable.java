@@ -32,12 +32,15 @@ public class CondorSubmitDAGCallable implements Callable<CondorJob> {
 
     private String dagName;
 
-    private File condorHomeDirectory;
-
     private Boolean includeGlideinRequirements = Boolean.FALSE;
 
-    public CondorSubmitDAGCallable() {
+    public CondorSubmitDAGCallable(File submitDir, Graph<CondorJob, CondorJobEdge> graph, String dagName,
+            Boolean includeGlideinRequirements) {
         super();
+        this.submitDir = submitDir;
+        this.graph = graph;
+        this.dagName = dagName;
+        this.includeGlideinRequirements = includeGlideinRequirements;
     }
 
     @Override
@@ -49,11 +52,10 @@ public class CondorSubmitDAGCallable implements Callable<CondorJob> {
 
         try {
 
-            String command = String.format("%s/bin/condor_submit_dag %s", condorHomeDirectory.getAbsolutePath(),
-                    dagSubmitJob.getSubmitFile().getName());
+            String command = String.format("condor_submit_dag %s", dagSubmitJob.getSubmitFile().getName());
             CommandInput input = new CommandInput(command, dagSubmitJob.getSubmitFile().getParentFile());
             Executor executor = BashExecutor.getInstance();
-            CommandOutput output = executor.execute(input);
+            CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             int exitCode = output.getExitCode();
             LineNumberReader lnr = new LineNumberReader(new StringReader(output.getStdout().toString()));
             logger.debug("executor.getStdout() = {}", output.getStdout().toString());
@@ -123,14 +125,6 @@ public class CondorSubmitDAGCallable implements Callable<CondorJob> {
 
     public void setDagName(String dagName) {
         this.dagName = dagName;
-    }
-
-    public File getCondorHomeDirectory() {
-        return condorHomeDirectory;
-    }
-
-    public void setCondorHomeDirectory(File condorHomeDirectory) {
-        this.condorHomeDirectory = condorHomeDirectory;
     }
 
     public Boolean getIncludeGlideinRequirements() {

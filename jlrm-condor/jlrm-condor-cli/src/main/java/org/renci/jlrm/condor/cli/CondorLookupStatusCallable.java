@@ -23,27 +23,20 @@ public class CondorLookupStatusCallable implements Callable<CondorJobStatusType>
 
     private CondorJob job;
 
-    private File condorHomeDirectory;
-
-    public CondorLookupStatusCallable() {
-        super();
-    }
-
-    public CondorLookupStatusCallable(File condorHomeDirectory, CondorJob job) {
+    public CondorLookupStatusCallable(CondorJob job) {
         super();
         this.job = job;
-        this.condorHomeDirectory = condorHomeDirectory;
     }
 
     @Override
     public CondorJobStatusType call() throws JLRMException {
 
         CondorJobStatusType ret = CondorJobStatusType.UNEXPANDED;
-        String command = String.format("%s/bin/condor_q %d.%d -format '%s\\n' JobStatus",
-                condorHomeDirectory.getAbsolutePath(), job.getCluster(), job.getJobId(), "%s");
+        String command = String.format("condor_q %d.%d -format '%s\\n' JobStatus", job.getCluster(), job.getJobId(),
+                "%s");
         try {
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
-            CommandOutput output = executor.execute(input);
+            CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             String stdout = output.getStdout().toString();
             if (output.getExitCode() != 0) {
                 logger.warn("output.getStderr() = {}", output.getStderr().toString());

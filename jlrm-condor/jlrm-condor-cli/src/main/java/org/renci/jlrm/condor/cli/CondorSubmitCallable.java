@@ -30,17 +30,10 @@ public class CondorSubmitCallable implements Callable<CondorJob> {
 
     private CondorJob job;
 
-    private File condorHomeDirectory;
-
-    public CondorSubmitCallable() {
-        super();
-    }
-
-    public CondorSubmitCallable(File condorHomeDirectory, File submitDir, CondorJob job) {
+    public CondorSubmitCallable(File submitDir, CondorJob job) {
         super();
         this.submitDir = submitDir;
         this.job = job;
-        this.condorHomeDirectory = condorHomeDirectory;
     }
 
     @Override
@@ -52,10 +45,9 @@ public class CondorSubmitCallable implements Callable<CondorJob> {
 
         try {
 
-            String command = String.format("%s/bin/condor_submit %s", condorHomeDirectory.getAbsolutePath(), job
-                    .getSubmitFile().getAbsolutePath());
+            String command = String.format("condor_submit %s", job.getSubmitFile().getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
-            CommandOutput output = executor.execute(input);
+            CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             int exitCode = output.getExitCode();
             LineNumberReader lnr = new LineNumberReader(new StringReader(output.getStdout().toString()));
             logger.debug("executor.getStdout() = {}", output.getStdout().toString());
