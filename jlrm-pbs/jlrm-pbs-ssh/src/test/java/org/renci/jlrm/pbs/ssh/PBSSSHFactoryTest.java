@@ -35,7 +35,6 @@ public class PBSSSHFactoryTest {
     public void testBasicSubmit() {
 
         Site site = new Site();
-        site.setLRMHomeDirectory("/opt/torque");
         site.setSubmitHost("br0.renci.org");
         PBSSSHFactory factory = PBSSSHFactory.getInstance(site, "jdr0887");
 
@@ -61,7 +60,6 @@ public class PBSSSHFactoryTest {
     public void testGlideinSubmit() {
 
         Site site = new Site();
-        site.setLRMHomeDirectory("/opt/torque");
         site.setSubmitHost("br0.renci.org");
         site.setMaxNoClaimTime(1440);
 
@@ -85,8 +83,7 @@ public class PBSSSHFactoryTest {
     @Test
     public void testLookupStatus() {
 
-        String command = String.format("%s/bin/qstat %s | tail -n+2 | awk '{print $1,$3}'", "/opt/torque",
-                "173198 173244");
+        String command = String.format("qstat %s | tail -n+2 | awk '{print $1,$3}'", "173198 173244");
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
@@ -95,7 +92,7 @@ public class PBSSSHFactoryTest {
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession("jreilly", "br0.renci.org", 22);
+            Session session = sch.getSession("jdr0887", "br0.renci.org", 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
