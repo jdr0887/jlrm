@@ -47,9 +47,9 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
 
     @Override
     public Set<SLURMJobStatusInfo> call() throws JLRMException {
-        logger.debug("ENTERING call()");
+        logger.info("ENTERING call()");
 
-        String command = String.format("%s/squeue", this.site.getLRMHomeDirectory());
+        String command = String.format(". ~/.bashrc; squeue");
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";

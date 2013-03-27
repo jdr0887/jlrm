@@ -46,7 +46,7 @@ public class SGESSHKillCallable implements Callable<SGESSHJob> {
             session.setConfig(config);
             session.connect(30000);
 
-            String command = String.format("%s/qdel %s", getSite().getLRMBinDirectory(), job.getId());
+            String command = String.format(". ~/.bashrc; qdel %s", job.getId());
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);

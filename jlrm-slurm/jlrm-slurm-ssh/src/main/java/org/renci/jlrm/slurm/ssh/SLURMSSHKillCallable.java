@@ -46,7 +46,7 @@ public class SLURMSSHKillCallable implements Callable<SLURMSSHJob> {
             session.setConfig(config);
             session.connect(30000);
 
-            String command = String.format("%s/bin/scancel %s", getSite().getLRMHomeDirectory(), job.getId());
+            String command = String.format(". ~/.bashrc; scancel %s", job.getId());
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);

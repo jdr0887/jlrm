@@ -210,7 +210,7 @@ public class SLURMSSHSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
 
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
-            command = String.format("%s/bin/sbatch < %s", getSite().getLRMHomeDirectory(), targetFile);
+            command = String.format(". ~/.bashrc; sbatch < %s", targetFile);
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);

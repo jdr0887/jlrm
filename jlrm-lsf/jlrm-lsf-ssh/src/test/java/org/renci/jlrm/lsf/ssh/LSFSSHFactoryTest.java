@@ -34,7 +34,6 @@ public class LSFSSHFactoryTest {
     public void testBasicSubmit() {
 
         Site site = new Site();
-        site.setLRMBinDirectory("/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/bin");
         site.setSubmitHost("biodev1.its.unc.edu");
         site.setUsername("jreilly");
         LSFSSHFactory lsfSSHFactory = LSFSSHFactory.getInstance(site);
@@ -59,7 +58,6 @@ public class LSFSSHFactoryTest {
     public void testGlideinSubmit() {
 
         Site site = new Site();
-        site.setLRMBinDirectory("/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/bin");
         site.setSubmitHost("biodev1.its.unc.edu");
         site.setMaxNoClaimTime(1440);
         site.setUsername("jreilly");
@@ -87,8 +85,8 @@ public class LSFSSHFactoryTest {
     @Test
     public void testLookupStatus() {
 
-        String command = String.format("%s/bjobs %s | tail -n+2 | awk '{print $1,$3,$4,$7}'",
-                "/nas02/apps/lsf/LSF_TOP_706/7.0/linux2.6-glibc2.3-x86_64/bin", "183291 183293");
+        String command = String
+                .format(". ~/.bashrc; bjobs %s | tail -n+2 | awk '{print $1,$3,$4,$7}'", "183291 183293");
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";

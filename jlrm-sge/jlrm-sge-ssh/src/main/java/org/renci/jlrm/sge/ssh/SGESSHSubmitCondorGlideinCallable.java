@@ -157,19 +157,19 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
 
             try {
                 String glideinScriptMacro = IOUtils.toString(this.getClass().getClassLoader()
-                        .getResourceAsStream("org/renci/jlrm/lsf/ssh/glidein.sh.vm"));
+                        .getResourceAsStream("org/renci/jlrm/sge/ssh/glidein.sh.vm"));
                 File glideinScript = new File(localWorkDir.getAbsolutePath(), "glidein.sh");
                 writeTemplate(velocityContext, glideinScript, glideinScriptMacro);
                 job.setExecutable(glideinScript);
 
                 String condorConfigLocalScriptMacro = IOUtils.toString(this.getClass().getClassLoader()
-                        .getResourceAsStream("org/renci/jlrm/lsf/ssh/condor_config.local.vm"));
+                        .getResourceAsStream("org/renci/jlrm/sge/ssh/condor_config.local.vm"));
                 File condorConfigLocal = new File(localWorkDir.getAbsolutePath(), "condor_config.local");
                 writeTemplate(velocityContext, condorConfigLocal, condorConfigLocalScriptMacro);
                 job.getInputFiles().add(condorConfigLocal);
 
                 String condorConfigScriptMacro = IOUtils.toString(this.getClass().getClassLoader()
-                        .getResourceAsStream("org/renci/jlrm/lsf/ssh/condor_config"));
+                        .getResourceAsStream("org/renci/jlrm/sge/ssh/condor_config"));
                 File condorConfig = new File(localWorkDir.getAbsolutePath(), "condor_config");
                 FileUtils.writeStringToFile(condorConfig, condorConfigScriptMacro);
                 job.getInputFiles().add(condorConfig);
@@ -210,7 +210,7 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
 
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
-            command = String.format("%s/qsub < %s", getSite().getLRMBinDirectory(), targetFile);
+            command = String.format(". ~/.bashrc; qsub < %s", targetFile);
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);

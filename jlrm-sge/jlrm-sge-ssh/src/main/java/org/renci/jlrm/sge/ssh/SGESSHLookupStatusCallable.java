@@ -49,7 +49,7 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
     public Set<SGEJobStatusInfo> call() throws JLRMException {
         logger.debug("ENTERING call()");
 
-        String command = String.format("%s/qstat -s prs -r -xml", this.site.getLRMBinDirectory());
+        String command = String.format(". ~/.bashrc; qstat -s prs -r -xml");
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
