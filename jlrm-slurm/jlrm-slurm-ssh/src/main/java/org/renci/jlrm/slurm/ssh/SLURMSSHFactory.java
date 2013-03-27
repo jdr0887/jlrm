@@ -49,7 +49,7 @@ public class SLURMSSHFactory {
     }
 
     public SLURMSSHJob submit(File submitDir, SLURMSSHJob job) throws JLRMException {
-        logger.debug("ENTERING submit(File)");
+        logger.info("ENTERING submit(File)");
         SLURMSSHSubmitCallable runnable = new SLURMSSHSubmitCallable();
         runnable.setJob(job);
         runnable.setSite(this.site);
@@ -67,7 +67,7 @@ public class SLURMSSHFactory {
 
     public SLURMSSHJob submitGlidein(File submitDir, String collectorHost, Queue queue, Integer requireMemory)
             throws JLRMException {
-        logger.debug("ENTERING submit(File)");
+        logger.info("ENTERING submit(File)");
         SLURMSSHSubmitCondorGlideinCallable runnable = new SLURMSSHSubmitCondorGlideinCallable();
         runnable.setSite(site);
         runnable.setRequiredMemory(requireMemory);
@@ -87,7 +87,7 @@ public class SLURMSSHFactory {
     }
 
     public SLURMSSHJob killGlidein(SLURMSSHJob job) throws JLRMException {
-        logger.debug("ENTERING submit(File)");
+        logger.info("ENTERING submit(File)");
         SLURMSSHKillCallable runnable = new SLURMSSHKillCallable();
         runnable.setJob(job);
         runnable.setSite(this.site);
@@ -103,7 +103,7 @@ public class SLURMSSHFactory {
     }
 
     public Set<SLURMJobStatusInfo> lookupStatus(List<SLURMSSHJob> jobs) throws JLRMException {
-        logger.debug("ENTERING lookupStatus(job)");
+        logger.info("ENTERING lookupStatus(job)");
         SLURMSSHLookupStatusCallable runnable = new SLURMSSHLookupStatusCallable();
         runnable.setJobs(jobs);
         runnable.setSite(this.site);

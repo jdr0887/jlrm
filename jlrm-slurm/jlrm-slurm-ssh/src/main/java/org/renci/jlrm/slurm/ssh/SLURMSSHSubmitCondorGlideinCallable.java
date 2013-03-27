@@ -67,7 +67,7 @@ public class SLURMSSHSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
      * @return number of glide-ins submitted
      */
     public SLURMSSHJob call() throws JLRMException {
-        logger.debug("ENTERING call()");
+        logger.info("ENTERING call()");
 
         SLURMSSHJob job = new SLURMSSHJob();
         job.setTransferExecutable(Boolean.TRUE);
