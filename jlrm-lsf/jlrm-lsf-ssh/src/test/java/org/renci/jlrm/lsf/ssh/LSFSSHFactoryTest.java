@@ -74,7 +74,8 @@ public class LSFSSHFactoryTest {
             // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "debug");
             // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "huge");
             // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "week");
-            LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, "biodev1.its.unc.edu", queue, 40, "glidein");
+            LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, "biodev1.its.unc.edu", queue, 40, "glidein",
+                    "*.its.unc.edu", "*.its.unc.edu");
             System.out.println(job.getId());
         } catch (JLRMException e) {
             e.printStackTrace();

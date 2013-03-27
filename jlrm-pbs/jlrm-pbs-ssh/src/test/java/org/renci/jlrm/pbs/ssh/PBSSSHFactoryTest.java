@@ -72,7 +72,8 @@ public class PBSSSHFactoryTest {
         File submitDir = new File("/tmp");
 
         try {
-            PBSSSHJob job = factory.submitGlidein(submitDir, "biodev1.its.unc.edu", queue, 40);
+            PBSSSHJob job = factory.submitGlidein(submitDir, "biodev1.its.unc.edu", queue, 40, "*.its.unc.edu",
+                    "*.its.unc.edu");
             System.out.println(job.getId());
         } catch (JLRMException e) {
             e.printStackTrace();

@@ -91,7 +91,8 @@ public class SGESSHFactoryTest {
 
         File submitDir = new File("/tmp");
         try {
-            SGESSHJob job = factory.submitGlidein(submitDir, "swprod.bioinf.unc.edu", queue, 40);
+            SGESSHJob job = factory.submitGlidein(submitDir, "swprod.bioinf.unc.edu", queue, 40, "*.its.unc.edu",
+                    "*.its.unc.edu");
             System.out.println(job.getId());
         } catch (JLRMException e) {
             e.printStackTrace();
