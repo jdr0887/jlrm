@@ -12,9 +12,11 @@ public class CondorJob extends Job {
 
     private Map<String, ClassAdvertisement> classAdvertismentMap = new HashMap<String, ClassAdvertisement>();
 
-    private int cluster;
+    private Integer cluster;
 
-    private int jobId;
+    private Integer jobId;
+
+    private Integer priority;
 
     private Integer retry;
 
@@ -72,28 +74,36 @@ public class CondorJob extends Job {
         }
     }
 
+    public Integer getCluster() {
+        return cluster;
+    }
+
+    public void setCluster(Integer cluster) {
+        this.cluster = cluster;
+    }
+
+    public Integer getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(Integer jobId) {
+        this.jobId = jobId;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
+    }
+
     public Integer getRetry() {
         return retry;
     }
 
     public void setRetry(Integer retry) {
         this.retry = retry;
-    }
-
-    public int getCluster() {
-        return cluster;
-    }
-
-    public void setCluster(int cluster) {
-        this.cluster = cluster;
-    }
-
-    public int getJobId() {
-        return jobId;
-    }
-
-    public void setJobId(int jobId) {
-        this.jobId = jobId;
     }
 
     public String getPreScript() {
@@ -114,19 +124,19 @@ public class CondorJob extends Job {
 
     @Override
     public String toString() {
-        return "CondorJob [classAdvertismentMap=" + classAdvertismentMap + ", cluster=" + cluster + ", jobId=" + jobId
-                + ", retry=" + retry + ", preScript=" + preScript + ", postScript=" + postScript + "]";
+        return "CondorJob [cluster=" + cluster + ", jobId=" + jobId + ", priority=" + priority + ", retry=" + retry
+                + ", preScript=" + preScript + ", postScript=" + postScript + "]";
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((classAdvertismentMap == null) ? 0 : classAdvertismentMap.hashCode());
-        result = prime * result + cluster;
-        result = prime * result + jobId;
+        result = prime * result + ((cluster == null) ? 0 : cluster.hashCode());
+        result = prime * result + ((jobId == null) ? 0 : jobId.hashCode());
         result = prime * result + ((postScript == null) ? 0 : postScript.hashCode());
         result = prime * result + ((preScript == null) ? 0 : preScript.hashCode());
+        result = prime * result + ((priority == null) ? 0 : priority.hashCode());
         result = prime * result + ((retry == null) ? 0 : retry.hashCode());
         return result;
     }
@@ -140,14 +150,15 @@ public class CondorJob extends Job {
         if (getClass() != obj.getClass())
             return false;
         CondorJob other = (CondorJob) obj;
-        if (classAdvertismentMap == null) {
-            if (other.classAdvertismentMap != null)
+        if (cluster == null) {
+            if (other.cluster != null)
                 return false;
-        } else if (!classAdvertismentMap.equals(other.classAdvertismentMap))
+        } else if (!cluster.equals(other.cluster))
             return false;
-        if (cluster != other.cluster)
-            return false;
-        if (jobId != other.jobId)
+        if (jobId == null) {
+            if (other.jobId != null)
+                return false;
+        } else if (!jobId.equals(other.jobId))
             return false;
         if (postScript == null) {
             if (other.postScript != null)
@@ -158,6 +169,11 @@ public class CondorJob extends Job {
             if (other.preScript != null)
                 return false;
         } else if (!preScript.equals(other.preScript))
+            return false;
+        if (priority == null) {
+            if (other.priority != null)
+                return false;
+        } else if (!priority.equals(other.priority))
             return false;
         if (retry == null) {
             if (other.retry != null)
