@@ -66,7 +66,7 @@ public class LSFSSHFactory {
     }
 
     public LSFSSHJob submitGlidein(File submitDir, String collectorHost, Queue queue, Integer requireMemory,
-            String jobName) throws JLRMException {
+            String jobName, String hostAllowRead, String hostAllowWrite) throws JLRMException {
         logger.info("ENTERING submit(File)");
         LSFSSHSubmitCondorGlideinCallable runnable = new LSFSSHSubmitCondorGlideinCallable();
         runnable.setSite(this.site);
@@ -75,6 +75,8 @@ public class LSFSSHFactory {
         runnable.setJobName(jobName);
         runnable.setCollectorHost(collectorHost);
         runnable.setQueue(queue);
+        runnable.setHostAllowRead(hostAllowRead);
+        runnable.setHostAllowWrite(hostAllowWrite);
         Future<LSFSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
         LSFSSHJob job = null;
         try {

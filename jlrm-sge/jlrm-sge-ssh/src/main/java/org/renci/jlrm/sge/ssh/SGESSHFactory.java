@@ -65,8 +65,8 @@ public class SGESSHFactory {
         return job;
     }
 
-    public SGESSHJob submitGlidein(File submitDir, String collectorHost, Queue queue, Integer requireMemory)
-            throws JLRMException {
+    public SGESSHJob submitGlidein(File submitDir, String collectorHost, Queue queue, Integer requireMemory,
+            String hostAllowRead, String hostAllowWrite) throws JLRMException {
         logger.info("ENTERING submit(File)");
         SGESSHSubmitCondorGlideinCallable runnable = new SGESSHSubmitCondorGlideinCallable();
         runnable.setSite(site);
@@ -74,6 +74,8 @@ public class SGESSHFactory {
         runnable.setSubmitDir(submitDir);
         runnable.setCollectorHost(collectorHost);
         runnable.setQueue(queue);
+        runnable.setHostAllowRead(hostAllowRead);
+        runnable.setHostAllowWrite(hostAllowWrite);
         Future<SGESSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
         SGESSHJob job = null;
         try {

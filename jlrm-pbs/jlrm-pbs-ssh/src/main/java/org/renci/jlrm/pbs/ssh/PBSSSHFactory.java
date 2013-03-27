@@ -66,8 +66,8 @@ public class PBSSSHFactory {
         return job;
     }
 
-    public PBSSSHJob submitGlidein(File submitDir, String collectorHost, Queue queue, Integer requireMemory)
-            throws JLRMException {
+    public PBSSSHJob submitGlidein(File submitDir, String collectorHost, Queue queue, Integer requireMemory,
+            String hostAllowRead, String hostAllowWrite) throws JLRMException {
         logger.info("ENTERING submit(File)");
         PBSSSHSubmitCondorGlideinCallable runnable = new PBSSSHSubmitCondorGlideinCallable();
         runnable.setSite(this.site);
@@ -75,6 +75,8 @@ public class PBSSSHFactory {
         runnable.setSubmitDir(submitDir);
         runnable.setCollectorHost(collectorHost);
         runnable.setQueue(queue);
+        runnable.setHostAllowRead(hostAllowRead);
+        runnable.setHostAllowWrite(hostAllowWrite);
         Future<PBSSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
         PBSSSHJob job = null;
         try {
