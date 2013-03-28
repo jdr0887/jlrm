@@ -90,20 +90,18 @@ public class PBSSSHFactory {
         return job;
     }
 
-    public PBSSSHJob killGlidein(PBSSSHJob job) throws JLRMException {
+    public void killGlidein(String jobId) throws JLRMException {
         logger.info("ENTERING submit(File)");
         PBSSSHKillCallable runnable = new PBSSSHKillCallable();
-        runnable.setJob(job);
+        runnable.setJobId(jobId);
         runnable.setSite(this.site);
-        Future<PBSSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
         try {
-            job = jobFuture.get();
+            this.threadPoolExecutor.submit(runnable).get();
         } catch (InterruptedException e) {
             logger.error("InterruptedException", e);
         } catch (ExecutionException e) {
             logger.error("ExecutionException", e);
         }
-        return job;
     }
 
     public Map<String, PBSJobStatusType> lookupStatus(List<PBSSSHJob> jobs) throws JLRMException {

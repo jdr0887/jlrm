@@ -17,20 +17,20 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
-public class SLURMSSHKillCallable implements Callable<SLURMSSHJob> {
+public class SLURMSSHKillCallable implements Callable<Void> {
 
     private final Logger logger = LoggerFactory.getLogger(SLURMSSHKillCallable.class);
 
     private Site site;
 
-    private SLURMSSHJob job;
+    private String jobId;
 
     public SLURMSSHKillCallable() {
         super();
     }
 
     @Override
-    public SLURMSSHJob call() throws JLRMException {
+    public Void call() throws JLRMException {
         logger.info("ENTERING call()");
 
         String home = System.getProperty("user.home");
@@ -46,7 +46,7 @@ public class SLURMSSHKillCallable implements Callable<SLURMSSHJob> {
             session.setConfig(config);
             session.connect(30000);
 
-            String command = String.format(". ~/.bashrc; scancel %s", job.getId());
+            String command = String.format(". ~/.bashrc; scancel %s", jobId);
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
@@ -77,7 +77,7 @@ public class SLURMSSHKillCallable implements Callable<SLURMSSHJob> {
             throw new JLRMException("IOException: " + e.getMessage());
         }
 
-        return job;
+        return null;
     }
 
     public Site getSite() {
@@ -88,12 +88,12 @@ public class SLURMSSHKillCallable implements Callable<SLURMSSHJob> {
         this.site = site;
     }
 
-    public SLURMSSHJob getJob() {
-        return job;
+    public String getJobId() {
+        return jobId;
     }
 
-    public void setJob(SLURMSSHJob job) {
-        this.job = job;
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
     }
 
 }

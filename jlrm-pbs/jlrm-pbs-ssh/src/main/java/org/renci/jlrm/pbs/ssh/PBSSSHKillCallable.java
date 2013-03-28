@@ -16,20 +16,20 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
-public class PBSSSHKillCallable implements Callable<PBSSSHJob> {
+public class PBSSSHKillCallable implements Callable<Void> {
 
     private final Logger logger = LoggerFactory.getLogger(PBSSSHKillCallable.class);
 
     private Site site;
 
-    private PBSSSHJob job;
+    private String jobId;
 
     public PBSSSHKillCallable() {
         super();
     }
 
     @Override
-    public PBSSSHJob call() throws JLRMException {
+    public Void call() throws JLRMException {
         logger.info("ENTERING call()");
 
         String home = System.getProperty("user.home");
@@ -45,7 +45,7 @@ public class PBSSSHKillCallable implements Callable<PBSSSHJob> {
             session.setConfig(config);
             session.connect(30000);
 
-            String command = String.format(". ~/.bashrc; qdel %s", job.getId());
+            String command = String.format(". ~/.bashrc; qdel %s", jobId);
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
@@ -71,7 +71,7 @@ public class PBSSSHKillCallable implements Callable<PBSSSHJob> {
             throw new JLRMException("IOException: " + e.getMessage());
         }
 
-        return job;
+        return null;
     }
 
     public Site getSite() {
@@ -82,12 +82,12 @@ public class PBSSSHKillCallable implements Callable<PBSSSHJob> {
         this.site = site;
     }
 
-    public PBSSSHJob getJob() {
-        return job;
+    public String getJobId() {
+        return jobId;
     }
 
-    public void setJob(PBSSSHJob job) {
-        this.job = job;
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
     }
 
 }

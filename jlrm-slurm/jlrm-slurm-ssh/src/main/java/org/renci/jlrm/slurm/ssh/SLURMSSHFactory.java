@@ -89,20 +89,18 @@ public class SLURMSSHFactory {
         return job;
     }
 
-    public SLURMSSHJob killGlidein(SLURMSSHJob job) throws JLRMException {
+    public void killGlidein(String jobId) throws JLRMException {
         logger.info("ENTERING submit(File)");
         SLURMSSHKillCallable runnable = new SLURMSSHKillCallable();
-        runnable.setJob(job);
+        runnable.setJobId(jobId);
         runnable.setSite(this.site);
-        Future<SLURMSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
         try {
-            job = jobFuture.get();
+            this.threadPoolExecutor.submit(runnable).get();
         } catch (InterruptedException e) {
             logger.error("InterruptedException", e);
         } catch (ExecutionException e) {
             logger.error("ExecutionException", e);
         }
-        return job;
     }
 
     public Set<SLURMJobStatusInfo> lookupStatus(List<SLURMSSHJob> jobs) throws JLRMException {
