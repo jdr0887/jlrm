@@ -219,7 +219,7 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
 
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
-            command = String.format(". ~/.bashrc; /bsub -J %s < %s", job.getName(), targetFile);
+            command = String.format(". ~/.bashrc; bsub < %s", targetFile);
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
