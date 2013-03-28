@@ -66,12 +66,13 @@ public class SLURMSSHFactory {
     }
 
     public SLURMSSHJob submitGlidein(File submitDir, String collectorHost, Queue queue, Integer requireMemory,
-            String hostAllowRead, String hostAllowWrite) throws JLRMException {
-        logger.info("ENTERING submit(File)");
+            String jobName, String hostAllowRead, String hostAllowWrite) throws JLRMException {
+        logger.info("ENTERING submit(File, String, Queue, Integer, String, String, String)");
         SLURMSSHSubmitCondorGlideinCallable runnable = new SLURMSSHSubmitCondorGlideinCallable();
         runnable.setSite(site);
         runnable.setRequiredMemory(requireMemory);
         runnable.setSubmitDir(submitDir);
+        runnable.setJobName(jobName);
         runnable.setCollectorHost(collectorHost);
         runnable.setQueue(queue);
         runnable.setHostAllowRead(hostAllowRead);

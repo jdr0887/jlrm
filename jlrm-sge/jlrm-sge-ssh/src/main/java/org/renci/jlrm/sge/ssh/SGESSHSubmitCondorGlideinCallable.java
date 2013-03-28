@@ -50,6 +50,8 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
 
     private Queue queue;
 
+    private String jobName;
+
     private String hostAllowRead;
 
     private String hostAllowWrite;
@@ -77,7 +79,7 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
         job.setTransferExecutable(Boolean.TRUE);
         job.setTransferInputs(Boolean.TRUE);
         job.setQueueName(this.queue.getName());
-        job.setName("glidein");
+        job.setName(this.jobName);
         job.setHostCount(1);
         job.setNumberOfProcessors(8);
         job.setOutput(new File("glidein.out"));
@@ -345,6 +347,14 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
 
     public void setHostAllowWrite(String hostAllowWrite) {
         this.hostAllowWrite = hostAllowWrite;
+    }
+
+    public String getJobName() {
+        return jobName;
+    }
+
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
     }
 
 }

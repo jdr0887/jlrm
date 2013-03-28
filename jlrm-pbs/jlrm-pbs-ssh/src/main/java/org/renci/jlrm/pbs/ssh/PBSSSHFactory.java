@@ -67,10 +67,11 @@ public class PBSSSHFactory {
     }
 
     public PBSSSHJob submitGlidein(File submitDir, String collectorHost, Queue queue, Integer requireMemory,
-            String hostAllowRead, String hostAllowWrite) throws JLRMException {
+            String jobName, String hostAllowRead, String hostAllowWrite) throws JLRMException {
         logger.info("ENTERING submit(File)");
         PBSSSHSubmitCondorGlideinCallable runnable = new PBSSSHSubmitCondorGlideinCallable();
         runnable.setSite(this.site);
+        runnable.setJobName(jobName);
         runnable.setRequiredMemory(requireMemory);
         runnable.setSubmitDir(submitDir);
         runnable.setCollectorHost(collectorHost);
