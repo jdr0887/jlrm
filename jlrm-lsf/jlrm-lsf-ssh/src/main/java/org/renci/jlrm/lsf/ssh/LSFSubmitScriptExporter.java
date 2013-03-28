@@ -29,6 +29,10 @@ public class LSFSubmitScriptExporter<T extends LSFSSHJob> {
             submitFileWriter.write(String.format("#BSUB -q %s%n", job.getQueueName()));
         }
 
+        if (StringUtils.isNotEmpty(job.getName())) {
+            submitFileWriter.write(String.format("#BSUB -J %s%n", job.getName()));
+        }
+
         if (StringUtils.isNotEmpty(job.getProject())) {
             submitFileWriter.write(String.format("#BSUB -P %s%n", job.getProject()));
         }
