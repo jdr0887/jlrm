@@ -35,7 +35,7 @@ public class CondorLookupJobsByOwnerCallable implements Callable<Map<String, Lis
     public Map<String, List<ClassAdvertisement>> call() throws JLRMException {
 
         Map<String, List<ClassAdvertisement>> classAdMap = new HashMap<String, List<ClassAdvertisement>>();
-        String format = "(condor_q -global -format '\\nClusterId=%%s' ClusterId -format ',JLRM_USER=%%s' JLRM_USER -format ',JobStatus=%%s' JobStatus -format ',Requirements=%%s' Requirements -submitter \"%2$s\" -constraint '!regexp(\".+condor_dagman\", Cmd)'; echo)";
+        String format = "(condor_q -global -format '\\nClusterId=%%s' ClusterId -format ',JLRM_USER=%%s' JLRM_USER -format ',JobStatus=%%s' JobStatus -format ',Requirements=%%s' Requirements -submitter \"%s\" -constraint '!regexp(\".+condor_dagman\", Cmd)'; echo)";
         String command = String.format(format, this.username);
         CommandInput input = new CommandInput();
         input.setCommand(command);
