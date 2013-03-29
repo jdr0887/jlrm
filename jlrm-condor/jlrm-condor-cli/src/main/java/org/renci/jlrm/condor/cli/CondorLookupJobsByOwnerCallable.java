@@ -35,13 +35,14 @@ public class CondorLookupJobsByOwnerCallable implements Callable<Map<String, Lis
     public Map<String, List<ClassAdvertisement>> call() throws JLRMException {
 
         Map<String, List<ClassAdvertisement>> classAdMap = new HashMap<String, List<ClassAdvertisement>>();
-        String format = "(condor_q -global -format '\\nClusterId=%%s' ClusterId -format ',JLRM_USER=%%s' JLRM_USER -format ',JobStatus=%%s' JobStatus -format ',Requirements=%%s' Requirements -submitter \"%s\" -constraint '!regexp(\".+condor_dagman\", Cmd)'; echo)";
-        String command = String.format(format, this.username);
-        CommandInput input = new CommandInput();
-        input.setCommand(command);
 
         LineNumberReader lnr = null;
         try {
+
+            String format = "(condor_q -global -format '\\nClusterId=%%s' ClusterId -format ',JLRM_USER=%%s' JLRM_USER -format ',JobStatus=%%s' JobStatus -format ',Requirements=%%s' Requirements -submitter \"%s\" -constraint '!regexp(\".+condor_dagman\", Cmd)'; echo)";
+            String command = String.format(format, this.username);
+            CommandInput input = new CommandInput();
+            input.setCommand(command);
 
             Executor executor = BashExecutor.getInstance();
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
@@ -68,15 +69,15 @@ public class CondorLookupJobsByOwnerCallable implements Callable<Map<String, Lis
                     classAdMap.put(classAdList.get(0).getValue(), classAdList);
                 }
             }
+            lnr.close();
         } catch (NumberFormatException e) {
-            e.printStackTrace();
             throw new JLRMException("Failed to parse cluster id: " + e.getMessage());
         } catch (ExecutorException e) {
-            e.printStackTrace();
             throw new JLRMException("ExecutorException: " + e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
             throw new JLRMException("IOException: " + e.getMessage());
+        } catch (Exception e) {
+            throw new JLRMException("Exception: " + e.getMessage());
         }
 
         return classAdMap;
