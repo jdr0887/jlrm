@@ -43,7 +43,7 @@ public class CondorLookupJobsByOwnerCallable implements Callable<Map<String, Lis
             String command = String.format(format, this.username);
             CommandInput input = new CommandInput();
             input.setCommand(command);
-
+            input.setExitImmediately(Boolean.FALSE);
             Executor executor = BashExecutor.getInstance();
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             int exitCode = output.getExitCode();
