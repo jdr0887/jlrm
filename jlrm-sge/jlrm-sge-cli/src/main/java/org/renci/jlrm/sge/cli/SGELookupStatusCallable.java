@@ -33,6 +33,7 @@ public class SGELookupStatusCallable implements Callable<SGEJobStatusType> {
         String command = String.format("qstat -j %s | tail -n+2 | awk '{print $3}'", job.getId());
         try {
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
+            input.setExitImmediately(Boolean.FALSE);
             Executor executor = BashExecutor.getInstance();
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             String stdout = output.getStdout().toString();

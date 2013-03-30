@@ -46,6 +46,7 @@ public class SGESubmitCallable implements Callable<SGEJob> {
 
             String command = String.format("qsub < %s", job.getSubmitFile().getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
+            input.setExitImmediately(Boolean.FALSE);
             Executor executor = BashExecutor.getInstance();
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             int exitCode = output.getExitCode();

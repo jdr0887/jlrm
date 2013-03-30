@@ -35,6 +35,7 @@ public class LSFLookupStatusCallable implements Callable<LSFJobStatusType> {
         String command = String.format("bjobs %s | tail -n+2 | awk '{print $1,$3,$4,$7}'", job.getId());
         try {
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
+            input.setExitImmediately(Boolean.FALSE);
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             String stdout = output.getStdout().toString();
             if (output.getExitCode() != 0) {

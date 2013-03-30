@@ -54,6 +54,7 @@ public class CondorSubmitDAGCallable implements Callable<CondorJob> {
 
             String command = String.format("condor_submit_dag %s", dagSubmitJob.getSubmitFile().getName());
             CommandInput input = new CommandInput(command, dagSubmitJob.getSubmitFile().getParentFile());
+            input.setExitImmediately(Boolean.FALSE);
             Executor executor = BashExecutor.getInstance();
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             int exitCode = output.getExitCode();

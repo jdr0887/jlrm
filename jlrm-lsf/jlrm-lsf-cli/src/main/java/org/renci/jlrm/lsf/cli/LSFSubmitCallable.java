@@ -48,6 +48,7 @@ public class LSFSubmitCallable implements Callable<LSFJob> {
 
             String command = String.format("bsub < %s", job.getSubmitFile().getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
+            input.setExitImmediately(Boolean.FALSE);
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             int exitCode = output.getExitCode();
             logger.debug("executor.getStdout() = {}", output.getStdout().toString());

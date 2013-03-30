@@ -35,6 +35,7 @@ public class PBSLookupStatusCallable implements Callable<PBSJobStatusType> {
         String command = String.format("qstat %s | tail -n+3 | awk '{print $5}'", job.getId());
         try {
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
+            input.setExitImmediately(Boolean.FALSE);
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             String stdout = output.getStdout().toString();
             if (output.getExitCode() != 0) {

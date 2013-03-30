@@ -47,6 +47,7 @@ public class CondorSubmitCallable implements Callable<CondorJob> {
 
             String command = String.format("condor_submit %s", job.getSubmitFile().getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
+            input.setExitImmediately(Boolean.FALSE);
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             int exitCode = output.getExitCode();
             LineNumberReader lnr = new LineNumberReader(new StringReader(output.getStdout().toString()));

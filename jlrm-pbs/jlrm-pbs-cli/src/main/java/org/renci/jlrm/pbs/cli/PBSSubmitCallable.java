@@ -49,6 +49,7 @@ public class PBSSubmitCallable implements Callable<PBSJob> {
 
             String command = String.format("qsub < %s", job.getSubmitFile().getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
+            input.setExitImmediately(Boolean.FALSE);
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             int exitCode = output.getExitCode();
             logger.debug("executor.getStdout() = {}", output.getStdout().toString());

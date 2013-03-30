@@ -33,6 +33,7 @@ public class SLURMLookupStatusCallable implements Callable<SLURMJobStatusType> {
         String command = String.format("squeue -j %s | tail -n+2 | awk '{print $4}'", job.getId());
         try {
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
+            input.setExitImmediately(Boolean.FALSE);
             Executor executor = BashExecutor.getInstance();
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             String stdout = output.getStdout().toString();
