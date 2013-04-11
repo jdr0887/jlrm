@@ -91,7 +91,8 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("siteName", getSite().getSubmitHost());
         velocityContext.put("collectorHost", this.collectorHost);
-        velocityContext.put("jlrmUser", site.getUsername());
+        velocityContext.put("jlrmUser", getSite().getUsername());
+        velocityContext.put("jlrmSiteName", getSite().getName());
         velocityContext.put("hostAllowRead", this.hostAllowRead);
         velocityContext.put("hostAllowWrite", this.hostAllowWrite);
 
