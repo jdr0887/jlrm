@@ -121,6 +121,11 @@ public class CondorSubmitScriptExporter {
                     String requirements = "(Arch == \"X86_64\") && (OpSys == \"LINUX\") && (Memory >= 500) && (Disk >= 0)";
 
                     if (includeGlideinRequirements) {
+
+                        if (StringUtils.isNotEmpty(job.getSiteName())) {
+                            requirements += String.format(" && (TARGET.JLRM_SITE_NAME == \"%s\")", job.getSiteName());
+                        }
+
                         requirements += String.format(
                                 " && (TARGET.JLRM_USER == \"%s\") && (TARGET.IS_GLIDEIN == True)",
                                 System.getProperty("user.name"));
