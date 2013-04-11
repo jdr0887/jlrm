@@ -109,10 +109,9 @@ public class SLURMSSHSubmitCallable implements Callable<SLURMSSHJob> {
             sftpChannel.chmod(0644, job.getSubmitFile().getName());
             sftpChannel.disconnect();
 
-            String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
-
-            command = String.format(". ~/.bashrc; sbatch %s", targetFile);
-
+            command = String.format(". ~/.bashrc; sbatch %s/%s", remoteWorkDir, job.getSubmitFile().getName());
+            logger.info("command: {}", command);
+            
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
             err = new ByteArrayOutputStream();
@@ -132,14 +131,13 @@ public class SLURMSSHSubmitCallable implements Callable<SLURMSSHJob> {
 
             if (exitCode != 0) {
                 String errorMessage = new String(err.toByteArray());
-                logger.debug("executor.getStderr() = {}", errorMessage);
-                logger.error(errorMessage);
+                logger.error("ERROR: {}", errorMessage);
                 throw new JLRMException(errorMessage);
             } else {
                 LineNumberReader lnr = new LineNumberReader(new StringReader(submitOutput));
                 String line;
                 while ((line = lnr.readLine()) != null) {
-                    if (line.indexOf("submitted") != -1) {
+                    if (line.indexOf("batch job") != -1) {
                         logger.info("line = " + line);
                         Pattern pattern = Pattern.compile("^.+batch job (\\d*)$");
                         Matcher matcher = pattern.matcher(line);
