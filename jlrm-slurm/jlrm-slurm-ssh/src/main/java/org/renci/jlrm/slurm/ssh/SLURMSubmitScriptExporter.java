@@ -17,7 +17,7 @@ public class SLURMSubmitScriptExporter<T extends SLURMSSHJob> {
     }
 
     public T export(File workDir, String remoteWorkDir, T job) throws IOException {
-        logger.info("ENTERING export(File, SGESSHJob)");
+        logger.info("ENTERING export(File, String, T)");
         File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
 
         FileWriter submitFileWriter = new FileWriter(submitFile);
@@ -27,7 +27,7 @@ public class SLURMSubmitScriptExporter<T extends SLURMSSHJob> {
         submitFileWriter.write(String.format("#SBATCH -J %s%n", job.getName()));
 
         if (StringUtils.isNotEmpty(job.getQueueName())) {
-            submitFileWriter.write(String.format("#SBATCH - %s%n", job.getQueueName()));
+            submitFileWriter.write(String.format("#SBATCH -p %s%n", job.getQueueName()));
         }
 
         if (StringUtils.isNotEmpty(job.getProject())) {
@@ -38,17 +38,17 @@ public class SLURMSubmitScriptExporter<T extends SLURMSSHJob> {
             submitFileWriter.write(String.format("#SBATCH -t %d%n", job.getWallTime() / 60));
         }
 
-        if (job.getMemory() != null) {
-            submitFileWriter.write(String.format("#SBATCH --mem %s%n", job.getMemory()));
-        }
+//        if (job.getMemory() != null) {
+//            submitFileWriter.write(String.format("#SBATCH --mem %s%n", job.getMemory()));
+//        }
 
         submitFileWriter.write(String.format("#SBATCH -i %s%n", "/dev/null"));
 
         job.setOutput(new File(String.format("%s/%s.out", workDir.getAbsolutePath(), job.getOutput().getName())));
         job.setError(new File(String.format("%s/%s.err", workDir.getAbsolutePath(), job.getError().getName())));
 
-        submitFileWriter.write(String.format("#SBATCH -o %s%n", job.getOutput().getAbsolutePath()));
-        submitFileWriter.write(String.format("#SBATCH -e %s%n", job.getError().getAbsolutePath()));
+        submitFileWriter.write(String.format("#SBATCH -o %s/%s%n", remoteWorkDir, job.getOutput().getName()));
+        submitFileWriter.write(String.format("#SBATCH -e %s/%s%n", remoteWorkDir, job.getError().getName()));
 
         submitFileWriter.write(String.format("#SBATCH -N %d%n", job.getHostCount()));
         submitFileWriter.write(String.format("#SBATCH -n %d%n", job.getNumberOfProcessors()));
