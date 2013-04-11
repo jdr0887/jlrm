@@ -24,6 +24,8 @@ public class CondorJob extends Job {
 
     private String postScript;
 
+    private String siteName;
+
     public CondorJob() {
         super();
     }
@@ -122,10 +124,19 @@ public class CondorJob extends Job {
         this.postScript = postScript;
     }
 
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
+    }
+
     @Override
     public String toString() {
-        return "CondorJob [cluster=" + cluster + ", jobId=" + jobId + ", priority=" + priority + ", retry=" + retry
-                + ", preScript=" + preScript + ", postScript=" + postScript + "]";
+        return String.format(
+                "CondorJob [cluster=%s, jobId=%s, priority=%s, retry=%s, preScript=%s, postScript=%s, siteName=%s]",
+                cluster, jobId, priority, retry, preScript, postScript, siteName);
     }
 
     @Override
@@ -138,6 +149,7 @@ public class CondorJob extends Job {
         result = prime * result + ((preScript == null) ? 0 : preScript.hashCode());
         result = prime * result + ((priority == null) ? 0 : priority.hashCode());
         result = prime * result + ((retry == null) ? 0 : retry.hashCode());
+        result = prime * result + ((siteName == null) ? 0 : siteName.hashCode());
         return result;
     }
 
@@ -179,6 +191,11 @@ public class CondorJob extends Job {
             if (other.retry != null)
                 return false;
         } else if (!retry.equals(other.retry))
+            return false;
+        if (siteName == null) {
+            if (other.siteName != null)
+                return false;
+        } else if (!siteName.equals(other.siteName))
             return false;
         return true;
     }
