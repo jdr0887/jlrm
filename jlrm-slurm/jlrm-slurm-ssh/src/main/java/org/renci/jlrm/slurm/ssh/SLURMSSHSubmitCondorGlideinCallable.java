@@ -91,6 +91,7 @@ public class SLURMSSHSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
         velocityContext.put("siteName", getSite().getSubmitHost());
         velocityContext.put("collectorHost", this.collectorHost);
         velocityContext.put("jlrmUser", getSite().getUsername());
+        velocityContext.put("jlrmSiteName", getSite().getName());
         velocityContext.put("hostAllowRead", this.hostAllowRead);
         velocityContext.put("hostAllowWrite", this.hostAllowWrite);
 
@@ -216,10 +217,9 @@ public class SLURMSSHSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
                 e.printStackTrace();
             }
 
-            String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
-
-            command = String.format(". ~/.bashrc; sbatch < %s", targetFile);
-
+            command = String.format(". ~/.bashrc; sbatch %s/%s", remoteWorkDir, job.getSubmitFile().getName());
+            logger.info("command: {}", command);
+            
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
 
@@ -244,7 +244,7 @@ public class SLURMSSHSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
             LineNumberReader lnr = new LineNumberReader(new StringReader(submitOutput));
             String line;
             while ((line = lnr.readLine()) != null) {
-                if (line.indexOf("submitted") != -1) {
+                if (line.indexOf("batch job") != -1) {
                     logger.info("line = " + line);
                     Pattern pattern = Pattern.compile("^.+batch job (\\d*)$");
                     Matcher matcher = pattern.matcher(line);
