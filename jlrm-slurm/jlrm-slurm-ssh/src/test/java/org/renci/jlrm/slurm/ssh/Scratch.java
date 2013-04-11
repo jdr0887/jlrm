@@ -26,8 +26,8 @@ public class Scratch {
 
     @Test
     public void testSubmitOutputRegex() {
-        String line = "Your job 609505 (\"Test\") has been submitted";
-        Pattern pattern = Pattern.compile("^.+job (\\d+) .+has been submitted$");
+        String line = "Submitted batch job 391";
+        Pattern pattern = Pattern.compile("^.+batch job (\\d+)$");
         Matcher matcher = pattern.matcher(line);
         assert (matcher.matches());
         matcher.find();
