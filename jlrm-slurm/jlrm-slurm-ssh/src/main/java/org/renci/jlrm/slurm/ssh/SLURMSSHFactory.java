@@ -4,10 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.renci.jlrm.JLRMException;
@@ -27,8 +24,6 @@ public class SLURMSSHFactory {
 
     private static SLURMSSHFactory instance = null;
 
-    private ThreadPoolExecutor threadPoolExecutor;
-
     private Site site;
 
     public static SLURMSSHFactory getInstance(Site site) {
@@ -44,8 +39,6 @@ public class SLURMSSHFactory {
         if (StringUtils.isEmpty(site.getUsername())) {
             site.setUsername(System.getProperty("user.name"));
         }
-        this.threadPoolExecutor = new ThreadPoolExecutor(4, 8, 50000L, TimeUnit.SECONDS,
-                new LinkedBlockingQueue<Runnable>());
     }
 
     public SLURMSSHJob submit(File submitDir, SLURMSSHJob job) throws JLRMException {
@@ -54,9 +47,8 @@ public class SLURMSSHFactory {
         runnable.setJob(job);
         runnable.setSite(this.site);
         runnable.setSubmitDir(submitDir);
-        Future<SLURMSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
         try {
-            job = jobFuture.get();
+            job = Executors.newSingleThreadExecutor().submit(runnable).get();
         } catch (InterruptedException e) {
             logger.error("InterruptedException", e);
         } catch (ExecutionException e) {
@@ -77,10 +69,9 @@ public class SLURMSSHFactory {
         runnable.setQueue(queue);
         runnable.setHostAllowRead(hostAllowRead);
         runnable.setHostAllowWrite(hostAllowWrite);
-        Future<SLURMSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
         SLURMSSHJob job = null;
         try {
-            job = jobFuture.get();
+            job = Executors.newSingleThreadExecutor().submit(runnable).get();
         } catch (InterruptedException e) {
             logger.error("InterruptedException", e);
         } catch (ExecutionException e) {
@@ -95,7 +86,7 @@ public class SLURMSSHFactory {
         runnable.setJobId(jobId);
         runnable.setSite(this.site);
         try {
-            this.threadPoolExecutor.submit(runnable).get();
+            Executors.newSingleThreadExecutor().submit(runnable).get();
         } catch (InterruptedException e) {
             logger.error("InterruptedException", e);
         } catch (ExecutionException e) {
@@ -108,10 +99,9 @@ public class SLURMSSHFactory {
         SLURMSSHLookupStatusCallable runnable = new SLURMSSHLookupStatusCallable();
         runnable.setJobs(jobs);
         runnable.setSite(this.site);
-        Future<Set<SLURMJobStatusInfo>> jobFuture = this.threadPoolExecutor.submit(runnable);
         Set<SLURMJobStatusInfo> ret = null;
         try {
-            ret = jobFuture.get();
+            ret = Executors.newSingleThreadExecutor().submit(runnable).get();
         } catch (InterruptedException e) {
             logger.error("InterruptedException", e);
         } catch (ExecutionException e) {
