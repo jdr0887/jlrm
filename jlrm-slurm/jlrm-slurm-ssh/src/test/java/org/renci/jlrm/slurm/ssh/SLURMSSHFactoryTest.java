@@ -49,12 +49,12 @@ public class SLURMSSHFactoryTest {
     public void testBasicSubmit() {
 
         Site site = new Site();
-        site.setSubmitHost("swprod.bioinf.unc.edu");
+        site.setSubmitHost("topsail-sn.unc.edu");
         site.setMaxNoClaimTime(1440);
-        site.setUsername("jreilly");
+        site.setUsername("jdr0887");
 
         Queue queue = new Queue();
-        queue.setName("all.q");
+        queue.setName("queue16");
         queue.setRunTime(2880);
 
         SLURMSSHFactory factory = SLURMSSHFactory.getInstance(site);
@@ -64,7 +64,7 @@ public class SLURMSSHFactoryTest {
         job.setNumberOfProcessors(1);
         job.setName("Test");
         job.setProject("TCGA");
-        job.setQueueName("all.q");
+        job.setQueueName("queue16");
         job.setOutput(new File("test.out"));
         job.setError(new File("test.err"));
 
