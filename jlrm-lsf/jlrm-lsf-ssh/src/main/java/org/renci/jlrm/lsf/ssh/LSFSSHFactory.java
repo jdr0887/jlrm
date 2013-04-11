@@ -4,10 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.renci.jlrm.JLRMException;
@@ -27,8 +24,6 @@ public class LSFSSHFactory {
 
     private static LSFSSHFactory instance = null;
 
-    private ThreadPoolExecutor threadPoolExecutor;
-
     private Site site;
 
     public static LSFSSHFactory getInstance(Site site) {
@@ -44,8 +39,6 @@ public class LSFSSHFactory {
         if (StringUtils.isEmpty(site.getUsername())) {
             site.setUsername(System.getProperty("user.name"));
         }
-        this.threadPoolExecutor = new ThreadPoolExecutor(4, 8, 50000L, TimeUnit.SECONDS,
-                new LinkedBlockingQueue<Runnable>());
     }
 
     public LSFSSHJob submit(File submitDir, LSFSSHJob job) throws JLRMException {
@@ -54,9 +47,8 @@ public class LSFSSHFactory {
         runnable.setJob(job);
         runnable.setSite(this.site);
         runnable.setSubmitDir(submitDir);
-        Future<LSFSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
         try {
-            job = jobFuture.get();
+            job = Executors.newSingleThreadExecutor().submit(runnable).get();
         } catch (InterruptedException e) {
             logger.error("InterruptedException", e);
         } catch (ExecutionException e) {
@@ -77,10 +69,9 @@ public class LSFSSHFactory {
         runnable.setQueue(queue);
         runnable.setHostAllowRead(hostAllowRead);
         runnable.setHostAllowWrite(hostAllowWrite);
-        Future<LSFSSHJob> jobFuture = this.threadPoolExecutor.submit(runnable);
         LSFSSHJob job = null;
         try {
-            job = jobFuture.get();
+            job = Executors.newSingleThreadExecutor().submit(runnable).get();
         } catch (InterruptedException e) {
             logger.error("InterruptedException", e);
         } catch (ExecutionException e) {
@@ -95,7 +86,7 @@ public class LSFSSHFactory {
             LSFSSHKillCallable runnable = new LSFSSHKillCallable();
             runnable.setJobId(jobId);
             runnable.setSite(this.site);
-            this.threadPoolExecutor.submit(runnable).get();
+            Executors.newSingleThreadExecutor().submit(runnable).get();
         } catch (InterruptedException e) {
             logger.error("InterruptedException", e);
         } catch (ExecutionException e) {
@@ -108,10 +99,9 @@ public class LSFSSHFactory {
         LSFSSHLookupStatusCallable runnable = new LSFSSHLookupStatusCallable();
         runnable.setJobs(jobs);
         runnable.setSite(this.site);
-        Future<Set<LSFJobStatusInfo>> jobFuture = this.threadPoolExecutor.submit(runnable);
         Set<LSFJobStatusInfo> ret = null;
         try {
-            ret = jobFuture.get();
+            ret = Executors.newSingleThreadExecutor().submit(runnable).get();
         } catch (InterruptedException e) {
             logger.error("InterruptedException", e);
         } catch (ExecutionException e) {
