@@ -47,7 +47,7 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
         }
         String jobXarg = sb.toString().replaceFirst(" ", "");
         String command = String
-                .format(". ~/.bashrc; bjobs %s | tail -n+2 | grep RUN | awk '{print $1,$3,$4,$7}' && bjobs %s | tail -n+2 | grep PEND | awk '{print $1,$3,$4,$6}'",
+                .format(". ~/.bashrc; bjobs %1$s | tail -n+2 | grep RUN | awk '{print $1,$3,$4,$7}' && bjobs %1$s | tail -n+2 | grep PEND | awk '{print $1,$3,$4,$6}'",
                         jobXarg);
 
         String home = System.getProperty("user.home");
