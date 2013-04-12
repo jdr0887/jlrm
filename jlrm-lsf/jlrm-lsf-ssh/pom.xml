@@ -3,12 +3,12 @@
   <parent>
     <groupId>org.renci.jlrm</groupId>
     <artifactId>jlrm-lsf</artifactId>
-    <version>0.2.20-SNAPSHOT</version>
+    <version>0.2.20</version>
   </parent>
   <name>jLRM :: LSF :: SSH</name>
   <groupId>org.renci.jlrm.jlrm-lsf</groupId>
   <artifactId>jlrm-lsf-ssh</artifactId>
-  <version>0.2.20-SNAPSHOT</version>
+  <version>0.2.20</version>
   <packaging>bundle</packaging>
   <dependencies>
     <dependency>
