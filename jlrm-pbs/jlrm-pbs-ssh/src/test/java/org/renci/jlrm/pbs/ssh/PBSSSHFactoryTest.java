@@ -17,8 +17,6 @@ import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Queue;
 import org.renci.jlrm.Site;
 import org.renci.jlrm.pbs.PBSJobStatusType;
-import org.renci.jlrm.pbs.ssh.PBSSSHFactory;
-import org.renci.jlrm.pbs.ssh.PBSSSHJob;
 
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
