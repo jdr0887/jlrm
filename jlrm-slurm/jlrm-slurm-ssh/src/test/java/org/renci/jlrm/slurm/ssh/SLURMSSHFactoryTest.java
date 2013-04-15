@@ -25,8 +25,6 @@ import org.renci.jlrm.Queue;
 import org.renci.jlrm.Site;
 import org.renci.jlrm.slurm.SLURMJobStatusInfo;
 import org.renci.jlrm.slurm.SLURMJobStatusType;
-import org.renci.jlrm.slurm.ssh.SLURMSSHFactory;
-import org.renci.jlrm.slurm.ssh.SLURMSSHJob;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
