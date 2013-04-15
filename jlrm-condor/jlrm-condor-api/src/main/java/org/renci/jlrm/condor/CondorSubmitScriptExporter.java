@@ -38,7 +38,7 @@ public class CondorSubmitScriptExporter {
         try {
 
             ClassAdvertisement classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_EXECUTABLE).clone();
-            classAd.setValue(job.getExecutable().getAbsolutePath());
+            classAd.setValue(job.getExecutable().getPath());
             job.getClassAdvertismentMap().put(CLASS_AD_KEY_EXECUTABLE, classAd);
 
             classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_OUTPUT).clone();
@@ -93,7 +93,7 @@ public class CondorSubmitScriptExporter {
                 for (CondorJob job : graph.vertexSet()) {
 
                     classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_EXECUTABLE).clone();
-                    classAd.setValue(job.getExecutable().getAbsolutePath());
+                    classAd.setValue(job.getExecutable().getPath());
                     job.getClassAdvertismentMap().put(CLASS_AD_KEY_EXECUTABLE, classAd);
 
                     classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_OUTPUT).clone();
