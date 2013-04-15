@@ -22,7 +22,7 @@ public class JobTest {
     @Test
     public void multiArgumentTest() {
 
-        CondorJob job = new CondorJob(String.format("%s_%d", "edu.unc.mapseq.module.gatk.GATKDepthOfCoverageCLI", 1), new File("/bin/run-mapseq.sh"), 3);
+        CondorJob job = new CondorJob(String.format("%s_%d", "edu.unc.mapseq.module.gatk.GATKDepthOfCoverageCLI", 1), new File("$HOME/bin/run-mapseq.sh"), 3);
 
         job.addArgument("edu.unc.mapseq.module.gatk.GATKDepthOfCoverageCLI");
 
@@ -39,6 +39,9 @@ public class JobTest {
         job.addArgument("--sequencerRunId", 113050);
         job.addArgument("--persistFileData");
         job.addArgument("--htsfSampleId", 113052);
+
+        CondorSubmitScriptExporter exporter = CondorSubmitScriptExporter.getInstance();
+        exporter.export(new File("/tmp"), job);
 
     }
 
