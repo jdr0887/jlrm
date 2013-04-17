@@ -55,8 +55,6 @@ public class SGESSHFactoryTest {
         queue.setName("all.q");
         queue.setRunTime(2880);
 
-        SGESSHFactory factory = SGESSHFactory.getInstance(site);
-
         SGESSHJob job = new SGESSHJob("test", new File("/bin/hostname"));
         job.setHostCount(1);
         job.setNumberOfProcessors(1);
@@ -67,7 +65,7 @@ public class SGESSHFactoryTest {
         job.setError(new File("test.err"));
 
         try {
-            job = factory.submit(new File("/tmp"), job);
+            job = new SGESSHSubmitCallable(site, job, new File("/tmp")).call();
             System.out.println(job.getId());
         } catch (JLRMException e) {
             e.printStackTrace();
@@ -87,12 +85,11 @@ public class SGESSHFactoryTest {
         queue.setName("all.q");
         queue.setRunTime(2880);
 
-        SGESSHFactory factory = SGESSHFactory.getInstance(site);
-
         File submitDir = new File("/tmp");
         try {
-            SGESSHJob job = factory.submitGlidein(submitDir, "swprod.bioinf.unc.edu", queue, 40, "glidein",
-                    "*.its.unc.edu", "*.its.unc.edu");
+            SGESSHSubmitCondorGlideinCallable callable = new SGESSHSubmitCondorGlideinCallable(site, queue, submitDir,
+                    "glidein", "swprod.bioinf.unc.edu", "*.its.unc.edu", "*.its.unc.edu", 40);
+            SGESSHJob job = callable.call();
             System.out.println(job.getId());
         } catch (JLRMException e) {
             e.printStackTrace();

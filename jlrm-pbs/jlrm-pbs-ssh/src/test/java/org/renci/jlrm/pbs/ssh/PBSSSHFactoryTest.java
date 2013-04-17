@@ -34,7 +34,6 @@ public class PBSSSHFactoryTest {
 
         Site site = new Site();
         site.setSubmitHost("br0.renci.org");
-        PBSSSHFactory factory = PBSSSHFactory.getInstance(site, "jdr0887");
 
         PBSSSHJob job = new PBSSSHJob("test", new File("/bin/hostname"));
         job.setHostCount(1);
@@ -46,7 +45,7 @@ public class PBSSSHFactoryTest {
         job.setError(new File("test.err"));
 
         try {
-            job = factory.submit(new File("/tmp"), job);
+            job = new PBSSSHSubmitCallable(site, job, new File("/tmp")).call();
             System.out.println(job.getId());
         } catch (JLRMException e) {
             e.printStackTrace();
@@ -64,14 +63,12 @@ public class PBSSSHFactoryTest {
         Queue queue = new Queue();
         queue.setName("serial");
         queue.setRunTime(2880);
-
-        PBSSSHFactory factory = PBSSSHFactory.getInstance(site, "jdr0887");
-
         File submitDir = new File("/tmp");
 
         try {
-            PBSSSHJob job = factory.submitGlidein(submitDir, "biodev1.its.unc.edu", queue, 40, "glidein",
-                    "*.its.unc.edu", "*.its.unc.edu");
+            PBSSSHSubmitCondorGlideinCallable callable = new PBSSSHSubmitCondorGlideinCallable(site, queue, submitDir,
+                    "glidein", "biodev1.its.unc.edu", "*.its.unc.edu", "*.its.unc.edu", 40);
+            PBSSSHJob job = callable.call();
             System.out.println(job.getId());
         } catch (JLRMException e) {
             e.printStackTrace();

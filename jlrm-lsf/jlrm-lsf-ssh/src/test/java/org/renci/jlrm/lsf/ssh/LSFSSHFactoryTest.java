@@ -36,7 +36,6 @@ public class LSFSSHFactoryTest {
         Site site = new Site();
         site.setSubmitHost("biodev1.its.unc.edu");
         site.setUsername("jreilly");
-        LSFSSHFactory lsfSSHFactory = LSFSSHFactory.getInstance(site);
         LSFSSHJob job = new LSFSSHJob("test", new File("/bin/hostname"));
         job.setHostCount(1);
         job.setNumberOfProcessors(1);
@@ -46,7 +45,11 @@ public class LSFSSHFactoryTest {
         job.setError(new File("test.err"));
 
         try {
-            job = lsfSSHFactory.submit(new File("/tmp"), job);
+            LSFSSHSubmitCallable runnable = new LSFSSHSubmitCallable();
+            runnable.setJob(job);
+            runnable.setSite(site);
+            runnable.setSubmitDir(new File("/tmp"));
+            job = runnable.call();
             System.out.println(job.getId());
         } catch (JLRMException e) {
             e.printStackTrace();
@@ -66,16 +69,17 @@ public class LSFSSHFactoryTest {
         queue.setName("prenci");
         queue.setRunTime(2880);
 
-        LSFSSHFactory lsfSSHFactory = LSFSSHFactory.getInstance(site);
         File submitDir = new File("/tmp");
 
         try {
+
             // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "idle");
             // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "debug");
             // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "huge");
             // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "week");
-            LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, "biodev1.its.unc.edu", queue, 40, "glidein",
-                    "*.its.unc.edu", "*.its.unc.edu");
+            LSFSSHSubmitCondorGlideinCallable callable = new LSFSSHSubmitCondorGlideinCallable(site, queue, submitDir,
+                    "glidein", "biodev1.its.unc.edu", "*.its.unc.edu", "*.its.unc.edu", 40);
+            LSFSSHJob job = callable.call();
             System.out.println(job.getId());
         } catch (JLRMException e) {
             e.printStackTrace();
