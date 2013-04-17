@@ -93,7 +93,7 @@ public class ClassAdvertisementFactory {
                 ClassAdvertisementType.BOOLEAN, Boolean.TRUE.toString()));
 
         classAdvertismentMap.put(CLASS_AD_KEY_COPY_TO_SPOOL, new ClassAdvertisement(CLASS_AD_KEY_COPY_TO_SPOOL,
-                ClassAdvertisementType.BOOLEAN, Boolean.FALSE.toString()));
+                ClassAdvertisementType.BOOLEAN, Boolean.TRUE.toString()));
 
         classAdvertismentMap.put(CLASS_AD_KEY_NOTIFICATION, new ClassAdvertisement(CLASS_AD_KEY_NOTIFICATION,
                 ClassAdvertisementType.EXPRESSION, "NEVER"));
@@ -200,7 +200,7 @@ public class ClassAdvertisementFactory {
 
     public static Set<ClassAdvertisement> getDefaultClassAds() {
         Set<ClassAdvertisement> ret = new HashSet<ClassAdvertisement>();
-        // ret.add(getClassAd(CLASS_AD_KEY_ARGUMENTS));
+        ret.add(getClassAd(CLASS_AD_KEY_ARGUMENTS));
         // ret.add(getClassAd(CLASS_AD_KEY_REQUIREMENTS));
         ret.add(getClassAd(CLASS_AD_KEY_COPY_TO_SPOOL));
         ret.add(getClassAd(CLASS_AD_KEY_GET_ENV));
@@ -208,7 +208,7 @@ public class ClassAdvertisementFactory {
         ret.add(getClassAd(CLASS_AD_KEY_STREAM_ERROR));
         ret.add(getClassAd(CLASS_AD_KEY_STREAM_OUTPUT));
         ret.add(getClassAd(CLASS_AD_KEY_PRIORITY));
-        ret.add(getClassAd(CLASS_AD_KEY_TRANSFER_EXECUTABLE));
+        //ret.add(getClassAd(CLASS_AD_KEY_TRANSFER_EXECUTABLE));
         ret.add(getClassAd(CLASS_AD_KEY_TRANSFER_ERROR));
         ret.add(getClassAd(CLASS_AD_KEY_TRANSFER_OUTPUT));
         ret.add(getClassAd(CLASS_AD_KEY_PERIODIC_RELEASE));
