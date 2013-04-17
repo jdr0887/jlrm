@@ -58,13 +58,19 @@ public class PBSSSHSubmitCondorGlideinCallable implements Callable<PBSSSHJob> {
 
     public PBSSSHSubmitCondorGlideinCallable() {
         super();
-        try {
-            Properties velocityProperties = new Properties();
-            velocityProperties.put("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.NullLogChute");
-            Velocity.init(velocityProperties);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    }
+
+    public PBSSSHSubmitCondorGlideinCallable(Site site, Queue queue, File submitDir, String jobName,
+            String collectorHost, String hostAllowRead, String hostAllowWrite, Integer requiredMemory) {
+        super();
+        this.site = site;
+        this.queue = queue;
+        this.submitDir = submitDir;
+        this.collectorHost = collectorHost;
+        this.requiredMemory = requiredMemory;
+        this.jobName = jobName;
+        this.hostAllowRead = hostAllowRead;
+        this.hostAllowWrite = hostAllowWrite;
     }
 
     /**
@@ -74,6 +80,14 @@ public class PBSSSHSubmitCondorGlideinCallable implements Callable<PBSSSHJob> {
      */
     public PBSSSHJob call() throws JLRMException {
         logger.info("ENTERING call()");
+
+        try {
+            Properties velocityProperties = new Properties();
+            velocityProperties.put("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.NullLogChute");
+            Velocity.init(velocityProperties);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         PBSSSHJob job = new PBSSSHJob();
         job.setTransferExecutable(Boolean.TRUE);

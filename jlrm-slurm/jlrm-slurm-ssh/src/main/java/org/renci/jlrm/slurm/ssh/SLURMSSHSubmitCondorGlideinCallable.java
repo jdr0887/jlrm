@@ -58,13 +58,19 @@ public class SLURMSSHSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
 
     public SLURMSSHSubmitCondorGlideinCallable() {
         super();
-        try {
-            Properties velocityProperties = new Properties();
-            velocityProperties.put("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.NullLogChute");
-            Velocity.init(velocityProperties);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    }
+
+    public SLURMSSHSubmitCondorGlideinCallable(Site site, Queue queue, File submitDir, String jobName,
+            String collectorHost, String hostAllowRead, String hostAllowWrite, Integer requiredMemory) {
+        super();
+        this.site = site;
+        this.submitDir = submitDir;
+        this.collectorHost = collectorHost;
+        this.requiredMemory = requiredMemory;
+        this.queue = queue;
+        this.jobName = jobName;
+        this.hostAllowRead = hostAllowRead;
+        this.hostAllowWrite = hostAllowWrite;
     }
 
     /**
@@ -74,6 +80,14 @@ public class SLURMSSHSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
      */
     public SLURMSSHJob call() throws JLRMException {
         logger.info("ENTERING call()");
+
+        try {
+            Properties velocityProperties = new Properties();
+            velocityProperties.put("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.NullLogChute");
+            Velocity.init(velocityProperties);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         SLURMSSHJob job = new SLURMSSHJob();
         job.setTransferExecutable(Boolean.TRUE);
