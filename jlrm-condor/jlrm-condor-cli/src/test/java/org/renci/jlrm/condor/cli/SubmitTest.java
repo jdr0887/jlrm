@@ -5,11 +5,13 @@ import java.io.File;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.junit.Test;
+import org.renci.jlrm.IOUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.condor.ClassAdvertisement;
 import org.renci.jlrm.condor.ClassAdvertisementFactory;
 import org.renci.jlrm.condor.CondorJob;
 import org.renci.jlrm.condor.CondorJobEdge;
+import org.renci.jlrm.condor.CondorSubmitScriptExporter;
 import org.renci.jlrm.condor.UniverseType;
 
 public class SubmitTest {
@@ -58,8 +60,14 @@ public class SubmitTest {
             g.addEdge(job3, job4);
 
             File submitDir = new File("/tmp");
-            CondorSubmitDAGCallable callable = new CondorSubmitDAGCallable(submitDir, g, "asdfasdf", false);
-            CondorJob result = callable.call();
+
+            File workDir = IOUtils.createWorkDirectory(submitDir, "asdfasdf");
+            CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
+            CondorJob dagSubmitJob = exporter.export("asdfasdf", workDir, g, false);
+            CondorSubmitDAGCallable callable = new CondorSubmitDAGCallable(dagSubmitJob.getSubmitFile());
+            Integer clusterId = callable.call();
+            dagSubmitJob.setCluster(clusterId);
+            dagSubmitJob.setJobId(0);
         } catch (JLRMException e) {
             e.printStackTrace();
         }
