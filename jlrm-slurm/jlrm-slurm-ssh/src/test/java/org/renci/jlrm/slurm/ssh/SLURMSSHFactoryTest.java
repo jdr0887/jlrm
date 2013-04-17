@@ -55,8 +55,6 @@ public class SLURMSSHFactoryTest {
         queue.setName("queue16");
         queue.setRunTime(2880);
 
-        SLURMSSHFactory factory = SLURMSSHFactory.getInstance(site);
-
         SLURMSSHJob job = new SLURMSSHJob("test", new File("/bin/hostname"));
         job.setHostCount(1);
         job.setNumberOfProcessors(1);
@@ -67,7 +65,7 @@ public class SLURMSSHFactoryTest {
         job.setError(new File("test.err"));
 
         try {
-            job = factory.submit(new File("/tmp"), job);
+            job = new SLURMSSHSubmitCallable(site, job, new File("/tmp")).call();
             System.out.println(job.getId());
         } catch (JLRMException e) {
             e.printStackTrace();
@@ -79,7 +77,7 @@ public class SLURMSSHFactoryTest {
     public void testGlideinSubmit() {
 
         Site site = new Site();
-        site.setSubmitHost("swprod.bioinf.unc.edu");
+        site.setSubmitHost("topsail-sn.unc.edu");
         site.setMaxNoClaimTime(1440);
         site.setUsername("jreilly");
 
@@ -87,12 +85,11 @@ public class SLURMSSHFactoryTest {
         queue.setName("all.q");
         queue.setRunTime(2880);
 
-        SLURMSSHFactory factory = SLURMSSHFactory.getInstance(site);
-
         File submitDir = new File("/tmp");
         try {
-            SLURMSSHJob job = factory.submitGlidein(submitDir, "swprod.bioinf.unc.edu", queue, 40, "glidein",
-                    "*.its.unc.edu", "*.its.unc.edu");
+            SLURMSSHSubmitCondorGlideinCallable callable = new SLURMSSHSubmitCondorGlideinCallable(site, queue,
+                    submitDir, "glidein", "biodev1.its.unc.edu", "*.its.unc.edu", "*.its.unc.edu", 40);
+            SLURMSSHJob job = callable.call();
             System.out.println(job.getId());
         } catch (JLRMException e) {
             e.printStackTrace();
