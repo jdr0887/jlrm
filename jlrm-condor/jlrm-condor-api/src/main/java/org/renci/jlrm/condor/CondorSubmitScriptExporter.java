@@ -21,16 +21,7 @@ public class CondorSubmitScriptExporter {
 
     private final Logger logger = LoggerFactory.getLogger(CondorSubmitScriptExporter.class);
 
-    private static CondorSubmitScriptExporter instance;
-
-    public static CondorSubmitScriptExporter getInstance() {
-        if (instance == null) {
-            instance = new CondorSubmitScriptExporter();
-        }
-        return instance;
-    }
-
-    private CondorSubmitScriptExporter() {
+    public CondorSubmitScriptExporter() {
         super();
     }
 
@@ -38,19 +29,19 @@ public class CondorSubmitScriptExporter {
         try {
 
             ClassAdvertisement classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_EXECUTABLE).clone();
-            classAd.setValue(job.getExecutable().getPath());
+            classAd.setValue(job.getExecutable().getAbsolutePath());
             job.getClassAdvertismentMap().put(CLASS_AD_KEY_EXECUTABLE, classAd);
 
             classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_OUTPUT).clone();
-            classAd.setValue(String.format("%s/%s.out", workDir.getAbsolutePath(), job.getName()));
+            classAd.setValue(String.format("%s.out", job.getName()));
             job.getClassAdvertismentMap().put(CLASS_AD_KEY_OUTPUT, classAd);
 
             classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_ERROR).clone();
-            classAd.setValue(String.format("%s/%s.err", workDir.getAbsolutePath(), job.getName()));
+            classAd.setValue(String.format("%s.err", job.getName()));
             job.getClassAdvertismentMap().put(CLASS_AD_KEY_ERROR, classAd);
 
             classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_LOG).clone();
-            classAd.setValue(String.format("%s/%s.log", workDir.getAbsolutePath(), job.getName()));
+            classAd.setValue(String.format("%s.log", job.getName()));
             job.getClassAdvertismentMap().put(CLASS_AD_KEY_LOG, classAd);
 
             classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_REQUEST_CPUS).clone();
@@ -93,19 +84,19 @@ public class CondorSubmitScriptExporter {
                 for (CondorJob job : graph.vertexSet()) {
 
                     classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_EXECUTABLE).clone();
-                    classAd.setValue(job.getExecutable().getPath());
+                    classAd.setValue(job.getExecutable().getAbsolutePath());
                     job.getClassAdvertismentMap().put(CLASS_AD_KEY_EXECUTABLE, classAd);
 
                     classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_OUTPUT).clone();
-                    classAd.setValue(String.format("%s/%s.out", workDir.getAbsolutePath(), job.getName()));
+                    classAd.setValue(String.format("%s.out", job.getName()));
                     job.getClassAdvertismentMap().put(CLASS_AD_KEY_OUTPUT, classAd);
 
                     classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_ERROR).clone();
-                    classAd.setValue(String.format("%s/%s.err", workDir.getAbsolutePath(), job.getName()));
+                    classAd.setValue(String.format("%s.err", job.getName()));
                     job.getClassAdvertismentMap().put(CLASS_AD_KEY_ERROR, classAd);
 
                     classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_LOG).clone();
-                    classAd.setValue(String.format("%s/%s.log", workDir.getAbsolutePath(), job.getName()));
+                    classAd.setValue(String.format("%s.log", job.getName()));
                     job.getClassAdvertismentMap().put(CLASS_AD_KEY_LOG, classAd);
 
                     classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_REQUEST_CPUS).clone();
@@ -178,20 +169,20 @@ public class CondorSubmitScriptExporter {
         return dagSubmitJob;
     }
 
-    private File writeSubmitFile(File submitDir, CondorJob job) throws IOException {
+    protected File writeSubmitFile(File submitDir, CondorJob job) throws IOException {
         File submitFile = new File(submitDir, String.format("%s.sub", job.getName()));
         FileWriter submitFileWriter = new FileWriter(submitFile);
         for (ClassAdvertisement classAd : job.getClassAdvertismentMap().values()) {
             switch (classAd.getType()) {
-            case BOOLEAN:
-            case EXPRESSION:
-            case INTEGER:
-                submitFileWriter.write(String.format("%1$-25s = %2$s%n", classAd.getKey(), classAd.getValue()));
-                break;
-            case STRING:
-            default:
-                submitFileWriter.write(String.format("%1$-25s = \"%2$s\"%n", classAd.getKey(), classAd.getValue()));
-                break;
+                case BOOLEAN:
+                case EXPRESSION:
+                case INTEGER:
+                    submitFileWriter.write(String.format("%1$-25s = %2$s%n", classAd.getKey(), classAd.getValue()));
+                    break;
+                case STRING:
+                default:
+                    submitFileWriter.write(String.format("%1$-25s = \"%2$s\"%n", classAd.getKey(), classAd.getValue()));
+                    break;
             }
             submitFileWriter.flush();
         }
