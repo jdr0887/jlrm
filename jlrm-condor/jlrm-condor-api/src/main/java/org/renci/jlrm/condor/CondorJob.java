@@ -3,6 +3,7 @@ package org.renci.jlrm.condor;
 import static org.renci.jlrm.condor.ClassAdvertisementFactory.CLASS_AD_KEY_ARGUMENTS;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +28,9 @@ public class CondorJob extends Job {
 
     private String siteName;
 
-    private List<String> transferInputList;
+    private List<String> transferInputList = new ArrayList<String>();
 
-    private List<String> transferOutputList;
+    private List<String> transferOutputList = new ArrayList<String>();
 
     public CondorJob() {
         super();
@@ -75,6 +76,22 @@ public class CondorJob extends Job {
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void addTransferInput(File file) {
+        this.transferInputList.add(file.getAbsolutePath());
+    }
+
+    public void addTransferInput(String file) {
+        this.transferInputList.add(file);
+    }
+
+    public void addTransferOutput(File file) {
+        this.transferOutputList.add(file.getAbsolutePath());
+    }
+
+    public void addTransferOutput(String file) {
+        this.transferOutputList.add(file);
     }
 
     public Integer getCluster() {
