@@ -29,6 +29,12 @@ public class LSFSSHKillCallable implements Callable<Void> {
         super();
     }
 
+    public LSFSSHKillCallable(Site site, String jobId) {
+        super();
+        this.site = site;
+        this.jobId = jobId;
+    }
+
     @Override
     public Void call() throws JLRMException {
         logger.info("ENTERING call()");

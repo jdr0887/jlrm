@@ -28,6 +28,12 @@ public class PBSSSHKillCallable implements Callable<Void> {
         super();
     }
 
+    public PBSSSHKillCallable(Site site, String jobId) {
+        super();
+        this.site = site;
+        this.jobId = jobId;
+    }
+
     @Override
     public Void call() throws JLRMException {
         logger.info("ENTERING call()");

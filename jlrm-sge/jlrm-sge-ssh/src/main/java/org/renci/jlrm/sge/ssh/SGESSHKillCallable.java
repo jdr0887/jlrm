@@ -29,6 +29,12 @@ public class SGESSHKillCallable implements Callable<SGESSHJob> {
         super();
     }
 
+    public SGESSHKillCallable(Site site, SGESSHJob job) {
+        super();
+        this.site = site;
+        this.job = job;
+    }
+
     @Override
     public SGESSHJob call() throws JLRMException {
         logger.info("ENTERING call()");

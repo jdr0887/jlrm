@@ -29,6 +29,12 @@ public class SLURMSSHKillCallable implements Callable<Void> {
         super();
     }
 
+    public SLURMSSHKillCallable(Site site, String jobId) {
+        super();
+        this.site = site;
+        this.jobId = jobId;
+    }
+
     @Override
     public Void call() throws JLRMException {
         logger.info("ENTERING call()");
