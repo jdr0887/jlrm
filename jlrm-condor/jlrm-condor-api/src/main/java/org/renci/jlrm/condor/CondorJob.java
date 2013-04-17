@@ -4,6 +4,7 @@ import static org.renci.jlrm.condor.ClassAdvertisementFactory.CLASS_AD_KEY_ARGUM
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.renci.jlrm.Job;
@@ -25,6 +26,10 @@ public class CondorJob extends Job {
     private String postScript;
 
     private String siteName;
+
+    private List<String> transferInputList;
+
+    private List<String> transferOutputList;
 
     public CondorJob() {
         super();
@@ -126,6 +131,22 @@ public class CondorJob extends Job {
 
     public void setSiteName(String siteName) {
         this.siteName = siteName;
+    }
+
+    public List<String> getTransferInputList() {
+        return transferInputList;
+    }
+
+    public void setTransferInputList(List<String> transferInputList) {
+        this.transferInputList = transferInputList;
+    }
+
+    public List<String> getTransferOutputList() {
+        return transferOutputList;
+    }
+
+    public void setTransferOutputList(List<String> transferOutputList) {
+        this.transferOutputList = transferOutputList;
     }
 
     @Override
