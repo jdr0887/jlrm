@@ -45,6 +45,12 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
         super();
     }
 
+    public SGESSHLookupStatusCallable(Site site, List<SGESSHJob> jobs) {
+        super();
+        this.site = site;
+        this.jobs = jobs;
+    }
+
     @Override
     public Set<SGEJobStatusInfo> call() throws JLRMException {
         logger.info("ENTERING call()");

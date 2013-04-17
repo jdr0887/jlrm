@@ -37,6 +37,12 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
         super();
     }
 
+    public LSFSSHLookupStatusCallable(List<LSFSSHJob> jobs, Site site) {
+        super();
+        this.jobs = jobs;
+        this.site = site;
+    }
+
     @Override
     public Set<LSFJobStatusInfo> call() throws JLRMException {
         logger.info("ENTERING call()");

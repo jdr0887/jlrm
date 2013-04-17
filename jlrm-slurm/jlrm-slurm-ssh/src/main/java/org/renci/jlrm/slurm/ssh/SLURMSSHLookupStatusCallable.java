@@ -45,6 +45,12 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
         super();
     }
 
+    public SLURMSSHLookupStatusCallable(Site site, List<SLURMSSHJob> jobs) {
+        super();
+        this.site = site;
+        this.jobs = jobs;
+    }
+
     @Override
     public Set<SLURMJobStatusInfo> call() throws JLRMException {
         logger.info("ENTERING call()");
