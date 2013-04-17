@@ -40,7 +40,7 @@ public class JobTest {
         job.addArgument("--persistFileData");
         job.addArgument("--htsfSampleId", 113052);
 
-        CondorSubmitScriptExporter exporter = CondorSubmitScriptExporter.getInstance();
+        CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
         exporter.export(new File("/tmp"), job);
 
     }
@@ -139,7 +139,7 @@ public class JobTest {
         graph.addVertex(job5);
         graph.addEdge(job2, job5);
 
-        CondorSubmitScriptExporter exporter = CondorSubmitScriptExporter.getInstance();
+        CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
         exporter.export("asdfads", new File("/tmp"), graph, false);
 
         try {
@@ -233,7 +233,7 @@ public class JobTest {
         classAd.setValue(UniverseType.MPI.toString().toLowerCase());
         job2.getClassAdvertismentMap().put(ClassAdvertisementFactory.CLASS_AD_KEY_UNIVERSE, classAd);
 
-        CondorSubmitScriptExporter exporter = CondorSubmitScriptExporter.getInstance();
+        CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
         exporter.export(new File("/tmp"), job2);
 
     }
