@@ -46,6 +46,10 @@ public class ClassAdvertisementFactory {
 
     public static final String CLASS_AD_KEY_TRANSFER_OUTPUT = "transfer_output";
 
+    public static final String CLASS_AD_KEY_TRANSFER_INPUT_FILES = "transfer_input_files";
+
+    public static final String CLASS_AD_KEY_TRANSFER_OUTPUT_FILES = "transfer_output_files";
+
     public static final String CLASS_AD_KEY_EXECUTABLE = "executable";
 
     public static final String CLASS_AD_KEY_UNIVERSE = "universe";
@@ -124,6 +128,12 @@ public class ClassAdvertisementFactory {
 
         classAdvertismentMap.put(CLASS_AD_KEY_TRANSFER_OUTPUT, new ClassAdvertisement(CLASS_AD_KEY_TRANSFER_OUTPUT,
                 ClassAdvertisementType.BOOLEAN, Boolean.TRUE.toString()));
+
+        classAdvertismentMap.put(CLASS_AD_KEY_TRANSFER_OUTPUT_FILES, new ClassAdvertisement(
+                CLASS_AD_KEY_TRANSFER_OUTPUT_FILES, ClassAdvertisementType.EXPRESSION, ""));
+
+        classAdvertismentMap.put(CLASS_AD_KEY_TRANSFER_INPUT_FILES, new ClassAdvertisement(
+                CLASS_AD_KEY_TRANSFER_INPUT_FILES, ClassAdvertisementType.EXPRESSION, ""));
 
         classAdvertismentMap.put(CLASS_AD_KEY_EXECUTABLE, new ClassAdvertisement(CLASS_AD_KEY_EXECUTABLE,
                 ClassAdvertisementType.EXPRESSION, ""));
@@ -208,7 +218,7 @@ public class ClassAdvertisementFactory {
         ret.add(getClassAd(CLASS_AD_KEY_STREAM_ERROR));
         ret.add(getClassAd(CLASS_AD_KEY_STREAM_OUTPUT));
         ret.add(getClassAd(CLASS_AD_KEY_PRIORITY));
-        //ret.add(getClassAd(CLASS_AD_KEY_TRANSFER_EXECUTABLE));
+        // ret.add(getClassAd(CLASS_AD_KEY_TRANSFER_EXECUTABLE));
         ret.add(getClassAd(CLASS_AD_KEY_TRANSFER_ERROR));
         ret.add(getClassAd(CLASS_AD_KEY_TRANSFER_OUTPUT));
         ret.add(getClassAd(CLASS_AD_KEY_PERIODIC_RELEASE));
