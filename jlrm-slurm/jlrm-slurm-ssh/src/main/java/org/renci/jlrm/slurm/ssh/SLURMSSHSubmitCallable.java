@@ -42,6 +42,13 @@ public class SLURMSSHSubmitCallable implements Callable<SLURMSSHJob> {
         super();
     }
 
+    public SLURMSSHSubmitCallable(Site site, SLURMSSHJob job, File submitDir) {
+        super();
+        this.site = site;
+        this.job = job;
+        this.submitDir = submitDir;
+    }
+
     @Override
     public SLURMSSHJob call() throws JLRMException {
 

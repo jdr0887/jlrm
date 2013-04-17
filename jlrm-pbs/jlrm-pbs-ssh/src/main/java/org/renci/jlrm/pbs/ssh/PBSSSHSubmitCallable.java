@@ -43,6 +43,13 @@ public class PBSSSHSubmitCallable implements Callable<PBSSSHJob> {
         super();
     }
 
+    public PBSSSHSubmitCallable(Site site, PBSSSHJob job, File submitDir) {
+        super();
+        this.site = site;
+        this.job = job;
+        this.submitDir = submitDir;
+    }
+
     @Override
     public PBSSSHJob call() throws JLRMException {
 

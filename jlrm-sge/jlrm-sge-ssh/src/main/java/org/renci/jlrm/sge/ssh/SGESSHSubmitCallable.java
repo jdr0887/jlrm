@@ -42,6 +42,13 @@ public class SGESSHSubmitCallable implements Callable<SGESSHJob> {
         super();
     }
 
+    public SGESSHSubmitCallable(Site site, SGESSHJob job, File submitDir) {
+        super();
+        this.site = site;
+        this.job = job;
+        this.submitDir = submitDir;
+    }
+
     @Override
     public SGESSHJob call() throws JLRMException {
 

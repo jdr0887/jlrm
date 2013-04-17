@@ -42,6 +42,13 @@ public class LSFSSHSubmitCallable implements Callable<LSFSSHJob> {
         super();
     }
 
+    public LSFSSHSubmitCallable(LSFSSHJob job, Site site, File submitDir) {
+        super();
+        this.job = job;
+        this.site = site;
+        this.submitDir = submitDir;
+    }
+
     @Override
     public LSFSSHJob call() throws JLRMException {
 
