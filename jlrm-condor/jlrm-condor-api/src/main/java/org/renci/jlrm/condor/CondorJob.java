@@ -31,15 +31,11 @@ public class CondorJob extends Job {
     }
 
     public CondorJob(String name, File executable) {
-        super();
-        this.name = name;
-        this.executable = executable;
+        super(name, executable);
     }
 
     public CondorJob(String name, File executable, Integer retry) {
-        super();
-        this.name = name;
-        this.executable = executable;
+        super(name, executable);
         this.retry = retry;
         for (ClassAdvertisement classAd : ClassAdvertisementFactory.getDefaultClassAds()) {
             classAdvertismentMap.put(classAd.getKey(), classAd);
