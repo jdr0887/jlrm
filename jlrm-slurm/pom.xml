@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.renci</groupId>
     <artifactId>jLRM</artifactId>
-    <version>0.2.26</version>
+    <version>0.2.27-SNAPSHOT</version>
   </parent>
   <name>jLRM :: SLURM</name>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.renci.jlrm</groupId>
   <artifactId>jlrm-slurm</artifactId>
-  <version>0.2.26</version>
+  <version>0.2.27-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
     <module>jlrm-slurm-api</module>
