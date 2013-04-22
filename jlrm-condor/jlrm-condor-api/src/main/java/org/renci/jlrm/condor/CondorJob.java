@@ -28,6 +28,8 @@ public class CondorJob extends Job {
 
     private String siteName;
 
+    private File initialDirectory;
+
     private List<String> transferInputList = new ArrayList<String>();
 
     private List<String> transferOutputList = new ArrayList<String>();
@@ -92,6 +94,14 @@ public class CondorJob extends Job {
 
     public void addTransferOutput(String file) {
         this.transferOutputList.add(file);
+    }
+
+    public File getInitialDirectory() {
+        return initialDirectory;
+    }
+
+    public void setInitialDirectory(File initialDirectory) {
+        this.initialDirectory = initialDirectory;
     }
 
     public Integer getCluster() {
@@ -168,9 +178,9 @@ public class CondorJob extends Job {
 
     @Override
     public String toString() {
-        return String.format(
-                "CondorJob [cluster=%s, jobId=%s, priority=%s, retry=%s, preScript=%s, postScript=%s, siteName=%s]",
-                cluster, jobId, priority, retry, preScript, postScript, siteName);
+        return String
+                .format("CondorJob [cluster=%s, jobId=%s, priority=%s, retry=%s, siteName=%s, initialDirectory=%s, id=%s, name=%s, executable=%s, submitFile=%s]",
+                        cluster, jobId, priority, retry, siteName, initialDirectory, id, name, executable, submitFile);
     }
 
     @Override
@@ -178,9 +188,8 @@ public class CondorJob extends Job {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + ((cluster == null) ? 0 : cluster.hashCode());
+        result = prime * result + ((initialDirectory == null) ? 0 : initialDirectory.hashCode());
         result = prime * result + ((jobId == null) ? 0 : jobId.hashCode());
-        result = prime * result + ((postScript == null) ? 0 : postScript.hashCode());
-        result = prime * result + ((preScript == null) ? 0 : preScript.hashCode());
         result = prime * result + ((priority == null) ? 0 : priority.hashCode());
         result = prime * result + ((retry == null) ? 0 : retry.hashCode());
         result = prime * result + ((siteName == null) ? 0 : siteName.hashCode());
@@ -201,20 +210,15 @@ public class CondorJob extends Job {
                 return false;
         } else if (!cluster.equals(other.cluster))
             return false;
+        if (initialDirectory == null) {
+            if (other.initialDirectory != null)
+                return false;
+        } else if (!initialDirectory.equals(other.initialDirectory))
+            return false;
         if (jobId == null) {
             if (other.jobId != null)
                 return false;
         } else if (!jobId.equals(other.jobId))
-            return false;
-        if (postScript == null) {
-            if (other.postScript != null)
-                return false;
-        } else if (!postScript.equals(other.postScript))
-            return false;
-        if (preScript == null) {
-            if (other.preScript != null)
-                return false;
-        } else if (!preScript.equals(other.preScript))
             return false;
         if (priority == null) {
             if (other.priority != null)
