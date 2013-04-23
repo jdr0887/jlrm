@@ -131,30 +131,25 @@ public class SLURMSSHSubmitCallable implements Callable<SLURMSSHJob> {
             // String submitOutput = new String(out.toByteArray());
             String submitOutput = IOUtils.toString(in);
             int exitCode = execChannel.getExitStatus();
+            logger.warn("Exit Code: {}", exitCode);
             execChannel.disconnect();
             session.disconnect();
             err.close();
             out.close();
 
-            if (exitCode != 0) {
-                String errorMessage = new String(err.toByteArray());
-                logger.error("ERROR: {}", errorMessage);
-                throw new JLRMException(errorMessage);
-            } else {
-                LineNumberReader lnr = new LineNumberReader(new StringReader(submitOutput));
-                String line;
-                while ((line = lnr.readLine()) != null) {
-                    if (line.indexOf("batch job") != -1) {
-                        logger.info("line = " + line);
-                        Pattern pattern = Pattern.compile("^.+batch job (\\d*)$");
-                        Matcher matcher = pattern.matcher(line);
-                        if (!matcher.matches()) {
-                            throw new JLRMException("failed to parse the jobid number");
-                        } else {
-                            job.setId(matcher.group(1));
-                        }
-                        break;
+            LineNumberReader lnr = new LineNumberReader(new StringReader(submitOutput));
+            String line;
+            while ((line = lnr.readLine()) != null) {
+                if (line.indexOf("batch job") != -1) {
+                    logger.info("line = " + line);
+                    Pattern pattern = Pattern.compile("^.+batch job (\\d*)$");
+                    Matcher matcher = pattern.matcher(line);
+                    if (!matcher.matches()) {
+                        throw new JLRMException("failed to parse the jobid number");
+                    } else {
+                        job.setId(matcher.group(1));
                     }
+                    break;
                 }
             }
         } catch (JSchException e) {
