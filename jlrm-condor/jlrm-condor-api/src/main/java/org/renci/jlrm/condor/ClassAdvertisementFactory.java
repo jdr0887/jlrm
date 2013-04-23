@@ -1,5 +1,10 @@
 package org.renci.jlrm.condor;
 
+import static org.renci.jlrm.condor.ClassAdvertisementType.BOOLEAN;
+import static org.renci.jlrm.condor.ClassAdvertisementType.EXPRESSION;
+import static org.renci.jlrm.condor.ClassAdvertisementType.INTEGER;
+import static org.renci.jlrm.condor.ClassAdvertisementType.STRING;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -84,107 +89,98 @@ public class ClassAdvertisementFactory {
 
     static {
 
-        classAdvertismentMap.put(CLASS_AD_KEY_PRIORITY, new ClassAdvertisement(CLASS_AD_KEY_PRIORITY,
-                ClassAdvertisementType.INTEGER, "0"));
+        classAdvertismentMap.put(CLASS_AD_KEY_PRIORITY, new ClassAdvertisement(CLASS_AD_KEY_PRIORITY, INTEGER, "0"));
 
-        classAdvertismentMap.put(CLASS_AD_KEY_STREAM_ERROR, new ClassAdvertisement(CLASS_AD_KEY_STREAM_ERROR,
-                ClassAdvertisementType.BOOLEAN, Boolean.FALSE.toString()));
+        classAdvertismentMap.put(CLASS_AD_KEY_STREAM_ERROR, new ClassAdvertisement(CLASS_AD_KEY_STREAM_ERROR, BOOLEAN,
+                Boolean.FALSE.toString()));
 
         classAdvertismentMap.put(CLASS_AD_KEY_STREAM_OUTPUT, new ClassAdvertisement(CLASS_AD_KEY_STREAM_OUTPUT,
-                ClassAdvertisementType.BOOLEAN, Boolean.FALSE.toString()));
+                BOOLEAN, Boolean.FALSE.toString()));
 
-        classAdvertismentMap.put(CLASS_AD_KEY_GET_ENV, new ClassAdvertisement(CLASS_AD_KEY_GET_ENV,
-                ClassAdvertisementType.BOOLEAN, Boolean.TRUE.toString()));
+        classAdvertismentMap.put(CLASS_AD_KEY_GET_ENV, new ClassAdvertisement(CLASS_AD_KEY_GET_ENV, BOOLEAN,
+                Boolean.TRUE.toString()));
 
         classAdvertismentMap.put(CLASS_AD_KEY_COPY_TO_SPOOL, new ClassAdvertisement(CLASS_AD_KEY_COPY_TO_SPOOL,
-                ClassAdvertisementType.BOOLEAN, Boolean.TRUE.toString()));
+                BOOLEAN, Boolean.TRUE.toString()));
 
         classAdvertismentMap.put(CLASS_AD_KEY_NOTIFICATION, new ClassAdvertisement(CLASS_AD_KEY_NOTIFICATION,
-                ClassAdvertisementType.EXPRESSION, "NEVER"));
+                EXPRESSION, "NEVER"));
 
         classAdvertismentMap.put(CLASS_AD_KEY_TRANSFER_EXECUTABLE, new ClassAdvertisement(
-                CLASS_AD_KEY_TRANSFER_EXECUTABLE, ClassAdvertisementType.EXPRESSION, Boolean.FALSE.toString()));
+                CLASS_AD_KEY_TRANSFER_EXECUTABLE, EXPRESSION, Boolean.FALSE.toString()));
 
-        classAdvertismentMap.put(CLASS_AD_KEY_QUEUE, new ClassAdvertisement(CLASS_AD_KEY_QUEUE,
-                ClassAdvertisementType.EXPRESSION, ""));
+        classAdvertismentMap.put(CLASS_AD_KEY_QUEUE, new ClassAdvertisement(CLASS_AD_KEY_QUEUE, EXPRESSION, ""));
 
-        classAdvertismentMap.put(CLASS_AD_KEY_ARGUMENTS, new ClassAdvertisement(CLASS_AD_KEY_ARGUMENTS,
-                ClassAdvertisementType.STRING, ""));
+        classAdvertismentMap.put(CLASS_AD_KEY_ARGUMENTS, new ClassAdvertisement(CLASS_AD_KEY_ARGUMENTS, STRING, ""));
 
         classAdvertismentMap.put(CLASS_AD_KEY_PERIODIC_RELEASE, new ClassAdvertisement(CLASS_AD_KEY_PERIODIC_RELEASE,
-                ClassAdvertisementType.BOOLEAN, Boolean.FALSE.toString()));
+                BOOLEAN, Boolean.FALSE.toString()));
 
         classAdvertismentMap.put(CLASS_AD_KEY_PERIODIC_REMOVE, new ClassAdvertisement(CLASS_AD_KEY_PERIODIC_REMOVE,
-                ClassAdvertisementType.EXPRESSION, Boolean.FALSE.toString()));
+                EXPRESSION, Boolean.FALSE.toString()));
 
         classAdvertismentMap.put(CLASS_AD_KEY_ON_EXIT_HOLD, new ClassAdvertisement(CLASS_AD_KEY_ON_EXIT_HOLD,
-                ClassAdvertisementType.EXPRESSION, "(ExitBySignal == True) || (ExitCode != 0)"));
+                EXPRESSION, "(ExitBySignal == True) || (ExitCode != 0)"));
 
         classAdvertismentMap.put(CLASS_AD_KEY_ON_EXIT_REMOVE, new ClassAdvertisement(CLASS_AD_KEY_ON_EXIT_REMOVE,
-                ClassAdvertisementType.EXPRESSION, "(ExitBySignal == True) && (ExitStatus == 0)"));
+                EXPRESSION, "(ExitBySignal == True) && (ExitStatus == 0)"));
 
         classAdvertismentMap.put(CLASS_AD_KEY_TRANSFER_ERROR, new ClassAdvertisement(CLASS_AD_KEY_TRANSFER_ERROR,
-                ClassAdvertisementType.BOOLEAN, Boolean.TRUE.toString()));
+                BOOLEAN, Boolean.TRUE.toString()));
 
         classAdvertismentMap.put(CLASS_AD_KEY_TRANSFER_OUTPUT, new ClassAdvertisement(CLASS_AD_KEY_TRANSFER_OUTPUT,
-                ClassAdvertisementType.BOOLEAN, Boolean.TRUE.toString()));
+                BOOLEAN, Boolean.TRUE.toString()));
 
         classAdvertismentMap.put(CLASS_AD_KEY_TRANSFER_OUTPUT_FILES, new ClassAdvertisement(
-                CLASS_AD_KEY_TRANSFER_OUTPUT_FILES, ClassAdvertisementType.EXPRESSION, ""));
+                CLASS_AD_KEY_TRANSFER_OUTPUT_FILES, EXPRESSION, ""));
 
         classAdvertismentMap.put(CLASS_AD_KEY_TRANSFER_INPUT_FILES, new ClassAdvertisement(
-                CLASS_AD_KEY_TRANSFER_INPUT_FILES, ClassAdvertisementType.EXPRESSION, ""));
+                CLASS_AD_KEY_TRANSFER_INPUT_FILES, EXPRESSION, ""));
 
-        classAdvertismentMap.put(CLASS_AD_KEY_EXECUTABLE, new ClassAdvertisement(CLASS_AD_KEY_EXECUTABLE,
-                ClassAdvertisementType.EXPRESSION, ""));
+        classAdvertismentMap.put(CLASS_AD_KEY_EXECUTABLE, new ClassAdvertisement(CLASS_AD_KEY_EXECUTABLE, EXPRESSION,
+                ""));
 
-        classAdvertismentMap.put(CLASS_AD_KEY_UNIVERSE, new ClassAdvertisement(CLASS_AD_KEY_UNIVERSE,
-                ClassAdvertisementType.EXPRESSION, UniverseType.VANILLA.toString().toLowerCase()));
+        classAdvertismentMap.put(CLASS_AD_KEY_UNIVERSE, new ClassAdvertisement(CLASS_AD_KEY_UNIVERSE, EXPRESSION,
+                UniverseType.VANILLA.toString().toLowerCase()));
 
-        classAdvertismentMap.put(CLASS_AD_KEY_GLOBUS_RSL, new ClassAdvertisement(CLASS_AD_KEY_GLOBUS_RSL,
-                ClassAdvertisementType.EXPRESSION, ""));
+        classAdvertismentMap.put(CLASS_AD_KEY_GLOBUS_RSL, new ClassAdvertisement(CLASS_AD_KEY_GLOBUS_RSL, EXPRESSION,
+                ""));
 
         classAdvertismentMap.put(CLASS_AD_KEY_GRID_RESOURCE, new ClassAdvertisement(CLASS_AD_KEY_GRID_RESOURCE,
-                ClassAdvertisementType.EXPRESSION, ""));
+                EXPRESSION, ""));
 
         classAdvertismentMap.put(CLASS_AD_KEY_X509_USER_PROXY, new ClassAdvertisement(CLASS_AD_KEY_X509_USER_PROXY,
-                ClassAdvertisementType.EXPRESSION, ""));
+                EXPRESSION, ""));
 
-        classAdvertismentMap.put(CLASS_AD_KEY_INITIAL_DIR, new ClassAdvertisement(CLASS_AD_KEY_INITIAL_DIR,
-                ClassAdvertisementType.EXPRESSION, ""));
+        classAdvertismentMap.put(CLASS_AD_KEY_INITIAL_DIR, new ClassAdvertisement(CLASS_AD_KEY_INITIAL_DIR, EXPRESSION,
+                ""));
 
         classAdvertismentMap.put(CLASS_AD_KEY_REMOTE_INITIAL_DIR, new ClassAdvertisement(
-                CLASS_AD_KEY_REMOTE_INITIAL_DIR, ClassAdvertisementType.EXPRESSION, ""));
+                CLASS_AD_KEY_REMOTE_INITIAL_DIR, EXPRESSION, ""));
 
-        classAdvertismentMap.put(CLASS_AD_KEY_OUTPUT, new ClassAdvertisement(CLASS_AD_KEY_OUTPUT,
-                ClassAdvertisementType.EXPRESSION, ""));
+        classAdvertismentMap.put(CLASS_AD_KEY_OUTPUT, new ClassAdvertisement(CLASS_AD_KEY_OUTPUT, EXPRESSION, ""));
 
-        classAdvertismentMap.put(CLASS_AD_KEY_ERROR, new ClassAdvertisement(CLASS_AD_KEY_ERROR,
-                ClassAdvertisementType.EXPRESSION, ""));
+        classAdvertismentMap.put(CLASS_AD_KEY_ERROR, new ClassAdvertisement(CLASS_AD_KEY_ERROR, EXPRESSION, ""));
 
-        classAdvertismentMap.put(CLASS_AD_KEY_LOG, new ClassAdvertisement(CLASS_AD_KEY_LOG,
-                ClassAdvertisementType.EXPRESSION, ""));
+        classAdvertismentMap.put(CLASS_AD_KEY_LOG, new ClassAdvertisement(CLASS_AD_KEY_LOG, EXPRESSION, ""));
 
-        classAdvertismentMap.put(CLASS_AD_KEY_REQUEST_CPUS, new ClassAdvertisement(CLASS_AD_KEY_REQUEST_CPUS,
-                ClassAdvertisementType.INTEGER, "1"));
+        classAdvertismentMap.put(CLASS_AD_KEY_REQUEST_CPUS, new ClassAdvertisement(CLASS_AD_KEY_REQUEST_CPUS, INTEGER,
+                "1"));
 
         classAdvertismentMap.put(CLASS_AD_KEY_REQUEST_MEMORY, new ClassAdvertisement(CLASS_AD_KEY_REQUEST_MEMORY,
-                ClassAdvertisementType.INTEGER, "1024"));
+                INTEGER, "1024"));
 
-        classAdvertismentMap.put(CLASS_AD_KEY_REQUEST_DISK, new ClassAdvertisement(CLASS_AD_KEY_REQUEST_DISK,
-                ClassAdvertisementType.INTEGER, "102400"));
+        classAdvertismentMap.put(CLASS_AD_KEY_REQUEST_DISK, new ClassAdvertisement(CLASS_AD_KEY_REQUEST_DISK, INTEGER,
+                "102400"));
 
         classAdvertismentMap.put(CLASS_AD_KEY_REQUIREMENTS, new ClassAdvertisement(CLASS_AD_KEY_REQUIREMENTS,
-                ClassAdvertisementType.EXPRESSION, ""));
+                EXPRESSION, ""));
 
         classAdvertismentMap.put(CLASS_AD_KEY_SHOULD_TRANSFER_FILES, new ClassAdvertisement(
-                CLASS_AD_KEY_SHOULD_TRANSFER_FILES, ClassAdvertisementType.EXPRESSION, "YES"));
+                CLASS_AD_KEY_SHOULD_TRANSFER_FILES, EXPRESSION, "YES"));
 
         classAdvertismentMap.put(CLASS_AD_KEY_WHEN_TO_TRANSFER_OUTPUT, new ClassAdvertisement(
-                CLASS_AD_KEY_WHEN_TO_TRANSFER_OUTPUT, ClassAdvertisementType.EXPRESSION, "ON_EXIT"));
-
-        classAdvertismentMap.put(CLASS_AD_KEY_WHEN_TO_TRANSFER_OUTPUT, new ClassAdvertisement(
-                CLASS_AD_KEY_WHEN_TO_TRANSFER_OUTPUT, ClassAdvertisementType.EXPRESSION, "ON_EXIT"));
+                CLASS_AD_KEY_WHEN_TO_TRANSFER_OUTPUT, EXPRESSION, "ON_EXIT"));
 
     }
 
