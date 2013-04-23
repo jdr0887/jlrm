@@ -3,30 +3,23 @@ package org.renci.jlrm.slurm.ssh;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.LineNumberReader;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Site;
 import org.renci.jlrm.slurm.SLURMJobStatusInfo;
 import org.renci.jlrm.slurm.SLURMJobStatusType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
@@ -55,7 +48,12 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
     public Set<SLURMJobStatusInfo> call() throws JLRMException {
         logger.info("ENTERING call()");
 
-        String command = String.format(". ~/.bashrc; squeue");
+        List<String> jobIdList = new ArrayList<String>();
+        for (SLURMSSHJob job : this.jobs) {
+            jobIdList.add(job.getId());
+        }
+        String format = ". ~/.bashrc; sacct -P -j %1$s -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2";
+        String command = String.format(format, StringUtils.join(jobIdList, ","));
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
@@ -87,57 +85,26 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
 
             String output = IOUtils.toString(in).trim();
             int exitCode = execChannel.getExitStatus();
-
+            logger.info("exitCode: {}", exitCode);
             execChannel.disconnect();
             session.disconnect();
 
-            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document document = documentBuilder.parse(new InputSource(new StringReader(output)));
-            XPath xpath = XPathFactory.newInstance().newXPath();
-            String jobListXPath = "/job_info/queue_info/job_list";
-            NodeList jobListNodeList = (NodeList) xpath.evaluate(jobListXPath, document, XPathConstants.NODESET);
-            if (jobListNodeList.getLength() > 0) {
-                for (int i = 0; i < jobListNodeList.getLength(); i++) {
-                    Node node = jobListNodeList.item(i);
-                    NodeList childNodes = node.getChildNodes();
-                    String jobId = "";
-                    String queueName = "";
-                    String status = "";
-                    SLURMJobStatusType statusType = SLURMJobStatusType.COMPLETED;
-                    for (int j = 0; j < childNodes.getLength(); j++) {
-                        Node childNode = childNodes.item(j);
-                        String nodeName = childNode.getNodeName();
-                        if ("JB_job_number".equals(nodeName)) {
-                            jobId = childNode.getTextContent();
-                        }
-                        if ("state".equals(nodeName)) {
-                            status = childNode.getTextContent();
-                            for (SLURMJobStatusType type : SLURMJobStatusType.values()) {
-                                if (type.getValue().equals(status)) {
-                                    statusType = type;
-                                }
+            LineNumberReader lnr = new LineNumberReader(new StringReader(output));
+            String line;
+            while ((line = lnr.readLine()) != null) {
+                SLURMJobStatusType statusType = SLURMJobStatusType.COMPLETED;
+                if (StringUtils.isNotEmpty(line)) {
+                    String[] lineSplit = StringUtils.split(line, '|');
+                    if (lineSplit != null && lineSplit.length == 4) {
+                        for (SLURMJobStatusType type : SLURMJobStatusType.values()) {
+                            if (type.getValue().equals(lineSplit[1])) {
+                                statusType = type;
                             }
                         }
-                        if ("hard_req_queue".equals(nodeName)) {
-                            queueName = childNode.getTextContent();
-                        }
-                    }
-                    SLURMJobStatusInfo info = new SLURMJobStatusInfo(jobId, statusType, queueName);
-                    logger.info("JobStatus is {}", info.toString());
-                    jobStatusSet.add(info);
-                }
-            }
-
-            Set<String> jobIdSet = new HashSet<String>();
-            for (SLURMJobStatusInfo info : jobStatusSet) {
-                jobIdSet.add(info.getJobId());
-            }
-
-            if (jobs != null) {
-                for (SLURMSSHJob job : jobs) {
-                    if (!jobIdSet.contains(job.getId())) {
-                        // need to default the queueName for non existing jobs
-                        jobStatusSet.add(new SLURMJobStatusInfo(job.getId(), SLURMJobStatusType.COMPLETED, "all.q"));
+                        SLURMJobStatusInfo info = new SLURMJobStatusInfo(lineSplit[0], statusType, lineSplit[2],
+                                lineSplit[3]);
+                        logger.info("JobStatus is {}", info.toString());
+                        jobStatusSet.add(info);
                     }
                 }
             }
