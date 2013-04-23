@@ -254,7 +254,7 @@ public class SLURMSSHSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
 
             execChannel.disconnect();
             session.disconnect();
-
+            
             LineNumberReader lnr = new LineNumberReader(new StringReader(submitOutput));
             String line;
             while ((line = lnr.readLine()) != null) {
