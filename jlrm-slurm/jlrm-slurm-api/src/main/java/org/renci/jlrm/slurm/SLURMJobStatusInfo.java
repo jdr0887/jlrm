@@ -8,11 +8,22 @@ public class SLURMJobStatusInfo {
 
     private String queue;
 
-    public SLURMJobStatusInfo(String jobId, SLURMJobStatusType type, String queue) {
+    private String jobName;
+
+    public SLURMJobStatusInfo(String jobId, SLURMJobStatusType type, String queue, String jobName) {
         super();
         this.jobId = jobId;
         this.type = type;
         this.queue = queue;
+        this.jobName = jobName;
+    }
+
+    public String getJobName() {
+        return jobName;
+    }
+
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
     }
 
     public String getJobId() {
@@ -41,7 +52,8 @@ public class SLURMJobStatusInfo {
 
     @Override
     public String toString() {
-        return "SGEJobStatusInfo [jobId=" + jobId + ", type=" + type + ", queue=" + queue + "]";
+        return String.format("SLURMJobStatusInfo [jobId=%s, type=%s, queue=%s, jobName=%s]", jobId, type, queue,
+                jobName);
     }
 
 }
