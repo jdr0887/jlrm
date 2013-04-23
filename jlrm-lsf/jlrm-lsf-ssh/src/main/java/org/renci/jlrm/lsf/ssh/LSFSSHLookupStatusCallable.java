@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -47,14 +48,12 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
     public Set<LSFJobStatusInfo> call() throws JLRMException {
         logger.info("ENTERING call()");
 
-        StringBuilder sb = new StringBuilder();
+        List<String> jobIdList = new ArrayList<String>();
         for (LSFSSHJob job : this.jobs) {
-            sb.append(" ").append(job.getId());
+            jobIdList.add(job.getId());
         }
-        String jobXarg = sb.toString().replaceFirst(" ", "");
-        String command = String
-                .format(". ~/.bashrc; bjobs %1$s | tail -n+2 | grep RUN | awk '{print $1,$3,$4,$7}' && bjobs %1$s | tail -n+2 | grep PEND | awk '{print $1,$3,$4,$6}'",
-                        jobXarg);
+        String format = ". ~/.bashrc; bjobs %1$s | tail -n+2 | grep RUN | awk '{print $1,$3,$4,$7}' && bjobs %1$s | tail -n+2 | grep PEND | awk '{print $1,$3,$4,$6}'";
+        String command = String.format(format, StringUtils.join(jobIdList, " "));
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
