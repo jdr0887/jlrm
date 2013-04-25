@@ -69,13 +69,13 @@ public class SLURMSSHFactoryTest {
         site.setUsername("jdr0887");
 
         Queue queue = new Queue();
-        queue.setName("all.q");
+        queue.setName("queue16");
         queue.setRunTime(2880);
 
         File submitDir = new File("/tmp");
         try {
             SLURMSSHSubmitCondorGlideinCallable callable = new SLURMSSHSubmitCondorGlideinCallable(site, queue,
-                    submitDir, "glidein", "biodev1.its.unc.edu", "*.its.unc.edu", "*.its.unc.edu", 40);
+                    submitDir, "glidein", "biodev1.its.unc.edu", "*.unc.edu", "*.unc.edu", 40);
             SLURMSSHJob job = callable.call();
             System.out.println(job.getId());
         } catch (JLRMException e) {
