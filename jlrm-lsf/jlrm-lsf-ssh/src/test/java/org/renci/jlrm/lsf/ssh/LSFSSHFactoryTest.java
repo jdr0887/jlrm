@@ -61,12 +61,12 @@ public class LSFSSHFactoryTest {
     public void testGlideinSubmit() {
 
         Site site = new Site();
-        site.setSubmitHost("biodev1.its.unc.edu");
+        site.setSubmitHost("gnet641.its.unc.edu");
         site.setMaxNoClaimTime(1440);
-        site.setUsername("jreilly");
+        site.setUsername("rc_lbg.svc");
 
         Queue queue = new Queue();
-        queue.setName("prenci");
+        queue.setName("pseq_tcga");
         queue.setRunTime(2880);
 
         File submitDir = new File("/tmp");
@@ -78,7 +78,7 @@ public class LSFSSHFactoryTest {
             // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "huge");
             // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "week");
             LSFSSHSubmitCondorGlideinCallable callable = new LSFSSHSubmitCondorGlideinCallable(site, queue, submitDir,
-                    "glidein", "biodev1.its.unc.edu", "*.its.unc.edu", "*.its.unc.edu", 40);
+                    "glidein", "gnet641.its.unc.edu", "*.unc.edu", "*.unc.edu", 40);
             LSFSSHJob job = callable.call();
             System.out.println(job.getId());
         } catch (JLRMException e) {
