@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.renci</groupId>
     <artifactId>jLRM</artifactId>
-    <version>0.2.29-SNAPSHOT</version>
+    <version>0.2.29</version>
   </parent>
   <name>jLRM :: PBS</name>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.renci.jlrm</groupId>
   <artifactId>jlrm-pbs</artifactId>
-  <version>0.2.29-SNAPSHOT</version>
+  <version>0.2.29</version>
   <packaging>pom</packaging>
   <modules>
     <module>jlrm-pbs-api</module>
