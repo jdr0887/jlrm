@@ -53,7 +53,8 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
             jobIdList.add(job.getId());
         }
         String format = ". ~/.bashrc; bjobs %1$s | tail -n+2 | grep RUN | awk '{print $1,$3,$4,$7}' && bjobs %1$s | tail -n+2 | grep PEND | awk '{print $1,$3,$4,$6}'";
-        String command = String.format(format, StringUtils.join(jobIdList, " "));
+        String delimitedJobList = jobIdList != null && jobIdList.size() > 0 ? StringUtils.join(jobIdList, ",") : "";
+        String command = String.format(format, delimitedJobList);
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";

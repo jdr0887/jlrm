@@ -53,7 +53,8 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
             jobIdList.add(job.getId());
         }
         String format = ". ~/.bashrc; sacct -P -j %1$s -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2";
-        String command = String.format(format, StringUtils.join(jobIdList, ","));
+        String delimitedJobList = jobIdList != null && jobIdList.size() > 0 ? StringUtils.join(jobIdList, ",") : "";
+        String command = String.format(format, delimitedJobList);
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
