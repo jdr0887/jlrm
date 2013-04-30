@@ -48,20 +48,22 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
     public Set<SLURMJobStatusInfo> call() throws JLRMException {
         logger.info("ENTERING call()");
 
-        List<String> jobIdList = new ArrayList<String>();
-        for (SLURMSSHJob job : this.jobs) {
-            jobIdList.add(job.getId());
-        }
-        String format = ". ~/.bashrc; sacct -P -j %1$s -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2";
-        String delimitedJobList = jobIdList != null && jobIdList.size() > 0 ? StringUtils.join(jobIdList, ",") : "";
-        String command = String.format(format, delimitedJobList);
-
-        String home = System.getProperty("user.home");
-        String knownHostsFilename = home + "/.ssh/known_hosts";
-
         Set<SLURMJobStatusInfo> jobStatusSet = new HashSet<SLURMJobStatusInfo>();
         JSch sch = new JSch();
+
         try {
+
+            List<String> jobIdList = new ArrayList<String>();
+            for (SLURMSSHJob job : this.jobs) {
+                jobIdList.add(job.getId());
+            }
+            String format = ". ~/.bashrc; sacct -P -j %1$s -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2";
+            String delimitedJobList = jobIdList != null && jobIdList.size() > 0 ? StringUtils.join(jobIdList, ",") : "";
+            String command = String.format(format, delimitedJobList);
+
+            String home = System.getProperty("user.home");
+            String knownHostsFilename = home + "/.ssh/known_hosts";
+
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
             Session session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);

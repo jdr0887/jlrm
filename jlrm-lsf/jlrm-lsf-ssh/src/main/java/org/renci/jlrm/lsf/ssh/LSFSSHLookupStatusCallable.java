@@ -48,20 +48,21 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
     public Set<LSFJobStatusInfo> call() throws JLRMException {
         logger.info("ENTERING call()");
 
-        List<String> jobIdList = new ArrayList<String>();
-        for (LSFSSHJob job : this.jobs) {
-            jobIdList.add(job.getId());
-        }
-        String format = ". ~/.bashrc; bjobs %1$s | tail -n+2 | grep RUN | awk '{print $1,$3,$4,$7}' && bjobs %1$s | tail -n+2 | grep PEND | awk '{print $1,$3,$4,$6}'";
-        String delimitedJobList = jobIdList != null && jobIdList.size() > 0 ? StringUtils.join(jobIdList, ",") : "";
-        String command = String.format(format, delimitedJobList);
-
-        String home = System.getProperty("user.home");
-        String knownHostsFilename = home + "/.ssh/known_hosts";
-
         Set<LSFJobStatusInfo> jobStatusSet = new HashSet<LSFJobStatusInfo>();
         JSch sch = new JSch();
         try {
+
+            List<String> jobIdList = new ArrayList<String>();
+            for (LSFSSHJob job : this.jobs) {
+                jobIdList.add(job.getId());
+            }
+            String format = ". ~/.bashrc; bjobs %1$s | tail -n+2 | grep RUN | awk '{print $1,$3,$4,$7}' && bjobs %1$s | tail -n+2 | grep PEND | awk '{print $1,$3,$4,$6}'";
+            String delimitedJobList = jobIdList != null && jobIdList.size() > 0 ? StringUtils.join(jobIdList, ",") : "";
+            String command = String.format(format, delimitedJobList);
+
+            String home = System.getProperty("user.home");
+            String knownHostsFilename = home + "/.ssh/known_hosts";
+
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
             Session session = sch.getSession(site.getUsername(), getSite().getSubmitHost(), 22);
