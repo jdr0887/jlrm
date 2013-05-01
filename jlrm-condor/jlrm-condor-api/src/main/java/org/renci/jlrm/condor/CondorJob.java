@@ -12,7 +12,7 @@ import org.renci.jlrm.Job;
 
 public class CondorJob extends Job {
 
-    private Map<String, ClassAdvertisement> classAdvertismentMap = new HashMap<String, ClassAdvertisement>();
+    private final Map<String, ClassAdvertisement> classAdvertismentMap = new HashMap<String, ClassAdvertisement>();
 
     private Integer cluster;
 
@@ -30,9 +30,9 @@ public class CondorJob extends Job {
 
     private File initialDirectory;
 
-    private List<String> transferInputList = new ArrayList<String>();
+    private final List<String> transferInputList = new ArrayList<String>();
 
-    private List<String> transferOutputList = new ArrayList<String>();
+    private final List<String> transferOutputList = new ArrayList<String>();
 
     public CondorJob() {
         super();
@@ -52,10 +52,6 @@ public class CondorJob extends Job {
 
     public Map<String, ClassAdvertisement> getClassAdvertismentMap() {
         return classAdvertismentMap;
-    }
-
-    public void setClassAdvertismentMap(Map<String, ClassAdvertisement> classAdvertismentMap) {
-        this.classAdvertismentMap = classAdvertismentMap;
     }
 
     public void addArgument(String flag) {
@@ -164,16 +160,8 @@ public class CondorJob extends Job {
         return transferInputList;
     }
 
-    public void setTransferInputList(List<String> transferInputList) {
-        this.transferInputList = transferInputList;
-    }
-
     public List<String> getTransferOutputList() {
         return transferOutputList;
-    }
-
-    public void setTransferOutputList(List<String> transferOutputList) {
-        this.transferOutputList = transferOutputList;
     }
 
     @Override
