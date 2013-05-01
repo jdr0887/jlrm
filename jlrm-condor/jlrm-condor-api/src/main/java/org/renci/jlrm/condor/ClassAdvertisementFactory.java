@@ -206,7 +206,7 @@ public class ClassAdvertisementFactory {
 
     public static Set<ClassAdvertisement> getDefaultClassAds() {
         Set<ClassAdvertisement> ret = new HashSet<ClassAdvertisement>();
-        ret.add(getClassAd(CLASS_AD_KEY_ARGUMENTS));
+        // ret.add(getClassAd(CLASS_AD_KEY_ARGUMENTS));
         // ret.add(getClassAd(CLASS_AD_KEY_REQUIREMENTS));
         ret.add(getClassAd(CLASS_AD_KEY_COPY_TO_SPOOL));
         ret.add(getClassAd(CLASS_AD_KEY_GET_ENV));
