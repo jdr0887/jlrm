@@ -57,21 +57,10 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
 
     private Integer requiredMemory;
 
+    private String username;
+
     public LSFSSHSubmitCondorGlideinCallable() {
         super();
-    }
-
-    public LSFSSHSubmitCondorGlideinCallable(Site site, Queue queue, File submitDir, String jobName,
-            String collectorHost, String hostAllowRead, String hostAllowWrite, Integer requiredMemory) {
-        super();
-        this.site = site;
-        this.queue = queue;
-        this.submitDir = submitDir;
-        this.collectorHost = collectorHost;
-        this.hostAllowRead = hostAllowRead;
-        this.hostAllowWrite = hostAllowWrite;
-        this.jobName = jobName;
-        this.requiredMemory = requiredMemory;
     }
 
     /**
@@ -105,7 +94,7 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("siteName", getSite().getSubmitHost());
         velocityContext.put("collectorHost", this.collectorHost);
-        velocityContext.put("jlrmUser", getSite().getUsername());
+        velocityContext.put("jlrmUser", this.username);
         velocityContext.put("jlrmSiteName", getSite().getName());
         velocityContext.put("hostAllowRead", this.hostAllowRead);
         velocityContext.put("hostAllowWrite", this.hostAllowWrite);
@@ -299,6 +288,14 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
         file.setExecutable(true);
         file.setWritable(true, true);
         FileUtils.writeStringToFile(file, sw.toString());
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Site getSite() {

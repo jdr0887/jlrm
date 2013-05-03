@@ -74,8 +74,16 @@ public class SLURMSSHFactoryTest {
 
         File submitDir = new File("/tmp");
         try {
-            SLURMSSHSubmitCondorGlideinCallable callable = new SLURMSSHSubmitCondorGlideinCallable(site, queue,
-                    submitDir, "glidein", "biodev1.its.unc.edu", "*.unc.edu", "*.unc.edu", 40);
+            SLURMSSHSubmitCondorGlideinCallable callable = new SLURMSSHSubmitCondorGlideinCallable();
+            callable.setCollectorHost("biodev1.its.unc.edu");
+            callable.setUsername("rc_renci.svc");
+            callable.setSite(site);
+            callable.setJobName("glidein");
+            callable.setQueue(queue);
+            callable.setSubmitDir(submitDir);
+            callable.setRequiredMemory(40);
+            callable.setHostAllowRead("*.unc.edu");
+            callable.setHostAllowWrite("*.unc.edu");
             SLURMSSHJob job = callable.call();
             System.out.println(job.getId());
         } catch (JLRMException e) {

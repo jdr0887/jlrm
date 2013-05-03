@@ -52,25 +52,14 @@ public class SLURMSSHSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
 
     private String jobName;
 
+    private String username;
+
     private String hostAllowRead;
 
     private String hostAllowWrite;
 
     public SLURMSSHSubmitCondorGlideinCallable() {
         super();
-    }
-
-    public SLURMSSHSubmitCondorGlideinCallable(Site site, Queue queue, File submitDir, String jobName,
-            String collectorHost, String hostAllowRead, String hostAllowWrite, Integer requiredMemory) {
-        super();
-        this.site = site;
-        this.submitDir = submitDir;
-        this.collectorHost = collectorHost;
-        this.requiredMemory = requiredMemory;
-        this.queue = queue;
-        this.jobName = jobName;
-        this.hostAllowRead = hostAllowRead;
-        this.hostAllowWrite = hostAllowWrite;
     }
 
     /**
@@ -102,9 +91,8 @@ public class SLURMSSHSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
         job.setMemory(null);
 
         VelocityContext velocityContext = new VelocityContext();
-        velocityContext.put("siteName", getSite().getSubmitHost());
         velocityContext.put("collectorHost", this.collectorHost);
-        velocityContext.put("jlrmUser", getSite().getUsername());
+        velocityContext.put("jlrmUser", this.username);
         velocityContext.put("jlrmSiteName", getSite().getName());
         velocityContext.put("hostAllowRead", this.hostAllowRead);
         velocityContext.put("hostAllowWrite", this.hostAllowWrite);
@@ -254,7 +242,7 @@ public class SLURMSSHSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
 
             execChannel.disconnect();
             session.disconnect();
-            
+
             LineNumberReader lnr = new LineNumberReader(new StringReader(submitOutput));
             String line;
             while ((line = lnr.readLine()) != null) {
@@ -369,6 +357,14 @@ public class SLURMSSHSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
 
     public void setJobName(String jobName) {
         this.jobName = jobName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
 }
