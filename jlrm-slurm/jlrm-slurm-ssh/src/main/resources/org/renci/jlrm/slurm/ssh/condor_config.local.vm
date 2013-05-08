@@ -28,6 +28,9 @@ GLIDEIN_START_TIME = "${glideinStartTime}"
 JLRM_SITE_NAME = "${jlrmSiteName}"
 JLRM_USER = "${jlrmUser}"                   
 
+USE_CCB="True"          
+CCB_ADDRESS=$(COLLECTOR_HOST)
+
 IS_GLIDEIN = True                    
 STARTD_ATTRS = IS_GLIDEIN,START,DaemonStopTime,GLIDEIN_START_TIME,JLRM_USER,JLRM_SITE_NAME
 
