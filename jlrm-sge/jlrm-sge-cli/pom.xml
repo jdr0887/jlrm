@@ -3,12 +3,12 @@
   <parent>
     <groupId>org.renci.jlrm</groupId>
     <artifactId>jlrm-sge</artifactId>
-    <version>0.2.33</version>
+    <version>0.2.34-SNAPSHOT</version>
   </parent>
   <name>jLRM :: SGE :: CLI</name>
   <groupId>org.renci.jlrm.jlrm-sge</groupId>
   <artifactId>jlrm-sge-cli</artifactId>
-  <version>0.2.33</version>
+  <version>0.2.34-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <dependencies>
     <dependency>
