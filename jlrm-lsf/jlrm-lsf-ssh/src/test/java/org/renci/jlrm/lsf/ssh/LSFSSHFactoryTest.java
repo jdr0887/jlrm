@@ -109,7 +109,7 @@ public class LSFSSHFactoryTest {
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession("jreilly", "biodev1.its.unc.edu", 22);
+            Session session = sch.getSession("rc_renci.svc", "biodev2.its.unc.edu", 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
