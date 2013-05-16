@@ -50,8 +50,8 @@ public class SLURMSubmitScriptExporter<T extends SLURMSSHJob> {
         submitFileWriter.write(String.format("#SBATCH -o %s/%s%n", remoteWorkDir, job.getOutput().getName()));
         submitFileWriter.write(String.format("#SBATCH -e %s/%s%n", remoteWorkDir, job.getError().getName()));
 
-        //submitFileWriter.write(String.format("#SBATCH -N %d%n", job.getHostCount()));
-        submitFileWriter.write(String.format("#SBATCH -n %d%n", job.getNumberOfProcessors()));
+        submitFileWriter.write(String.format("#SBATCH -N %d%n", job.getHostCount()));
+        //submitFileWriter.write(String.format("#SBATCH -n %d%n", job.getNumberOfProcessors()));
 
         if (job.getTransferExecutable()) {
             submitFileWriter.write(remoteWorkDir + File.separator + job.getExecutable().getName());
