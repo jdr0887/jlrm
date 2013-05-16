@@ -6,12 +6,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.StringReader;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.junit.Test;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Queue;
@@ -95,9 +98,13 @@ public class SLURMSSHFactoryTest {
     @Test
     public void testLookupStatus() {
 
-        String command = String.format(
-                ". ~/.bashrc; sacct -P -j %1$s -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2",
-                "435,436");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.roll(Calendar.DAY_OF_YEAR, -4);
+        String dateFormat = DateFormatUtils.format(calendar, "MMdd");
+        String command = String
+                .format(". ~/.bashrc; sacct -S %s -P -j %s -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2",
+                        dateFormat, "1150,1149");
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
@@ -106,7 +113,7 @@ public class SLURMSSHFactoryTest {
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession("jdr0887", "topsail-sn.unc.edu", 22);
+            Session session = sch.getSession("pipeline", "topsail-sn.unc.edu", 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
