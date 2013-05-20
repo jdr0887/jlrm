@@ -23,7 +23,7 @@ public class SLURMSubmitScriptExporter<T extends SLURMSSHJob> {
         FileWriter submitFileWriter = new FileWriter(submitFile);
 
         submitFileWriter.write("#!/bin/bash\n\n");
-        submitFileWriter.write("set -e\n\n");
+        submitFileWriter.write("#set -e\n\n");
         submitFileWriter.write(String.format("#SBATCH -J %s%n", job.getName()));
 
         if (StringUtils.isNotEmpty(job.getQueueName())) {
@@ -35,7 +35,7 @@ public class SLURMSubmitScriptExporter<T extends SLURMSSHJob> {
         }
 
         if (job.getWallTime() != null) {
-            submitFileWriter.write(String.format("#SBATCH -t %d%n", job.getWallTime() / 60));
+            submitFileWriter.write(String.format("#SBATCH -t %d%n", job.getWallTime()));
         }
 
         // if (job.getMemory() != null) {
