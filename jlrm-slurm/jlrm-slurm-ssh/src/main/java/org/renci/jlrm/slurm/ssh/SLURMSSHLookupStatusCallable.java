@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -14,6 +16,7 @@ import java.util.concurrent.Callable;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Site;
 import org.renci.jlrm.slurm.SLURMJobStatusInfo;
@@ -53,13 +56,21 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
 
         try {
 
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.roll(Calendar.DAY_OF_YEAR, -4);
+            String dateFormat = DateFormatUtils.format(calendar, "MMdd");
+
             List<String> jobIdList = new ArrayList<String>();
-            for (SLURMSSHJob job : this.jobs) {
-                jobIdList.add(job.getId());
+            if (this.jobs != null && this.jobs.size() > 0) {
+                for (SLURMSSHJob job : this.jobs) {
+                    jobIdList.add(job.getId());
+                }
             }
-            String format = ". ~/.bashrc; sacct -P -j %1$s -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2";
-            String delimitedJobList = jobIdList != null && jobIdList.size() > 0 ? StringUtils.join(jobIdList, ",") : "";
-            String command = String.format(format, delimitedJobList);
+            String format = ". ~/.bashrc; sacct -S %s -P %s -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2";
+            String delimitedJobList = jobIdList != null && jobIdList.size() > 0 ? String.format("-j %s",
+                    StringUtils.join(jobIdList, ",")) : "";
+            String command = String.format(format, dateFormat, delimitedJobList);
 
             String home = System.getProperty("user.home");
             String knownHostsFilename = home + "/.ssh/known_hosts";
