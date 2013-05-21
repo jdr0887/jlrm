@@ -67,18 +67,20 @@ public class SLURMSSHFactoryTest {
     public void testGlideinSubmit() {
 
         Site site = new Site();
+        site.setName("Topsail");
         site.setSubmitHost("topsail-sn.unc.edu");
         site.setMaxNoClaimTime(1440);
-        site.setUsername("jdr0887");
+        site.setUsername("pipeline");
 
         Queue queue = new Queue();
         queue.setName("queue16");
-        queue.setRunTime(2880);
+        queue.setRunTime(5760);
+        queue.setMaxMultipleJobsToSubmit(2);
 
         File submitDir = new File("/tmp");
         try {
             SLURMSSHSubmitCondorGlideinCallable callable = new SLURMSSHSubmitCondorGlideinCallable();
-            callable.setCollectorHost("biodev1.its.unc.edu");
+            callable.setCollectorHost("biodev2.its.unc.edu");
             callable.setUsername("rc_renci.svc");
             callable.setSite(site);
             callable.setJobName("glidein");
@@ -103,8 +105,12 @@ public class SLURMSSHFactoryTest {
         calendar.roll(Calendar.DAY_OF_YEAR, -4);
         String dateFormat = DateFormatUtils.format(calendar, "MMdd");
         String command = String
-                .format(". ~/.bashrc; sacct -S %s -P -j %s -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2",
-                        dateFormat, "1150,1149");
+                .format(". ~/.bashrc; sacct -S %s -P -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2",
+                        dateFormat, "");
+
+//        String command = String.format(
+//                ". ~/.bashrc; sacct -S %s -P %s -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2",
+//                dateFormat, "-j 1331,1332,1333");
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
@@ -121,11 +127,15 @@ public class SLURMSSHFactoryTest {
 
             ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
+
             ByteArrayOutputStream err = new ByteArrayOutputStream();
             execChannel.setErrStream(err);
+
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             execChannel.setOutputStream(out);
+
             execChannel.setCommand(String.format(command));
+
             InputStream in = execChannel.getInputStream();
             execChannel.connect();
             Set<SLURMJobStatusInfo> jobStatusSet = new HashSet<SLURMJobStatusInfo>();
