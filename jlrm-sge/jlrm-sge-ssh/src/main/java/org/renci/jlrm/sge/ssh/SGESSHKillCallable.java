@@ -43,10 +43,12 @@ public class SGESSHKillCallable implements Callable<SGESSHJob> {
         String knownHostsFilename = home + "/.ssh/known_hosts";
 
         JSch sch = new JSch();
+        Session session = null;
+        ChannelExec execChannel = null;
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
+            session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
@@ -54,7 +56,7 @@ public class SGESSHKillCallable implements Callable<SGESSHJob> {
 
             String command = String.format(". ~/.bashrc; qdel %s", job.getId());
 
-            ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
+            execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
 
             ByteArrayOutputStream err = new ByteArrayOutputStream();
@@ -81,6 +83,13 @@ public class SGESSHKillCallable implements Callable<SGESSHJob> {
         } catch (IOException e) {
             logger.warn("error: {}", e.getMessage());
             throw new JLRMException("IOException: " + e.getMessage());
+        } finally {
+            if (execChannel != null) {
+                execChannel.disconnect();
+            }
+            if (session != null) {
+                session.disconnect();
+            }
         }
 
         return job;

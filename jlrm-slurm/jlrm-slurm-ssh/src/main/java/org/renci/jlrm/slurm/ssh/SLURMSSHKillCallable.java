@@ -43,10 +43,13 @@ public class SLURMSSHKillCallable implements Callable<Void> {
         String knownHostsFilename = home + "/.ssh/known_hosts";
 
         JSch sch = new JSch();
+        Session session = null;
+        ChannelExec execChannel = null;
+
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
+            session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
@@ -54,7 +57,7 @@ public class SLURMSSHKillCallable implements Callable<Void> {
 
             String command = String.format(". ~/.bashrc; scancel %s", jobId);
 
-            ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
+            execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
 
             ByteArrayOutputStream err = new ByteArrayOutputStream();
@@ -72,15 +75,22 @@ public class SLURMSSHKillCallable implements Callable<Void> {
             int exitCode = execChannel.getExitStatus();
             logger.warn("exitCode: {}", exitCode);
 
-            execChannel.disconnect();
-            session.disconnect();
-
         } catch (JSchException e) {
             logger.warn("error: {}", e.getMessage());
             throw new JLRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
             logger.warn("error: {}", e.getMessage());
             throw new JLRMException("IOException: " + e.getMessage());
+        } catch (Exception e) {
+            logger.error("Exception", e);
+            throw new JLRMException("Exception: " + e.getMessage());
+        } finally {
+            if (execChannel != null) {
+                execChannel.disconnect();
+            }
+            if (session != null) {
+                session.disconnect();
+            }
         }
 
         return null;

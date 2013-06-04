@@ -56,10 +56,13 @@ public class SLURMSSHSubmitCallable implements Callable<SLURMSSHJob> {
         String knownHostsFilename = home + "/.ssh/known_hosts";
 
         JSch sch = new JSch();
+        Session session = null;
+        ChannelExec execChannel = null;
+
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
+            session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("compression.s2c", "zlib,none");
             config.setProperty("compression.c2s", "zlib,none");
@@ -72,7 +75,7 @@ public class SLURMSSHSubmitCallable implements Callable<SLURMSSHJob> {
                     DateFormatUtils.ISO_DATE_FORMAT.format(new Date()), UUID.randomUUID().toString());
             String command = String.format("(mkdir -p $HOME/%s && echo $HOME)", remoteWorkDirSuffix);
 
-            ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
+            execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
             ByteArrayOutputStream err = new ByteArrayOutputStream();
             execChannel.setErrStream(err);
@@ -161,6 +164,13 @@ public class SLURMSSHSubmitCallable implements Callable<SLURMSSHJob> {
         } catch (SftpException e) {
             logger.error("error: {}", e.getMessage());
             throw new JLRMException("SftpException: " + e.getMessage());
+        } finally {
+            if (execChannel != null) {
+                execChannel.disconnect();
+            }
+            if (session != null) {
+                session.disconnect();
+            }
         }
         return job;
     }

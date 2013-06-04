@@ -50,6 +50,8 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
 
         Set<LSFJobStatusInfo> jobStatusSet = new HashSet<LSFJobStatusInfo>();
         JSch sch = new JSch();
+        Session session = null;
+        ChannelExec execChannel = null;
         try {
 
             List<String> jobIdList = new ArrayList<String>();
@@ -65,13 +67,13 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
 
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(site.getUsername(), getSite().getSubmitHost(), 22);
+            session = sch.getSession(site.getUsername(), getSite().getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
             session.connect(30000);
 
-            ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
+            execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
 
             ByteArrayOutputStream err = new ByteArrayOutputStream();
@@ -123,6 +125,13 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
         } catch (Exception e) {
             logger.error("Exception", e);
             throw new JLRMException("Exception: " + e.getMessage());
+        } finally {
+            if (execChannel != null) {
+                execChannel.disconnect();
+            }
+            if (session != null) {
+                session.disconnect();
+            }
         }
         return jobStatusSet;
     }

@@ -53,6 +53,8 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
 
         Set<SLURMJobStatusInfo> jobStatusSet = new HashSet<SLURMJobStatusInfo>();
         JSch sch = new JSch();
+        Session session = null;
+        ChannelExec execChannel = null;
 
         try {
 
@@ -77,13 +79,13 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
 
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
+            session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
             session.connect(30000);
 
-            ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
+            execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
 
             ByteArrayOutputStream err = new ByteArrayOutputStream();
@@ -132,6 +134,13 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
         } catch (Exception e) {
             logger.error("Exception", e);
             throw new JLRMException("Exception: " + e.getMessage());
+        } finally {
+            if (execChannel != null) {
+                execChannel.disconnect();
+            }
+            if (session != null) {
+                session.disconnect();
+            }
         }
         return jobStatusSet;
     }

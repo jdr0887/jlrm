@@ -58,16 +58,18 @@ public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobSt
 
         Map<String, PBSJobStatusType> jobStatusMap = new HashMap<String, PBSJobStatusType>();
         JSch sch = new JSch();
+        Session session = null;
+        ChannelExec execChannel = null;
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
+            session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
             session.connect(30000);
 
-            ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
+            execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
 
             ByteArrayOutputStream err = new ByteArrayOutputStream();
@@ -114,6 +116,13 @@ public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobSt
         } catch (IOException e) {
             logger.error("IOException", e);
             throw new JLRMException("IOException: " + e.getMessage());
+        } finally {
+            if (execChannel != null) {
+                execChannel.disconnect();
+            }
+            if (session != null) {
+                session.disconnect();
+            }
         }
         return jobStatusMap;
     }
