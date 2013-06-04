@@ -156,8 +156,9 @@ public class SLURMSSHFactoryTest {
                     String[] lineSplit = StringUtils.split(line, '|');
                     if (lineSplit != null && lineSplit.length == 4) {
                         for (SLURMJobStatusType type : SLURMJobStatusType.values()) {
-                            if (type.getValue().equals(lineSplit[1])) {
+                            if (type.toString().equals(lineSplit[1])) {
                                 statusType = type;
+                                break;
                             }
                         }
                         SLURMJobStatusInfo info = new SLURMJobStatusInfo(lineSplit[0], statusType, lineSplit[2],
