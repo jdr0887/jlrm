@@ -69,11 +69,18 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
                     jobIdList.add(job.getId());
                 }
             }
-            String format = ". ~/.bashrc; sacct -S %s -P %s -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2";
+
+            String format = "%s (%s && %s) | sort | uniq";
+
             String delimitedJobList = jobIdList != null && jobIdList.size() > 0 ? String.format("-j %s",
                     StringUtils.join(jobIdList, ",")) : "";
-            String command = String.format(format, dateFormat, delimitedJobList);
-
+            String command = String.format(format, ". ~/.bashrc",
+                    String.format(
+                            "sacct -S %s -P -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2",
+                            dateFormat), String.format(
+                            "sacct -S %s -P %s -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2",
+                            dateFormat, delimitedJobList));
+            logger.info("command: {}", command);
             String home = System.getProperty("user.home");
             String knownHostsFilename = home + "/.ssh/known_hosts";
 
