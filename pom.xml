@@ -3,7 +3,7 @@
   <name>jLRM</name>
   <groupId>org.renci</groupId>
   <artifactId>jLRM</artifactId>
-  <version>0.2.40</version>
+  <version>0.2.41-SNAPSHOT</version>
   <packaging>pom</packaging>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -168,32 +168,32 @@
       <dependency>
 	<groupId>org.renci.jlrm</groupId>
 	<artifactId>jlrm-api</artifactId>
-	<version>0.2.40</version>
+	<version>0.2.41-SNAPSHOT</version>
       </dependency>
       <dependency>
 	<groupId>org.renci.jlrm.jlrm-condor</groupId>
 	<artifactId>jlrm-condor-api</artifactId>
-	<version>0.2.40</version>
+	<version>0.2.41-SNAPSHOT</version>
       </dependency>
       <dependency>
 	<groupId>org.renci.jlrm.jlrm-lsf</groupId>
 	<artifactId>jlrm-lsf-api</artifactId>
-	<version>0.2.40</version>
+	<version>0.2.41-SNAPSHOT</version>
       </dependency>
       <dependency>
 	<groupId>org.renci.jlrm.jlrm-sge</groupId>
 	<artifactId>jlrm-sge-api</artifactId>
-	<version>0.2.40</version>
+	<version>0.2.41-SNAPSHOT</version>
       </dependency>
       <dependency>
 	<groupId>org.renci.jlrm.jlrm-pbs</groupId>
 	<artifactId>jlrm-pbs-api</artifactId>
-	<version>0.2.40</version>
+	<version>0.2.41-SNAPSHOT</version>
       </dependency>
       <dependency>
 	<groupId>org.renci.jlrm.jlrm-slurm</groupId>
 	<artifactId>jlrm-slurm-api</artifactId>
-	<version>0.2.40</version>
+	<version>0.2.41-SNAPSHOT</version>
       </dependency>
       <dependency>
 	<groupId>org.slf4j</groupId>
