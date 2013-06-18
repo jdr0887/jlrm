@@ -34,12 +34,13 @@ public class PBSSSHFactoryTest {
 
         Site site = new Site();
         site.setSubmitHost("br0.renci.org");
+        site.setUsername("mapseq");
 
         PBSSSHJob job = new PBSSSHJob("test", new File("/bin/hostname"));
         job.setHostCount(1);
         job.setNumberOfProcessors(1);
         job.setName("Test");
-        job.setProject("TCGA");
+        job.setProject("RENCI");
         job.setQueueName("serial");
         job.setOutput(new File("test.out"));
         job.setError(new File("test.err"));
@@ -66,8 +67,17 @@ public class PBSSSHFactoryTest {
         File submitDir = new File("/tmp");
 
         try {
-            PBSSSHSubmitCondorGlideinCallable callable = new PBSSSHSubmitCondorGlideinCallable(site, queue, submitDir,
-                    "glidein", "biodev1.its.unc.edu", "*.its.unc.edu", "*.its.unc.edu", 40);
+            PBSSSHSubmitCondorGlideinCallable callable = new PBSSSHSubmitCondorGlideinCallable();
+            callable.setSite(site);
+            callable.setQueue(queue);
+            callable.setSubmitDir(submitDir);
+            callable.setCollectorHost("biodev2.its.unc.edu");
+            callable.setHostAllowRead("*.unc.edu");
+            callable.setHostAllowWrite("*.unc.edu");
+            callable.setRequiredMemory(40);
+            callable.setUsername("rc_renci.svc");
+            callable.setJobName("glidein");
+
             PBSSSHJob job = callable.call();
             System.out.println(job.getId());
         } catch (JLRMException e) {
