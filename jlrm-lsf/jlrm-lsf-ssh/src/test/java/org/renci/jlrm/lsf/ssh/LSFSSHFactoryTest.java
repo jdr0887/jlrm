@@ -78,7 +78,7 @@ public class LSFSSHFactoryTest {
             // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "huge");
             // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "week");
             LSFSSHSubmitCondorGlideinCallable callable = new LSFSSHSubmitCondorGlideinCallable();
-            callable.setCollectorHost("gnet641.its.unc.edu");
+            callable.setCollectorHost("biodev2.its.unc.edu");
             callable.setUsername("rc_renci.svc");
             callable.setSite(site);
             callable.setJobName("glidein");
