@@ -56,21 +56,10 @@ public class PBSSSHSubmitCondorGlideinCallable implements Callable<PBSSSHJob> {
 
     private String hostAllowWrite;
 
+    private String username;
+
     public PBSSSHSubmitCondorGlideinCallable() {
         super();
-    }
-
-    public PBSSSHSubmitCondorGlideinCallable(Site site, Queue queue, File submitDir, String jobName,
-            String collectorHost, String hostAllowRead, String hostAllowWrite, Integer requiredMemory) {
-        super();
-        this.site = site;
-        this.queue = queue;
-        this.submitDir = submitDir;
-        this.collectorHost = collectorHost;
-        this.requiredMemory = requiredMemory;
-        this.jobName = jobName;
-        this.hostAllowRead = hostAllowRead;
-        this.hostAllowWrite = hostAllowWrite;
     }
 
     /**
@@ -104,7 +93,7 @@ public class PBSSSHSubmitCondorGlideinCallable implements Callable<PBSSSHJob> {
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("siteName", getSite().getSubmitHost());
         velocityContext.put("collectorHost", this.collectorHost);
-        velocityContext.put("jlrmUser", getSite().getUsername());
+        velocityContext.put("jlrmUser", this.username);
         velocityContext.put("jlrmSiteName", getSite().getName());
         velocityContext.put("hostAllowRead", this.hostAllowRead);
         velocityContext.put("hostAllowWrite", this.hostAllowWrite);
@@ -379,6 +368,14 @@ public class PBSSSHSubmitCondorGlideinCallable implements Callable<PBSSSHJob> {
 
     public void setJobName(String jobName) {
         this.jobName = jobName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
 }
