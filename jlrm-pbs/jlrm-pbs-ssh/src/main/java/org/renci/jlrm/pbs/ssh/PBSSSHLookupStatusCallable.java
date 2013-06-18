@@ -5,16 +5,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.StringReader;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Site;
+import org.renci.jlrm.pbs.PBSJobStatusInfo;
 import org.renci.jlrm.pbs.PBSJobStatusType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
-public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobStatusType>> {
+public class PBSSSHLookupStatusCallable implements Callable<Set<PBSJobStatusInfo>> {
 
     private final Logger logger = LoggerFactory.getLogger(PBSSSHLookupStatusCallable.class);
 
@@ -43,20 +44,21 @@ public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobSt
     }
 
     @Override
-    public Map<String, PBSJobStatusType> call() throws JLRMException {
+    public Set<PBSJobStatusInfo> call() throws JLRMException {
         logger.info("ENTERING call()");
+
+        Set<PBSJobStatusInfo> jobStatusSet = new HashSet<PBSJobStatusInfo>();
 
         StringBuilder sb = new StringBuilder();
         for (PBSSSHJob job : this.jobs) {
             sb.append(" ").append(job.getId());
         }
         String jobXarg = sb.toString().replaceFirst(" ", "");
-        String command = String.format(". ~/.bashrc; qstat %s | tail -n+2 | awk '{print $1,$3}'", jobXarg);
+        String command = String.format(". ~/.bashrc; qstat | tail -n+3 | awk '{print $1,$5,$6,$2}'", jobXarg);
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";
 
-        Map<String, PBSJobStatusType> jobStatusMap = new HashMap<String, PBSJobStatusType>();
         JSch sch = new JSch();
         Session session = null;
         ChannelExec execChannel = null;
@@ -104,8 +106,11 @@ public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobSt
                                     statusType = type;
                                 }
                             }
-                            logger.info("JobStatus for {} is {}", lineSplit[0], statusType);
-                            jobStatusMap.put(lineSplit[0], statusType);
+
+                            PBSJobStatusInfo info = new PBSJobStatusInfo(lineSplit[0], statusType, lineSplit[2],
+                                    lineSplit[3]);
+                            logger.info("JobStatus is {}", info.toString());
+                            jobStatusSet.add(info);
                         }
                     }
                 }
@@ -124,7 +129,7 @@ public class PBSSSHLookupStatusCallable implements Callable<Map<String, PBSJobSt
                 session.disconnect();
             }
         }
-        return jobStatusMap;
+        return jobStatusSet;
     }
 
     public Site getSite() {
