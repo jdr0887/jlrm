@@ -70,11 +70,11 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
                 }
             }
 
-            String format = "%s (%s && %s) | sort | uniq";
+            String format = ". ~/.bashrc; (%s && %s) | sort | uniq";
 
             String delimitedJobList = jobIdList != null && jobIdList.size() > 0 ? String.format("-j %s",
                     StringUtils.join(jobIdList, ",")) : "";
-            String command = String.format(format, ". ~/.bashrc",
+            String command = String.format(format,
                     String.format(
                             "sacct -S %s -P -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2",
                             dateFormat), String.format(
