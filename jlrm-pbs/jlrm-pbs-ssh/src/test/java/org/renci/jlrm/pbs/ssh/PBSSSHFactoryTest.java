@@ -59,11 +59,12 @@ public class PBSSSHFactoryTest {
 
         Site site = new Site();
         site.setSubmitHost("br0.renci.org");
+        site.setUsername("mapseq");
         site.setMaxNoClaimTime(1440);
 
         Queue queue = new Queue();
         queue.setName("serial");
-        queue.setRunTime(2880);
+        queue.setRunTime(5760);
         File submitDir = new File("/tmp");
 
         try {
@@ -112,7 +113,7 @@ public class PBSSSHFactoryTest {
             execChannel.setOutputStream(out);
             execChannel.setCommand(command);
             InputStream in = execChannel.getInputStream();
-            execChannel.connect();
+            execChannel.connect(5*1000);
 
             byte[] tmp = new byte[1024];
             while (true) {

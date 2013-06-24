@@ -10,18 +10,7 @@ import java.security.KeyPair;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import net.schmizz.sshj.SSHClient;
-import net.schmizz.sshj.connection.channel.direct.Session;
-import net.schmizz.sshj.connection.channel.direct.Session.Command;
-import net.schmizz.sshj.transport.TransportException;
-import net.schmizz.sshj.userauth.UserAuthException;
-
 import org.apache.commons.io.IOUtils;
-import org.apache.sshd.ClientChannel;
-import org.apache.sshd.ClientSession;
-import org.apache.sshd.SshClient;
-import org.apache.sshd.common.KeyPairProvider;
-import org.apache.sshd.common.keyprovider.FileKeyPairProvider;
 import org.junit.Test;
 
 import com.jcraft.jsch.ChannelSftp;
@@ -33,70 +22,6 @@ public class SSHConnectionTest {
 
     public SSHConnectionTest() {
         super();
-    }
-
-    @Test
-    public void testExecSSHJ() {
-
-        final SSHClient ssh = new SSHClient();
-        try {
-            ssh.loadKnownHosts();
-            ssh.connect("biodev1.its.unc.edu");
-            ssh.authPublickey("jreilly", System.getProperty("user.home") + "/.ssh/id_rsa");
-
-            Session session = ssh.startSession();
-            final Command command = session.exec("/bin/echo hello");
-            String commandOutput = net.schmizz.sshj.common.IOUtils.readFully(command.getInputStream()).toString()
-                    .trim();
-            System.out.println(commandOutput);
-            command.join(5, TimeUnit.SECONDS);
-            session.close();
-            ssh.close();
-        } catch (UserAuthException e) {
-            e.printStackTrace();
-        } catch (TransportException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Test
-    public void testExecSSHCore() {
-        String home = System.getProperty("user.home");
-        SshClient sshClient = SshClient.setUpDefaultClient();
-        sshClient.start();
-        try {
-            ClientSession session = sshClient.connect("biodev1.its.unc.edu", 22).await().getSession();
-            KeyPair pair = new FileKeyPairProvider(new String[] { home + "/.ssh/id_rsa" })
-                    .loadKey(KeyPairProvider.SSH_RSA);
-            session.authPublicKey("jreilly", pair);
-
-            ClientChannel channel = session.createExecChannel("/bin/echo hello");
-
-            channel.setIn(new ByteArrayInputStream(new byte[0]));
-
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            channel.setOut(out);
-
-            ByteArrayOutputStream err = new ByteArrayOutputStream();
-            channel.setErr(err);
-
-            channel.open();
-            channel.waitFor(ClientChannel.CLOSED, 0);
-
-            session.close(true);
-            System.out.println(new String(out.toByteArray()));
-            System.out.println(new String(err.toByteArray()));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     @Test
@@ -141,11 +66,11 @@ public class SSHConnectionTest {
             JSch sch = new JSch();
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            com.jcraft.jsch.Session session = sch.getSession("jreilly", "biodev1.its.unc.edu", 22);
+            com.jcraft.jsch.Session session = sch.getSession("rc_renci.svc", "biodev1.its.unc.edu", 22);
             Properties config = new Properties();
             config.setProperty("StrictHostKeyChecking", "no");
             session.setConfig(config);
-            session.connect(30000);
+            session.connect();
             com.jcraft.jsch.ChannelExec channel = (com.jcraft.jsch.ChannelExec) session.openChannel("exec");
             channel.setInputStream(null);
 

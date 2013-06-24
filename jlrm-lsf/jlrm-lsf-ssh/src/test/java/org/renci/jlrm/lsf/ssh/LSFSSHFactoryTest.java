@@ -61,13 +61,14 @@ public class LSFSSHFactoryTest {
     public void testGlideinSubmit() {
 
         Site site = new Site();
-        site.setSubmitHost("gnet641.its.unc.edu");
+        site.setSubmitHost("biodev1.its.unc.edu");
         site.setMaxNoClaimTime(1440);
-        site.setUsername("rc_lbg.svc");
+        site.setUsername("rc_renci.svc");
 
         Queue queue = new Queue();
-        queue.setName("pseq_tcga");
-        queue.setRunTime(2880);
+        queue.setName("pseq_prod");
+        queue.setRunTime(5760);
+        queue.setMaxMultipleJobsToSubmit(2);
 
         File submitDir = new File("/tmp");
 
@@ -123,7 +124,7 @@ public class LSFSSHFactoryTest {
             execChannel.setOutputStream(out);
             execChannel.setCommand(command);
             InputStream in = execChannel.getInputStream();
-            execChannel.connect();
+            execChannel.connect(5*1000);
 
             String output = IOUtils.toString(in).trim();
 

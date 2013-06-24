@@ -1,11 +1,8 @@
 package org.renci.jlrm.lsf.ssh;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -25,15 +22,9 @@ import org.apache.velocity.app.Velocity;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Queue;
 import org.renci.jlrm.Site;
+import org.renci.jlrm.commons.ssh.SSHConnectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.ChannelSftp;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Session;
-import com.jcraft.jsch.SftpException;
 
 public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
 
@@ -112,46 +103,13 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
         velocityContext.put("glideinStartTime", new Date().getTime());
         velocityContext.put("maxRunTime", maxRunTimeAdjusted);
 
-        String home = System.getProperty("user.home");
-        String knownHostsFilename = home + "/.ssh/known_hosts";
-        JSch sch = new JSch();
-        Session session = null;
-        ChannelExec execChannel = null;
         try {
-            sch.addIdentity(home + "/.ssh/id_rsa");
-            sch.setKnownHosts(knownHostsFilename);
-            session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
-            Properties config = new Properties();
-            config.setProperty("compression.s2c", "zlib,none");
-            config.setProperty("compression.c2s", "zlib,none");
-            config.setProperty("compression_level", "9");
-            config.setProperty("StrictHostKeyChecking", "no");
-            session.setConfig(config);
-            session.connect(30000);
 
             String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s",
                     DateFormatUtils.ISO_DATE_FORMAT.format(new Date()), UUID.randomUUID().toString());
             String command = String.format("(mkdir -p $HOME/%s && echo $HOME)", remoteWorkDirSuffix);
 
-            execChannel = (ChannelExec) session.openChannel("exec");
-            execChannel.setInputStream(null);
-
-            ByteArrayOutputStream err = new ByteArrayOutputStream();
-            execChannel.setErrStream(err);
-
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            execChannel.setOutputStream(out);
-
-            execChannel.setCommand(command);
-
-            InputStream in = execChannel.getInputStream();
-            execChannel.connect();
-
-            // String remoteHome = new String(out.toByteArray());
-            String remoteHome = IOUtils.toString(in).trim();
-            execChannel.disconnect();
-            err.close();
-            out.close();
+            String remoteHome = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
 
             try {
                 TimeUnit.SECONDS.sleep(2);
@@ -197,56 +155,15 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
             LSFSubmitScriptExporter<LSFSSHJob> exporter = new LSFSubmitScriptExporter<LSFSSHJob>();
             this.job = exporter.export(localWorkDir, remoteWorkDir, job);
 
-            ChannelSftp sftpChannel = (ChannelSftp) session.openChannel("sftp");
-            sftpChannel.connect();
-            sftpChannel.cd(remoteWorkDir);
-            if (job.getTransferExecutable()) {
-                sftpChannel.put(new FileInputStream(job.getExecutable()), job.getExecutable().getName(),
-                        ChannelSftp.OVERWRITE);
-                sftpChannel.chmod(0755, job.getExecutable().getName());
-            }
-
-            if (job.getTransferInputs() && job.getInputFiles() != null && job.getInputFiles().size() > 0) {
-                for (File inputFile : job.getInputFiles()) {
-                    sftpChannel.put(new FileInputStream(inputFile), inputFile.getName(), ChannelSftp.OVERWRITE);
-                    sftpChannel.chmod(0644, inputFile.getName());
-                }
-            }
-            sftpChannel.put(new FileInputStream(job.getSubmitFile()), job.getSubmitFile().getName(),
-                    ChannelSftp.OVERWRITE);
-            sftpChannel.chmod(0644, job.getSubmitFile().getName());
-            sftpChannel.disconnect();
-
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            SSHConnectionUtil.transferSubmitScript(site.getUsername(), site.getSubmitHost(), remoteWorkDir,
+                    this.job.getTransferExecutable(), this.job.getExecutable(), this.job.getTransferInputs(),
+                    this.job.getInputFiles(), job.getSubmitFile());
 
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
-            command = String.format(". ~/.bashrc; bsub < %s", targetFile);
+            command = String.format("bsub < %s", targetFile);
 
-            execChannel = (ChannelExec) session.openChannel("exec");
-            execChannel.setInputStream(null);
-
-            err = new ByteArrayOutputStream();
-            execChannel.setErrStream(err);
-
-            out = new ByteArrayOutputStream();
-            execChannel.setOutputStream(out);
-
-            execChannel.setCommand(command);
-
-            in = execChannel.getInputStream();
-            execChannel.connect();
-
-            // String submitOutput = new String(out.toByteArray());
-            String submitOutput = IOUtils.toString(in);
-            // int exitCode = execChannel.getExitStatus();
-
-            execChannel.disconnect();
-            session.disconnect();
+            String submitOutput = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
 
             LineNumberReader lnr = new LineNumberReader(new StringReader(submitOutput));
             String line;
@@ -266,24 +183,10 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
         } catch (FileNotFoundException e) {
             logger.error("FileNotFoundException", e);
             throw new JLRMException("JSchException: " + e.getMessage());
-        } catch (JSchException e) {
-            logger.error("JSchException", e);
-            throw new JLRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
             logger.error("IOException", e);
             throw new JLRMException("IOException: " + e.getMessage());
-        } catch (SftpException e) {
-            logger.error("SftpException", e);
-            throw new JLRMException("SftpException: " + e.getMessage());
-        } finally {
-            if (execChannel != null) {
-                execChannel.disconnect();
-            }
-            if (session != null) {
-                session.disconnect();
-            }
         }
-
         return job;
     }
 
