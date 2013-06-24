@@ -1,21 +1,12 @@
 package org.renci.jlrm.sge.ssh;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 import java.util.concurrent.Callable;
 
-import org.apache.commons.io.IOUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Site;
+import org.renci.jlrm.commons.ssh.SSHConnectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Session;
 
 public class SGESSHKillCallable implements Callable<SGESSHJob> {
 
@@ -38,60 +29,8 @@ public class SGESSHKillCallable implements Callable<SGESSHJob> {
     @Override
     public SGESSHJob call() throws JLRMException {
         logger.info("ENTERING call()");
-
-        String home = System.getProperty("user.home");
-        String knownHostsFilename = home + "/.ssh/known_hosts";
-
-        JSch sch = new JSch();
-        Session session = null;
-        ChannelExec execChannel = null;
-        try {
-            sch.addIdentity(home + "/.ssh/id_rsa");
-            sch.setKnownHosts(knownHostsFilename);
-            session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
-            Properties config = new Properties();
-            config.setProperty("StrictHostKeyChecking", "no");
-            session.setConfig(config);
-            session.connect(30000);
-
-            String command = String.format(". ~/.bashrc; qdel %s", job.getId());
-
-            execChannel = (ChannelExec) session.openChannel("exec");
-            execChannel.setInputStream(null);
-
-            ByteArrayOutputStream err = new ByteArrayOutputStream();
-            execChannel.setErrStream(err);
-
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            execChannel.setOutputStream(out);
-
-            execChannel.setCommand(command);
-
-            InputStream in = execChannel.getInputStream();
-            execChannel.connect();
-
-            String output = IOUtils.toString(in).trim();
-            int exitCode = execChannel.getExitStatus();
-            logger.warn("exitCode: {}", exitCode);
-
-            execChannel.disconnect();
-            session.disconnect();
-
-        } catch (JSchException e) {
-            logger.warn("error: {}", e.getMessage());
-            throw new JLRMException("JSchException: " + e.getMessage());
-        } catch (IOException e) {
-            logger.warn("error: {}", e.getMessage());
-            throw new JLRMException("IOException: " + e.getMessage());
-        } finally {
-            if (execChannel != null) {
-                execChannel.disconnect();
-            }
-            if (session != null) {
-                session.disconnect();
-            }
-        }
-
+        String command = String.format("qdel %s", job.getId());
+        SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
         return job;
     }
 

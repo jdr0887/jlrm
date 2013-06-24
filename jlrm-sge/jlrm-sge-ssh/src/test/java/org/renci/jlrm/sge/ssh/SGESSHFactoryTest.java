@@ -123,7 +123,7 @@ public class SGESSHFactoryTest {
             execChannel.setOutputStream(out);
             execChannel.setCommand(command);
             InputStream in = execChannel.getInputStream();
-            execChannel.connect();
+            execChannel.connect(5*1000);
             Set<SGEJobStatusInfo> jobStatusSet = new HashSet<SGEJobStatusInfo>();
 
             String xmloutput = IOUtils.toString(in).trim();

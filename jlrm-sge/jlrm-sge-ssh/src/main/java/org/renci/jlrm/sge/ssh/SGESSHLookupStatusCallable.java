@@ -1,12 +1,9 @@
 package org.renci.jlrm.sge.ssh;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
@@ -16,9 +13,9 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
-import org.apache.commons.io.IOUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Site;
+import org.renci.jlrm.commons.ssh.SSHConnectionUtil;
 import org.renci.jlrm.sge.SGEJobStatusInfo;
 import org.renci.jlrm.sge.SGEJobStatusType;
 import org.slf4j.Logger;
@@ -27,11 +24,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-
-import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Session;
 
 public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo>> {
 
@@ -54,44 +46,12 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
     @Override
     public Set<SGEJobStatusInfo> call() throws JLRMException {
         logger.info("ENTERING call()");
-
-        String command = String.format(". ~/.bashrc; qstat -s prs -r -xml");
-
-        String home = System.getProperty("user.home");
-        String knownHostsFilename = home + "/.ssh/known_hosts";
-
         Set<SGEJobStatusInfo> jobStatusSet = new HashSet<SGEJobStatusInfo>();
-        JSch sch = new JSch();
-        Session session = null;
-        ChannelExec execChannel = null;
         try {
-            sch.addIdentity(home + "/.ssh/id_rsa");
-            sch.setKnownHosts(knownHostsFilename);
-            session = sch.getSession(getSite().getUsername(), getSite().getSubmitHost(), 22);
-            Properties config = new Properties();
-            config.setProperty("StrictHostKeyChecking", "no");
-            session.setConfig(config);
-            session.connect(30000);
 
-            execChannel = (ChannelExec) session.openChannel("exec");
-            execChannel.setInputStream(null);
+            String command = String.format("qstat -s prs -r -xml");
 
-            ByteArrayOutputStream err = new ByteArrayOutputStream();
-            execChannel.setErrStream(err);
-
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            execChannel.setOutputStream(out);
-
-            execChannel.setCommand(command);
-
-            InputStream in = execChannel.getInputStream();
-            execChannel.connect();
-
-            String output = IOUtils.toString(in).trim();
-            int exitCode = execChannel.getExitStatus();
-
-            execChannel.disconnect();
-            session.disconnect();
+            String output = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
 
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = documentBuilder.parse(new InputSource(new StringReader(output)));
@@ -144,22 +104,12 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
                 }
             }
 
-        } catch (JSchException e) {
-            logger.error("JSchException", e);
-            throw new JLRMException("JSchException: " + e.getMessage());
         } catch (IOException e) {
             logger.error("IOException", e);
             throw new JLRMException("IOException: " + e.getMessage());
         } catch (Exception e) {
             logger.error("Exception", e);
             throw new JLRMException("Exception: " + e.getMessage());
-        } finally {
-            if (execChannel != null) {
-                execChannel.disconnect();
-            }
-            if (session != null) {
-                session.disconnect();
-            }
         }
         return jobStatusSet;
     }

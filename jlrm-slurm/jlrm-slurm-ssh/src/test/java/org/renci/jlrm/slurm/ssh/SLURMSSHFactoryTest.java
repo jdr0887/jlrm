@@ -137,7 +137,7 @@ public class SLURMSSHFactoryTest {
             execChannel.setCommand(String.format(command));
 
             InputStream in = execChannel.getInputStream();
-            execChannel.connect();
+            execChannel.connect(5*1000);
             Set<SLURMJobStatusInfo> jobStatusSet = new HashSet<SLURMJobStatusInfo>();
 
             String output = IOUtils.toString(in).trim();
