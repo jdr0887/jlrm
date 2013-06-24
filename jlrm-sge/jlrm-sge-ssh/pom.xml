@@ -12,34 +12,8 @@
   <packaging>bundle</packaging>
   <dependencies>
     <dependency>
-      <groupId>org.apache.sshd</groupId>
-      <artifactId>sshd-core</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.jcraft</groupId>
-      <artifactId>jsch</artifactId>
-    </dependency>    
-    <dependency>
-      <groupId>org.bouncycastle</groupId>
-      <artifactId>bcprov-jdk16</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.jcraft</groupId>
-      <artifactId>jzlib</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>net.schmizz</groupId>
-      <artifactId>sshj</artifactId>
-      <scope>test</scope>
-    </dependency>   
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.velocity</groupId>
-      <artifactId>velocity</artifactId>
+      <groupId>org.renci.jlrm</groupId>
+      <artifactId>jlrm-commons</artifactId>
     </dependency>
     <dependency>
       <groupId>org.renci.jlrm.jlrm-sge</groupId>
