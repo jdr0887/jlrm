@@ -281,8 +281,8 @@
   </build>
   <modules>
     <module>jlrm-api</module>
-    <module>jlrm-commons</module>
     <module>jlrm-condor</module>
+    <module>jlrm-commons</module>
     <module>jlrm-lsf</module>
     <module>jlrm-pbs</module>
     <module>jlrm-sge</module>
