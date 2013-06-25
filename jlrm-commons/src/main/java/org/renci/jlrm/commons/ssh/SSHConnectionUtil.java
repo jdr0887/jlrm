@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
 import org.renci.jlrm.JLRMException;
@@ -41,10 +40,9 @@ public class SSHConnectionUtil {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
             session = sch.getSession(username, host, 22);
-            Properties config = new Properties();
-            config.setProperty("StrictHostKeyChecking", "no");
-            session.setConfig(config);
-            session.connect(30000);
+            session.connect(30 * 1000);
+
+            logger.info("session.isConnected() = {}", session.isConnected());
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
@@ -58,12 +56,27 @@ public class SSHConnectionUtil {
             execChannel.setCommand(command);
 
             InputStream in = execChannel.getInputStream();
-            execChannel.connect(5 * 1000);
+            execChannel.connect(10 * 1000);
 
+            logger.info("execChannel.isConnected() = {}", execChannel.isConnected());
+
+            do {
+                Thread.sleep(1000);
+            } while (!execChannel.isEOF());
+
+            logger.info("command = {}", command);
             ret = IOUtils.toString(in).trim();
+
             int exitCode = execChannel.getExitStatus();
             logger.info("exitCode = {}", exitCode);
 
+            if (exitCode != 0) {
+                logger.warn("stdout: {}", new String(out.toByteArray()));
+                logger.warn("stderr: {}", new String(err.toByteArray()));
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } catch (JSchException e) {
             logger.error("JSchException", e);
             throw new JLRMException("JSchException: " + e.getMessage());
@@ -108,13 +121,19 @@ public class SSHConnectionUtil {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
             session = sch.getSession(username, host, 22);
-            Properties config = new Properties();
-            config.setProperty("StrictHostKeyChecking", "no");
-            session.setConfig(config);
             session.connect(30000);
+
+            logger.info("session.isConnected() = {}", session.isConnected());
 
             sftpChannel = (ChannelSftp) session.openChannel("sftp");
             sftpChannel.connect(5 * 1000);
+
+            logger.info("sftpChannel.isConnected() = {}", sftpChannel.isConnected());
+
+            do {
+                Thread.sleep(1000);
+            } while (!sftpChannel.isEOF());
+
             sftpChannel.cd(remoteWorkDir);
 
             if (transferExecutable) {
@@ -128,9 +147,12 @@ public class SSHConnectionUtil {
                     sftpChannel.chmod(0644, inputFile.getName());
                 }
             }
+
             sftpChannel.put(new FileInputStream(submitFile), submitFile.getName(), ChannelSftp.OVERWRITE);
             sftpChannel.chmod(0644, submitFile.getName());
-            sftpChannel.disconnect();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } catch (FileNotFoundException e) {
             logger.error("FileNotFoundException", e);
             throw new JLRMException("FileNotFoundException: " + e.getMessage());
