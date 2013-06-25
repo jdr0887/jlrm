@@ -61,6 +61,7 @@ public class LSFSSHFactoryTest {
     public void testGlideinSubmit() {
 
         Site site = new Site();
+        site.setName("Kure");
         site.setSubmitHost("biodev1.its.unc.edu");
         site.setMaxNoClaimTime(1440);
         site.setUsername("rc_renci.svc");
