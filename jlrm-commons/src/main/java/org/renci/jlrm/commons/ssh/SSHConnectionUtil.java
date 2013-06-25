@@ -130,10 +130,6 @@ public class SSHConnectionUtil {
 
             logger.info("sftpChannel.isConnected() = {}", sftpChannel.isConnected());
 
-            do {
-                Thread.sleep(1000);
-            } while (!sftpChannel.isEOF());
-
             sftpChannel.cd(remoteWorkDir);
 
             if (transferExecutable) {
@@ -151,8 +147,6 @@ public class SSHConnectionUtil {
             sftpChannel.put(new FileInputStream(submitFile), submitFile.getName(), ChannelSftp.OVERWRITE);
             sftpChannel.chmod(0644, submitFile.getName());
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         } catch (FileNotFoundException e) {
             logger.error("FileNotFoundException", e);
             throw new JLRMException("FileNotFoundException: " + e.getMessage());
