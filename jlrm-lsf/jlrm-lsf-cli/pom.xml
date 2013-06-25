@@ -3,12 +3,12 @@
   <parent>
     <groupId>org.renci.jlrm</groupId>
     <artifactId>jlrm-lsf</artifactId>
-    <version>0.3.1</version>
+    <version>0.3.2-SNAPSHOT</version>
   </parent>
   <name>jLRM :: LSF :: CLI</name>
   <groupId>org.renci.jlrm.jlrm-lsf</groupId>
   <artifactId>jlrm-lsf-cli</artifactId>
-  <version>0.3.1</version>
+  <version>0.3.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <dependencies>
     <dependency>
