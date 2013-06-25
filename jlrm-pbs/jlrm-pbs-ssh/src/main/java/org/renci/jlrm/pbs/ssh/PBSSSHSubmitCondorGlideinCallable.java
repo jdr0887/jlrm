@@ -151,7 +151,7 @@ public class PBSSSHSubmitCondorGlideinCallable implements Callable<PBSSSHJob> {
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
             command = String.format("qsub < %s", targetFile);
-            String submitOutput = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
+            String submitOutput = SSHConnectionUtil.execute(command, site.getUsername(), site.getSubmitHost());
 
             LineNumberReader lnr = new LineNumberReader(new StringReader(submitOutput));
             String line;
