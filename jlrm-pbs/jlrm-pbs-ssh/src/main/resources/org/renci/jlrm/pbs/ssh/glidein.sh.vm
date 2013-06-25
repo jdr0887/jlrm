@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 if [ ! -e "$HOME/.jlrmrc" ]; then
 cat > $HOME/.jlrmrc <<EOF
 #!/bin/bash
@@ -11,6 +9,7 @@ export KERNEL_NAME=\`uname -s\`
 EOF
 fi
 
+. $HOME/.bashrc
 . $HOME/.jlrmrc                                 
 
 # this will contain logs/execute/spool
