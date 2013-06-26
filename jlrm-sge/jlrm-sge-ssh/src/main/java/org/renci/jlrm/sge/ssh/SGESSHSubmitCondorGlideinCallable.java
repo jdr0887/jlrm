@@ -47,6 +47,8 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
 
     private String hostAllowWrite;
 
+    private String username;
+
     public SGESSHSubmitCondorGlideinCallable() {
         super();
     }
@@ -95,7 +97,7 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
         VelocityContext velocityContext = new VelocityContext();
         velocityContext.put("siteName", getSite().getSubmitHost());
         velocityContext.put("collectorHost", this.collectorHost);
-        velocityContext.put("jlrmUser", getSite().getUsername());
+        velocityContext.put("jlrmUser", this.username);
         velocityContext.put("jlrmSiteName", getSite().getName());
         velocityContext.put("hostAllowRead", this.hostAllowRead);
         velocityContext.put("hostAllowWrite", this.hostAllowWrite);
@@ -276,6 +278,14 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
 
     public void setJobName(String jobName) {
         this.jobName = jobName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
 }
