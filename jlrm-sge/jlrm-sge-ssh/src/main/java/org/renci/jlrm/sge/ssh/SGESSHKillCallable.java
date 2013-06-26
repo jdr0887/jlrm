@@ -8,30 +8,30 @@ import org.renci.jlrm.commons.ssh.SSHConnectionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SGESSHKillCallable implements Callable<SGESSHJob> {
+public class SGESSHKillCallable implements Callable<Void> {
 
     private final Logger logger = LoggerFactory.getLogger(SGESSHKillCallable.class);
 
     private Site site;
 
-    private SGESSHJob job;
+    private String jobId;
 
     public SGESSHKillCallable() {
         super();
     }
 
-    public SGESSHKillCallable(Site site, SGESSHJob job) {
+    public SGESSHKillCallable(Site site, String jobId) {
         super();
         this.site = site;
-        this.job = job;
+        this.jobId = jobId;
     }
 
     @Override
-    public SGESSHJob call() throws JLRMException {
+    public Void call() throws JLRMException {
         logger.info("ENTERING call()");
-        String command = String.format("qdel %s", job.getId());
+        String command = String.format("qdel %s", this.jobId);
         SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
-        return job;
+        return null;
     }
 
     public Site getSite() {
@@ -42,12 +42,12 @@ public class SGESSHKillCallable implements Callable<SGESSHJob> {
         this.site = site;
     }
 
-    public SGESSHJob getJob() {
-        return job;
+    public String getJobId() {
+        return jobId;
     }
 
-    public void setJob(SGESSHJob job) {
-        this.job = job;
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
     }
 
 }
