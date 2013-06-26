@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
@@ -23,16 +22,13 @@ public class PBSSSHLookupStatusCallable implements Callable<Set<PBSJobStatusInfo
 
     private Site site;
 
-    private List<PBSSSHJob> jobs;
-
     public PBSSSHLookupStatusCallable() {
         super();
     }
 
-    public PBSSSHLookupStatusCallable(Site site, List<PBSSSHJob> jobs) {
+    public PBSSSHLookupStatusCallable(Site site) {
         super();
         this.site = site;
-        this.jobs = jobs;
     }
 
     @Override
@@ -43,35 +39,24 @@ public class PBSSSHLookupStatusCallable implements Callable<Set<PBSJobStatusInfo
 
         try {
 
-            StringBuilder sb = new StringBuilder();
-            for (PBSSSHJob job : this.jobs) {
-                sb.append(" ").append(job.getId());
-            }
-            String jobXarg = sb.toString().replaceFirst(" ", "");
-            String command = String.format("qstat | tail -n+3 | awk '{print $1,$5,$6,$2}'", jobXarg);
-            String output = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
+            String command = String.format("qstat | tail -n+3 | awk '{print $1,$5,$6,$2}'");
+            String output = SSHConnectionUtil.execute(command, site.getUsername(), site.getSubmitHost());
 
             LineNumberReader lnr = new LineNumberReader(new StringReader(output));
             String line;
             while ((line = lnr.readLine()) != null) {
                 PBSJobStatusType statusType = PBSJobStatusType.ENDING;
                 if (StringUtils.isNotEmpty(line)) {
-                    if (line.contains("is not found")) {
-                        statusType = PBSJobStatusType.ENDING;
-                    } else {
-                        String[] lineSplit = line.split(" ");
-                        if (lineSplit != null && lineSplit.length == 2) {
-                            for (PBSJobStatusType type : PBSJobStatusType.values()) {
-                                if (type.getValue().equals(lineSplit[1])) {
-                                    statusType = type;
-                                }
+                    String[] lineSplit = line.split(" ");
+                    if (lineSplit != null && lineSplit.length == 4) {
+                        for (PBSJobStatusType type : PBSJobStatusType.values()) {
+                            if (type.getValue().equals(lineSplit[1])) {
+                                statusType = type;
                             }
-
-                            PBSJobStatusInfo info = new PBSJobStatusInfo(lineSplit[0], statusType, lineSplit[2],
-                                    lineSplit[3]);
-                            logger.info("JobStatus is {}", info.toString());
-                            jobStatusSet.add(info);
                         }
+                        String jobId = lineSplit[0].substring(0, lineSplit[0].indexOf("."));
+                        PBSJobStatusInfo info = new PBSJobStatusInfo(jobId, statusType, lineSplit[2], lineSplit[3]);
+                        jobStatusSet.add(info);
                     }
                 }
             }
@@ -88,14 +73,6 @@ public class PBSSSHLookupStatusCallable implements Callable<Set<PBSJobStatusInfo
 
     public void setSite(Site site) {
         this.site = site;
-    }
-
-    public List<PBSSSHJob> getJobs() {
-        return jobs;
-    }
-
-    public void setJobs(List<PBSSSHJob> jobs) {
-        this.jobs = jobs;
     }
 
 }

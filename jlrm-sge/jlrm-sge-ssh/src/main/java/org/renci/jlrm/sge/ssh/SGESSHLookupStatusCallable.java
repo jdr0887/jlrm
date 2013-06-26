@@ -3,7 +3,6 @@ package org.renci.jlrm.sge.ssh;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
@@ -31,16 +30,13 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
 
     private Site site;
 
-    private List<SGESSHJob> jobs;
-
     public SGESSHLookupStatusCallable() {
         super();
     }
 
-    public SGESSHLookupStatusCallable(Site site, List<SGESSHJob> jobs) {
+    public SGESSHLookupStatusCallable(Site site) {
         super();
         this.site = site;
-        this.jobs = jobs;
     }
 
     @Override
@@ -85,22 +81,7 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
                         }
                     }
                     SGEJobStatusInfo info = new SGEJobStatusInfo(jobId, statusType, queueName);
-                    logger.info("JobStatus is {}", info.toString());
                     jobStatusSet.add(info);
-                }
-            }
-
-            Set<String> jobIdSet = new HashSet<String>();
-            for (SGEJobStatusInfo info : jobStatusSet) {
-                jobIdSet.add(info.getJobId());
-            }
-
-            if (jobs != null) {
-                for (SGESSHJob job : jobs) {
-                    if (!jobIdSet.contains(job.getId())) {
-                        // need to default the queueName for non existing jobs
-                        jobStatusSet.add(new SGEJobStatusInfo(job.getId(), SGEJobStatusType.DONE, "all.q"));
-                    }
                 }
             }
 
@@ -120,14 +101,6 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
 
     public void setSite(Site site) {
         this.site = site;
-    }
-
-    public List<SGESSHJob> getJobs() {
-        return jobs;
-    }
-
-    public void setJobs(List<SGESSHJob> jobs) {
-        this.jobs = jobs;
     }
 
 }

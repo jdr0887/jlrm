@@ -3,11 +3,9 @@ package org.renci.jlrm.slurm.ssh;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
@@ -27,16 +25,13 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
 
     private Site site;
 
-    private List<SLURMSSHJob> jobs;
-
     public SLURMSSHLookupStatusCallable() {
         super();
     }
 
-    public SLURMSSHLookupStatusCallable(Site site, List<SLURMSSHJob> jobs) {
+    public SLURMSSHLookupStatusCallable(Site site) {
         super();
         this.site = site;
-        this.jobs = jobs;
     }
 
     @Override
@@ -51,23 +46,9 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
             calendar.roll(Calendar.DAY_OF_YEAR, -4);
             String dateFormat = DateFormatUtils.format(calendar, "MMdd");
 
-            List<String> jobIdList = new ArrayList<String>();
-            if (this.jobs != null && this.jobs.size() > 0) {
-                for (SLURMSSHJob job : this.jobs) {
-                    jobIdList.add(job.getId());
-                }
-            }
+            String command = String.format(
+                    "sacct -S %s -P -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2", dateFormat);
 
-            String format = "(%s && %s) | sort | uniq";
-
-            String delimitedJobList = jobIdList != null && jobIdList.size() > 0 ? String.format("-j %s",
-                    StringUtils.join(jobIdList, ",")) : "";
-            String command = String.format(format,
-                    String.format(
-                            "sacct -S %s -P -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2",
-                            dateFormat), String.format(
-                            "sacct -S %s -P %s -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2",
-                            dateFormat, delimitedJobList));
             String output = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
 
             LineNumberReader lnr = new LineNumberReader(new StringReader(output));
@@ -107,14 +88,6 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
 
     public void setSite(Site site) {
         this.site = site;
-    }
-
-    public List<SLURMSSHJob> getJobs() {
-        return jobs;
-    }
-
-    public void setJobs(List<SLURMSSHJob> jobs) {
-        this.jobs = jobs;
     }
 
 }

@@ -3,9 +3,7 @@ package org.renci.jlrm.lsf.ssh;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
@@ -22,17 +20,14 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
 
     private final Logger logger = LoggerFactory.getLogger(LSFSSHLookupStatusCallable.class);
 
-    private List<LSFSSHJob> jobs;
-
     private Site site;
 
     public LSFSSHLookupStatusCallable() {
         super();
     }
 
-    public LSFSSHLookupStatusCallable(List<LSFSSHJob> jobs, Site site) {
+    public LSFSSHLookupStatusCallable(Site site) {
         super();
-        this.jobs = jobs;
         this.site = site;
     }
 
@@ -42,15 +37,8 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
 
         Set<LSFJobStatusInfo> jobStatusSet = new HashSet<LSFJobStatusInfo>();
 
-        List<String> jobIdList = new ArrayList<String>();
-        for (LSFSSHJob job : this.jobs) {
-            jobIdList.add(job.getId());
-        }
-
-        String format = "bjobs %1$s | tail -n+2 | grep RUN | awk '{print $1,$3,$4,$7}' && bjobs %1$s | tail -n+2 | grep PEND | awk '{print $1,$3,$4,$6}'";
-        String delimitedJobList = jobIdList != null && jobIdList.size() > 0 ? StringUtils.join(jobIdList, ",") : "";
-        String command = String.format(format, delimitedJobList);
-        String output = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
+        String command = "bjobs | tail -n+2 | grep RUN | awk '{print $1,$3,$4,$7}' && bjobs | tail -n+2 | grep PEND | awk '{print $1,$3,$4,$6}'";
+        String output = SSHConnectionUtil.execute(command, site.getUsername(), site.getSubmitHost());
 
         try {
             LineNumberReader lnr = new LineNumberReader(new StringReader(output));
@@ -70,7 +58,6 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
                             }
                             LSFJobStatusInfo info = new LSFJobStatusInfo(lineSplit[0], statusType, lineSplit[2],
                                     lineSplit[3]);
-                            logger.debug("JobStatus is {}", info.toString());
                             jobStatusSet.add(info);
                         }
                     }
@@ -89,14 +76,6 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
 
     public void setSite(Site site) {
         this.site = site;
-    }
-
-    public List<LSFSSHJob> getJobs() {
-        return jobs;
-    }
-
-    public void setJobs(List<LSFSSHJob> jobs) {
-        this.jobs = jobs;
     }
 
 }
