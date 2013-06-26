@@ -1,6 +1,5 @@
 package org.renci.jlrm.lsf.ssh;
 
-import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +19,6 @@ public class LookupStatusTask implements Runnable {
 
         LSFSSHLookupStatusCallable callable = new LSFSSHLookupStatusCallable();
         callable.setSite(site);
-        callable.setJobs(new ArrayList<LSFSSHJob>());
         try {
             callable.call();
         } catch (Exception e) {
