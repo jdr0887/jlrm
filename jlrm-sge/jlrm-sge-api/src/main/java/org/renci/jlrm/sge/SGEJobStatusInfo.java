@@ -8,11 +8,14 @@ public class SGEJobStatusInfo {
 
     private String queue;
 
-    public SGEJobStatusInfo(String jobId, SGEJobStatusType type, String queue) {
+    private String jobName;
+
+    public SGEJobStatusInfo(String jobId, SGEJobStatusType type, String queue, String jobName) {
         super();
         this.jobId = jobId;
         this.type = type;
         this.queue = queue;
+        this.jobName = jobName;
     }
 
     public String getJobId() {
@@ -41,7 +44,7 @@ public class SGEJobStatusInfo {
 
     @Override
     public String toString() {
-        return "SGEJobStatusInfo [jobId=" + jobId + ", type=" + type + ", queue=" + queue + "]";
+        return String.format("SGEJobStatusInfo [jobId=%s, type=%s, queue=%s, jobName=%s]", jobId, type, queue, jobName);
     }
 
 }

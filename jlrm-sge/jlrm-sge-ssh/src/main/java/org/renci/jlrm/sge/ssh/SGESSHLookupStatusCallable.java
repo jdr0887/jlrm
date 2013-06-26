@@ -59,12 +59,16 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
                     Node node = jobListNodeList.item(i);
                     NodeList childNodes = node.getChildNodes();
                     String jobId = "";
+                    String jobName = "";
                     String queueName = "";
                     String status = "";
                     SGEJobStatusType statusType = SGEJobStatusType.DONE;
                     for (int j = 0; j < childNodes.getLength(); j++) {
                         Node childNode = childNodes.item(j);
                         String nodeName = childNode.getNodeName();
+                        if ("JB_name".equals(nodeName)) {
+                            jobName = childNode.getTextContent();
+                        }
                         if ("JB_job_number".equals(nodeName)) {
                             jobId = childNode.getTextContent();
                         }
@@ -80,7 +84,7 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
                             queueName = childNode.getTextContent();
                         }
                     }
-                    SGEJobStatusInfo info = new SGEJobStatusInfo(jobId, statusType, queueName);
+                    SGEJobStatusInfo info = new SGEJobStatusInfo(jobId, statusType, queueName, jobName);
                     jobStatusSet.add(info);
                 }
             }

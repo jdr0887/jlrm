@@ -15,6 +15,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.junit.Test;
+import org.renci.jlrm.sge.SGEJobStatusInfo;
+import org.renci.jlrm.sge.SGEJobStatusType;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -92,23 +94,34 @@ public class Scratch {
             for (int i = 0; i < jobListNodeList.getLength(); i++) {
                 Node node = jobListNodeList.item(i);
                 NodeList childNodes = node.getChildNodes();
+                String jobName = "";
                 String jobId = "";
                 String queueName = "";
                 String status = "";
+                SGEJobStatusType statusType = SGEJobStatusType.DONE;
+
                 for (int j = 0; j < childNodes.getLength(); j++) {
                     Node childNode = childNodes.item(j);
                     String nodeName = childNode.getNodeName();
+                    if ("JB_name".equals(nodeName)) {
+                        jobName = childNode.getTextContent();
+                    }
                     if ("JB_job_number".equals(nodeName)) {
                         jobId = childNode.getTextContent();
                     }
                     if ("state".equals(nodeName)) {
                         status = childNode.getTextContent();
+                        for (SGEJobStatusType type : SGEJobStatusType.values()) {
+                            if (type.getValue().equals(status)) {
+                                statusType = type;
+                            }
+                        }
                     }
                     if ("hard_req_queue".equals(nodeName)) {
                         queueName = childNode.getTextContent();
                     }
                 }
-                System.out.println(String.format("%1$-16s%2$-10s%3$s", jobId, status, queueName));
+                System.out.println(new SGEJobStatusInfo(jobId, statusType, queueName, jobName));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
