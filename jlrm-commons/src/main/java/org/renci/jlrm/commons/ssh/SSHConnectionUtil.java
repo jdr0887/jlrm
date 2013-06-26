@@ -42,7 +42,7 @@ public class SSHConnectionUtil {
             session = sch.getSession(username, host, 22);
             session.connect(30 * 1000);
 
-            logger.info("session.isConnected() = {}", session.isConnected());
+            logger.debug("session.isConnected() = {}", session.isConnected());
 
             execChannel = (ChannelExec) session.openChannel("exec");
             execChannel.setInputStream(null);
@@ -58,7 +58,7 @@ public class SSHConnectionUtil {
             InputStream in = execChannel.getInputStream();
             execChannel.connect(10 * 1000);
 
-            logger.info("execChannel.isConnected() = {}", execChannel.isConnected());
+            logger.debug("execChannel.isConnected() = {}", execChannel.isConnected());
 
             do {
                 Thread.sleep(1000);
@@ -97,9 +97,11 @@ public class SSHConnectionUtil {
 
             if (execChannel != null) {
                 execChannel.disconnect();
+                logger.debug("execChannel.isConnected() = {}", execChannel.isConnected());
             }
             if (session != null) {
                 session.disconnect();
+                logger.debug("session.isConnected() = {}", session.isConnected());
             }
         }
         return ret;
@@ -123,12 +125,12 @@ public class SSHConnectionUtil {
             session = sch.getSession(username, host, 22);
             session.connect(30000);
 
-            logger.info("session.isConnected() = {}", session.isConnected());
+            logger.debug("session.isConnected() = {}", session.isConnected());
 
             sftpChannel = (ChannelSftp) session.openChannel("sftp");
             sftpChannel.connect(5 * 1000);
 
-            logger.info("sftpChannel.isConnected() = {}", sftpChannel.isConnected());
+            logger.debug("sftpChannel.isConnected() = {}", sftpChannel.isConnected());
 
             sftpChannel.cd(remoteWorkDir);
 
@@ -159,9 +161,11 @@ public class SSHConnectionUtil {
         } finally {
             if (sftpChannel != null) {
                 sftpChannel.disconnect();
+                logger.debug("sftpChannel.isConnected() = {}", sftpChannel.isConnected());
             }
             if (session != null) {
                 session.disconnect();
+                logger.debug("session.isConnected() = {}", session.isConnected());
             }
         }
 
