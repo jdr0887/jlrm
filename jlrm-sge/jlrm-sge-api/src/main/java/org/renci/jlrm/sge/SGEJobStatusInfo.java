@@ -42,6 +42,14 @@ public class SGEJobStatusInfo {
         this.queue = queue;
     }
 
+    public String getJobName() {
+        return jobName;
+    }
+
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
+    }
+
     @Override
     public String toString() {
         return String.format("SGEJobStatusInfo [jobId=%s, type=%s, queue=%s, jobName=%s]", jobId, type, queue, jobName);
