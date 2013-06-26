@@ -1,27 +1,13 @@
 package org.renci.jlrm.pbs.ssh;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.LineNumberReader;
-import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Queue;
 import org.renci.jlrm.Site;
-import org.renci.jlrm.pbs.PBSJobStatusType;
-
-import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Session;
+import org.renci.jlrm.pbs.PBSJobStatusInfo;
 
 public class PBSSSHFactoryTest {
 
@@ -90,86 +76,22 @@ public class PBSSSHFactoryTest {
     @Test
     public void testLookupStatus() {
 
-        String command = String.format("qstat %s | tail -n+2 | awk '{print $1,$3}'", "173198 173244");
+        Site site = new Site();
+        site.setName("BlueRidge");
+        site.setSubmitHost("br0.renci.org");
+        site.setUsername("mapseq");
 
-        String home = System.getProperty("user.home");
-        String knownHostsFilename = home + "/.ssh/known_hosts";
+        PBSSSHLookupStatusCallable callable = new PBSSSHLookupStatusCallable(site);
 
-        JSch sch = new JSch();
         try {
-            sch.addIdentity(home + "/.ssh/id_rsa");
-            sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession("jdr0887", "br0.renci.org", 22);
-            Properties config = new Properties();
-            config.setProperty("StrictHostKeyChecking", "no");
-            session.setConfig(config);
-            session.connect(30000);
-
-            ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
-            execChannel.setInputStream(null);
-            ByteArrayOutputStream err = new ByteArrayOutputStream();
-            execChannel.setErrStream(err);
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            execChannel.setOutputStream(out);
-            execChannel.setCommand(command);
-            InputStream in = execChannel.getInputStream();
-            execChannel.connect(5*1000);
-
-            byte[] tmp = new byte[1024];
-            while (true) {
-                while (in.available() > 0) {
-                    int i = in.read(tmp, 0, 1024);
-                    if (i < 0)
-                        break;
-                    System.out.print(new String(tmp, 0, i));
-                }
-                if (execChannel.isClosed()) {
-                    System.out.println("exit-status: " + execChannel.getExitStatus());
-                    break;
-                }
-                try {
-                    Thread.sleep(1000);
-                } catch (Exception ee) {
-                }
+            Set<PBSJobStatusInfo> results = callable.call();
+            for (PBSJobStatusInfo info : results) {
+                System.out.println(info.toString());
             }
-
-            String output = IOUtils.toString(in).trim();
-
-            int exitCode = execChannel.getExitStatus();
-            execChannel.disconnect();
-            session.disconnect();
-
-            Map<String, PBSJobStatusType> jobStatusMap = new HashMap<String, PBSJobStatusType>();
-            LineNumberReader lnr = new LineNumberReader(new StringReader(output));
-            String line;
-            while ((line = lnr.readLine()) != null) {
-                PBSJobStatusType statusType = PBSJobStatusType.ENDING;
-                if (StringUtils.isNotEmpty(line)) {
-                    if (line.contains("is not found")) {
-                        statusType = PBSJobStatusType.ENDING;
-                    } else {
-                        // System.out.println(line);
-                        String[] lineSplit = line.split(" ");
-                        if (lineSplit != null && lineSplit.length == 2) {
-                            for (PBSJobStatusType type : PBSJobStatusType.values()) {
-                                if (type.getValue().equals(lineSplit[1])) {
-                                    statusType = type;
-                                }
-                            }
-                            jobStatusMap.put(lineSplit[0], statusType);
-                        }
-                    }
-                }
-            }
-
-            for (String id : jobStatusMap.keySet()) {
-                System.out.println("Job: " + id + " has a status of " + jobStatusMap.get(id));
-            }
-        } catch (JSchException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (JLRMException e) {
             e.printStackTrace();
         }
+
     }
 
 }

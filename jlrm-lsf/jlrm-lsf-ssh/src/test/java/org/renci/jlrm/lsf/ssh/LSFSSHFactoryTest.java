@@ -1,28 +1,13 @@
 package org.renci.jlrm.lsf.ssh;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.LineNumberReader;
-import java.io.StringReader;
-import java.util.HashSet;
-import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Queue;
 import org.renci.jlrm.Site;
 import org.renci.jlrm.lsf.LSFJobStatusInfo;
-import org.renci.jlrm.lsf.LSFJobStatusType;
-
-import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Session;
 
 public class LSFSSHFactoryTest {
 
@@ -67,7 +52,7 @@ public class LSFSSHFactoryTest {
         site.setUsername("rc_renci.svc");
 
         Queue queue = new Queue();
-        queue.setName("pseq_prod");
+        queue.setName("prenci");
         queue.setRunTime(5760);
         queue.setMaxMultipleJobsToSubmit(2);
 
@@ -89,7 +74,7 @@ public class LSFSSHFactoryTest {
             callable.setRequiredMemory(40);
             callable.setHostAllowRead("*.unc.edu");
             callable.setHostAllowWrite("*.unc.edu");
-            
+
             LSFSSHJob job = callable.call();
             System.out.println(job.getId());
         } catch (JLRMException e) {
@@ -101,69 +86,23 @@ public class LSFSSHFactoryTest {
     @Test
     public void testLookupStatus() {
 
-        String command = String
-                .format(". ~/.bashrc; bjobs %s | tail -n+2 | awk '{print $1,$3,$4,$7}'", "183291 183293");
+        Site site = new Site();
+        site.setName("Kure");
+        site.setSubmitHost("biodev1.its.unc.edu");
+        site.setUsername("rc_renci.svc");
 
-        String home = System.getProperty("user.home");
-        String knownHostsFilename = home + "/.ssh/known_hosts";
+        LSFSSHLookupStatusCallable callable = new LSFSSHLookupStatusCallable(site);
 
-        JSch sch = new JSch();
         try {
-            sch.addIdentity(home + "/.ssh/id_rsa");
-            sch.setKnownHosts(knownHostsFilename);
-            Session session = sch.getSession("rc_renci.svc", "biodev2.its.unc.edu", 22);
-            Properties config = new Properties();
-            config.setProperty("StrictHostKeyChecking", "no");
-            session.setConfig(config);
-            session.connect(30000);
-
-            ChannelExec execChannel = (ChannelExec) session.openChannel("exec");
-            execChannel.setInputStream(null);
-            ByteArrayOutputStream err = new ByteArrayOutputStream();
-            execChannel.setErrStream(err);
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            execChannel.setOutputStream(out);
-            execChannel.setCommand(command);
-            InputStream in = execChannel.getInputStream();
-            execChannel.connect(5*1000);
-
-            String output = IOUtils.toString(in).trim();
-
-            int exitCode = execChannel.getExitStatus();
-            execChannel.disconnect();
-            session.disconnect();
-
-            Set<LSFJobStatusInfo> jobStatusSet = new HashSet<LSFJobStatusInfo>();
-            LineNumberReader lnr = new LineNumberReader(new StringReader(output));
-            String line;
-            while ((line = lnr.readLine()) != null) {
-                LSFJobStatusType statusType = LSFJobStatusType.DONE;
-                if (StringUtils.isNotEmpty(line)) {
-                    if (line.contains("is not found")) {
-                        statusType = LSFJobStatusType.DONE;
-                    } else {
-                        // System.out.println(line);
-                        String[] lineSplit = line.split(" ");
-                        if (lineSplit != null && lineSplit.length == 4) {
-                            for (LSFJobStatusType type : LSFJobStatusType.values()) {
-                                if (type.getValue().equals(lineSplit[1])) {
-                                    statusType = type;
-                                }
-                            }
-                            LSFJobStatusInfo info = new LSFJobStatusInfo(lineSplit[0], statusType, lineSplit[2],
-                                    lineSplit[3]);
-                            System.out.println(info.toString());
-                            jobStatusSet.add(info);
-                        }
-                    }
-                }
+            Set<LSFJobStatusInfo> results = callable.call();
+            for (LSFJobStatusInfo info : results) {
+                System.out.println(info.toString());
             }
-
-        } catch (JSchException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            
+        } catch (JLRMException e) {
             e.printStackTrace();
         }
+
     }
 
 }
