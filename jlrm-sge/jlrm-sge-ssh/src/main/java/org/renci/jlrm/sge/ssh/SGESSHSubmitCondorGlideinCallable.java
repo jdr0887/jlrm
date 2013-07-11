@@ -150,7 +150,7 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
                 String condorConfigScriptMacro = IOUtils.toString(this.getClass().getClassLoader()
                         .getResourceAsStream("org/renci/jlrm/sge/ssh/condor_config"));
                 File condorConfig = new File(localWorkDir.getAbsolutePath(), "condor_config");
-                FileUtils.writeStringToFile(condorConfig, condorConfigScriptMacro);
+                writeTemplate(velocityContext, condorConfig, condorConfigScriptMacro);
                 job.getInputFiles().add(condorConfig);
 
             } catch (IOException e) {
