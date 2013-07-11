@@ -44,6 +44,7 @@ public class PBSSSHFactoryTest {
     public void testGlideinSubmit() {
 
         Site site = new Site();
+        site.setName("BlueRidge");
         site.setSubmitHost("br0.renci.org");
         site.setUsername("mapseq");
         site.setMaxNoClaimTime(1440);

@@ -45,6 +45,8 @@ public class LSFSSHFactoryTest {
     @Test
     public void testGlideinSubmit() {
 
+        // for (int i = 0; i < 10; ++i) {
+
         Site site = new Site();
         site.setName("Kure");
         site.setSubmitHost("biodev1.its.unc.edu");
@@ -60,10 +62,6 @@ public class LSFSSHFactoryTest {
 
         try {
 
-            // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "idle");
-            // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "debug");
-            // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "huge");
-            // LSFSSHJob job = lsfSSHFactory.submitGlidein(submitDir, 2, 30, 40, "biodev1.its.unc.edu", "week");
             LSFSSHSubmitCondorGlideinCallable callable = new LSFSSHSubmitCondorGlideinCallable();
             callable.setCollectorHost("biodev2.its.unc.edu");
             callable.setUsername("rc_renci.svc");
@@ -77,10 +75,12 @@ public class LSFSSHFactoryTest {
 
             LSFSSHJob job = callable.call();
             System.out.println(job.getId());
+
         } catch (JLRMException e) {
             e.printStackTrace();
         }
 
+        // }
     }
 
     @Test
@@ -98,7 +98,7 @@ public class LSFSSHFactoryTest {
             for (LSFJobStatusInfo info : results) {
                 System.out.println(info.toString());
             }
-            
+
         } catch (JLRMException e) {
             e.printStackTrace();
         }
