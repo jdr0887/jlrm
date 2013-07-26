@@ -33,7 +33,7 @@ public class CondorSubmitDAGCallable implements Callable<Integer> {
 
         try {
 
-            String command = String.format("condor_submit_dag %s", dagSubmitScript.getName());
+            String command = String.format("condor_submit_dag -force %s", dagSubmitScript.getName());
             CommandInput input = new CommandInput(command, dagSubmitScript.getParentFile());
             input.setExitImmediately(Boolean.FALSE);
             Executor executor = BashExecutor.getInstance();
