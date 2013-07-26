@@ -3,12 +3,12 @@
   <parent>
     <groupId>org.renci.jlrm</groupId>
     <artifactId>jlrm-slurm</artifactId>
-    <version>0.3.10-SNAPSHOT</version>
+    <version>0.3.10</version>
   </parent>
   <name>jLRM :: SLURM :: CLI</name>
   <groupId>org.renci.jlrm.jlrm-slurm</groupId>
   <artifactId>jlrm-slurm-cli</artifactId>
-  <version>0.3.10-SNAPSHOT</version>
+  <version>0.3.10</version>
   <packaging>bundle</packaging>
   <dependencies>
     <dependency>
