@@ -49,6 +49,8 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
 
     private String username;
 
+    private String numberOfProcessors = "$(DETECTED_CORES)";
+
     public SGESSHSubmitCondorGlideinCallable() {
         super();
     }
@@ -101,7 +103,8 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
         velocityContext.put("jlrmSiteName", getSite().getName());
         velocityContext.put("hostAllowRead", this.hostAllowRead);
         velocityContext.put("hostAllowWrite", this.hostAllowWrite);
-
+        velocityContext.put("numberOfProcessors", this.numberOfProcessors);
+        
         // note that we want a lower max run time here, so that the glidein can shut down
         // gracefully before getting kicked off by the batch scheduler
         long maxRunTimeAdjusted = this.queue.getRunTime() - 20;
@@ -286,6 +289,14 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getNumberOfProcessors() {
+        return numberOfProcessors;
+    }
+
+    public void setNumberOfProcessors(String numberOfProcessors) {
+        this.numberOfProcessors = numberOfProcessors;
     }
 
 }

@@ -49,6 +49,8 @@ public class SLURMSSHSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
 
     private String hostAllowWrite;
 
+    private String numberOfProcessors = "$(DETECTED_CORES)";
+
     public SLURMSSHSubmitCondorGlideinCallable() {
         super();
     }
@@ -87,6 +89,7 @@ public class SLURMSSHSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
         velocityContext.put("jlrmSiteName", getSite().getName());
         velocityContext.put("hostAllowRead", this.hostAllowRead);
         velocityContext.put("hostAllowWrite", this.hostAllowWrite);
+        velocityContext.put("numberOfProcessors", this.numberOfProcessors);
 
         // note that we want a lower max run time here, so that the glidein can shut down
         // gracefully before getting kicked off by the batch scheduler
@@ -268,6 +271,14 @@ public class SLURMSSHSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getNumberOfProcessors() {
+        return numberOfProcessors;
+    }
+
+    public void setNumberOfProcessors(String numberOfProcessors) {
+        this.numberOfProcessors = numberOfProcessors;
     }
 
 }

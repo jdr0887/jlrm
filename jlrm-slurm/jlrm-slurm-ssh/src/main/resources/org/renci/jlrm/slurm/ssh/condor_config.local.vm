@@ -19,7 +19,7 @@ SUSPEND = False
 CONTINUE = True
 
 SLOT_TYPE_1 = cpus=100%, memory=90%
-NUM_CPUS=$(DETECTED_CORES)/2
+NUM_CPUS=${numberOfProcessors}
 CONDOR_HOST=${collectorHost}
 FILESYSTEM_DOMAIN=${collectorHost}
 DAEMON_LIST=MASTER, STARTD
