@@ -23,7 +23,6 @@ public class SGESubmitScriptExporter<T extends SGESSHJob> {
         FileWriter submitFileWriter = new FileWriter(submitFile);
 
         submitFileWriter.write("#!/bin/bash\n\n");
-        submitFileWriter.write("set -e\n\n");
         submitFileWriter.write(String.format("#$ -V%n", job.getName()));
         submitFileWriter.write(String.format("#$ -N %s%n", job.getName()));
 

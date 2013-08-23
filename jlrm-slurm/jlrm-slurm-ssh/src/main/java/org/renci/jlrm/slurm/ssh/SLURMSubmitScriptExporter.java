@@ -23,7 +23,6 @@ public class SLURMSubmitScriptExporter<T extends SLURMSSHJob> {
         FileWriter submitFileWriter = new FileWriter(submitFile);
 
         submitFileWriter.write("#!/bin/bash\n\n");
-        submitFileWriter.write("#set -e\n\n");
         submitFileWriter.write(String.format("#SBATCH -J %s%n", job.getName()));
 
         if (StringUtils.isNotEmpty(job.getQueueName())) {

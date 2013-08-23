@@ -23,7 +23,6 @@ public class PBSSubmitScriptExporter<T extends PBSSSHJob> {
         FileWriter submitFileWriter = new FileWriter(submitFile);
 
         submitFileWriter.write("#!/bin/bash\n\n");
-        submitFileWriter.write("set -e\n\n");
 
         submitFileWriter.write(String.format("#PBS -N %s%n", job.getName()));
 
