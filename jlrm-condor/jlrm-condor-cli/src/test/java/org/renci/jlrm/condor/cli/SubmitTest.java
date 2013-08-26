@@ -31,7 +31,7 @@ public class SubmitTest {
             ClassAdvertisement classAd = ClassAdvertisementFactory.getClassAd(
                     ClassAdvertisementFactory.CLASS_AD_KEY_UNIVERSE).clone();
             classAd.setValue(UniverseType.MPI.toString().toLowerCase());
-            job1.getClassAdvertismentMap().put(ClassAdvertisementFactory.CLASS_AD_KEY_UNIVERSE, classAd);
+            job1.getClassAdMap().put(ClassAdvertisementFactory.CLASS_AD_KEY_UNIVERSE, classAd);
             g.addVertex(job1);
 
             CondorJob job2 = new CondorJob("b", executable, 4);
