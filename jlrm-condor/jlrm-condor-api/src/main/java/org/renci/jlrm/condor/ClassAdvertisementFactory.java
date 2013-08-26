@@ -171,7 +171,7 @@ public class ClassAdvertisementFactory {
                 INTEGER, "1024"));
 
         classAdvertismentMap.put(CLASS_AD_KEY_REQUEST_DISK, new ClassAdvertisement(CLASS_AD_KEY_REQUEST_DISK, INTEGER,
-                "102400"));
+                "20GB"));
 
         classAdvertismentMap.put(CLASS_AD_KEY_REQUIREMENTS, new ClassAdvertisement(CLASS_AD_KEY_REQUIREMENTS,
                 EXPRESSION, ""));
