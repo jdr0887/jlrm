@@ -30,27 +30,27 @@ public class CondorSubmitScriptExporter {
 
             ClassAdvertisement classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_EXECUTABLE).clone();
             classAd.setValue(job.getExecutable().getAbsolutePath());
-            job.getClassAdvertismentMap().put(CLASS_AD_KEY_EXECUTABLE, classAd);
+            job.getClassAdMap().put(CLASS_AD_KEY_EXECUTABLE, classAd);
 
             classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_OUTPUT).clone();
             classAd.setValue(String.format("%s.out", job.getName()));
-            job.getClassAdvertismentMap().put(CLASS_AD_KEY_OUTPUT, classAd);
+            job.getClassAdMap().put(CLASS_AD_KEY_OUTPUT, classAd);
 
             classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_ERROR).clone();
             classAd.setValue(String.format("%s.err", job.getName()));
-            job.getClassAdvertismentMap().put(CLASS_AD_KEY_ERROR, classAd);
+            job.getClassAdMap().put(CLASS_AD_KEY_ERROR, classAd);
 
             classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_LOG).clone();
             classAd.setValue(String.format("%s.log", job.getName()));
-            job.getClassAdvertismentMap().put(CLASS_AD_KEY_LOG, classAd);
+            job.getClassAdMap().put(CLASS_AD_KEY_LOG, classAd);
 
             classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_REQUEST_CPUS).clone();
             classAd.setValue(String.format("%d", job.getNumberOfProcessors()));
-            job.getClassAdvertismentMap().put(CLASS_AD_KEY_REQUEST_CPUS, classAd);
+            job.getClassAdMap().put(CLASS_AD_KEY_REQUEST_CPUS, classAd);
 
             classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_REQUEST_MEMORY).clone();
             classAd.setValue(String.format("%d", job.getMemory()));
-            job.getClassAdvertismentMap().put(CLASS_AD_KEY_REQUEST_MEMORY, classAd);
+            job.getClassAdMap().put(CLASS_AD_KEY_REQUEST_MEMORY, classAd);
 
             File submitFile = writeSubmitFile(workDir, job);
             job.setSubmitFile(submitFile);
@@ -85,27 +85,27 @@ public class CondorSubmitScriptExporter {
 
                     classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_EXECUTABLE).clone();
                     classAd.setValue(job.getExecutable().getAbsolutePath());
-                    job.getClassAdvertismentMap().put(CLASS_AD_KEY_EXECUTABLE, classAd);
+                    job.getClassAdMap().put(CLASS_AD_KEY_EXECUTABLE, classAd);
 
                     classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_OUTPUT).clone();
                     classAd.setValue(String.format("%s.out", job.getName()));
-                    job.getClassAdvertismentMap().put(CLASS_AD_KEY_OUTPUT, classAd);
+                    job.getClassAdMap().put(CLASS_AD_KEY_OUTPUT, classAd);
 
                     classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_ERROR).clone();
                     classAd.setValue(String.format("%s.err", job.getName()));
-                    job.getClassAdvertismentMap().put(CLASS_AD_KEY_ERROR, classAd);
+                    job.getClassAdMap().put(CLASS_AD_KEY_ERROR, classAd);
 
                     classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_LOG).clone();
                     classAd.setValue(String.format("%s.log", job.getName()));
-                    job.getClassAdvertismentMap().put(CLASS_AD_KEY_LOG, classAd);
+                    job.getClassAdMap().put(CLASS_AD_KEY_LOG, classAd);
 
                     classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_REQUEST_CPUS).clone();
                     classAd.setValue(String.format("%d", job.getNumberOfProcessors()));
-                    job.getClassAdvertismentMap().put(CLASS_AD_KEY_REQUEST_CPUS, classAd);
+                    job.getClassAdMap().put(CLASS_AD_KEY_REQUEST_CPUS, classAd);
 
                     classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_REQUEST_MEMORY).clone();
                     classAd.setValue(String.format("%d", job.getMemory()));
-                    job.getClassAdvertismentMap().put(CLASS_AD_KEY_REQUEST_MEMORY, classAd);
+                    job.getClassAdMap().put(CLASS_AD_KEY_REQUEST_MEMORY, classAd);
 
                     classAd = ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_REQUIREMENTS).clone();
 
@@ -123,7 +123,7 @@ public class CondorSubmitScriptExporter {
                     }
 
                     classAd.setValue(requirements);
-                    job.getClassAdvertismentMap().put(CLASS_AD_KEY_REQUIREMENTS, classAd);
+                    job.getClassAdMap().put(CLASS_AD_KEY_REQUIREMENTS, classAd);
 
                 }
 
@@ -172,7 +172,7 @@ public class CondorSubmitScriptExporter {
     protected File writeSubmitFile(File submitDir, CondorJob job) throws IOException {
         File submitFile = new File(submitDir, String.format("%s.sub", job.getName()));
         FileWriter submitFileWriter = new FileWriter(submitFile);
-        for (ClassAdvertisement classAd : job.getClassAdvertismentMap().values()) {
+        for (ClassAdvertisement classAd : job.getClassAdMap().values()) {
             switch (classAd.getType()) {
                 case BOOLEAN:
                 case EXPRESSION:
