@@ -12,7 +12,7 @@ import org.renci.jlrm.Job;
 
 public class CondorJob extends Job {
 
-    private final Map<String, ClassAdvertisement> classAdvertismentMap = new HashMap<String, ClassAdvertisement>();
+    private final Map<String, ClassAdvertisement> classAdMap = new HashMap<String, ClassAdvertisement>();
 
     private Integer cluster;
 
@@ -46,12 +46,12 @@ public class CondorJob extends Job {
         super(name, executable);
         this.retry = retry;
         for (ClassAdvertisement classAd : ClassAdvertisementFactory.getDefaultClassAds()) {
-            classAdvertismentMap.put(classAd.getKey(), classAd);
+            classAdMap.put(classAd.getKey(), classAd);
         }
     }
 
-    public Map<String, ClassAdvertisement> getClassAdvertismentMap() {
-        return classAdvertismentMap;
+    public Map<String, ClassAdvertisement> getClassAdMap() {
+        return classAdMap;
     }
 
     public void addArgument(String flag) {
@@ -64,12 +64,12 @@ public class CondorJob extends Job {
 
     public void addArgument(String flag, Object value, String delimiter) {
         try {
-            if (!getClassAdvertismentMap().containsKey(CLASS_AD_KEY_ARGUMENTS)) {
-                getClassAdvertismentMap().put(CLASS_AD_KEY_ARGUMENTS,
+            if (!getClassAdMap().containsKey(CLASS_AD_KEY_ARGUMENTS)) {
+                getClassAdMap().put(CLASS_AD_KEY_ARGUMENTS,
                         ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_ARGUMENTS).clone());
             }
             String arg = String.format("%s%s%s", flag, delimiter, value.toString());
-            ClassAdvertisement classAd = getClassAdvertismentMap().get(CLASS_AD_KEY_ARGUMENTS);
+            ClassAdvertisement classAd = getClassAdMap().get(CLASS_AD_KEY_ARGUMENTS);
             classAd.setValue(classAd.getValue() + " " + arg);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
