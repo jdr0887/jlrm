@@ -78,7 +78,7 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
         job.setQueueName(this.queue.getName());
         job.setName(this.jobName);
         job.setHostCount(1);
-        job.setNumberOfProcessors(8);
+        job.setNumberOfProcessors(getSite().getNumberOfProcessors());
         job.setOutput(new File("glidein.out"));
         job.setError(new File("glidein.err"));
         job.setWallTime(queue.getRunTime());
