@@ -47,7 +47,8 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
             String dateFormat = DateFormatUtils.format(calendar, "MMdd");
 
             String command = String.format(
-                    "sacct -S %s -P -o JobID -o State -o Partition -o JobName | grep -v batch | tail -n+2", dateFormat);
+                    "sacct -S %s -P -o JobID -o State -o Partition -o JobName | grep -v \"\\.batch\" | tail -n+2",
+                    dateFormat);
 
             String output = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
 
