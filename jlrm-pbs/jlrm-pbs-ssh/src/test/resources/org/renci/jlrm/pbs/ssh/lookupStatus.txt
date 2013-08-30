@@ -1,0 +1,10 @@
+   
+brsn.renci.org:   
+Req'd  Elap 
+Job Time Username Queue
+-------------------- - -------- ----------------
+3565216.brsn.ren R serial glidein
+3565218.brsn.ren R serial glidein
+3565274.brsn.ren R serial glidein
+3565311.brsn.ren R serial glidein
+3576174.brsn.ren Q serial glidein
