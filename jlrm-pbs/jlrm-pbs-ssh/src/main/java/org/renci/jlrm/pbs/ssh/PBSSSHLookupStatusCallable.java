@@ -39,24 +39,34 @@ public class PBSSSHLookupStatusCallable implements Callable<Set<PBSJobStatusInfo
 
         try {
 
-            String command = String.format("qstat | tail -n+3 | awk '{print $1,$5,$6,$2}'");
+            String command = String.format("qstat -u %s | awk '{print $1,$10,$3,$4}'", site.getUsername());
             String output = SSHConnectionUtil.execute(command, site.getUsername(), site.getSubmitHost());
 
             LineNumberReader lnr = new LineNumberReader(new StringReader(output));
+            boolean canRead = false;
             String line;
             while ((line = lnr.readLine()) != null) {
-                PBSJobStatusType statusType = PBSJobStatusType.ENDING;
+
                 if (StringUtils.isNotEmpty(line)) {
-                    String[] lineSplit = line.split(" ");
-                    if (lineSplit != null && lineSplit.length == 4) {
-                        for (PBSJobStatusType type : PBSJobStatusType.values()) {
-                            if (type.getValue().equals(lineSplit[1])) {
-                                statusType = type;
+
+                    if (line.startsWith("---")) {
+                        canRead = true;
+                        continue;
+                    }
+
+                    if (canRead) {
+                        PBSJobStatusType statusType = PBSJobStatusType.ENDING;
+                        String[] lineSplit = line.split(" ");
+                        if (lineSplit != null && lineSplit.length == 4) {
+                            for (PBSJobStatusType type : PBSJobStatusType.values()) {
+                                if (type.getValue().equals(lineSplit[1])) {
+                                    statusType = type;
+                                }
                             }
+                            String jobId = lineSplit[0].substring(0, lineSplit[0].indexOf("."));
+                            PBSJobStatusInfo info = new PBSJobStatusInfo(jobId, statusType, lineSplit[2], lineSplit[3]);
+                            jobStatusSet.add(info);
                         }
-                        String jobId = lineSplit[0].substring(0, lineSplit[0].indexOf("."));
-                        PBSJobStatusInfo info = new PBSJobStatusInfo(jobId, statusType, lineSplit[2], lineSplit[3]);
-                        jobStatusSet.add(info);
                     }
                 }
             }
