@@ -47,8 +47,11 @@ public class PBSSubmitScriptExporter<T extends PBSSSHJob> {
 
         submitFileWriter.write(String.format("#PBS -o %s%n", job.getOutput().getAbsolutePath()));
         submitFileWriter.write(String.format("#PBS -e %s%n", job.getError().getAbsolutePath()));
-        submitFileWriter.write(String.format("#PBS -l nodes=%s:ppn=%s%n", job.getHostCount(),
-                job.getNumberOfProcessors()));
+
+        if (job.getHostCount() != null && job.getNumberOfProcessors() != null) {
+            submitFileWriter.write(String.format("#PBS -l nodes=%s:ppn=%s%n", job.getHostCount(),
+                    job.getNumberOfProcessors()));
+        }
 
         if (job.getTransferExecutable()) {
             submitFileWriter.write(remoteWorkDir + File.separator + job.getExecutable().getName());

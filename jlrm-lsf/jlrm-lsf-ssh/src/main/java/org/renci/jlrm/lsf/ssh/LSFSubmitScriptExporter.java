@@ -52,7 +52,10 @@ public class LSFSubmitScriptExporter<T extends LSFSSHJob> {
 
         submitFileWriter.write(String.format("#BSUB -o %s%n", job.getOutput().getAbsolutePath()));
         submitFileWriter.write(String.format("#BSUB -e %s%n", job.getError().getAbsolutePath()));
-        submitFileWriter.write(String.format("#BSUB -n %s%n", job.getNumberOfProcessors()));
+
+        if (job.getNumberOfProcessors() != null) {
+            submitFileWriter.write(String.format("#BSUB -n %s%n", job.getNumberOfProcessors()));
+        }
 
         if (job.getHostCount() != null) {
             submitFileWriter.write(String.format("#BSUB -R \"span[hosts=%d]\"%n", job.getHostCount()));

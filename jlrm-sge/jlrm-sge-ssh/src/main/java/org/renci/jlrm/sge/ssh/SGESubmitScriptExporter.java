@@ -50,7 +50,10 @@ public class SGESubmitScriptExporter<T extends SGESSHJob> {
 
         submitFileWriter.write(String.format("#$ -o %s%n", job.getOutput().getAbsolutePath()));
         submitFileWriter.write(String.format("#$ -e %s%n", job.getError().getAbsolutePath()));
-        submitFileWriter.write(String.format("#$ -pe threads %d%n", job.getNumberOfProcessors()));
+
+        if (job.getNumberOfProcessors() != null) {
+            submitFileWriter.write(String.format("#$ -pe threads %d%n", job.getNumberOfProcessors()));
+        }
 
         if (job.getTransferExecutable()) {
             submitFileWriter.write(remoteWorkDir + File.separator + job.getExecutable().getName());
