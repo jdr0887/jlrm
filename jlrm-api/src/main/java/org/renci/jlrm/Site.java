@@ -18,6 +18,8 @@ public class Site {
 
     private String project;
 
+    private Integer numberOfProcessors;
+
     private Map<String, Queue> queueInfoMap;
 
     public Site() {
@@ -88,11 +90,20 @@ public class Site {
         this.username = username;
     }
 
+    public Integer getNumberOfProcessors() {
+        return numberOfProcessors;
+    }
+
+    public void setNumberOfProcessors(Integer numberOfProcessors) {
+        this.numberOfProcessors = numberOfProcessors;
+    }
+
     @Override
     public String toString() {
         return String
-                .format("Site [submitHost=%s, maxTotalPending=%s, maxTotalRunning=%s, maxNoClaimTime=%s, username=%s, name=%s, project=%s]",
-                        submitHost, maxTotalPending, maxTotalRunning, maxNoClaimTime, username, name, project);
+                .format("Site [submitHost=%s, maxTotalPending=%s, maxTotalRunning=%s, maxNoClaimTime=%s, username=%s, name=%s, project=%s, numberOfProcessors=%s]",
+                        submitHost, maxTotalPending, maxTotalRunning, maxNoClaimTime, username, name, project,
+                        numberOfProcessors);
     }
 
     @Override
@@ -103,6 +114,7 @@ public class Site {
         result = prime * result + maxTotalPending;
         result = prime * result + maxTotalRunning;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((numberOfProcessors == null) ? 0 : numberOfProcessors.hashCode());
         result = prime * result + ((project == null) ? 0 : project.hashCode());
         result = prime * result + ((submitHost == null) ? 0 : submitHost.hashCode());
         result = prime * result + ((username == null) ? 0 : username.hashCode());
@@ -128,6 +140,11 @@ public class Site {
             if (other.name != null)
                 return false;
         } else if (!name.equals(other.name))
+            return false;
+        if (numberOfProcessors == null) {
+            if (other.numberOfProcessors != null)
+                return false;
+        } else if (!numberOfProcessors.equals(other.numberOfProcessors))
             return false;
         if (project == null) {
             if (other.project != null)
