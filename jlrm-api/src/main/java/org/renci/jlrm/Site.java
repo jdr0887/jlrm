@@ -1,6 +1,6 @@
 package org.renci.jlrm;
 
-import java.util.Map;
+import java.util.List;
 
 public class Site {
 
@@ -20,7 +20,7 @@ public class Site {
 
     private Integer numberOfProcessors;
 
-    private Map<String, Queue> queueInfoMap;
+    private List<Queue> queueList;
 
     public Site() {
         super();
@@ -66,12 +66,12 @@ public class Site {
         this.project = project;
     }
 
-    public Map<String, Queue> getQueueInfoMap() {
-        return queueInfoMap;
+    public List<Queue> getQueueList() {
+        return queueList;
     }
 
-    public void setQueueInfoMap(Map<String, Queue> queueInfoMap) {
-        this.queueInfoMap = queueInfoMap;
+    public void setQueueList(List<Queue> queueList) {
+        this.queueList = queueList;
     }
 
     public long getMaxNoClaimTime() {
