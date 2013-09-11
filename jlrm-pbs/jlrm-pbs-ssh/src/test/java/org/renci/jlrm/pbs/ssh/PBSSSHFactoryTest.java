@@ -47,11 +47,10 @@ public class PBSSSHFactoryTest {
         site.setName("BlueRidge");
         site.setSubmitHost("br0.renci.org");
         site.setUsername("mapseq");
-        site.setMaxNoClaimTime(1440);
 
         Queue queue = new Queue();
         queue.setName("serial");
-        queue.setRunTime(5760);
+        queue.setRunTime(5760L);
         File submitDir = new File("/tmp");
 
         try {

@@ -20,12 +20,11 @@ public class SLURMSSHFactoryTest {
 
         Site site = new Site();
         site.setSubmitHost("topsail-sn.unc.edu");
-        site.setMaxNoClaimTime(1440);
         site.setUsername("jdr0887");
 
         Queue queue = new Queue();
         queue.setName("queue16");
-        queue.setRunTime(2880);
+        queue.setRunTime(2880L);
 
         SLURMSSHJob job = new SLURMSSHJob("test", new File("/bin/hostname"));
         job.setHostCount(1);
@@ -51,13 +50,11 @@ public class SLURMSSHFactoryTest {
         Site site = new Site();
         site.setName("Topsail");
         site.setSubmitHost("topsail-sn.unc.edu");
-        site.setMaxNoClaimTime(1440);
         site.setUsername("pipeline");
 
         Queue queue = new Queue();
         queue.setName("queue16");
-        queue.setRunTime(5760);
-        queue.setMaxMultipleJobsToSubmit(2);
+        queue.setRunTime(5760L);
 
         File submitDir = new File("/tmp");
         try {
@@ -85,7 +82,6 @@ public class SLURMSSHFactoryTest {
         Site site = new Site();
         site.setName("Topsail");
         site.setSubmitHost("topsail-sn.unc.edu");
-        site.setMaxNoClaimTime(1440);
         site.setUsername("pipeline");
 
         SLURMSSHLookupStatusCallable callable = new SLURMSSHLookupStatusCallable(site);

@@ -20,12 +20,11 @@ public class SGESSHFactoryTest {
 
         Site site = new Site();
         site.setSubmitHost("swprod.bioinf.unc.edu");
-        site.setMaxNoClaimTime(1440);
         site.setUsername("jreilly");
 
         Queue queue = new Queue();
         queue.setName("all.q");
-        queue.setRunTime(2880);
+        queue.setRunTime(2880L);
 
         SGESSHJob job = new SGESSHJob("test", new File("/bin/hostname"));
         job.setHostCount(1);
@@ -50,12 +49,11 @@ public class SGESSHFactoryTest {
 
         Site site = new Site();
         site.setSubmitHost("swprod.bioinf.unc.edu");
-        site.setMaxNoClaimTime(1440);
         site.setUsername("jreilly");
 
         Queue queue = new Queue();
         queue.setName("all.q");
-        queue.setRunTime(2880);
+        queue.setRunTime(2880L);
 
         File submitDir = new File("/tmp");
         try {
@@ -74,7 +72,6 @@ public class SGESSHFactoryTest {
 
         Site site = new Site();
         site.setSubmitHost("swprod.bioinf.unc.edu");
-        site.setMaxNoClaimTime(1440);
         site.setUsername("jreilly");
 
         try {

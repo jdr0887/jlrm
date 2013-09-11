@@ -78,7 +78,7 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
         job.setQueueName(this.queue.getName());
         job.setName(this.jobName);
         job.setHostCount(1);
-        job.setNumberOfProcessors(getSite().getNumberOfProcessors());
+        job.setNumberOfProcessors(getQueue().getNumberOfProcessors());
         job.setOutput(new File("glidein.out"));
         job.setError(new File("glidein.err"));
         job.setWallTime(queue.getRunTime());
@@ -101,7 +101,6 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
         }
         velocityContext.put("siteMaxRunTimeMins", maxRunTimeAdjusted);
         velocityContext.put("siteMaxRunTimeSecs", maxRunTimeAdjusted * 60);
-        velocityContext.put("siteMaxNoClaimTimeSecs", getSite().getMaxNoClaimTime() * 60);
         velocityContext.put("requiredMemory", this.requiredMemory * 1024);
         velocityContext.put("glideinStartTime", new Date().getTime());
         velocityContext.put("maxRunTime", maxRunTimeAdjusted);

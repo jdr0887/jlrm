@@ -50,13 +50,11 @@ public class LSFSSHFactoryTest {
         Site site = new Site();
         site.setName("Kure");
         site.setSubmitHost("biodev1.its.unc.edu");
-        site.setMaxNoClaimTime(1440);
         site.setUsername("rc_renci.svc");
 
         Queue queue = new Queue();
         queue.setName("prenci");
-        queue.setRunTime(5760);
-        queue.setMaxMultipleJobsToSubmit(2);
+        queue.setRunTime(5760L);
 
         File submitDir = new File("/tmp");
 

@@ -90,7 +90,7 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
         job.setQueueName(this.queue.getName());
         job.setName(this.jobName);
         job.setHostCount(1);
-        job.setNumberOfProcessors(getSite().getNumberOfProcessors());
+        job.setNumberOfProcessors(getQueue().getNumberOfProcessors());
         job.setOutput(new File("glidein.out"));
         job.setError(new File("glidein.err"));
         job.setWallTime(this.queue.getRunTime());
@@ -113,7 +113,6 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
         }
         velocityContext.put("siteMaxRunTimeMins", maxRunTimeAdjusted);
         velocityContext.put("siteMaxRunTimeSecs", maxRunTimeAdjusted * 60);
-        velocityContext.put("siteMaxNoClaimTimeSecs", this.site.getMaxNoClaimTime() * 60);
         velocityContext.put("requiredMemory", this.requiredMemory * 1024);
         velocityContext.put("glideinStartTime", new Date().getTime());
         velocityContext.put("maxRunTime", maxRunTimeAdjusted);
