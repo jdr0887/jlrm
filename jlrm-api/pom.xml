@@ -3,12 +3,12 @@
   <parent>
     <groupId>org.renci</groupId>
     <artifactId>jLRM</artifactId>
-    <version>0.3.19-SNAPSHOT</version>
+    <version>0.3.19</version>
   </parent>
   <name>jLRM :: API</name>
   <groupId>org.renci.jlrm</groupId>
   <artifactId>jlrm-api</artifactId>
-  <version>0.3.19-SNAPSHOT</version>
+  <version>0.3.19</version>
   <packaging>bundle</packaging>
   <dependencies>
     <dependency>
