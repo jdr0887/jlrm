@@ -4,15 +4,15 @@ public class Queue {
 
     private String name;
 
-    private long pendingTime;
-
     private Double weight;
 
-    private long runTime;
+    private Long runTime;
 
-    private int maxJobLimit;
+    private Integer maxPending;
 
-    private int maxMultipleJobsToSubmit;
+    private Integer maxRunning;
+
+    private Integer numberOfProcessors;
 
     public Queue() {
         super();
@@ -26,14 +26,6 @@ public class Queue {
         this.name = name;
     }
 
-    public long getPendingTime() {
-        return pendingTime;
-    }
-
-    public void setPendingTime(long pendingTime) {
-        this.pendingTime = pendingTime;
-    }
-
     public Double getWeight() {
         return weight;
     }
@@ -42,45 +34,54 @@ public class Queue {
         this.weight = weight;
     }
 
-    public long getRunTime() {
+    public Long getRunTime() {
         return runTime;
     }
 
-    public void setRunTime(long runTime) {
+    public void setRunTime(Long runTime) {
         this.runTime = runTime;
     }
 
-    public int getMaxJobLimit() {
-        return maxJobLimit;
+    public Integer getMaxPending() {
+        return maxPending;
     }
 
-    public void setMaxJobLimit(int maxJobLimit) {
-        this.maxJobLimit = maxJobLimit;
+    public void setMaxPending(Integer maxPending) {
+        this.maxPending = maxPending;
     }
 
-    public int getMaxMultipleJobsToSubmit() {
-        return maxMultipleJobsToSubmit;
+    public Integer getMaxRunning() {
+        return maxRunning;
     }
 
-    public void setMaxMultipleJobsToSubmit(int maxMultipleJobsToSubmit) {
-        this.maxMultipleJobsToSubmit = maxMultipleJobsToSubmit;
+    public void setMaxRunning(Integer maxRunning) {
+        this.maxRunning = maxRunning;
+    }
+
+    public Integer getNumberOfProcessors() {
+        return numberOfProcessors;
+    }
+
+    public void setNumberOfProcessors(Integer numberOfProcessors) {
+        this.numberOfProcessors = numberOfProcessors;
     }
 
     @Override
     public String toString() {
-        return "Queue [name=" + name + ", pendingTime=" + pendingTime + ", weight=" + weight + ", runTime=" + runTime
-                + ", maxJobLimit=" + maxJobLimit + ", maxMultipleJobsToSubmit=" + maxMultipleJobsToSubmit + "]";
+        return String.format(
+                "Queue [name=%s, weight=%s, runTime=%s, maxPending=%s, maxRunning=%s, numberOfProcessors=%s]", name,
+                weight, runTime, maxPending, maxRunning, numberOfProcessors);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + maxJobLimit;
-        result = prime * result + maxMultipleJobsToSubmit;
+        result = prime * result + ((maxPending == null) ? 0 : maxPending.hashCode());
+        result = prime * result + ((maxRunning == null) ? 0 : maxRunning.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + (int) (pendingTime ^ (pendingTime >>> 32));
-        result = prime * result + (int) (runTime ^ (runTime >>> 32));
+        result = prime * result + ((numberOfProcessors == null) ? 0 : numberOfProcessors.hashCode());
+        result = prime * result + ((runTime == null) ? 0 : runTime.hashCode());
         result = prime * result + ((weight == null) ? 0 : weight.hashCode());
         return result;
     }
@@ -94,18 +95,30 @@ public class Queue {
         if (getClass() != obj.getClass())
             return false;
         Queue other = (Queue) obj;
-        if (maxJobLimit != other.maxJobLimit)
+        if (maxPending == null) {
+            if (other.maxPending != null)
+                return false;
+        } else if (!maxPending.equals(other.maxPending))
             return false;
-        if (maxMultipleJobsToSubmit != other.maxMultipleJobsToSubmit)
+        if (maxRunning == null) {
+            if (other.maxRunning != null)
+                return false;
+        } else if (!maxRunning.equals(other.maxRunning))
             return false;
         if (name == null) {
             if (other.name != null)
                 return false;
         } else if (!name.equals(other.name))
             return false;
-        if (pendingTime != other.pendingTime)
+        if (numberOfProcessors == null) {
+            if (other.numberOfProcessors != null)
+                return false;
+        } else if (!numberOfProcessors.equals(other.numberOfProcessors))
             return false;
-        if (runTime != other.runTime)
+        if (runTime == null) {
+            if (other.runTime != null)
+                return false;
+        } else if (!runTime.equals(other.runTime))
             return false;
         if (weight == null) {
             if (other.weight != null)
