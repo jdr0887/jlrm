@@ -6,9 +6,9 @@ public class Site {
 
     private String submitHost;
 
-    private int maxTotalPending;
+    private int maxPending;
 
-    private int maxTotalRunning;
+    private int maxRunning;
 
     private long maxNoClaimTime;
 
@@ -34,20 +34,20 @@ public class Site {
         this.submitHost = submitHost;
     }
 
-    public int getMaxTotalPending() {
-        return maxTotalPending;
+    public int getMaxPending() {
+        return maxPending;
     }
 
-    public void setMaxTotalPending(int maxTotalPending) {
-        this.maxTotalPending = maxTotalPending;
+    public void setMaxPending(int maxPending) {
+        this.maxPending = maxPending;
     }
 
-    public int getMaxTotalRunning() {
-        return maxTotalRunning;
+    public int getMaxRunning() {
+        return maxRunning;
     }
 
-    public void setMaxTotalRunning(int maxTotalRunning) {
-        this.maxTotalRunning = maxTotalRunning;
+    public void setMaxRunning(int maxRunning) {
+        this.maxRunning = maxRunning;
     }
 
     public String getName() {
@@ -101,9 +101,8 @@ public class Site {
     @Override
     public String toString() {
         return String
-                .format("Site [submitHost=%s, maxTotalPending=%s, maxTotalRunning=%s, maxNoClaimTime=%s, username=%s, name=%s, project=%s, numberOfProcessors=%s]",
-                        submitHost, maxTotalPending, maxTotalRunning, maxNoClaimTime, username, name, project,
-                        numberOfProcessors);
+                .format("Site [submitHost=%s, maxPending=%s, maxRunning=%s, maxNoClaimTime=%s, username=%s, name=%s, project=%s, numberOfProcessors=%s]",
+                        submitHost, maxPending, maxRunning, maxNoClaimTime, username, name, project, numberOfProcessors);
     }
 
     @Override
@@ -111,8 +110,8 @@ public class Site {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) (maxNoClaimTime ^ (maxNoClaimTime >>> 32));
-        result = prime * result + maxTotalPending;
-        result = prime * result + maxTotalRunning;
+        result = prime * result + maxPending;
+        result = prime * result + maxRunning;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((numberOfProcessors == null) ? 0 : numberOfProcessors.hashCode());
         result = prime * result + ((project == null) ? 0 : project.hashCode());
@@ -132,9 +131,9 @@ public class Site {
         Site other = (Site) obj;
         if (maxNoClaimTime != other.maxNoClaimTime)
             return false;
-        if (maxTotalPending != other.maxTotalPending)
+        if (maxPending != other.maxPending)
             return false;
-        if (maxTotalRunning != other.maxTotalRunning)
+        if (maxRunning != other.maxRunning)
             return false;
         if (name == null) {
             if (other.name != null)
