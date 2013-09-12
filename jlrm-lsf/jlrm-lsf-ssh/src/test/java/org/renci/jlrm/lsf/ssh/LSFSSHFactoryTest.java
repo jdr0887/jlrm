@@ -55,6 +55,7 @@ public class LSFSSHFactoryTest {
         Queue queue = new Queue();
         queue.setName("prenci");
         queue.setRunTime(5760L);
+        queue.setNumberOfProcessors(8);
 
         File submitDir = new File("/tmp");
 
