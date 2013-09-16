@@ -30,6 +30,7 @@ public class CondorLookupStatusCallable implements Callable<CondorJobStatusType>
 
     @Override
     public CondorJobStatusType call() throws JLRMException {
+        logger.info("ENTERING call()");
 
         CondorJobStatusType ret = CondorJobStatusType.UNEXPANDED;
         String command = String.format("condor_q %d.%d -format '%s\\n' JobStatus", job.getCluster(), job.getJobId(),
