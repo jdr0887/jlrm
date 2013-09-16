@@ -1,30 +1,25 @@
 package org.renci.jlrm.condor.cli;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.LineNumberReader;
-import java.io.StringReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.concurrent.Callable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
-import org.renci.common.exec.BashExecutor;
-import org.renci.common.exec.CommandInput;
-import org.renci.common.exec.CommandOutput;
-import org.renci.common.exec.Executor;
-import org.renci.common.exec.ExecutorException;
+import org.apache.commons.lang3.time.DateUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.condor.CondorJob;
 import org.renci.jlrm.condor.CondorJobStatusType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CondorLookupDAGStatusCallable implements Callable<Map<String, CondorJobStatusType>> {
+public class CondorLookupDAGStatusCallable implements Callable<CondorJobStatusType> {
 
     private final Logger logger = LoggerFactory.getLogger(CondorLookupDAGStatusCallable.class);
-
-    private final Executor executor = BashExecutor.getInstance();
 
     private CondorJob job;
 
@@ -34,52 +29,130 @@ public class CondorLookupDAGStatusCallable implements Callable<Map<String, Condo
     }
 
     @Override
-    public Map<String, CondorJobStatusType> call() throws JLRMException {
+    public CondorJobStatusType call() throws JLRMException {
+        logger.info("ENTERING call()");
+        CondorJobStatusType ret = CondorJobStatusType.UNEXPANDED;
 
-        Map<String, CondorJobStatusType> jobStatusMap = new HashMap<String, CondorJobStatusType>();
+        boolean allJobsCompleted = false;
+        int totalChildrenJobs = 0;
+        Date date = null;
+        int done = 0;
+        int pre = 0;
+        int queued = 0;
+        int post = 0;
+        int ready = 0;
+        int unReady = 0;
+        int failed = 0;
+        int held = 0;
 
-        String command = String.format(
-                "condor_q -constraint \"DAGManJobId == %d\" -format '%s\t' ClusterId -format '%s\\n' JobStatus",
-                job.getCluster(), "%s");
+        File dagmanOutFile = new File(job.getSubmitFile().getParentFile(), job.getSubmitFile().getName()
+                .replace(".dag", ".dag.dagman.out"));
+
+        if (!dagmanOutFile.exists()) {
+            ret = CondorJobStatusType.IDLE;
+            return ret;
+        }
+
+
+        BufferedReader br = null;
         try {
-            CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
-            CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
-            String stdout = output.getStdout().toString();
-            if (output.getExitCode() != 0) {
-                logger.warn("output.getStderr() = {}", output.getStderr().toString());
-                throw new JLRMException("Problem looking up status: " + output.getStderr().toString());
-            }
-            if (StringUtils.isNotEmpty(stdout)) {
-                LineNumberReader lnr = new LineNumberReader(new StringReader(stdout));
-                String line;
-                try {
-                    while ((line = lnr.readLine()) != null) {
-                        String[] tokens = line.split("\t");
-                        CondorJobStatusType statusType = null;
-                        for (CondorJobStatusType js : CondorJobStatusType.values()) {
-                            int code;
-                            try {
-                                code = Integer.valueOf(tokens[1].trim());
-                                if (code == js.getCode()) {
-                                    statusType = js;
-                                    break;
-                                }
-                            } catch (NumberFormatException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        jobStatusMap.put(tokens[0], statusType);
+
+            br = new BufferedReader(new FileReader(dagmanOutFile));
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.contains("Dag contains")) {
+                    Pattern pattern = Pattern.compile("^.+ Dag contains (\\d*) total jobs$");
+                    Matcher matcher = pattern.matcher(line);
+                    boolean matches = matcher.matches();
+                    if (matches) {
+                        String count = matcher.group(1);
+                        totalChildrenJobs = Integer.valueOf(count);
+                        break;
                     }
+                }
+            }
+
+            while ((line = br.readLine()) != null) {
+                if (line.contains(String.format("Of %d nodes total", totalChildrenJobs))) {
+                    br.readLine();
+                    br.readLine();
+                    String tallies = br.readLine();
+                    System.out.println(tallies);
+                    Pattern pattern = Pattern
+                            .compile("^(\\d*/\\d*/\\d*\\s.\\d*:\\d*:\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)");
+                    Matcher matcher = pattern.matcher(tallies);
+                    boolean matches = matcher.matches();
+                    System.out.println(matches);
+                    if (matches) {
+
+                        String match = matcher.group(1);
+                        try {
+                            date = DateUtils.parseDate(match, new String[] { "MM/dd/yy HH:mm:ss" });
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        match = matcher.group(2);
+                        done = Integer.valueOf(match);
+
+                        match = matcher.group(3);
+                        pre = Integer.valueOf(match);
+
+                        match = matcher.group(4);
+                        queued = Integer.valueOf(match);
+
+                        match = matcher.group(5);
+                        post = Integer.valueOf(match);
+
+                        match = matcher.group(6);
+                        ready = Integer.valueOf(match);
+
+                        match = matcher.group(7);
+                        unReady = Integer.valueOf(match);
+
+                        match = matcher.group(8);
+                        failed = Integer.valueOf(match);
+                    }
+
+                    String heldLine = br.readLine();
+                    pattern = Pattern.compile("^.+ (\\d*) job proc(s) currently held$");
+                    matcher = pattern.matcher(heldLine);
+                    matches = matcher.matches();
+                    if (matches) {
+                        String heldCount = matcher.group(1);
+                        held = Integer.valueOf(heldCount);
+                    }
+
+                    String allJobsCompletedLine = br.readLine();
+                    if (allJobsCompletedLine.contains("All jobs Completed")) {
+                        allJobsCompleted = true;
+                    }
+
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-        } catch (ExecutorException e) {
-            logger.error("ExecutorException", e);
-            throw new JLRMException("Problem running: " + command);
         }
-        return jobStatusMap;
 
+        boolean completed = done == totalChildrenJobs && allJobsCompleted;
+        boolean running = queued > 0 && queued < totalChildrenJobs;
+        if (completed) {
+            ret = CondorJobStatusType.COMPLETED;
+        } else if (!completed && running) {
+            ret = CondorJobStatusType.RUNNING;
+        }
+
+        return ret;
     }
 
     public CondorJob getJob() {
