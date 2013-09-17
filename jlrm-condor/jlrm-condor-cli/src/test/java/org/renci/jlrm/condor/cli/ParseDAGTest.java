@@ -32,6 +32,7 @@ public class ParseDAGTest {
         int held = 0;
         int totalChildrenJobs = 0;
 
+        long startTime = System.currentTimeMillis();
         BufferedReader br = null;
         try {
             br = IOUtils.toBufferedReader(new InputStreamReader(this.getClass().getClassLoader()
@@ -128,6 +129,8 @@ public class ParseDAGTest {
         } else if (!completed && running) {
             ret = CondorJobStatusType.RUNNING;
         }
+        long endTime = System.currentTimeMillis();
+        System.out.println("Duration: " + (endTime - startTime));
 
         assertTrue(ret == CondorJobStatusType.COMPLETED);
         // assertTrue(ret == CondorJobStatusType.RUNNING);
