@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 import org.renci.jlrm.condor.CondorJobStatusType;
@@ -18,9 +19,27 @@ import org.renci.jlrm.condor.CondorJobStatusType;
 public class ParseDAGTest {
 
     @Test
-    public void testParseDAG() {
+    public void testRunning() {
+        CondorJobStatusType ret = parseDAG("org/renci/jlrm/condor/cli/NIDAUCSFVariantCalling.dag.dagman.out");
+        assertTrue(ret == CondorJobStatusType.RUNNING);
+    }
+
+    @Test
+    public void testCompleted() {
+        CondorJobStatusType ret = parseDAG("org/renci/jlrm/condor/cli/NIDAUCSFSymlink.dag.dagman.out");
+        assertTrue(ret == CondorJobStatusType.COMPLETED);
+    }
+
+    @Test
+    public void testAborted() {
+        CondorJobStatusType ret = parseDAG("org/renci/jlrm/condor/cli/NIDAUCSFClean.dag.dagman.out");
+        assertTrue(ret == CondorJobStatusType.COMPLETED);
+    }
+
+    private CondorJobStatusType parseDAG(String resource) {
 
         boolean allJobsCompleted = false;
+        boolean dagAborted = false;
         Date date = null;
         int done = 0;
         int pre = 0;
@@ -36,9 +55,7 @@ public class ParseDAGTest {
         BufferedReader br = null;
         try {
             br = IOUtils.toBufferedReader(new InputStreamReader(this.getClass().getClassLoader()
-                    .getResourceAsStream("org/renci/jlrm/condor/cli/NIDAUCSFSymlink.dag.dagman.out")));
-            // br = IOUtils.toBufferedReader(new InputStreamReader(this.getClass().getClassLoader()
-            // .getResourceAsStream("org/renci/jlrm/condor/cli/NIDAUCSFVariantCalling.dag.dagman.out")));
+                    .getResourceAsStream(resource)));
 
             String line;
             while ((line = br.readLine()) != null) {
@@ -104,8 +121,15 @@ public class ParseDAGTest {
                     }
 
                     String allJobsCompletedLine = br.readLine();
-                    if (allJobsCompletedLine.contains("All jobs Completed")) {
-                        allJobsCompleted = true;
+                    if (StringUtils.isNotEmpty(allJobsCompletedLine)) {
+                        if (allJobsCompletedLine.contains("All jobs Completed")) {
+                            allJobsCompleted = true;
+                        } else if (allJobsCompletedLine.contains("Received SIGUSR1")) {
+                            String abortingDAGLine = br.readLine();
+                            if (abortingDAGLine.contains("Aborting DAG")) {
+                                dagAborted = true;
+                            }
+                        }
                     }
 
                 }
@@ -121,7 +145,7 @@ public class ParseDAGTest {
             }
         }
 
-        boolean completed = done == totalChildrenJobs && allJobsCompleted;
+        boolean completed = (done == totalChildrenJobs && allJobsCompleted) || dagAborted;
         boolean running = queued > 0 && queued < totalChildrenJobs;
         CondorJobStatusType ret = CondorJobStatusType.UNEXPANDED;
         if (completed) {
@@ -131,9 +155,7 @@ public class ParseDAGTest {
         }
         long endTime = System.currentTimeMillis();
         System.out.println("Duration: " + (endTime - startTime));
-
-        assertTrue(ret == CondorJobStatusType.COMPLETED);
-        // assertTrue(ret == CondorJobStatusType.RUNNING);
+        return ret;
     }
 
 }
