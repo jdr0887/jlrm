@@ -53,7 +53,7 @@ public class LSFSSHFactoryTest {
         site.setUsername("rc_renci.svc");
 
         Queue queue = new Queue();
-        queue.setName("prenci");
+        queue.setName("pseq_prod");
         queue.setRunTime(5760L);
         queue.setNumberOfProcessors(8);
 
