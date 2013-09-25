@@ -35,6 +35,7 @@ public class CondorLookupDAGStatusCallable implements Callable<CondorJobStatusTy
         CondorJobStatusType ret = CondorJobStatusType.UNEXPANDED;
 
         boolean allJobsCompleted = false;
+        boolean dagAborted = false;
         int totalChildrenJobs = 0;
         Date date = null;
         int done = 0;
@@ -141,9 +142,15 @@ public class CondorLookupDAGStatusCallable implements Callable<CondorJobStatusTy
                     }
 
                     String allJobsCompletedLine = br.readLine();
-                    if (StringUtils.isNotEmpty(allJobsCompletedLine)
-                            && allJobsCompletedLine.contains("All jobs Completed")) {
-                        allJobsCompleted = true;
+                    if (StringUtils.isNotEmpty(allJobsCompletedLine)) {
+                        if (allJobsCompletedLine.contains("All jobs Completed")) {
+                            allJobsCompleted = true;
+                        } else if (allJobsCompletedLine.contains("Received SIGUSR1")) {
+                            String abortingDAGLine = br.readLine();
+                            if (abortingDAGLine.contains("Aborting DAG")) {
+                                dagAborted = true;
+                            }
+                        }
                     }
 
                 }
@@ -161,7 +168,7 @@ public class CondorLookupDAGStatusCallable implements Callable<CondorJobStatusTy
             }
         }
 
-        boolean completed = done == totalChildrenJobs && allJobsCompleted;
+        boolean completed = (done == totalChildrenJobs && allJobsCompleted) || dagAborted;
         boolean running = queued > 0 && queued < totalChildrenJobs;
         if (completed) {
             ret = CondorJobStatusType.COMPLETED;
