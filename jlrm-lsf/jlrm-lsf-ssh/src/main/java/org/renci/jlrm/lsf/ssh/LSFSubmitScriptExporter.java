@@ -37,8 +37,7 @@ public class LSFSubmitScriptExporter<T extends LSFSSHJob> {
         }
 
         if (job.getWallTime() != null) {
-            submitFileWriter.write(String.format("#BSUB -W %02d:%02d%n", (job.getWallTime() % 3600) / 60,
-                    (job.getWallTime() % 60)));
+            submitFileWriter.write(String.format("#BSUB -W %d%n", job.getWallTime()));
         }
 
         if (job.getMemory() != null) {
