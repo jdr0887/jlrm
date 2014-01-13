@@ -50,10 +50,10 @@ public class LSFSSHFactoryTest {
         Site site = new Site();
         site.setName("Kure");
         site.setSubmitHost("biodev1.its.unc.edu");
-        site.setUsername("rc_renci.svc");
+        site.setUsername("rc_lbg.svc");
 
         Queue queue = new Queue();
-        queue.setName("pseq_prod");
+        queue.setName("pseq_tcga");
         queue.setRunTime(5760L);
         queue.setNumberOfProcessors(8);
 
@@ -62,8 +62,8 @@ public class LSFSSHFactoryTest {
         try {
 
             LSFSSHSubmitCondorGlideinCallable callable = new LSFSSHSubmitCondorGlideinCallable();
-            callable.setCollectorHost("biodev2.its.unc.edu");
-            callable.setUsername("rc_renci.svc");
+            callable.setCollectorHost("gnet641.its.unc.edu");
+            callable.setUsername("rc_lbg.svc");
             callable.setSite(site);
             callable.setJobName("glidein");
             callable.setQueue(queue);
