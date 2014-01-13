@@ -29,16 +29,42 @@ public class SSHConnectionUtil {
         String ret = null;
 
         String home = System.getProperty("user.home");
-        String knownHostsFilename = home + "/.ssh/known_hosts";
+        
+        JSch.setLogger(new com.jcraft.jsch.Logger() {
 
+            @Override
+            public boolean isEnabled(int arg0) {
+                return true;
+            }
+
+            @Override
+            public void log(int level, String msg) {
+                switch (level) {
+                    case DEBUG:
+                        logger.debug(msg);
+                        break;
+                    case INFO:
+                        logger.info(msg);
+                        break;
+                    case WARN:
+                        logger.warn(msg);
+                        break;
+                    case ERROR:
+                    case FATAL:
+                        logger.error(msg);
+                        break;
+                }
+            }
+
+        });
         JSch sch = new JSch();
         Session session = null;
         ChannelExec execChannel = null;
         ByteArrayOutputStream err = null;
         ByteArrayOutputStream out = null;
         try {
-            sch.addIdentity(home + "/.ssh/id_rsa");
-            sch.setKnownHosts(knownHostsFilename);
+            sch.addIdentity(String.format("%s/.ssh/id_rsa", home));
+            sch.setKnownHosts(String.format("%s/.ssh/known_hosts", home));
             session = sch.getSession(username, host, 22);
             session.connect(30 * 1000);
 
