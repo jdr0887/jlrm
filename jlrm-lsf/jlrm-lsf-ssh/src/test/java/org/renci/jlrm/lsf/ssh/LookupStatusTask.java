@@ -30,7 +30,7 @@ public class LookupStatusTask implements Runnable {
     public static void main(String[] args) {
         try {
             ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-            executor.scheduleAtFixedRate(new LookupStatusTask(), 5, 10, TimeUnit.SECONDS);
+            executor.scheduleAtFixedRate(new LookupStatusTask(), 3, 20, TimeUnit.SECONDS);
             executor.awaitTermination(10, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
             e.printStackTrace();
