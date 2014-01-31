@@ -17,7 +17,7 @@
     </dependency>
     <dependency>
       <groupId>org.jgrapht</groupId>
-      <artifactId>jgrapht-jdk1.6</artifactId>
+      <artifactId>jgrapht-core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.renci.jlrm</groupId>

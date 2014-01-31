@@ -41,38 +41,6 @@
     <developerConnection>scm:git:ssh://${user.name}@code.renci.org/gitroot/jlrm</developerConnection>
     <connection>scm:git:ssh://developername@code.renci.org/gitroot/jlrm</connection>
   </scm>
-  <repositories>
-    <repository>
-      <id>ibiblio.repository</id>
-      <name>ibiblio.repository</name>
-      <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
-      <releases>
-	<enabled>true</enabled>
-	<updatePolicy>always</updatePolicy>
-	<checksumPolicy>warn</checksumPolicy>
-      </releases>
-      <snapshots>
-	<enabled>false</enabled>
-	<updatePolicy>never</updatePolicy>
-	<checksumPolicy>fail</checksumPolicy>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>renci.repository</id>
-      <name>renci.repository</name>
-      <url>http://ci-dev.renci.org/nexus/content/repositories/public</url>
-      <releases>
-	<enabled>true</enabled>
-	<updatePolicy>always</updatePolicy>
-	<checksumPolicy>warn</checksumPolicy>
-      </releases>
-      <snapshots>
-	<enabled>false</enabled>
-	<updatePolicy>never</updatePolicy>
-	<checksumPolicy>fail</checksumPolicy>
-      </snapshots>
-    </repository>
-  </repositories>
   <developers>
     <developer>
       <id>jdr0887</id>
@@ -90,12 +58,12 @@
     <repository>
       <id>renci.repository</id>
       <name>renci.repository</name>
-      <url>https://ci-dev.renci.org/nexus/content/repositories/releases</url>
+      <url>http://archiva.renci.org:8080/repository/internal</url>
     </repository>
     <snapshotRepository>
       <id>renci.repository</id>
       <name>renci.repository</name>
-      <url>https://ci-dev.renci.org/nexus/content/repositories/snapshots</url>
+      <url>http://archiva.renci.org:8080/repository/snapshots</url>
     </snapshotRepository>
     <site>
       <id>renci.site</id>
@@ -117,8 +85,8 @@
       </dependency>
       <dependency>
 	<groupId>org.jgrapht</groupId>
-	<artifactId>jgrapht-jdk1.6</artifactId>
-	<version>0.8.3</version>
+	<artifactId>jgrapht-core</artifactId>
+	<version>0.9.0</version>
       </dependency>
       <dependency>
 	<groupId>commons-beanutils</groupId>
