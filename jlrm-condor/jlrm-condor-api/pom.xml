@@ -20,6 +20,10 @@
       <artifactId>jgrapht-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.jgrapht</groupId>
+      <artifactId>jgrapht-ext</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.renci.jlrm</groupId>
       <artifactId>jlrm-api</artifactId>
     </dependency>
