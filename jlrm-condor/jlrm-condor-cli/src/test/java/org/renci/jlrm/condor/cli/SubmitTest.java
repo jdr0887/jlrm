@@ -11,8 +11,8 @@ import org.renci.jlrm.condor.ClassAdvertisement;
 import org.renci.jlrm.condor.ClassAdvertisementFactory;
 import org.renci.jlrm.condor.CondorJob;
 import org.renci.jlrm.condor.CondorJobEdge;
-import org.renci.jlrm.condor.CondorSubmitScriptExporter;
 import org.renci.jlrm.condor.UniverseType;
+import org.renci.jlrm.condor.ext.CondorSubmitScriptExporter;
 
 public class SubmitTest {
 
@@ -31,7 +31,7 @@ public class SubmitTest {
             ClassAdvertisement classAd = ClassAdvertisementFactory.getClassAd(
                     ClassAdvertisementFactory.CLASS_AD_KEY_UNIVERSE).clone();
             classAd.setValue(UniverseType.MPI.toString().toLowerCase());
-            job1.getClassAdMap().put(ClassAdvertisementFactory.CLASS_AD_KEY_UNIVERSE, classAd);
+            job1.getClassAdvertisments().add(classAd);
             g.addVertex(job1);
 
             CondorJob job2 = new CondorJob("b", executable, 4);
