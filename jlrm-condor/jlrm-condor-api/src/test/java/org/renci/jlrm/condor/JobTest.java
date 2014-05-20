@@ -10,39 +10,73 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
+
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.ext.EdgeNameProvider;
 import org.jgrapht.ext.VertexNameProvider;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.junit.Test;
+import org.renci.jlrm.condor.ext.CondorDOTExporter;
+import org.renci.jlrm.condor.ext.CondorSubmitScriptExporter;
 
 public class JobTest {
 
     @Test
     public void multiArgumentTest() {
 
-        CondorJob job = new CondorJob(String.format("%s_%d", "edu.unc.mapseq.module.gatk.GATKDepthOfCoverageCLI", 1),
-                new File("$HOME/bin/run-mapseq.sh"), 3);
+        CondorJob job = new CondorJob(String.format("%s_%d", "GATKDepthOfCoverageCLI", 1), new File(
+                "$HOME/bin/run-mapseq.sh"), 3);
 
         job.addArgument("edu.unc.mapseq.module.gatk.GATKDepthOfCoverageCLI");
 
         for (ClassAdvertisement classAd : ClassAdvertisementFactory.getDefaultClassAds()) {
             try {
-                job.getClassAdMap().put(classAd.getKey(), classAd.clone());
+                job.getClassAdvertisments().add(classAd.clone());
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             }
         }
 
+        job.setMemory(2048);
+        job.setNumberOfProcessors(8);
         job.addArgument("--workflowRunId", 189478);
         job.addArgument("--accountId", 46625);
         job.addArgument("--sequencerRunId", 113050);
-        job.addArgument("--persistFileData");
         job.addArgument("--htsfSampleId", 113052);
+        job.addArgument("--persistFileData");
+
+        job.addRequirement(String.format("JRLM_USER == \"%s\"", System.getProperty("user.name")));
+
+        job.setSiteName("Kure");
+
+        job.setInitialDirectory(new File("/tmp"));
+
+        job.addTransferInput("asdf");
+        job.addTransferInput("asdfadsf");
+        job.addTransferOutput("qwer");
+        job.addTransferOutput("qwerqwer");
 
         CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
         exporter.export(new File("/tmp"), job);
+
+        try {
+            JAXBContext context = JAXBContext.newInstance(CondorJob.class);
+            Marshaller m = context.createMarshaller();
+            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            FileWriter fw = new FileWriter(new File("/tmp/condorJob.xml"));
+            m.marshal(job, fw);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } catch (PropertyException e1) {
+            e1.printStackTrace();
+        } catch (JAXBException e1) {
+            e1.printStackTrace();
+        }
 
     }
 
@@ -79,7 +113,7 @@ public class JobTest {
                 defaultRSLAttributeMap, "gt2 localhost/jobmanager-fork", null, null);
 
         for (ClassAdvertisement classAd : classAdvertisementSet) {
-            job.getClassAdMap().put(classAd.getKey(), classAd);
+            job.getClassAdvertisments().add(classAd);
         }
 
         job.addArgument("asdfasdf");
@@ -94,7 +128,7 @@ public class JobTest {
         ClassAdvertisement classAd = ClassAdvertisementFactory.getClassAd(
                 ClassAdvertisementFactory.CLASS_AD_KEY_UNIVERSE).clone();
         classAd.setValue(UniverseType.MPI.toString().toLowerCase());
-        job2.getClassAdMap().put(ClassAdvertisementFactory.CLASS_AD_KEY_UNIVERSE, classAd);
+        job2.getClassAdvertisments().add(classAd);
 
         graph.addVertex(job2);
         CondorJobEdge jobEdge = graph.addEdge(job, job2);
@@ -119,7 +153,7 @@ public class JobTest {
                 "gt2 localhost/jobmanager-fork", null, null);
 
         for (ClassAdvertisement classAd2 : classAdvertisementSet) {
-            job3.getClassAdMap().put(classAd2.getKey(), classAd2);
+            job3.getClassAdvertisments().add(classAd2);
         }
 
         job3.addArgument("--foo", "bar");
@@ -232,7 +266,7 @@ public class JobTest {
         ClassAdvertisement classAd = ClassAdvertisementFactory.getClassAd(
                 ClassAdvertisementFactory.CLASS_AD_KEY_UNIVERSE).clone();
         classAd.setValue(UniverseType.MPI.toString().toLowerCase());
-        job2.getClassAdMap().put(ClassAdvertisementFactory.CLASS_AD_KEY_UNIVERSE, classAd);
+        job2.getClassAdvertisments().add(classAd);
 
         CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
         exporter.export(new File("/tmp"), job2);
