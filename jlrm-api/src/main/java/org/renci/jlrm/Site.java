@@ -2,6 +2,14 @@ package org.renci.jlrm;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Site", propOrder = {})
+@XmlRootElement(name = "site")
 public class Site {
 
     private String submitHost;

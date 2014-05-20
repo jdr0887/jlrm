@@ -1,24 +1,35 @@
 package org.renci.jlrm.condor;
 
 import static org.renci.jlrm.condor.ClassAdvertisementFactory.CLASS_AD_KEY_ARGUMENTS;
+import static org.renci.jlrm.condor.ClassAdvertisementFactory.CLASS_AD_KEY_REQUIREMENTS;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+
+import org.apache.commons.lang3.StringUtils;
 import org.renci.jlrm.Job;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "CondorJob", propOrder = {})
+@XmlRootElement(name = "condorJob")
 public class CondorJob extends Job {
 
-    private final Map<String, ClassAdvertisement> classAdMap = new HashMap<String, ClassAdvertisement>();
+    @XmlElementWrapper(name = "classAdvertisements")
+    @XmlElement(name = "classAd")
+    private final Set<ClassAdvertisement> classAdvertisments = new HashSet<ClassAdvertisement>();
 
     private Integer cluster;
 
     private Integer jobId;
-
-    private Integer priority;
 
     private Integer retry;
 
@@ -26,32 +37,44 @@ public class CondorJob extends Job {
 
     private String postScript;
 
-    private String siteName;
+    @XmlTransient
+    private ClassAdvertisement argumentsClassAd;
 
-    private File initialDirectory;
-
-    private final List<String> transferInputList = new ArrayList<String>();
-
-    private final List<String> transferOutputList = new ArrayList<String>();
+    @XmlTransient
+    private ClassAdvertisement requirementsClassAd;
 
     public CondorJob() {
         super();
+        init();
     }
 
     public CondorJob(String name, File executable) {
         super(name, executable);
+        init();
     }
 
     public CondorJob(String name, File executable, Integer retry) {
         super(name, executable);
         this.retry = retry;
+        init();
         for (ClassAdvertisement classAd : ClassAdvertisementFactory.getDefaultClassAds()) {
-            classAdMap.put(classAd.getKey(), classAd);
+            classAdvertisments.add(classAd);
         }
     }
 
-    public Map<String, ClassAdvertisement> getClassAdMap() {
-        return classAdMap;
+    private void init() {
+        this.argumentsClassAd = new ClassAdvertisement(CLASS_AD_KEY_ARGUMENTS, ClassAdvertisementType.STRING);
+        this.classAdvertisments.add(this.argumentsClassAd);
+
+        String requirements = "(Arch == \"X86_64\") && (OpSys == \"LINUX\") && (Memory >= 500) && (Disk >= 0)";
+        this.requirementsClassAd = new ClassAdvertisement(CLASS_AD_KEY_REQUIREMENTS, ClassAdvertisementType.EXPRESSION,
+                requirements);
+        this.requirementsClassAd.setValue(requirements);
+        this.classAdvertisments.add(this.requirementsClassAd);
+    }
+
+    public Set<ClassAdvertisement> getClassAdvertisments() {
+        return classAdvertisments;
     }
 
     public void addArgument(String flag) {
@@ -63,41 +86,49 @@ public class CondorJob extends Job {
     }
 
     public void addArgument(String flag, Object value, String delimiter) {
-        try {
-            if (!getClassAdMap().containsKey(CLASS_AD_KEY_ARGUMENTS)) {
-                getClassAdMap().put(CLASS_AD_KEY_ARGUMENTS,
-                        ClassAdvertisementFactory.getClassAd(CLASS_AD_KEY_ARGUMENTS).clone());
-            }
-            String arg = String.format("%s%s%s", flag, delimiter, value.toString());
-            ClassAdvertisement classAd = getClassAdMap().get(CLASS_AD_KEY_ARGUMENTS);
-            classAd.setValue(classAd.getValue() + " " + arg);
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
+        String arg = String.format("%s%s%s", flag, delimiter, value.toString());
+        String argumentsClassAdValue = this.argumentsClassAd.getValue() != null ? String.format("%s %s",
+                this.argumentsClassAd.getValue(), arg) : arg;
+        this.argumentsClassAd.setValue(argumentsClassAdValue);
     }
 
-    public void addTransferInput(File file) {
-        this.transferInputList.add(file.getAbsolutePath());
+    public void addRequirement(String expression) {
+        String arg = String.format("&& (%s)", expression);
+        this.requirementsClassAd.setValue(String.format("%s %s", this.requirementsClassAd.getValue(), arg));
     }
 
     public void addTransferInput(String file) {
-        this.transferInputList.add(file);
-    }
+        ClassAdvertisement transferInputFilesClassAd = new ClassAdvertisement(
+                ClassAdvertisementFactory.CLASS_AD_KEY_TRANSFER_INPUT_FILES, ClassAdvertisementType.EXPRESSION);
+        if (!getClassAdvertisments().contains(transferInputFilesClassAd)) {
+            transferInputFilesClassAd.setValue(file);
+            this.classAdvertisments.add(transferInputFilesClassAd);
+            return;
+        }
 
-    public void addTransferOutput(File file) {
-        this.transferOutputList.add(file.getAbsolutePath());
+        for (ClassAdvertisement classAd : getClassAdvertisments()) {
+            if (classAd.equals(transferInputFilesClassAd)) {
+                classAd.setValue(String.format("%s,%s", classAd.getValue(), file));
+                break;
+            }
+        }
     }
 
     public void addTransferOutput(String file) {
-        this.transferOutputList.add(file);
-    }
+        ClassAdvertisement transferOutputFilesClassAd = new ClassAdvertisement(
+                ClassAdvertisementFactory.CLASS_AD_KEY_TRANSFER_OUTPUT_FILES, ClassAdvertisementType.EXPRESSION);
+        if (!getClassAdvertisments().contains(transferOutputFilesClassAd)) {
+            transferOutputFilesClassAd.setValue(file);
+            this.classAdvertisments.add(transferOutputFilesClassAd);
+            return;
+        }
 
-    public File getInitialDirectory() {
-        return initialDirectory;
-    }
-
-    public void setInitialDirectory(File initialDirectory) {
-        this.initialDirectory = initialDirectory;
+        for (ClassAdvertisement classAd : getClassAdvertisments()) {
+            if (classAd.equals(transferOutputFilesClassAd)) {
+                classAd.setValue(String.format("%s,%s", classAd.getValue(), file));
+                break;
+            }
+        }
     }
 
     public Integer getCluster() {
@@ -116,12 +147,15 @@ public class CondorJob extends Job {
         this.jobId = jobId;
     }
 
-    public Integer getPriority() {
-        return priority;
-    }
-
     public void setPriority(Integer priority) {
-        this.priority = priority;
+        ClassAdvertisement priorityClassAd = new ClassAdvertisement(ClassAdvertisementFactory.CLASS_AD_KEY_PRIORITY,
+                ClassAdvertisementType.INTEGER);
+        for (ClassAdvertisement classAd : getClassAdvertisments()) {
+            if (classAd.equals(priorityClassAd)) {
+                classAd.setValue(priority.toString());
+                break;
+            }
+        }
     }
 
     public Integer getRetry() {
@@ -148,27 +182,53 @@ public class CondorJob extends Job {
         this.postScript = postScript;
     }
 
-    public String getSiteName() {
-        return siteName;
-    }
-
     public void setSiteName(String siteName) {
-        this.siteName = siteName;
+        if (StringUtils.isNotEmpty(siteName)) {
+            this.addRequirement(String.format("TARGET.JLRM_SITE_NAME == \"%s\"", siteName));
+        }
     }
 
-    public List<String> getTransferInputList() {
-        return transferInputList;
+    public void setInitialDirectory(File initialDirectory) {
+        ClassAdvertisement initialDirClassAd = new ClassAdvertisement(
+                ClassAdvertisementFactory.CLASS_AD_KEY_INITIAL_DIR, ClassAdvertisementType.EXPRESSION);
+        for (ClassAdvertisement classAd : getClassAdvertisments()) {
+            if (classAd.equals(initialDirClassAd)) {
+                classAd.setValue(initialDirectory.getAbsolutePath());
+                break;
+            }
+        }
     }
 
-    public List<String> getTransferOutputList() {
-        return transferOutputList;
+    public void setNumberOfProcessors(Integer numberOfProcessors) {
+        this.numberOfProcessors = numberOfProcessors;
+        ClassAdvertisement requestCPUsClassAd = new ClassAdvertisement(
+                ClassAdvertisementFactory.CLASS_AD_KEY_REQUEST_CPUS, ClassAdvertisementType.INTEGER,
+                numberOfProcessors.toString());
+        for (ClassAdvertisement classAd : getClassAdvertisments()) {
+            if (classAd.equals(requestCPUsClassAd)) {
+                classAd.setValue(numberOfProcessors.toString());
+                break;
+            }
+        }
+    }
+
+    public void setMemory(Integer memory) {
+        this.memory = memory;
+        ClassAdvertisement requestMemoryClassAd = new ClassAdvertisement(
+                ClassAdvertisementFactory.CLASS_AD_KEY_REQUEST_MEMORY, ClassAdvertisementType.INTEGER);
+        for (ClassAdvertisement classAd : getClassAdvertisments()) {
+            if (classAd.equals(requestMemoryClassAd)) {
+                classAd.setValue(memory.toString());
+                break;
+            }
+        }
     }
 
     @Override
     public String toString() {
-        return String
-                .format("CondorJob [cluster=%s, jobId=%s, priority=%s, retry=%s, siteName=%s, initialDirectory=%s, id=%s, name=%s, executable=%s, submitFile=%s]",
-                        cluster, jobId, priority, retry, siteName, initialDirectory, id, name, executable, submitFile);
+        return String.format(
+                "CondorJob [cluster=%s, jobId=%s, retry=%s, id=%s, name=%s, executable=%s, submitFile=%s]", cluster,
+                jobId, retry, id, name, executable, submitFile);
     }
 
     @Override
@@ -176,11 +236,8 @@ public class CondorJob extends Job {
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + ((cluster == null) ? 0 : cluster.hashCode());
-        result = prime * result + ((initialDirectory == null) ? 0 : initialDirectory.hashCode());
         result = prime * result + ((jobId == null) ? 0 : jobId.hashCode());
-        result = prime * result + ((priority == null) ? 0 : priority.hashCode());
         result = prime * result + ((retry == null) ? 0 : retry.hashCode());
-        result = prime * result + ((siteName == null) ? 0 : siteName.hashCode());
         return result;
     }
 
@@ -198,30 +255,15 @@ public class CondorJob extends Job {
                 return false;
         } else if (!cluster.equals(other.cluster))
             return false;
-        if (initialDirectory == null) {
-            if (other.initialDirectory != null)
-                return false;
-        } else if (!initialDirectory.equals(other.initialDirectory))
-            return false;
         if (jobId == null) {
             if (other.jobId != null)
                 return false;
         } else if (!jobId.equals(other.jobId))
             return false;
-        if (priority == null) {
-            if (other.priority != null)
-                return false;
-        } else if (!priority.equals(other.priority))
-            return false;
         if (retry == null) {
             if (other.retry != null)
                 return false;
         } else if (!retry.equals(other.retry))
-            return false;
-        if (siteName == null) {
-            if (other.siteName != null)
-                return false;
-        } else if (!siteName.equals(other.siteName))
             return false;
         return true;
     }

@@ -1,5 +1,13 @@
 package org.renci.jlrm;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Queue", propOrder = {})
+@XmlRootElement(name = "queue")
 public class Queue {
 
     private String name;

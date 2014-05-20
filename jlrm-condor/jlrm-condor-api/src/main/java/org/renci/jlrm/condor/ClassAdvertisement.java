@@ -1,17 +1,33 @@
 package org.renci.jlrm.condor;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "ClassAdvertisement", propOrder = {})
+@XmlRootElement(name = "classAdvertisement")
 public class ClassAdvertisement implements Cloneable {
 
+    @XmlAttribute
     private String key;
 
+    @XmlAttribute
     private String value;
 
+    @XmlAttribute
     private ClassAdvertisementType type;
 
     public ClassAdvertisement() {
         super();
+    }
+
+    public ClassAdvertisement(String key, ClassAdvertisementType type) {
+        super();
+        this.key = key;
+        this.type = type;
     }
 
     public ClassAdvertisement(String key, ClassAdvertisementType type, String value) {
@@ -94,7 +110,7 @@ public class ClassAdvertisement implements Cloneable {
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return String.format("ClassAdvertisement [key=%s, value=%s, type=%s]", key, value, type);
     }
 
 }
