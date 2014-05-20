@@ -1,0 +1,1015 @@
+05/18/14 02:54:37 Setting maximum accepts per cycle 8.
+05/18/14 02:54:37 Setting maximum file descriptors to 20000.
+05/18/14 02:54:37 ******************************************************
+05/18/14 02:54:37 ** condor_scheduniv_exec.1254390.0 (CONDOR_DAGMAN) STARTING UP
+05/18/14 02:54:37 ** /nas02/apps/condor-7.8.7/bin/condor_dagman
+05/18/14 02:54:37 ** SubsystemInfo: name=DAGMAN type=DAGMAN(10) class=DAEMON(1)
+05/18/14 02:54:37 ** Configuration: subsystem:DAGMAN local:<NONE> class:DAEMON
+05/18/14 02:54:37 ** $CondorVersion: 7.8.7 Dec 12 2012 BuildID: 86173 $
+05/18/14 02:54:37 ** $CondorPlatform: x86_64_rhap_5.8 $
+05/18/14 02:54:37 ** PID = 16625
+05/18/14 02:54:37 ** Log last touched time unavailable (No such file or directory)
+05/18/14 02:54:37 ******************************************************
+05/18/14 02:54:37 Using config source: /nas02/apps/condor-7.8.7/etc/condor_config
+05/18/14 02:54:37 Using local config sources: 
+05/18/14 02:54:37    /nas02/apps/condor-7.8.7/config/biodev2/condor_config.biodev2
+05/18/14 02:54:37    /nas02/apps/condor-7.8.7/config/biodev2/condor_config.biodev2
+05/18/14 02:54:37 DaemonCore: command socket at <152.19.197.180:41513>
+05/18/14 02:54:37 DaemonCore: private command socket at <152.19.197.180:41513>
+05/18/14 02:54:37 Setting maximum accepts per cycle 8.
+05/18/14 02:54:37 DAGMAN_USE_STRICT setting: 0
+05/18/14 02:54:37 DAGMAN_VERBOSITY setting: 3
+05/18/14 02:54:37 DAGMAN_DEBUG_CACHE_SIZE setting: 5242880
+05/18/14 02:54:37 DAGMAN_DEBUG_CACHE_ENABLE setting: False
+05/18/14 02:54:37 DAGMAN_SUBMIT_DELAY setting: 0
+05/18/14 02:54:37 DAGMAN_MAX_SUBMIT_ATTEMPTS setting: 6
+05/18/14 02:54:37 DAGMAN_STARTUP_CYCLE_DETECT setting: False
+05/18/14 02:54:37 DAGMAN_MAX_SUBMITS_PER_INTERVAL setting: 5
+05/18/14 02:54:37 DAGMAN_USER_LOG_SCAN_INTERVAL setting: 5
+05/18/14 02:54:37 allow_events (DAGMAN_IGNORE_DUPLICATE_JOB_EXECUTION, DAGMAN_ALLOW_EVENTS) setting: 114
+05/18/14 02:54:37 DAGMAN_RETRY_SUBMIT_FIRST setting: True
+05/18/14 02:54:37 DAGMAN_RETRY_NODE_FIRST setting: False
+05/18/14 02:54:37 DAGMAN_MAX_JOBS_IDLE setting: 0
+05/18/14 02:54:37 DAGMAN_MAX_JOBS_SUBMITTED setting: 0
+05/18/14 02:54:37 DAGMAN_MAX_PRE_SCRIPTS setting: 0
+05/18/14 02:54:37 DAGMAN_MAX_POST_SCRIPTS setting: 0
+05/18/14 02:54:37 DAGMAN_ALLOW_LOG_ERROR setting: False
+05/18/14 02:54:37 DAGMAN_MUNGE_NODE_NAMES setting: True
+05/18/14 02:54:37 DAGMAN_PROHIBIT_MULTI_JOBS setting: False
+05/18/14 02:54:37 DAGMAN_SUBMIT_DEPTH_FIRST setting: False
+05/18/14 02:54:37 DAGMAN_ALWAYS_RUN_POST setting: True
+05/18/14 02:54:37 DAGMAN_ABORT_DUPLICATES setting: True
+05/18/14 02:54:37 DAGMAN_ABORT_ON_SCARY_SUBMIT setting: True
+05/18/14 02:54:37 DAGMAN_PENDING_REPORT_INTERVAL setting: 600
+05/18/14 02:54:37 DAGMAN_AUTO_RESCUE setting: True
+05/18/14 02:54:37 DAGMAN_MAX_RESCUE_NUM setting: 100
+05/18/14 02:54:37 DAGMAN_WRITE_PARTIAL_RESCUE setting: True
+05/18/14 02:54:37 DAGMAN_DEFAULT_NODE_LOG setting: null
+05/18/14 02:54:37 DAGMAN_GENERATE_SUBDAG_SUBMITS setting: True
+05/18/14 02:54:37 ALL_DEBUG setting: 
+05/18/14 02:54:37 DAGMAN_DEBUG setting: 
+05/18/14 02:54:37 argv[0] == "condor_scheduniv_exec.1254390.0"
+05/18/14 02:54:37 argv[1] == "-Lockfile"
+05/18/14 02:54:37 argv[2] == "NECAlignment.dag.lock"
+05/18/14 02:54:37 argv[3] == "-AutoRescue"
+05/18/14 02:54:37 argv[4] == "1"
+05/18/14 02:54:37 argv[5] == "-DoRescueFrom"
+05/18/14 02:54:37 argv[6] == "0"
+05/18/14 02:54:37 argv[7] == "-Dag"
+05/18/14 02:54:37 argv[8] == "NECAlignment.dag"
+05/18/14 02:54:37 argv[9] == "-CsdVersion"
+05/18/14 02:54:37 argv[10] == "$CondorVersion: 7.8.7 Dec 12 2012 BuildID: 86173 $"
+05/18/14 02:54:37 argv[11] == "-Force"
+05/18/14 02:54:37 argv[12] == "-Dagman"
+05/18/14 02:54:37 argv[13] == "/nas02/apps/condor-7.8.7/bin/condor_dagman"
+05/18/14 02:54:37 Default node log file is: </nas02/home/r/c/rc_renci.svc/.mapseq/submit/2014-05-18/NECAlignment/36512fbe-6ed7-4cce-955e-80f9a58879ca/NECAlignment.dag.nodes.log>
+05/18/14 02:54:37 DAG Lockfile will be written to NECAlignment.dag.lock
+05/18/14 02:54:37 DAG Input file is NECAlignment.dag
+05/18/14 02:54:37 Parsing 1 dagfiles
+05/18/14 02:54:37 Parsing NECAlignment.dag ...
+05/18/14 02:54:37 Dag contains 11 total jobs
+05/18/14 02:54:37 Sleeping for 12 seconds to ensure ProcessId uniqueness
+05/18/14 02:54:49 Bootstrapping...
+05/18/14 02:54:49 Number of pre-completed nodes: 0
+05/18/14 02:54:49 Registering condor_event_timer...
+05/18/14 02:54:50 Sleeping for one second for log file consistency
+05/18/14 02:54:51 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2014-05-18/NECAlignment/36512fbe-6ed7-4cce-955e-80f9a58879ca/WriteVCFHeaderCLI_1.log
+05/18/14 02:54:51 Submitting Condor Node WriteVCFHeaderCLI_1 job(s)...
+05/18/14 02:54:51 submitting: condor_submit -a dag_node_name' '=' 'WriteVCFHeaderCLI_1 -a +DAGManJobId' '=' '1254390 -a DAGManJobId' '=' '1254390 -a submit_event_notes' '=' 'DAG' 'Node:' 'WriteVCFHeaderCLI_1 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" -a +KeepClaimIdle' '=' '20 WriteVCFHeaderCLI_1.sub
+05/18/14 02:54:51 From submit: Submitting job(s).
+05/18/14 02:54:51 From submit: 1 job(s) submitted to cluster 1254399.
+05/18/14 02:54:51 	assigned Condor ID (1254399.0.0)
+05/18/14 02:54:51 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2014-05-18/NECAlignment/36512fbe-6ed7-4cce-955e-80f9a58879ca/FastQCCLI_2.log
+05/18/14 02:54:51 Submitting Condor Node FastQCCLI_2 job(s)...
+05/18/14 02:54:51 submitting: condor_submit -a dag_node_name' '=' 'FastQCCLI_2 -a +DAGManJobId' '=' '1254390 -a DAGManJobId' '=' '1254390 -a submit_event_notes' '=' 'DAG' 'Node:' 'FastQCCLI_2 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" -a +KeepClaimIdle' '=' '20 FastQCCLI_2.sub
+05/18/14 02:54:51 From submit: Submitting job(s).
+05/18/14 02:54:51 From submit: 1 job(s) submitted to cluster 1254408.
+05/18/14 02:54:51 	assigned Condor ID (1254408.0.0)
+05/18/14 02:54:51 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2014-05-18/NECAlignment/36512fbe-6ed7-4cce-955e-80f9a58879ca/FastQCCLI_4.log
+05/18/14 02:54:51 Submitting Condor Node FastQCCLI_4 job(s)...
+05/18/14 02:54:51 submitting: condor_submit -a dag_node_name' '=' 'FastQCCLI_4 -a +DAGManJobId' '=' '1254390 -a DAGManJobId' '=' '1254390 -a submit_event_notes' '=' 'DAG' 'Node:' 'FastQCCLI_4 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" -a +KeepClaimIdle' '=' '20 FastQCCLI_4.sub
+05/18/14 02:54:51 From submit: Submitting job(s).
+05/18/14 02:54:51 From submit: 1 job(s) submitted to cluster 1254416.
+05/18/14 02:54:51 	assigned Condor ID (1254416.0.0)
+05/18/14 02:54:51 Just submitted 3 jobs this cycle...
+05/18/14 02:54:51 Currently monitoring 3 Condor log file(s)
+05/18/14 02:54:51 Event: ULOG_SUBMIT for Condor Node WriteVCFHeaderCLI_1 (1254399.0.0)
+05/18/14 02:54:51 Number of idle job procs: 1
+05/18/14 02:54:51 Event: ULOG_SUBMIT for Condor Node FastQCCLI_4 (1254416.0.0)
+05/18/14 02:54:51 Number of idle job procs: 2
+05/18/14 02:54:51 Event: ULOG_SUBMIT for Condor Node FastQCCLI_2 (1254408.0.0)
+05/18/14 02:54:51 Number of idle job procs: 3
+05/18/14 02:54:51 Of 11 nodes total:
+05/18/14 02:54:51  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+05/18/14 02:54:51   ===     ===      ===     ===     ===        ===      ===
+05/18/14 02:54:51     0       0        3       0       0          8        0
+05/18/14 02:54:51 0 job proc(s) currently held
+05/18/14 02:54:56 Currently monitoring 3 Condor log file(s)
+05/18/14 02:54:56 Event: ULOG_EXECUTE for Condor Node FastQCCLI_4 (1254416.0.0)
+05/18/14 02:54:56 Number of idle job procs: 2
+05/18/14 02:54:56 Event: ULOG_EXECUTE for Condor Node WriteVCFHeaderCLI_1 (1254399.0.0)
+05/18/14 02:54:56 Number of idle job procs: 1
+05/18/14 02:54:56 Event: ULOG_EXECUTE for Condor Node FastQCCLI_2 (1254408.0.0)
+05/18/14 02:54:56 Number of idle job procs: 0
+05/18/14 02:55:01 Currently monitoring 3 Condor log file(s)
+05/18/14 02:55:01 Event: ULOG_IMAGE_SIZE for Condor Node WriteVCFHeaderCLI_1 (1254399.0.0)
+05/18/14 02:55:01 Event: ULOG_JOB_TERMINATED for Condor Node WriteVCFHeaderCLI_1 (1254399.0.0)
+05/18/14 02:55:01 Node WriteVCFHeaderCLI_1 job proc (1254399.0.0) completed successfully.
+05/18/14 02:55:01 Node WriteVCFHeaderCLI_1 job completed
+05/18/14 02:55:01 Number of idle job procs: 0
+05/18/14 02:55:01 Of 11 nodes total:
+05/18/14 02:55:01  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+05/18/14 02:55:01   ===     ===      ===     ===     ===        ===      ===
+05/18/14 02:55:01     1       0        2       0       0          8        0
+05/18/14 02:55:01 0 job proc(s) currently held
+05/18/14 02:55:06 Currently monitoring 2 Condor log file(s)
+05/18/14 02:55:06 Event: ULOG_IMAGE_SIZE for Condor Node FastQCCLI_4 (1254416.0.0)
+05/18/14 02:55:06 Event: ULOG_IMAGE_SIZE for Condor Node FastQCCLI_2 (1254408.0.0)
+05/18/14 02:56:36 Currently monitoring 2 Condor log file(s)
+05/18/14 02:56:36 Event: ULOG_IMAGE_SIZE for Condor Node FastQCCLI_2 (1254408.0.0)
+05/18/14 02:56:36 Event: ULOG_JOB_TERMINATED for Condor Node FastQCCLI_2 (1254408.0.0)
+05/18/14 02:56:36 Node FastQCCLI_2 job proc (1254408.0.0) completed successfully.
+05/18/14 02:56:36 Node FastQCCLI_2 job completed
+05/18/14 02:56:36 Number of idle job procs: 0
+05/18/14 02:56:36 Of 11 nodes total:
+05/18/14 02:56:36  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+05/18/14 02:56:36   ===     ===      ===     ===     ===        ===      ===
+05/18/14 02:56:36     2       0        1       0       1          7        0
+05/18/14 02:56:36 0 job proc(s) currently held
+05/18/14 02:56:41 Sleeping for one second for log file consistency
+05/18/14 02:56:42 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2014-05-18/NECAlignment/36512fbe-6ed7-4cce-955e-80f9a58879ca/BWAAlignCLI_3.log
+05/18/14 02:56:42 Submitting Condor Node BWAAlignCLI_3 job(s)...
+05/18/14 02:56:42 submitting: condor_submit -a dag_node_name' '=' 'BWAAlignCLI_3 -a +DAGManJobId' '=' '1254390 -a DAGManJobId' '=' '1254390 -a submit_event_notes' '=' 'DAG' 'Node:' 'BWAAlignCLI_3 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"FastQCCLI_2" -a +KeepClaimIdle' '=' '20 BWAAlignCLI_3.sub
+05/18/14 02:56:42 From submit: Submitting job(s).
+05/18/14 02:56:42 From submit: 1 job(s) submitted to cluster 1254428.
+05/18/14 02:56:42 	assigned Condor ID (1254428.0.0)
+05/18/14 02:56:42 Just submitted 1 job this cycle...
+05/18/14 02:56:42 Currently monitoring 2 Condor log file(s)
+05/18/14 02:56:42 Event: ULOG_JOB_TERMINATED for Condor Node FastQCCLI_4 (1254416.0.0)
+05/18/14 02:56:42 Node FastQCCLI_4 job proc (1254416.0.0) completed successfully.
+05/18/14 02:56:42 Node FastQCCLI_4 job completed
+05/18/14 02:56:42 Number of idle job procs: 0
+05/18/14 02:56:42 Event: ULOG_SUBMIT for Condor Node BWAAlignCLI_3 (1254428.0.0)
+05/18/14 02:56:42 Number of idle job procs: 1
+05/18/14 02:56:42 Of 11 nodes total:
+05/18/14 02:56:42  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+05/18/14 02:56:42   ===     ===      ===     ===     ===        ===      ===
+05/18/14 02:56:42     3       0        1       0       1          6        0
+05/18/14 02:56:42 0 job proc(s) currently held
+05/18/14 02:56:47 Sleeping for one second for log file consistency
+05/18/14 02:56:48 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2014-05-18/NECAlignment/36512fbe-6ed7-4cce-955e-80f9a58879ca/BWAAlignCLI_5.log
+05/18/14 02:56:48 Submitting Condor Node BWAAlignCLI_5 job(s)...
+05/18/14 02:56:48 submitting: condor_submit -a dag_node_name' '=' 'BWAAlignCLI_5 -a +DAGManJobId' '=' '1254390 -a DAGManJobId' '=' '1254390 -a submit_event_notes' '=' 'DAG' 'Node:' 'BWAAlignCLI_5 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"FastQCCLI_4" -a +KeepClaimIdle' '=' '20 BWAAlignCLI_5.sub
+05/18/14 02:56:48 From submit: Submitting job(s).
+05/18/14 02:56:48 From submit: 1 job(s) submitted to cluster 1254435.
+05/18/14 02:56:48 	assigned Condor ID (1254435.0.0)
+05/18/14 02:56:48 Just submitted 1 job this cycle...
+05/18/14 02:56:48 Currently monitoring 2 Condor log file(s)
+05/18/14 02:56:48 Event: ULOG_SUBMIT for Condor Node BWAAlignCLI_5 (1254435.0.0)
+05/18/14 02:56:48 Number of idle job procs: 2
+05/18/14 02:56:48 Of 11 nodes total:
+05/18/14 02:56:48  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+05/18/14 02:56:48   ===     ===      ===     ===     ===        ===      ===
+05/18/14 02:56:48     3       0        2       0       0          6        0
+05/18/14 02:56:48 0 job proc(s) currently held
+05/18/14 02:57:03 Currently monitoring 2 Condor log file(s)
+05/18/14 02:57:03 Event: ULOG_EXECUTE for Condor Node BWAAlignCLI_5 (1254435.0.0)
+05/18/14 02:57:03 Number of idle job procs: 1
+05/18/14 02:57:03 Event: ULOG_EXECUTE for Condor Node BWAAlignCLI_3 (1254428.0.0)
+05/18/14 02:57:03 Number of idle job procs: 0
+05/18/14 02:57:08 Currently monitoring 2 Condor log file(s)
+05/18/14 02:57:08 Event: ULOG_IMAGE_SIZE for Condor Node BWAAlignCLI_5 (1254435.0.0)
+05/18/14 02:57:08 Event: ULOG_JOB_HELD for Condor Node BWAAlignCLI_5 (1254435.0.0)
+05/18/14 02:57:08 Number of idle job procs: 1
+05/18/14 02:57:08 Event: ULOG_IMAGE_SIZE for Condor Node BWAAlignCLI_3 (1254428.0.0)
+05/18/14 02:57:08 Event: ULOG_JOB_HELD for Condor Node BWAAlignCLI_3 (1254428.0.0)
+05/18/14 02:57:08 Number of idle job procs: 2
+05/18/14 02:57:08 Of 11 nodes total:
+05/18/14 02:57:08  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+05/18/14 02:57:08   ===     ===      ===     ===     ===        ===      ===
+05/18/14 02:57:08     3       0        2       0       0          6        0
+05/18/14 02:57:08 2 job proc(s) currently held
+05/18/14 03:07:08 600 seconds since last log event
+05/18/14 03:07:08 Pending DAG nodes:
+05/18/14 03:07:08   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 03:07:08   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 03:17:08 1200 seconds since last log event
+05/18/14 03:17:08 Pending DAG nodes:
+05/18/14 03:17:08   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 03:17:08   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 03:27:08 1800 seconds since last log event
+05/18/14 03:27:08 Pending DAG nodes:
+05/18/14 03:27:08   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 03:27:08   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 03:37:08 2400 seconds since last log event
+05/18/14 03:37:08 Pending DAG nodes:
+05/18/14 03:37:08   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 03:37:08   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 03:47:08 3000 seconds since last log event
+05/18/14 03:47:08 Pending DAG nodes:
+05/18/14 03:47:08   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 03:47:08   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 03:57:09 3601 seconds since last log event
+05/18/14 03:57:09 Pending DAG nodes:
+05/18/14 03:57:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 03:57:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 04:07:09 4201 seconds since last log event
+05/18/14 04:07:09 Pending DAG nodes:
+05/18/14 04:07:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 04:07:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 04:17:09 4801 seconds since last log event
+05/18/14 04:17:09 Pending DAG nodes:
+05/18/14 04:17:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 04:17:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 04:27:09 5401 seconds since last log event
+05/18/14 04:27:09 Pending DAG nodes:
+05/18/14 04:27:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 04:27:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 04:37:09 6001 seconds since last log event
+05/18/14 04:37:09 Pending DAG nodes:
+05/18/14 04:37:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 04:37:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 04:47:09 6601 seconds since last log event
+05/18/14 04:47:09 Pending DAG nodes:
+05/18/14 04:47:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 04:47:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 04:57:09 7201 seconds since last log event
+05/18/14 04:57:09 Pending DAG nodes:
+05/18/14 04:57:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 04:57:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 05:07:09 7801 seconds since last log event
+05/18/14 05:07:09 Pending DAG nodes:
+05/18/14 05:07:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 05:07:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 05:17:09 8401 seconds since last log event
+05/18/14 05:17:09 Pending DAG nodes:
+05/18/14 05:17:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 05:17:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 05:27:09 9001 seconds since last log event
+05/18/14 05:27:09 Pending DAG nodes:
+05/18/14 05:27:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 05:27:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 05:37:09 9601 seconds since last log event
+05/18/14 05:37:09 Pending DAG nodes:
+05/18/14 05:37:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 05:37:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 05:47:09 10201 seconds since last log event
+05/18/14 05:47:09 Pending DAG nodes:
+05/18/14 05:47:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 05:47:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 05:57:09 10801 seconds since last log event
+05/18/14 05:57:09 Pending DAG nodes:
+05/18/14 05:57:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 05:57:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 06:07:09 11401 seconds since last log event
+05/18/14 06:07:09 Pending DAG nodes:
+05/18/14 06:07:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 06:07:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 06:17:09 12001 seconds since last log event
+05/18/14 06:17:09 Pending DAG nodes:
+05/18/14 06:17:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 06:17:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 06:27:09 12601 seconds since last log event
+05/18/14 06:27:09 Pending DAG nodes:
+05/18/14 06:27:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 06:27:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 06:37:09 13201 seconds since last log event
+05/18/14 06:37:09 Pending DAG nodes:
+05/18/14 06:37:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 06:37:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 06:47:09 13801 seconds since last log event
+05/18/14 06:47:09 Pending DAG nodes:
+05/18/14 06:47:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 06:47:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 06:57:09 14401 seconds since last log event
+05/18/14 06:57:09 Pending DAG nodes:
+05/18/14 06:57:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 06:57:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 07:07:09 15001 seconds since last log event
+05/18/14 07:07:09 Pending DAG nodes:
+05/18/14 07:07:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 07:07:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 07:17:09 15601 seconds since last log event
+05/18/14 07:17:09 Pending DAG nodes:
+05/18/14 07:17:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 07:17:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 07:27:09 16201 seconds since last log event
+05/18/14 07:27:09 Pending DAG nodes:
+05/18/14 07:27:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 07:27:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 07:37:09 16801 seconds since last log event
+05/18/14 07:37:09 Pending DAG nodes:
+05/18/14 07:37:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 07:37:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 07:47:09 17401 seconds since last log event
+05/18/14 07:47:09 Pending DAG nodes:
+05/18/14 07:47:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 07:47:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 07:57:09 18001 seconds since last log event
+05/18/14 07:57:09 Pending DAG nodes:
+05/18/14 07:57:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 07:57:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 08:07:09 18601 seconds since last log event
+05/18/14 08:07:09 Pending DAG nodes:
+05/18/14 08:07:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 08:07:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 08:17:09 19201 seconds since last log event
+05/18/14 08:17:09 Pending DAG nodes:
+05/18/14 08:17:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 08:17:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 08:27:09 19801 seconds since last log event
+05/18/14 08:27:09 Pending DAG nodes:
+05/18/14 08:27:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 08:27:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 08:37:09 20401 seconds since last log event
+05/18/14 08:37:09 Pending DAG nodes:
+05/18/14 08:37:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 08:37:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 08:47:09 21001 seconds since last log event
+05/18/14 08:47:09 Pending DAG nodes:
+05/18/14 08:47:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 08:47:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 08:57:09 21601 seconds since last log event
+05/18/14 08:57:09 Pending DAG nodes:
+05/18/14 08:57:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 08:57:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 09:07:09 22201 seconds since last log event
+05/18/14 09:07:09 Pending DAG nodes:
+05/18/14 09:07:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 09:07:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 09:17:09 22801 seconds since last log event
+05/18/14 09:17:09 Pending DAG nodes:
+05/18/14 09:17:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 09:17:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 09:27:09 23401 seconds since last log event
+05/18/14 09:27:09 Pending DAG nodes:
+05/18/14 09:27:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 09:27:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 09:37:09 24001 seconds since last log event
+05/18/14 09:37:09 Pending DAG nodes:
+05/18/14 09:37:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 09:37:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 09:47:09 24601 seconds since last log event
+05/18/14 09:47:09 Pending DAG nodes:
+05/18/14 09:47:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 09:47:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 09:57:09 25201 seconds since last log event
+05/18/14 09:57:09 Pending DAG nodes:
+05/18/14 09:57:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 09:57:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 10:07:09 25801 seconds since last log event
+05/18/14 10:07:09 Pending DAG nodes:
+05/18/14 10:07:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 10:07:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 10:17:09 26401 seconds since last log event
+05/18/14 10:17:09 Pending DAG nodes:
+05/18/14 10:17:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 10:17:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 10:27:09 27001 seconds since last log event
+05/18/14 10:27:09 Pending DAG nodes:
+05/18/14 10:27:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 10:27:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 10:37:09 27601 seconds since last log event
+05/18/14 10:37:09 Pending DAG nodes:
+05/18/14 10:37:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 10:37:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 10:47:09 28201 seconds since last log event
+05/18/14 10:47:09 Pending DAG nodes:
+05/18/14 10:47:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 10:47:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 10:57:09 28801 seconds since last log event
+05/18/14 10:57:09 Pending DAG nodes:
+05/18/14 10:57:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 10:57:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 11:07:09 29401 seconds since last log event
+05/18/14 11:07:09 Pending DAG nodes:
+05/18/14 11:07:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 11:07:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 11:17:09 30001 seconds since last log event
+05/18/14 11:17:09 Pending DAG nodes:
+05/18/14 11:17:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 11:17:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 11:27:09 30601 seconds since last log event
+05/18/14 11:27:09 Pending DAG nodes:
+05/18/14 11:27:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 11:27:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 11:37:09 31201 seconds since last log event
+05/18/14 11:37:09 Pending DAG nodes:
+05/18/14 11:37:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 11:37:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 11:47:09 31801 seconds since last log event
+05/18/14 11:47:09 Pending DAG nodes:
+05/18/14 11:47:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 11:47:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 11:57:09 32401 seconds since last log event
+05/18/14 11:57:09 Pending DAG nodes:
+05/18/14 11:57:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 11:57:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 12:07:09 33001 seconds since last log event
+05/18/14 12:07:09 Pending DAG nodes:
+05/18/14 12:07:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 12:07:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 12:17:09 33601 seconds since last log event
+05/18/14 12:17:09 Pending DAG nodes:
+05/18/14 12:17:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 12:17:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 12:27:09 34201 seconds since last log event
+05/18/14 12:27:09 Pending DAG nodes:
+05/18/14 12:27:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 12:27:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 12:37:09 34801 seconds since last log event
+05/18/14 12:37:09 Pending DAG nodes:
+05/18/14 12:37:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 12:37:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 12:47:09 35401 seconds since last log event
+05/18/14 12:47:09 Pending DAG nodes:
+05/18/14 12:47:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 12:47:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 12:57:09 36001 seconds since last log event
+05/18/14 12:57:09 Pending DAG nodes:
+05/18/14 12:57:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 12:57:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 13:07:09 36601 seconds since last log event
+05/18/14 13:07:09 Pending DAG nodes:
+05/18/14 13:07:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 13:07:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 13:17:09 37201 seconds since last log event
+05/18/14 13:17:09 Pending DAG nodes:
+05/18/14 13:17:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 13:17:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 13:27:09 37801 seconds since last log event
+05/18/14 13:27:09 Pending DAG nodes:
+05/18/14 13:27:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 13:27:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 13:37:09 38401 seconds since last log event
+05/18/14 13:37:09 Pending DAG nodes:
+05/18/14 13:37:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 13:37:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 13:47:09 39001 seconds since last log event
+05/18/14 13:47:09 Pending DAG nodes:
+05/18/14 13:47:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 13:47:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 13:57:09 39601 seconds since last log event
+05/18/14 13:57:09 Pending DAG nodes:
+05/18/14 13:57:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 13:57:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 14:07:09 40201 seconds since last log event
+05/18/14 14:07:09 Pending DAG nodes:
+05/18/14 14:07:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 14:07:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 14:17:09 40801 seconds since last log event
+05/18/14 14:17:09 Pending DAG nodes:
+05/18/14 14:17:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 14:17:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 14:27:09 41401 seconds since last log event
+05/18/14 14:27:09 Pending DAG nodes:
+05/18/14 14:27:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 14:27:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 14:37:09 42001 seconds since last log event
+05/18/14 14:37:09 Pending DAG nodes:
+05/18/14 14:37:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 14:37:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 14:47:09 42601 seconds since last log event
+05/18/14 14:47:09 Pending DAG nodes:
+05/18/14 14:47:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 14:47:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 14:57:09 43201 seconds since last log event
+05/18/14 14:57:09 Pending DAG nodes:
+05/18/14 14:57:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 14:57:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 15:07:09 43801 seconds since last log event
+05/18/14 15:07:09 Pending DAG nodes:
+05/18/14 15:07:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 15:07:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 15:17:09 44401 seconds since last log event
+05/18/14 15:17:09 Pending DAG nodes:
+05/18/14 15:17:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 15:17:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 15:27:09 45001 seconds since last log event
+05/18/14 15:27:09 Pending DAG nodes:
+05/18/14 15:27:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 15:27:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 15:37:09 45601 seconds since last log event
+05/18/14 15:37:09 Pending DAG nodes:
+05/18/14 15:37:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 15:37:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 15:47:09 46201 seconds since last log event
+05/18/14 15:47:09 Pending DAG nodes:
+05/18/14 15:47:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 15:47:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 15:57:09 46801 seconds since last log event
+05/18/14 15:57:09 Pending DAG nodes:
+05/18/14 15:57:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 15:57:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 16:07:09 47401 seconds since last log event
+05/18/14 16:07:09 Pending DAG nodes:
+05/18/14 16:07:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 16:07:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 16:17:09 48001 seconds since last log event
+05/18/14 16:17:09 Pending DAG nodes:
+05/18/14 16:17:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 16:17:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 16:27:09 48601 seconds since last log event
+05/18/14 16:27:09 Pending DAG nodes:
+05/18/14 16:27:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 16:27:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 16:37:09 49201 seconds since last log event
+05/18/14 16:37:09 Pending DAG nodes:
+05/18/14 16:37:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 16:37:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 16:47:09 49801 seconds since last log event
+05/18/14 16:47:09 Pending DAG nodes:
+05/18/14 16:47:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 16:47:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 16:57:09 50401 seconds since last log event
+05/18/14 16:57:09 Pending DAG nodes:
+05/18/14 16:57:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 16:57:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 17:07:09 51001 seconds since last log event
+05/18/14 17:07:09 Pending DAG nodes:
+05/18/14 17:07:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 17:07:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 17:17:09 51601 seconds since last log event
+05/18/14 17:17:09 Pending DAG nodes:
+05/18/14 17:17:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 17:17:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 17:27:09 52201 seconds since last log event
+05/18/14 17:27:09 Pending DAG nodes:
+05/18/14 17:27:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 17:27:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 17:37:09 52801 seconds since last log event
+05/18/14 17:37:09 Pending DAG nodes:
+05/18/14 17:37:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 17:37:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 17:47:09 53401 seconds since last log event
+05/18/14 17:47:09 Pending DAG nodes:
+05/18/14 17:47:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 17:47:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 17:57:09 54001 seconds since last log event
+05/18/14 17:57:09 Pending DAG nodes:
+05/18/14 17:57:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 17:57:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 18:07:09 54601 seconds since last log event
+05/18/14 18:07:09 Pending DAG nodes:
+05/18/14 18:07:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 18:07:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 18:17:09 55201 seconds since last log event
+05/18/14 18:17:09 Pending DAG nodes:
+05/18/14 18:17:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 18:17:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 18:27:09 55801 seconds since last log event
+05/18/14 18:27:09 Pending DAG nodes:
+05/18/14 18:27:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 18:27:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 18:37:09 56401 seconds since last log event
+05/18/14 18:37:09 Pending DAG nodes:
+05/18/14 18:37:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 18:37:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 18:47:09 57001 seconds since last log event
+05/18/14 18:47:09 Pending DAG nodes:
+05/18/14 18:47:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 18:47:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 18:57:09 57601 seconds since last log event
+05/18/14 18:57:09 Pending DAG nodes:
+05/18/14 18:57:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 18:57:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 19:07:09 58201 seconds since last log event
+05/18/14 19:07:09 Pending DAG nodes:
+05/18/14 19:07:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 19:07:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 19:17:09 58801 seconds since last log event
+05/18/14 19:17:09 Pending DAG nodes:
+05/18/14 19:17:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 19:17:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 19:27:09 59401 seconds since last log event
+05/18/14 19:27:09 Pending DAG nodes:
+05/18/14 19:27:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 19:27:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 19:37:09 60001 seconds since last log event
+05/18/14 19:37:09 Pending DAG nodes:
+05/18/14 19:37:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 19:37:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 19:47:09 60601 seconds since last log event
+05/18/14 19:47:09 Pending DAG nodes:
+05/18/14 19:47:09   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 19:47:09   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 19:57:10 61202 seconds since last log event
+05/18/14 19:57:10 Pending DAG nodes:
+05/18/14 19:57:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 19:57:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 20:07:10 61802 seconds since last log event
+05/18/14 20:07:10 Pending DAG nodes:
+05/18/14 20:07:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 20:07:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 20:17:10 62402 seconds since last log event
+05/18/14 20:17:10 Pending DAG nodes:
+05/18/14 20:17:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 20:17:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 20:27:10 63002 seconds since last log event
+05/18/14 20:27:10 Pending DAG nodes:
+05/18/14 20:27:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 20:27:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 20:37:10 63602 seconds since last log event
+05/18/14 20:37:10 Pending DAG nodes:
+05/18/14 20:37:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 20:37:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 20:47:10 64202 seconds since last log event
+05/18/14 20:47:10 Pending DAG nodes:
+05/18/14 20:47:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 20:47:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 20:57:10 64802 seconds since last log event
+05/18/14 20:57:10 Pending DAG nodes:
+05/18/14 20:57:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 20:57:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 21:07:10 65402 seconds since last log event
+05/18/14 21:07:10 Pending DAG nodes:
+05/18/14 21:07:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 21:07:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 21:17:10 66002 seconds since last log event
+05/18/14 21:17:10 Pending DAG nodes:
+05/18/14 21:17:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 21:17:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 21:27:10 66602 seconds since last log event
+05/18/14 21:27:10 Pending DAG nodes:
+05/18/14 21:27:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 21:27:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 21:37:10 67202 seconds since last log event
+05/18/14 21:37:10 Pending DAG nodes:
+05/18/14 21:37:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 21:37:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 21:47:10 67802 seconds since last log event
+05/18/14 21:47:10 Pending DAG nodes:
+05/18/14 21:47:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 21:47:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 21:57:10 68402 seconds since last log event
+05/18/14 21:57:10 Pending DAG nodes:
+05/18/14 21:57:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 21:57:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 22:07:10 69002 seconds since last log event
+05/18/14 22:07:10 Pending DAG nodes:
+05/18/14 22:07:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 22:07:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 22:17:10 69602 seconds since last log event
+05/18/14 22:17:10 Pending DAG nodes:
+05/18/14 22:17:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 22:17:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 22:27:10 70202 seconds since last log event
+05/18/14 22:27:10 Pending DAG nodes:
+05/18/14 22:27:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 22:27:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 22:37:10 70802 seconds since last log event
+05/18/14 22:37:10 Pending DAG nodes:
+05/18/14 22:37:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 22:37:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 22:47:10 71402 seconds since last log event
+05/18/14 22:47:10 Pending DAG nodes:
+05/18/14 22:47:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 22:47:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 22:57:10 72002 seconds since last log event
+05/18/14 22:57:10 Pending DAG nodes:
+05/18/14 22:57:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 22:57:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 23:07:10 72602 seconds since last log event
+05/18/14 23:07:10 Pending DAG nodes:
+05/18/14 23:07:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 23:07:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 23:17:10 73202 seconds since last log event
+05/18/14 23:17:10 Pending DAG nodes:
+05/18/14 23:17:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 23:17:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 23:27:10 73802 seconds since last log event
+05/18/14 23:27:10 Pending DAG nodes:
+05/18/14 23:27:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 23:27:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 23:37:10 74402 seconds since last log event
+05/18/14 23:37:10 Pending DAG nodes:
+05/18/14 23:37:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 23:37:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 23:47:10 75002 seconds since last log event
+05/18/14 23:47:10 Pending DAG nodes:
+05/18/14 23:47:10   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 23:47:10   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/18/14 23:57:11 75603 seconds since last log event
+05/18/14 23:57:11 Pending DAG nodes:
+05/18/14 23:57:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/18/14 23:57:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 00:07:11 76203 seconds since last log event
+05/19/14 00:07:11 Pending DAG nodes:
+05/19/14 00:07:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 00:07:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 00:17:11 76803 seconds since last log event
+05/19/14 00:17:11 Pending DAG nodes:
+05/19/14 00:17:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 00:17:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 00:27:11 77403 seconds since last log event
+05/19/14 00:27:11 Pending DAG nodes:
+05/19/14 00:27:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 00:27:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 00:37:11 78003 seconds since last log event
+05/19/14 00:37:11 Pending DAG nodes:
+05/19/14 00:37:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 00:37:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 00:47:11 78603 seconds since last log event
+05/19/14 00:47:11 Pending DAG nodes:
+05/19/14 00:47:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 00:47:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 00:57:11 79203 seconds since last log event
+05/19/14 00:57:11 Pending DAG nodes:
+05/19/14 00:57:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 00:57:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 01:07:11 79803 seconds since last log event
+05/19/14 01:07:11 Pending DAG nodes:
+05/19/14 01:07:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 01:07:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 01:17:11 80403 seconds since last log event
+05/19/14 01:17:11 Pending DAG nodes:
+05/19/14 01:17:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 01:17:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 01:27:11 81003 seconds since last log event
+05/19/14 01:27:11 Pending DAG nodes:
+05/19/14 01:27:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 01:27:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 01:37:11 81603 seconds since last log event
+05/19/14 01:37:11 Pending DAG nodes:
+05/19/14 01:37:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 01:37:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 01:47:11 82203 seconds since last log event
+05/19/14 01:47:11 Pending DAG nodes:
+05/19/14 01:47:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 01:47:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 01:57:11 82803 seconds since last log event
+05/19/14 01:57:11 Pending DAG nodes:
+05/19/14 01:57:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 01:57:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 02:07:11 83403 seconds since last log event
+05/19/14 02:07:11 Pending DAG nodes:
+05/19/14 02:07:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 02:07:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 02:17:11 84003 seconds since last log event
+05/19/14 02:17:11 Pending DAG nodes:
+05/19/14 02:17:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 02:17:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 02:27:11 84603 seconds since last log event
+05/19/14 02:27:11 Pending DAG nodes:
+05/19/14 02:27:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 02:27:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 02:37:11 85203 seconds since last log event
+05/19/14 02:37:11 Pending DAG nodes:
+05/19/14 02:37:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 02:37:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 02:47:11 85803 seconds since last log event
+05/19/14 02:47:11 Pending DAG nodes:
+05/19/14 02:47:11   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 02:47:11   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 02:57:12 86404 seconds since last log event
+05/19/14 02:57:12 Pending DAG nodes:
+05/19/14 02:57:12   Node BWAAlignCLI_3, Condor ID 1254428, status STATUS_SUBMITTED
+05/19/14 02:57:12   Node BWAAlignCLI_5, Condor ID 1254435, status STATUS_SUBMITTED
+05/19/14 03:00:52 Currently monitoring 2 Condor log file(s)
+05/19/14 03:00:52 Event: ULOG_JOB_ABORTED for Condor Node BWAAlignCLI_3 (1254428.0.0)
+05/19/14 03:00:52 Retrying node BWAAlignCLI_3 (retry #1 of 3)...
+05/19/14 03:00:52 Number of idle job procs: 1
+05/19/14 03:00:52 Event: ULOG_JOB_ABORTED for Condor Node BWAAlignCLI_5 (1254435.0.0)
+05/19/14 03:00:52 Retrying node BWAAlignCLI_5 (retry #1 of 3)...
+05/19/14 03:00:52 Number of idle job procs: 0
+05/19/14 03:00:52 Of 11 nodes total:
+05/19/14 03:00:52  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+05/19/14 03:00:52   ===     ===      ===     ===     ===        ===      ===
+05/19/14 03:00:52     3       0        0       0       2          6        0
+05/19/14 03:00:52 0 job proc(s) currently held
+05/19/14 03:00:57 Sleeping for one second for log file consistency
+05/19/14 03:00:58 Submitting Condor Node BWAAlignCLI_3 job(s)...
+05/19/14 03:00:58 submitting: condor_submit -a dag_node_name' '=' 'BWAAlignCLI_3 -a +DAGManJobId' '=' '1254390 -a DAGManJobId' '=' '1254390 -a submit_event_notes' '=' 'DAG' 'Node:' 'BWAAlignCLI_3 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"FastQCCLI_2" -a +KeepClaimIdle' '=' '20 BWAAlignCLI_3.sub
+05/19/14 03:00:58 From submit: Submitting job(s).
+05/19/14 03:00:58 From submit: 1 job(s) submitted to cluster 1254788.
+05/19/14 03:00:58 	assigned Condor ID (1254788.0.0)
+05/19/14 03:00:58 Submitting Condor Node BWAAlignCLI_5 job(s)...
+05/19/14 03:00:58 submitting: condor_submit -a dag_node_name' '=' 'BWAAlignCLI_5 -a +DAGManJobId' '=' '1254390 -a DAGManJobId' '=' '1254390 -a submit_event_notes' '=' 'DAG' 'Node:' 'BWAAlignCLI_5 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"FastQCCLI_4" -a +KeepClaimIdle' '=' '20 BWAAlignCLI_5.sub
+05/19/14 03:00:58 From submit: Submitting job(s).
+05/19/14 03:00:58 From submit: 1 job(s) submitted to cluster 1254790.
+05/19/14 03:00:58 	assigned Condor ID (1254790.0.0)
+05/19/14 03:00:58 Just submitted 2 jobs this cycle...
+05/19/14 03:00:58 Currently monitoring 2 Condor log file(s)
+05/19/14 03:00:58 Event: ULOG_SUBMIT for Condor Node BWAAlignCLI_3 (1254788.0.0)
+05/19/14 03:00:58 Number of idle job procs: 1
+05/19/14 03:00:58 Event: ULOG_SUBMIT for Condor Node BWAAlignCLI_5 (1254790.0.0)
+05/19/14 03:00:58 Number of idle job procs: 2
+05/19/14 03:00:58 Of 11 nodes total:
+05/19/14 03:00:58  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+05/19/14 03:00:58   ===     ===      ===     ===     ===        ===      ===
+05/19/14 03:00:58     3       0        2       0       0          6        0
+05/19/14 03:00:58 0 job proc(s) currently held
+05/19/14 03:01:23 Currently monitoring 2 Condor log file(s)
+05/19/14 03:01:23 Event: ULOG_EXECUTE for Condor Node BWAAlignCLI_3 (1254788.0.0)
+05/19/14 03:01:23 Number of idle job procs: 1
+05/19/14 03:01:23 Event: ULOG_EXECUTE for Condor Node BWAAlignCLI_5 (1254790.0.0)
+05/19/14 03:01:23 Number of idle job procs: 0
+05/19/14 03:01:28 Currently monitoring 2 Condor log file(s)
+05/19/14 03:01:28 Event: ULOG_IMAGE_SIZE for Condor Node BWAAlignCLI_3 (1254788.0.0)
+05/19/14 03:01:28 Event: ULOG_JOB_HELD for Condor Node BWAAlignCLI_3 (1254788.0.0)
+05/19/14 03:01:28 Number of idle job procs: 1
+05/19/14 03:01:28 Event: ULOG_IMAGE_SIZE for Condor Node BWAAlignCLI_5 (1254790.0.0)
+05/19/14 03:01:28 Event: ULOG_JOB_HELD for Condor Node BWAAlignCLI_5 (1254790.0.0)
+05/19/14 03:01:28 Number of idle job procs: 2
+05/19/14 03:01:28 Of 11 nodes total:
+05/19/14 03:01:28  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+05/19/14 03:01:28   ===     ===      ===     ===     ===        ===      ===
+05/19/14 03:01:28     3       0        2       0       0          6        0
+05/19/14 03:01:28 2 job proc(s) currently held
+05/19/14 03:11:28 600 seconds since last log event
+05/19/14 03:11:28 Pending DAG nodes:
+05/19/14 03:11:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 03:11:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 03:21:28 1200 seconds since last log event
+05/19/14 03:21:28 Pending DAG nodes:
+05/19/14 03:21:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 03:21:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 03:31:28 1800 seconds since last log event
+05/19/14 03:31:28 Pending DAG nodes:
+05/19/14 03:31:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 03:31:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 03:41:28 2400 seconds since last log event
+05/19/14 03:41:28 Pending DAG nodes:
+05/19/14 03:41:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 03:41:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 03:51:28 3000 seconds since last log event
+05/19/14 03:51:28 Pending DAG nodes:
+05/19/14 03:51:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 03:51:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 04:01:28 3600 seconds since last log event
+05/19/14 04:01:28 Pending DAG nodes:
+05/19/14 04:01:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 04:01:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 04:11:28 4200 seconds since last log event
+05/19/14 04:11:28 Pending DAG nodes:
+05/19/14 04:11:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 04:11:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 04:21:28 4800 seconds since last log event
+05/19/14 04:21:28 Pending DAG nodes:
+05/19/14 04:21:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 04:21:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 04:31:28 5400 seconds since last log event
+05/19/14 04:31:28 Pending DAG nodes:
+05/19/14 04:31:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 04:31:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 04:41:28 6000 seconds since last log event
+05/19/14 04:41:28 Pending DAG nodes:
+05/19/14 04:41:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 04:41:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 04:51:28 6600 seconds since last log event
+05/19/14 04:51:28 Pending DAG nodes:
+05/19/14 04:51:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 04:51:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 05:01:28 7200 seconds since last log event
+05/19/14 05:01:28 Pending DAG nodes:
+05/19/14 05:01:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 05:01:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 05:11:28 7800 seconds since last log event
+05/19/14 05:11:28 Pending DAG nodes:
+05/19/14 05:11:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 05:11:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 05:21:28 8400 seconds since last log event
+05/19/14 05:21:28 Pending DAG nodes:
+05/19/14 05:21:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 05:21:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 05:31:28 9000 seconds since last log event
+05/19/14 05:31:28 Pending DAG nodes:
+05/19/14 05:31:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 05:31:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 05:41:28 9600 seconds since last log event
+05/19/14 05:41:28 Pending DAG nodes:
+05/19/14 05:41:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 05:41:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 05:51:28 10200 seconds since last log event
+05/19/14 05:51:28 Pending DAG nodes:
+05/19/14 05:51:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 05:51:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 06:01:28 10800 seconds since last log event
+05/19/14 06:01:28 Pending DAG nodes:
+05/19/14 06:01:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 06:01:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 06:11:28 11400 seconds since last log event
+05/19/14 06:11:28 Pending DAG nodes:
+05/19/14 06:11:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 06:11:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 06:21:28 12000 seconds since last log event
+05/19/14 06:21:28 Pending DAG nodes:
+05/19/14 06:21:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 06:21:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 06:31:28 12600 seconds since last log event
+05/19/14 06:31:28 Pending DAG nodes:
+05/19/14 06:31:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 06:31:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 06:41:28 13200 seconds since last log event
+05/19/14 06:41:28 Pending DAG nodes:
+05/19/14 06:41:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 06:41:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 06:51:28 13800 seconds since last log event
+05/19/14 06:51:28 Pending DAG nodes:
+05/19/14 06:51:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 06:51:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 07:01:28 14400 seconds since last log event
+05/19/14 07:01:28 Pending DAG nodes:
+05/19/14 07:01:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 07:01:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 07:11:28 15000 seconds since last log event
+05/19/14 07:11:28 Pending DAG nodes:
+05/19/14 07:11:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 07:11:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 07:21:28 15600 seconds since last log event
+05/19/14 07:21:28 Pending DAG nodes:
+05/19/14 07:21:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 07:21:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 07:31:28 16200 seconds since last log event
+05/19/14 07:31:28 Pending DAG nodes:
+05/19/14 07:31:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 07:31:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 07:41:28 16800 seconds since last log event
+05/19/14 07:41:28 Pending DAG nodes:
+05/19/14 07:41:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 07:41:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 07:51:28 17400 seconds since last log event
+05/19/14 07:51:28 Pending DAG nodes:
+05/19/14 07:51:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 07:51:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 08:01:28 18000 seconds since last log event
+05/19/14 08:01:28 Pending DAG nodes:
+05/19/14 08:01:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 08:01:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 08:11:28 18600 seconds since last log event
+05/19/14 08:11:28 Pending DAG nodes:
+05/19/14 08:11:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 08:11:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 08:21:28 19200 seconds since last log event
+05/19/14 08:21:28 Pending DAG nodes:
+05/19/14 08:21:28   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 08:21:28   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 08:31:28 19800 seconds since last log event
+05/19/14 08:31:29 Pending DAG nodes:
+05/19/14 08:31:29   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 08:31:29   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 08:41:29 20401 seconds since last log event
+05/19/14 08:41:29 Pending DAG nodes:
+05/19/14 08:41:29   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 08:41:29   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 08:51:29 21001 seconds since last log event
+05/19/14 08:51:29 Pending DAG nodes:
+05/19/14 08:51:29   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 08:51:29   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 09:01:29 21601 seconds since last log event
+05/19/14 09:01:29 Pending DAG nodes:
+05/19/14 09:01:29   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 09:01:29   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 09:11:29 22201 seconds since last log event
+05/19/14 09:11:29 Pending DAG nodes:
+05/19/14 09:11:29   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 09:11:29   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 09:21:29 22801 seconds since last log event
+05/19/14 09:21:29 Pending DAG nodes:
+05/19/14 09:21:29   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 09:21:29   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 09:31:29 23401 seconds since last log event
+05/19/14 09:31:29 Pending DAG nodes:
+05/19/14 09:31:29   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 09:31:29   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 09:41:29 24001 seconds since last log event
+05/19/14 09:41:29 Pending DAG nodes:
+05/19/14 09:41:29   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 09:41:29   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 09:51:29 24601 seconds since last log event
+05/19/14 09:51:29 Pending DAG nodes:
+05/19/14 09:51:29   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 09:51:29   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 10:01:29 25201 seconds since last log event
+05/19/14 10:01:29 Pending DAG nodes:
+05/19/14 10:01:29   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 10:01:29   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 10:11:29 25801 seconds since last log event
+05/19/14 10:11:29 Pending DAG nodes:
+05/19/14 10:11:29   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 10:11:29   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 10:21:29 26401 seconds since last log event
+05/19/14 10:21:29 Pending DAG nodes:
+05/19/14 10:21:29   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 10:21:29   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 10:31:29 27001 seconds since last log event
+05/19/14 10:31:29 Pending DAG nodes:
+05/19/14 10:31:29   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 10:31:29   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 10:41:29 27601 seconds since last log event
+05/19/14 10:41:29 Pending DAG nodes:
+05/19/14 10:41:29   Node BWAAlignCLI_3, Condor ID 1254788, status STATUS_SUBMITTED
+05/19/14 10:41:29   Node BWAAlignCLI_5, Condor ID 1254790, status STATUS_SUBMITTED
+05/19/14 10:50:59 Received SIGUSR1
+05/19/14 10:50:59 Aborting DAG...
+05/19/14 10:50:59 Writing Rescue DAG to NECAlignment.dag.rescue001...
+05/19/14 10:50:59 Removing submitted jobs...
+05/19/14 10:50:59 Removing any/all submitted Condor/Stork jobs...
+05/19/14 10:50:59 Running: condor_rm -const DAGManJobId' '==' '1254390
+05/19/14 10:50:59 Note: 0 total job deferrals because of -MaxJobs limit (0)
+05/19/14 10:50:59 Note: 0 total job deferrals because of -MaxIdle limit (0)
+05/19/14 10:50:59 Note: 0 total job deferrals because of node category throttles
+05/19/14 10:50:59 Note: 0 total PRE script deferrals because of -MaxPre limit (0)
+05/19/14 10:50:59 Note: 0 total POST script deferrals because of -MaxPost limit (0)
+05/19/14 10:50:59 Warning: ReadMultipleUserLogs destructor called, but still monitoring 2 log(s)!
+05/19/14 10:50:59 **** condor_scheduniv_exec.1254390.0 (condor_DAGMAN) pid 16625 EXITING WITH STATUS 2
