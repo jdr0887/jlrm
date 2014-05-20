@@ -16,7 +16,7 @@ import org.renci.common.exec.ExecutorException;
 import org.renci.jlrm.IOUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.condor.CondorJob;
-import org.renci.jlrm.condor.CondorSubmitScriptExporter;
+import org.renci.jlrm.condor.ext.CondorSubmitScriptExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
