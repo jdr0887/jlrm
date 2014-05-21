@@ -4,7 +4,10 @@ import static org.renci.jlrm.condor.ClassAdvertisementFactory.CLASS_AD_KEY_ARGUM
 import static org.renci.jlrm.condor.ClassAdvertisementFactory.CLASS_AD_KEY_REQUIREMENTS;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -36,6 +39,12 @@ public class CondorJob extends Job {
     private String preScript;
 
     private String postScript;
+
+    private String siteName;
+
+    private String initialDirectory;
+
+    private Integer priority;
 
     @XmlTransient
     private ClassAdvertisement argumentsClassAd;
@@ -114,6 +123,21 @@ public class CondorJob extends Job {
         }
     }
 
+    public List<String> getTransferInputList() {
+        List<String> ret = new ArrayList<String>();
+        ClassAdvertisement transferFilesClassAd = new ClassAdvertisement(
+                ClassAdvertisementFactory.CLASS_AD_KEY_TRANSFER_INPUT_FILES, ClassAdvertisementType.EXPRESSION);
+        if (getClassAdvertisments().contains(transferFilesClassAd)) {
+            for (ClassAdvertisement classAd : getClassAdvertisments()) {
+                if (classAd.equals(transferFilesClassAd)) {
+                    ret.addAll(Arrays.asList(StringUtils.split(classAd.getValue(), ',')));
+                    break;
+                }
+            }
+        }
+        return ret;
+    }
+
     public void addTransferOutput(String file) {
         ClassAdvertisement transferOutputFilesClassAd = new ClassAdvertisement(
                 ClassAdvertisementFactory.CLASS_AD_KEY_TRANSFER_OUTPUT_FILES, ClassAdvertisementType.EXPRESSION);
@@ -129,6 +153,21 @@ public class CondorJob extends Job {
                 break;
             }
         }
+    }
+
+    public List<String> getTransferOutputList() {
+        List<String> ret = new ArrayList<String>();
+        ClassAdvertisement transferFilesClassAd = new ClassAdvertisement(
+                ClassAdvertisementFactory.CLASS_AD_KEY_TRANSFER_OUTPUT_FILES, ClassAdvertisementType.EXPRESSION);
+        if (getClassAdvertisments().contains(transferFilesClassAd)) {
+            for (ClassAdvertisement classAd : getClassAdvertisments()) {
+                if (classAd.equals(transferFilesClassAd)) {
+                    ret.addAll(Arrays.asList(StringUtils.split(classAd.getValue(), ',')));
+                    break;
+                }
+            }
+        }
+        return ret;
     }
 
     public Integer getCluster() {
@@ -147,7 +186,12 @@ public class CondorJob extends Job {
         this.jobId = jobId;
     }
 
+    public Integer getPriority() {
+        return priority;
+    }
+
     public void setPriority(Integer priority) {
+        this.priority = priority;
         ClassAdvertisement priorityClassAd = new ClassAdvertisement(ClassAdvertisementFactory.CLASS_AD_KEY_PRIORITY,
                 ClassAdvertisementType.INTEGER);
         for (ClassAdvertisement classAd : getClassAdvertisments()) {
@@ -183,17 +227,32 @@ public class CondorJob extends Job {
     }
 
     public void setSiteName(String siteName) {
+        this.siteName = siteName;
         if (StringUtils.isNotEmpty(siteName)) {
             this.addRequirement(String.format("TARGET.JLRM_SITE_NAME == \"%s\"", siteName));
         }
     }
 
-    public void setInitialDirectory(File initialDirectory) {
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public String getInitialDirectory() {
+        return initialDirectory;
+    }
+
+    public void setInitialDirectory(String initialDirectory) {
+        this.initialDirectory = initialDirectory;
         ClassAdvertisement initialDirClassAd = new ClassAdvertisement(
                 ClassAdvertisementFactory.CLASS_AD_KEY_INITIAL_DIR, ClassAdvertisementType.EXPRESSION);
+        if (!getClassAdvertisments().contains(initialDirClassAd)) {
+            initialDirClassAd.setValue(initialDirectory);
+            this.classAdvertisments.add(initialDirClassAd);
+            return;
+        }
         for (ClassAdvertisement classAd : getClassAdvertisments()) {
             if (classAd.equals(initialDirClassAd)) {
-                classAd.setValue(initialDirectory.getAbsolutePath());
+                classAd.setValue(initialDirectory);
                 break;
             }
         }
