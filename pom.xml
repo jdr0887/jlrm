@@ -8,9 +8,9 @@
     <version>0.0.2</version>    
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <name>jLRM</name>
+  <name>Java Local Resource Management</name>
   <groupId>org.renci</groupId>
-  <artifactId>jLRM</artifactId>
+  <artifactId>jlrm</artifactId>
   <version>0.3.28-SNAPSHOT</version>
   <packaging>pom</packaging>
   <properties>
