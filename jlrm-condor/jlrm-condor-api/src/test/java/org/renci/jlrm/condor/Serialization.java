@@ -19,7 +19,7 @@ public class Serialization {
         CondorJob job = new CondorJob();
         job.setDuration(1000);
         job.setId("asdfads");
-        job.setInitialDirectory(new File("/tmp"));
+        job.setInitialDirectory("/tmp");
 
         job.getClassAdvertisments()
                 .add(new ClassAdvertisement("executable", ClassAdvertisementType.STRING, "sub_1.sh"));

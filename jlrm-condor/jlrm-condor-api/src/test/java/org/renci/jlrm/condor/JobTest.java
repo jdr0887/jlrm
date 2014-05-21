@@ -54,7 +54,7 @@ public class JobTest {
 
         job.setSiteName("Kure");
 
-        job.setInitialDirectory(new File("/tmp"));
+        job.setInitialDirectory("/tmp");
 
         job.addTransferInput("asdf");
         job.addTransferInput("asdfadsf");
