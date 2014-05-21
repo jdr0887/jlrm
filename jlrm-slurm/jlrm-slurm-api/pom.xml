@@ -2,19 +2,19 @@
   <parent>
     <groupId>org.renci.jlrm</groupId>
     <artifactId>jlrm-slurm</artifactId>
-    <version>0.3.31-SNAPSHOT</version>
+    <version>0.3.30-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>jLRM :: SLURM :: API</name>
   <groupId>org.renci.jlrm.jlrm-slurm</groupId>
   <artifactId>jlrm-slurm-api</artifactId>
-  <version>0.3.31-SNAPSHOT</version>
+  <version>0.3.30-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <dependencies>
     <dependency>
       <groupId>org.renci.jlrm</groupId>
       <artifactId>jlrm-api</artifactId>
-      <version>0.3.31-SNAPSHOT</version>      
+      <version>0.3.30-SNAPSHOT</version>      
     </dependency>
   </dependencies>
   <build>
