@@ -1,9 +1,5 @@
 package org.renci.jlrm.condor;
 
-import static org.renci.jlrm.condor.ClassAdvertisementFactory.CLASS_AD_KEY_ARGUMENTS;
-import static org.renci.jlrm.condor.ClassAdvertisementFactory.CLASS_AD_KEY_REQUIREMENTS;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -28,7 +24,7 @@ public class CondorJob extends Job {
 
     @XmlElementWrapper(name = "classAdvertisements")
     @XmlElement(name = "classAd")
-    private final Set<ClassAdvertisement> classAdvertisments = new HashSet<ClassAdvertisement>();
+    private Set<ClassAdvertisement> classAdvertisments = new HashSet<ClassAdvertisement>();
 
     private Integer cluster;
 
@@ -47,127 +43,42 @@ public class CondorJob extends Job {
     private Integer priority;
 
     @XmlTransient
-    private ClassAdvertisement argumentsClassAd;
+    private ClassAdvertisement argumentsClassAd = new ClassAdvertisement(
+            ClassAdvertisementFactory.CLASS_AD_KEY_ARGUMENTS, ClassAdvertisementType.STRING);
 
     @XmlTransient
-    private ClassAdvertisement requirementsClassAd;
+    private ClassAdvertisement requirementsClassAd = new ClassAdvertisement(
+            ClassAdvertisementFactory.CLASS_AD_KEY_REQUIREMENTS, ClassAdvertisementType.EXPRESSION);
 
     public CondorJob() {
         super();
-        init();
     }
 
-    public CondorJob(String name, File executable) {
-        super(name, executable);
-        init();
-    }
-
-    public CondorJob(String name, File executable, Integer retry) {
-        super(name, executable);
-        this.retry = retry;
-        init();
-        for (ClassAdvertisement classAd : ClassAdvertisementFactory.getDefaultClassAds()) {
-            classAdvertisments.add(classAd);
-        }
-    }
-
-    private void init() {
-        this.argumentsClassAd = new ClassAdvertisement(CLASS_AD_KEY_ARGUMENTS, ClassAdvertisementType.STRING);
-        this.classAdvertisments.add(this.argumentsClassAd);
-
-        String requirements = "(Arch == \"X86_64\") && (OpSys == \"LINUX\") && (Memory >= 500) && (Disk >= 0)";
-        this.requirementsClassAd = new ClassAdvertisement(CLASS_AD_KEY_REQUIREMENTS, ClassAdvertisementType.EXPRESSION,
-                requirements);
-        this.requirementsClassAd.setValue(requirements);
-        this.classAdvertisments.add(this.requirementsClassAd);
-    }
-
-    public Set<ClassAdvertisement> getClassAdvertisments() {
-        return classAdvertisments;
-    }
-
-    public void addArgument(String flag) {
-        addArgument(flag, "", "");
-    }
-
-    public void addArgument(String flag, Object value) {
-        addArgument(flag, value, " ");
-    }
-
-    public void addArgument(String flag, Object value, String delimiter) {
-        String arg = String.format("%s%s%s", flag, delimiter, value.toString());
-        String argumentsClassAdValue = this.argumentsClassAd.getValue() != null ? String.format("%s %s",
-                this.argumentsClassAd.getValue(), arg) : arg;
-        this.argumentsClassAd.setValue(argumentsClassAdValue);
-    }
-
-    public void addRequirement(String expression) {
-        String arg = String.format("&& (%s)", expression);
-        this.requirementsClassAd.setValue(String.format("%s %s", this.requirementsClassAd.getValue(), arg));
-    }
-
-    public void addTransferInput(String file) {
-        ClassAdvertisement transferInputFilesClassAd = new ClassAdvertisement(
-                ClassAdvertisementFactory.CLASS_AD_KEY_TRANSFER_INPUT_FILES, ClassAdvertisementType.EXPRESSION);
-        if (!getClassAdvertisments().contains(transferInputFilesClassAd)) {
-            transferInputFilesClassAd.setValue(file);
-            this.classAdvertisments.add(transferInputFilesClassAd);
-            return;
-        }
-
-        for (ClassAdvertisement classAd : getClassAdvertisments()) {
-            if (classAd.equals(transferInputFilesClassAd)) {
-                classAd.setValue(String.format("%s,%s", classAd.getValue(), file));
-                break;
-            }
-        }
-    }
-
-    public List<String> getTransferInputList() {
-        List<String> ret = new ArrayList<String>();
-        ClassAdvertisement transferFilesClassAd = new ClassAdvertisement(
-                ClassAdvertisementFactory.CLASS_AD_KEY_TRANSFER_INPUT_FILES, ClassAdvertisementType.EXPRESSION);
-        if (getClassAdvertisments().contains(transferFilesClassAd)) {
-            for (ClassAdvertisement classAd : getClassAdvertisments()) {
-                if (classAd.equals(transferFilesClassAd)) {
-                    ret.addAll(Arrays.asList(StringUtils.split(classAd.getValue(), ',')));
-                    break;
-                }
-            }
-        }
-        return ret;
-    }
-
-    public void addTransferOutput(String file) {
-        ClassAdvertisement transferOutputFilesClassAd = new ClassAdvertisement(
-                ClassAdvertisementFactory.CLASS_AD_KEY_TRANSFER_OUTPUT_FILES, ClassAdvertisementType.EXPRESSION);
-        if (!getClassAdvertisments().contains(transferOutputFilesClassAd)) {
-            transferOutputFilesClassAd.setValue(file);
-            this.classAdvertisments.add(transferOutputFilesClassAd);
-            return;
-        }
-
-        for (ClassAdvertisement classAd : getClassAdvertisments()) {
-            if (classAd.equals(transferOutputFilesClassAd)) {
-                classAd.setValue(String.format("%s,%s", classAd.getValue(), file));
-                break;
-            }
-        }
-    }
-
-    public List<String> getTransferOutputList() {
-        List<String> ret = new ArrayList<String>();
-        ClassAdvertisement transferFilesClassAd = new ClassAdvertisement(
-                ClassAdvertisementFactory.CLASS_AD_KEY_TRANSFER_OUTPUT_FILES, ClassAdvertisementType.EXPRESSION);
-        if (getClassAdvertisments().contains(transferFilesClassAd)) {
-            for (ClassAdvertisement classAd : getClassAdvertisments()) {
-                if (classAd.equals(transferFilesClassAd)) {
-                    ret.addAll(Arrays.asList(StringUtils.split(classAd.getValue(), ',')));
-                    break;
-                }
-            }
-        }
-        return ret;
+    public CondorJob(CondorJobBuilder builder) {
+        super();
+        // from JobBuilder
+        this.id = builder.id();
+        this.name = builder.name();
+        this.executable = builder.executable();
+        this.submitFile = builder.submitFile();
+        this.output = builder.output();
+        this.error = builder.error();
+        this.numberOfProcessors = builder.numberOfProcessors();
+        this.memory = builder.memory();
+        this.duration = builder.duration();
+        this.durationTimeUnit = builder.durationTimeUnit();
+        // from CondorJobBuilder
+        this.classAdvertisments = builder.classAdvertisments();
+        this.cluster = builder.cluster();
+        this.jobId = builder.jobId();
+        this.retry = builder.retry();
+        this.preScript = builder.preScript();
+        this.postScript = builder.postScript();
+        this.siteName = builder.siteName();
+        this.initialDirectory = builder.initialDirectory();
+        this.priority = builder.priority();
+        this.argumentsClassAd = builder.argumentsClassAd();
+        this.requirementsClassAd = builder.requirementsClassAd();
     }
 
     public Integer getCluster() {
@@ -184,22 +95,6 @@ public class CondorJob extends Job {
 
     public void setJobId(Integer jobId) {
         this.jobId = jobId;
-    }
-
-    public Integer getPriority() {
-        return priority;
-    }
-
-    public void setPriority(Integer priority) {
-        this.priority = priority;
-        ClassAdvertisement priorityClassAd = new ClassAdvertisement(ClassAdvertisementFactory.CLASS_AD_KEY_PRIORITY,
-                ClassAdvertisementType.INTEGER);
-        for (ClassAdvertisement classAd : getClassAdvertisments()) {
-            if (classAd.equals(priorityClassAd)) {
-                classAd.setValue(priority.toString());
-                break;
-            }
-        }
     }
 
     public Integer getRetry() {
@@ -226,15 +121,12 @@ public class CondorJob extends Job {
         this.postScript = postScript;
     }
 
-    public void setSiteName(String siteName) {
-        this.siteName = siteName;
-        if (StringUtils.isNotEmpty(siteName)) {
-            this.addRequirement(String.format("TARGET.JLRM_SITE_NAME == \"%s\"", siteName));
-        }
-    }
-
     public String getSiteName() {
         return siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
     }
 
     public String getInitialDirectory() {
@@ -243,51 +135,121 @@ public class CondorJob extends Job {
 
     public void setInitialDirectory(String initialDirectory) {
         this.initialDirectory = initialDirectory;
-        ClassAdvertisement initialDirClassAd = new ClassAdvertisement(
-                ClassAdvertisementFactory.CLASS_AD_KEY_INITIAL_DIR, ClassAdvertisementType.EXPRESSION);
-        if (!getClassAdvertisments().contains(initialDirClassAd)) {
-            initialDirClassAd.setValue(initialDirectory);
-            this.classAdvertisments.add(initialDirClassAd);
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
+    }
+
+    public ClassAdvertisement getArgumentsClassAd() {
+        return argumentsClassAd;
+    }
+
+    public void setArgumentsClassAd(ClassAdvertisement argumentsClassAd) {
+        this.argumentsClassAd = argumentsClassAd;
+    }
+
+    public ClassAdvertisement getRequirementsClassAd() {
+        return requirementsClassAd;
+    }
+
+    public void setRequirementsClassAd(ClassAdvertisement requirementsClassAd) {
+        this.requirementsClassAd = requirementsClassAd;
+    }
+
+    public Set<ClassAdvertisement> getClassAdvertisments() {
+        return classAdvertisments;
+    }
+
+    public void addArgument(String flag, Object value, String delimiter) {
+        String arg = String.format("%s%s%s", flag, delimiter, value.toString());
+        String argumentsClassAdValue = this.argumentsClassAd.getValue() != null ? String.format("%s %s",
+                this.argumentsClassAd.getValue(), arg) : arg;
+        this.argumentsClassAd.setValue(argumentsClassAdValue);
+    }
+
+    public void addRequirement(String expression) {
+        String arg = String.format("&& (%s)", expression);
+        String requirementsClassAdValue = this.requirementsClassAd.getValue() != null ? String.format("%s %s",
+                this.requirementsClassAd.getValue(), arg) : arg;
+        this.argumentsClassAd.setValue(requirementsClassAdValue);
+    }
+
+    public void addTransferInput(String file) {
+        ClassAdvertisement transferInputFilesClassAd = new ClassAdvertisement(
+                ClassAdvertisementFactory.CLASS_AD_KEY_TRANSFER_INPUT_FILES, ClassAdvertisementType.EXPRESSION);
+        if (!getClassAdvertisments().contains(transferInputFilesClassAd)) {
+            transferInputFilesClassAd.setValue(file);
+            this.classAdvertisments.add(transferInputFilesClassAd);
             return;
         }
+
         for (ClassAdvertisement classAd : getClassAdvertisments()) {
-            if (classAd.equals(initialDirClassAd)) {
-                classAd.setValue(initialDirectory);
+            if (classAd.equals(transferInputFilesClassAd)) {
+                classAd.setValue(String.format("%s,%s", classAd.getValue(), file));
                 break;
             }
         }
     }
 
-    public void setNumberOfProcessors(Integer numberOfProcessors) {
-        this.numberOfProcessors = numberOfProcessors;
-        ClassAdvertisement requestCPUsClassAd = new ClassAdvertisement(
-                ClassAdvertisementFactory.CLASS_AD_KEY_REQUEST_CPUS, ClassAdvertisementType.INTEGER,
-                numberOfProcessors.toString());
+    public void addTransferOutput(String file) {
+        ClassAdvertisement transferOutputFilesClassAd = new ClassAdvertisement(
+                ClassAdvertisementFactory.CLASS_AD_KEY_TRANSFER_OUTPUT_FILES, ClassAdvertisementType.EXPRESSION);
+        if (!getClassAdvertisments().contains(transferOutputFilesClassAd)) {
+            transferOutputFilesClassAd.setValue(file);
+            this.classAdvertisments.add(transferOutputFilesClassAd);
+            return;
+        }
+
         for (ClassAdvertisement classAd : getClassAdvertisments()) {
-            if (classAd.equals(requestCPUsClassAd)) {
-                classAd.setValue(numberOfProcessors.toString());
+            if (classAd.equals(transferOutputFilesClassAd)) {
+                classAd.setValue(String.format("%s,%s", classAd.getValue(), file));
                 break;
             }
         }
     }
 
-    public void setMemory(Integer memory) {
-        this.memory = memory;
-        ClassAdvertisement requestMemoryClassAd = new ClassAdvertisement(
-                ClassAdvertisementFactory.CLASS_AD_KEY_REQUEST_MEMORY, ClassAdvertisementType.INTEGER);
-        for (ClassAdvertisement classAd : getClassAdvertisments()) {
-            if (classAd.equals(requestMemoryClassAd)) {
-                classAd.setValue(memory.toString());
-                break;
+    public List<String> getTransferInputList() {
+        List<String> ret = new ArrayList<String>();
+        ClassAdvertisement transferFilesClassAd = new ClassAdvertisement(
+                ClassAdvertisementFactory.CLASS_AD_KEY_TRANSFER_INPUT_FILES, ClassAdvertisementType.EXPRESSION);
+        if (getClassAdvertisments().contains(transferFilesClassAd)) {
+            for (ClassAdvertisement classAd : getClassAdvertisments()) {
+                if (classAd.equals(transferFilesClassAd)) {
+                    ret.addAll(Arrays.asList(StringUtils.split(classAd.getValue(), ',')));
+                    break;
+                }
             }
         }
+        return ret;
+    }
+
+    public List<String> getTransferOutputList() {
+        List<String> ret = new ArrayList<String>();
+        ClassAdvertisement transferFilesClassAd = new ClassAdvertisement(
+                ClassAdvertisementFactory.CLASS_AD_KEY_TRANSFER_OUTPUT_FILES, ClassAdvertisementType.EXPRESSION);
+        if (getClassAdvertisments().contains(transferFilesClassAd)) {
+            for (ClassAdvertisement classAd : getClassAdvertisments()) {
+                if (classAd.equals(transferFilesClassAd)) {
+                    ret.addAll(Arrays.asList(StringUtils.split(classAd.getValue(), ',')));
+                    break;
+                }
+            }
+        }
+        return ret;
     }
 
     @Override
     public String toString() {
-        return String.format(
-                "CondorJob [cluster=%s, jobId=%s, retry=%s, id=%s, name=%s, executable=%s, submitFile=%s]", cluster,
-                jobId, retry, id, name, executable, submitFile);
+        return String
+                .format("CondorJob [cluster=%s, jobId=%s, retry=%s, preScript=%s, postScript=%s, siteName=%s, initialDirectory=%s, priority=%s, argumentsClassAd=%s, requirementsClassAd=%s, id=%s, name=%s, executable=%s, submitFile=%s, output=%s, error=%s, numberOfProcessors=%s, memory=%s, duration=%s, durationTimeUnit=%s]",
+                        cluster, jobId, retry, preScript, postScript, siteName, initialDirectory, priority,
+                        argumentsClassAd, requirementsClassAd, id, name, executable, submitFile, output, error,
+                        numberOfProcessors, memory, duration, durationTimeUnit);
     }
 
     @Override
