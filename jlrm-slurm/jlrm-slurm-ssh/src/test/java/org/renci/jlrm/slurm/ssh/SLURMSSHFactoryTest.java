@@ -26,14 +26,9 @@ public class SLURMSSHFactoryTest {
         queue.setName("queue16");
         queue.setRunTime(2880L);
 
-        SLURMSSHJob job = new SLURMSSHJob("test", new File("/bin/hostname"));
-        job.setHostCount(1);
-        job.setNumberOfProcessors(1);
-        job.setName("Test");
-        job.setProject("TCGA");
-        job.setQueueName("queue16");
-        job.setOutput(new File("test.out"));
-        job.setError(new File("test.err"));
+        SLURMSSHJob job = new SLURMSSHJobBuilder().name("test").executable(new File("/bin/hostname")).hostCount(1)
+                .numberOfProcessors(1).project("TCGA").queueName("queue16").output(new File("test.out"))
+                .error(new File("test.err")).build();
 
         try {
             job = new SLURMSSHSubmitCallable(site, job, new File("/tmp")).call();

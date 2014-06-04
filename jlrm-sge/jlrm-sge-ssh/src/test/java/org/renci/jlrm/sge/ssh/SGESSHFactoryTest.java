@@ -26,14 +26,9 @@ public class SGESSHFactoryTest {
         queue.setName("all.q");
         queue.setRunTime(2880L);
 
-        SGESSHJob job = new SGESSHJob("test", new File("/bin/hostname"));
-        job.setHostCount(1);
-        job.setNumberOfProcessors(1);
-        job.setName("Test");
-        job.setProject("TCGA");
-        job.setQueueName("all.q");
-        job.setOutput(new File("test.out"));
-        job.setError(new File("test.err"));
+        SGESSHJob job = new SGESSHJobBuilder().name("test").executable(new File("/bin/hostname")).hostCount(1)
+                .numberOfProcessors(1).project("TCGA").queueName("all.q").output(new File("test.out"))
+                .error(new File("test.err")).build();
 
         try {
             job = new SGESSHSubmitCallable(site, job, new File("/tmp")).call();

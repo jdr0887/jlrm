@@ -22,14 +22,9 @@ public class PBSSSHFactoryTest {
         site.setSubmitHost("br0.renci.org");
         site.setUsername("mapseq");
 
-        PBSSSHJob job = new PBSSSHJob("test", new File("/bin/hostname"));
-        job.setHostCount(1);
-        job.setNumberOfProcessors(1);
-        job.setName("Test");
-        job.setProject("RENCI");
-        job.setQueueName("serial");
-        job.setOutput(new File("test.out"));
-        job.setError(new File("test.err"));
+        PBSSSHJob job = new PBSSSHJobBuilder().name("test").executable(new File("/bin/hostname")).hostCount(1)
+                .numberOfProcessors(1).project("RENCI").queueName("serial").output(new File("test.out"))
+                .error(new File("test.err")).build();
 
         try {
             job = new PBSSSHSubmitCallable(site, job, new File("/tmp")).call();

@@ -21,14 +21,11 @@ public class LSFSSHFactoryTest {
         Site site = new Site();
         site.setSubmitHost("biodev1.its.unc.edu");
         site.setUsername("jreilly");
-        LSFSSHJob job = new LSFSSHJob("test", new File("/bin/hostname"));
-        job.setHostCount(1);
-        job.setNumberOfProcessors(1);
-        job.setProject("TCGA");
-        job.setQueueName("prenci");
-        job.setOutput(new File("test.out"));
-        job.setError(new File("test.err"));
+        LSFSSHJobBuilder builder = new LSFSSHJobBuilder().name("test").executable(new File("/bin/hostname"));
+        builder.hostCount(1).numberOfProcessors(1);
+        builder.project("TCGA").queueName("prenci").output(new File("test.out")).error(new File("test.err"));
 
+        LSFSSHJob job = builder.build();
         try {
             LSFSSHSubmitCallable runnable = new LSFSSHSubmitCallable();
             runnable.setJob(job);

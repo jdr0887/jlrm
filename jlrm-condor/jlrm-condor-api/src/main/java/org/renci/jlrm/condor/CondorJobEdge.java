@@ -1,14 +1,12 @@
 package org.renci.jlrm.condor;
 
-import java.util.List;
-
 import org.jgrapht.graph.DefaultEdge;
 
 public class CondorJobEdge extends DefaultEdge {
 
     private static final long serialVersionUID = 3289410868411756519L;
 
-    private List<String> inputLabelList;
+    private String inputLabel = "";
 
     public CondorJobEdge() {
         super();
@@ -24,12 +22,12 @@ public class CondorJobEdge extends DefaultEdge {
         return super.getTarget();
     }
 
-    public List<String> getInputLabelList() {
-        return inputLabelList;
+    public String getInputLabel() {
+        return inputLabel;
     }
 
-    public void setInputLabelList(List<String> inputLabelList) {
-        this.inputLabelList = inputLabelList;
+    public void setInputLabel(String inputLabel) {
+        this.inputLabel = inputLabel;
     }
 
 }

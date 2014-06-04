@@ -29,38 +29,32 @@ public class JobTest {
     @Test
     public void multiArgumentTest() {
 
-        CondorJob job = new CondorJob(String.format("%s_%d", "GATKDepthOfCoverageCLI", 1), new File(
-                "$HOME/bin/run-mapseq.sh"), 3);
+        CondorJobBuilder builder = new CondorJobBuilder().name(String.format("%s_%d", "GATKDepthOfCoverageCLI", 1));
 
-        job.addArgument("edu.unc.mapseq.module.gatk.GATKDepthOfCoverageCLI");
+        // condor attributes
+        builder.retry(3).memory(2048).numberOfProcessors(8).siteName("Kure").initialDirectory("/tmp")
+                .addRequirement(String.format("JRLM_USER == \"%s\"", System.getProperty("user.name")));
+
+        // actual job attributes
+        builder.executable(new File("$HOME/bin/run-mapseq.sh"))
+                .addArgument("edu.unc.mapseq.module.gatk.GATKDepthOfCoverageCLI")
+                .addArgument("--workflowRunId", 189478).addArgument("--accountId", 46625)
+                .addArgument("--sequencerRunId", 113050).addArgument("--htsfSampleId", 113052)
+                .addArgument("--persistFileData");
+
+        // job transfer info
+        builder.addTransferInput("asdf").addTransferInput("asdfadsf").addTransferOutput("qwer")
+                .addTransferOutput("qwerqwer");
 
         for (ClassAdvertisement classAd : ClassAdvertisementFactory.getDefaultClassAds()) {
             try {
-                job.getClassAdvertisments().add(classAd.clone());
+                builder.classAdvertisments().add(classAd.clone());
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             }
         }
 
-        job.setMemory(2048);
-        job.setNumberOfProcessors(8);
-        job.addArgument("--workflowRunId", 189478);
-        job.addArgument("--accountId", 46625);
-        job.addArgument("--sequencerRunId", 113050);
-        job.addArgument("--htsfSampleId", 113052);
-        job.addArgument("--persistFileData");
-
-        job.addRequirement(String.format("JRLM_USER == \"%s\"", System.getProperty("user.name")));
-
-        job.setSiteName("Kure");
-
-        job.setInitialDirectory("/tmp");
-
-        job.addTransferInput("asdf");
-        job.addTransferInput("asdfadsf");
-        job.addTransferOutput("qwer");
-        job.addTransferOutput("qwerqwer");
-
+        CondorJob job = builder.build();
         CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
         exporter.export(new File("/tmp"), job);
 
@@ -92,11 +86,11 @@ public class JobTest {
                 CondorJobEdge.class);
 
         File executable = new File("/bin/hostname");
-        CondorJob job = new CondorJob("asdfasdfasdffffffffffffffasdfasdfasdfasdfasdfa", executable, 3);
-        job.setPreScript("/bin/echo asdf");
-        job.setPostScript("/bin/echo qwer");
+        CondorJob job = new CondorJobBuilder().name("asdfasdfasdffffffffffffffasdfasdfasdfasdfasdfa")
+                .executable(executable).retry(3).preScript("/bin/echo asdf").postScript("/bin/echo qwer")
+                .addArgument("someClassName").addArgument("asdfasdf").addArgument("--foo", "bar")
+                .addArgument("--fuzz", "buzz").build();
 
-        job.addArgument("someClassName");
         Map<String, String> defaultRSLAttributeMap = new HashMap<String, String>();
         defaultRSLAttributeMap.put("count", "1");
         defaultRSLAttributeMap.put("jobtype", "single");
@@ -116,31 +110,31 @@ public class JobTest {
             job.getClassAdvertisments().add(classAd);
         }
 
-        job.addArgument("asdfasdf");
-        job.addArgument("--foo", "bar");
-        job.addArgument("--fuzz", "buzz");
         graph.addVertex(job);
 
-        CondorJob job2 = new CondorJob("b", executable, 4);
-        job2.addArgument("qwerqwer");
-        job2.addArgument("--foo", "bar");
-        job2.addArgument("--fuzz", "buzz");
+        CondorJobBuilder builder = new CondorJobBuilder().name("b").retry(4);
+        builder.executable(executable).addArgument("qwerqwer").addArgument("--foo", "bar")
+                .addArgument("--fuzz", "buzz");
+
         ClassAdvertisement classAd = ClassAdvertisementFactory.getClassAd(
                 ClassAdvertisementFactory.CLASS_AD_KEY_UNIVERSE).clone();
         classAd.setValue(UniverseType.MPI.toString().toLowerCase());
-        job2.getClassAdvertisments().add(classAd);
+        builder.classAdvertisments().add(classAd);
+
+        CondorJob job2 = builder.build();
 
         graph.addVertex(job2);
+
         CondorJobEdge jobEdge = graph.addEdge(job, job2);
         List<String> edgeLabel = new ArrayList<String>();
         edgeLabel.add("qwerqwer");
-        jobEdge.setInputLabelList(edgeLabel);
+        // jobEdge.setInputLabelList(edgeLabel);
 
-        CondorJob job3 = new CondorJob("c", executable, 2);
-        job3.setPreScript("/bin/echo bar");
-        job3.setPostScript("/bin/echo buzz");
-
-        job3.addArgument("zxcvzxcv");
+        builder = new CondorJobBuilder().name("c").retry(2);
+        builder.executable(executable).addArgument("qwerqwer").addArgument("--foo", "bar")
+                .addArgument("--fuzz", "buzz").addArgument("zxcvzxcv").addArgument("--foo", "bar")
+                .addArgument("--fuzz", "buzz");
+        builder.preScript("/bin/echo bar").postScript("/bin/echo buzz");
 
         defaultRSLAttributeMap.put("count", "8");
         defaultRSLAttributeMap.put("host_count", "1");
@@ -153,24 +147,24 @@ public class JobTest {
                 "gt2 localhost/jobmanager-fork", null, null);
 
         for (ClassAdvertisement classAd2 : classAdvertisementSet) {
-            job3.getClassAdvertisments().add(classAd2);
+            builder.classAdvertisments().add(classAd2);
         }
 
-        job3.addArgument("--foo", "bar");
-        job3.addArgument("--fuzz", "buzz");
+        CondorJob job3 = builder.build();
+
         graph.addVertex(job3);
         jobEdge = graph.addEdge(job, job3);
         edgeLabel = new ArrayList<String>();
         edgeLabel.add("asdfasdf");
-        jobEdge.setInputLabelList(edgeLabel);
+        // jobEdge.setInputLabelList(edgeLabel);
 
-        CondorJob job4 = new CondorJob("d", executable, 6);
+        CondorJob job4 = new CondorJobBuilder().name("d").retry(6).executable(executable).build();
         graph.addVertex(job4);
 
         graph.addEdge(job2, job4);
         graph.addEdge(job3, job4);
 
-        CondorJob job5 = new CondorJob("e", executable, 5);
+        CondorJob job5 = new CondorJobBuilder().name("e").retry(5).executable(executable).build();
         graph.addVertex(job5);
         graph.addEdge(job2, job5);
 
@@ -195,13 +189,7 @@ public class JobTest {
             EdgeNameProvider<CondorJobEdge> enpLabel = new EdgeNameProvider<CondorJobEdge>() {
                 @Override
                 public String getEdgeName(CondorJobEdge edge) {
-                    StringBuilder sb = new StringBuilder();
-                    if (edge.getInputLabelList() != null) {
-                        for (String label : edge.getInputLabelList()) {
-                            sb.append(String.format(",%s", label));
-                        }
-                    }
-                    return sb.toString().replaceFirst(",", "");
+                    return edge.getInputLabel();
                 }
             };
 
@@ -226,23 +214,19 @@ public class JobTest {
 
         DirectedGraph<CondorJob, CondorJobEdge> graph1 = new DefaultDirectedGraph<CondorJob, CondorJobEdge>(
                 CondorJobEdge.class);
-        CondorJob job = new CondorJob("asdf", new File("/bin/hostname"));
-        job.setPreScript("/bin/echo foo");
-        job.setPostScript("/bin/echo bar");
-        job.addArgument("someClassName");
-        job.addArgument("asdfasdf");
-        job.addArgument("--fuzz", "buzz");
+
+        CondorJob job = new CondorJobBuilder().name("asdf").executable(new File("/bin/hostname"))
+                .addArgument("someClassName").addArgument("asdfasdf").addArgument("--fuzz", "buzz")
+                .preScript("/bin/echo foo").postScript("/bin/echo bar").build();
         graph1.addVertex(job);
         parentGraph.addVertex(graph1);
 
         DirectedGraph<CondorJob, CondorJobEdge> graph2 = new DefaultDirectedGraph<CondorJob, CondorJobEdge>(
                 CondorJobEdge.class);
-        job = new CondorJob("qwer", new File("/bin/hostname"));
-        job.setPreScript("/bin/echo fuzz");
-        job.setPostScript("/bin/echo buzz");
-        job.addArgument("someClassName");
-        job.addArgument("asdfasdf");
-        job.addArgument("--foo", "bar");
+
+        job = new CondorJobBuilder().name("qwer").executable(new File("/bin/hostname")).addArgument("someClassName")
+                .addArgument("asdfasdf").addArgument("--foo", "bar").preScript("/bin/echo foo")
+                .postScript("/bin/echo bar").build();
         graph2.addVertex(job);
         parentGraph.addVertex(graph2);
         parentGraph.addEdge(graph1, graph2);
@@ -261,8 +245,7 @@ public class JobTest {
     public void testSingleJob() throws Exception {
 
         File executable = new File("/bin/echo");
-        CondorJob job2 = new CondorJob("b", executable);
-        job2.addArgument("asdfasdfasdf");
+        CondorJob job2 = new CondorJobBuilder().name("b").executable(executable).addArgument("asdfasdfasdf").build();
         ClassAdvertisement classAd = ClassAdvertisementFactory.getClassAd(
                 ClassAdvertisementFactory.CLASS_AD_KEY_UNIVERSE).clone();
         classAd.setValue(UniverseType.MPI.toString().toLowerCase());

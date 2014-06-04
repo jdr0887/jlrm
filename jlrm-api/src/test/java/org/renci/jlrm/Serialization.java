@@ -34,4 +34,23 @@ public class Serialization {
         }
     }
 
+    @Test
+    public void testBuilder() {
+
+        Job job = new JobBuilder().duration(1000).id("asdfas").build();
+        try {
+            JAXBContext context = JAXBContext.newInstance(Job.class);
+            Marshaller m = context.createMarshaller();
+            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            FileWriter fw = new FileWriter(new File("/tmp/job.xml"));
+            m.marshal(job, fw);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } catch (PropertyException e1) {
+            e1.printStackTrace();
+        } catch (JAXBException e1) {
+            e1.printStackTrace();
+        }
+    }
+
 }
