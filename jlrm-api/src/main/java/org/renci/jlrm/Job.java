@@ -40,10 +40,18 @@ public class Job {
         super();
     }
 
-    public Job(String name, File executable) {
+    public Job(JobBuilder jobBuilder) {
         super();
-        this.name = name;
-        this.executable = executable;
+        this.id = jobBuilder.id();
+        this.name = jobBuilder.name();
+        this.executable = jobBuilder.executable();
+        this.submitFile = jobBuilder.submitFile();
+        this.output = jobBuilder.output();
+        this.error = jobBuilder.error();
+        this.numberOfProcessors = jobBuilder.numberOfProcessors();
+        this.memory = jobBuilder.memory();
+        this.duration = jobBuilder.duration();
+        this.durationTimeUnit = jobBuilder.durationTimeUnit();
     }
 
     public String getId() {
