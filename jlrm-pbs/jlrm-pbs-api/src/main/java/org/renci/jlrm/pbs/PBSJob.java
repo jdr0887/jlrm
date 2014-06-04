@@ -1,7 +1,5 @@
 package org.renci.jlrm.pbs;
 
-import java.io.File;
-
 import org.renci.jlrm.Job;
 
 public class PBSJob extends Job {
@@ -18,8 +16,24 @@ public class PBSJob extends Job {
         super();
     }
 
-    public PBSJob(String name, File executable) {
-        super(name, executable);
+    public PBSJob(PBSJobBuilder builder) {
+        super();
+        // from JobBuilder
+        this.id = builder.id();
+        this.name = builder.name();
+        this.executable = builder.executable();
+        this.submitFile = builder.submitFile();
+        this.output = builder.output();
+        this.error = builder.error();
+        this.numberOfProcessors = builder.numberOfProcessors();
+        this.memory = builder.memory();
+        this.duration = builder.duration();
+        this.durationTimeUnit = builder.durationTimeUnit();
+        // from LSFJobBuilder
+        this.queueName = builder.queueName();
+        this.project = builder.project();
+        this.wallTime = builder.wallTime();
+        this.hostCount = builder.hostCount();
     }
 
     public String getQueueName() {

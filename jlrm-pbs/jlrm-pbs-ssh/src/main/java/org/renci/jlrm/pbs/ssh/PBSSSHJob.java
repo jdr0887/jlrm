@@ -18,8 +18,28 @@ public class PBSSSHJob extends PBSJob {
         super();
     }
 
-    public PBSSSHJob(String name, File executable) {
-        super(name, executable);
+    public PBSSSHJob(PBSSSHJobBuilder builder) {
+        super();
+        // from JobBuilder
+        this.id = builder.id();
+        this.name = builder.name();
+        this.executable = builder.executable();
+        this.submitFile = builder.submitFile();
+        this.output = builder.output();
+        this.error = builder.error();
+        this.numberOfProcessors = builder.numberOfProcessors();
+        this.memory = builder.memory();
+        this.duration = builder.duration();
+        this.durationTimeUnit = builder.durationTimeUnit();
+        // from LSFJobBuilder
+        this.queueName = builder.queueName();
+        this.project = builder.project();
+        this.wallTime = builder.wallTime();
+        this.hostCount = builder.hostCount();
+        // from LSFJobBuilder
+        this.transferInputs = builder.transferInputs();
+        this.transferExecutable = builder.transferExecutable();
+        this.inputFiles = builder.inputFiles();
     }
 
     public Boolean getTransferInputs() {
