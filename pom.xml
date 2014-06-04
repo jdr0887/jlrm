@@ -18,6 +18,8 @@
     <commons.lang.version>3.1</commons.lang.version>
     <commons.logging.version>1.1.1</commons.logging.version>
     <jgrapht.version>0.9.0</jgrapht.version>
+    <jaxb.version>2.2.7</jaxb.version>
+    <slf4j.version>1.7.2</slf4j.version>
   </properties>
   <url>https://ci-dev.renci.org/site/jLRM</url>
   <issueManagement>
@@ -34,17 +36,17 @@
       <dependency>
       	<groupId>javax.xml.bind</groupId>
       	<artifactId>jaxb-api</artifactId>
-      	<version>2.2.3</version>
+      	<version>${jaxb.version}</version>
       </dependency>
       <dependency>
       	<groupId>com.sun.xml.bind</groupId>
       	<artifactId>jaxb-impl</artifactId>
-      	<version>2.2.4-1</version>
+      	<version>${jaxb.version}</version>
       </dependency>
       <dependency>
       	<groupId>com.sun.xml.bind</groupId>
       	<artifactId>jaxb-xjc</artifactId>
-      	<version>2.2.4-1</version>
+      	<version>${jaxb.version}</version>
       </dependency>
       <dependency>
 	<groupId>org.bouncycastle</groupId>
@@ -142,24 +144,24 @@
 	<version>0.3.31-SNAPSHOT</version>
       </dependency>
       <dependency>
-	<groupId>org.slf4j</groupId>
-	<artifactId>slf4j-api</artifactId>
-	<version>1.6.2</version>
+      	<groupId>org.slf4j</groupId>
+      	<artifactId>slf4j-api</artifactId>
+      	<version>${slf4j.version}</version>
       </dependency>
       <dependency>
-	<groupId>org.slf4j</groupId>
-	<artifactId>slf4j-simple</artifactId>
-	<version>1.6.2</version>
+      	<groupId>org.slf4j</groupId>
+      	<artifactId>slf4j-simple</artifactId>
+      	<version>${slf4j.version}</version>
       </dependency>
       <dependency>
-	<groupId>org.ops4j.pax.logging</groupId>
-	<artifactId>pax-logging-service</artifactId>
-	<version>1.6.3</version>
+      	<groupId>org.slf4j</groupId>
+      	<artifactId>slf4j-log4j12</artifactId>
+      	<version>${slf4j.version}</version>
       </dependency>
       <dependency>
-	<groupId>org.ops4j.pax.logging</groupId>
-	<artifactId>pax-logging-api</artifactId>
-	<version>1.6.3</version>
+      	<groupId>log4j</groupId>
+      	<artifactId>log4j</artifactId>
+      	<version>1.2.16</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -170,14 +172,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>pax-logging-service</artifactId>
-      <scope>provided</scope>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.ops4j.pax.logging</groupId>
-      <artifactId>pax-logging-api</artifactId>
-      <scope>provided</scope>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
     </dependency>
   </dependencies>
   <build>
