@@ -143,6 +143,19 @@ public class CondorJob extends Job {
 
     public void setPriority(Integer priority) {
         this.priority = priority;
+        ClassAdvertisement priorityClassAd = new ClassAdvertisement(ClassAdvertisementFactory.CLASS_AD_KEY_PRIORITY,
+                ClassAdvertisementType.INTEGER);
+        if (!getClassAdvertisments().contains(priorityClassAd)) {
+            priorityClassAd.setValue(priority.toString());
+            this.classAdvertisments.add(priorityClassAd);
+            return;
+        }
+        for (ClassAdvertisement classAd : getClassAdvertisments()) {
+            if (classAd.equals(priorityClassAd)) {
+                classAd.setValue(priority.toString());
+                break;
+            }
+        }
     }
 
     public ClassAdvertisement getArgumentsClassAd() {
