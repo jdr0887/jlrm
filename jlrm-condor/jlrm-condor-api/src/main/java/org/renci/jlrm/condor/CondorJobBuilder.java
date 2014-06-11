@@ -178,6 +178,11 @@ public class CondorJobBuilder extends JobBuilder {
         this.priority = priority;
         ClassAdvertisement priorityClassAd = new ClassAdvertisement(ClassAdvertisementFactory.CLASS_AD_KEY_PRIORITY,
                 ClassAdvertisementType.INTEGER);
+        if (!classAdvertisments().contains(priorityClassAd)) {
+            priorityClassAd.setValue(priority.toString());
+            this.classAdvertisments.add(priorityClassAd);
+            return this;
+        }
         for (ClassAdvertisement classAd : classAdvertisments()) {
             if (classAd.equals(priorityClassAd)) {
                 classAd.setValue(priority.toString());
