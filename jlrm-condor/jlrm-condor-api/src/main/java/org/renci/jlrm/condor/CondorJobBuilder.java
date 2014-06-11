@@ -108,7 +108,7 @@ public class CondorJobBuilder extends JobBuilder {
         String arg = String.format("&& (%s)", expression);
         String requirementsClassAdValue = this.requirementsClassAd.getValue() != null ? String.format("%s %s",
                 this.requirementsClassAd.getValue(), arg) : arg;
-        this.argumentsClassAd.setValue(requirementsClassAdValue);
+        this.requirementsClassAd.setValue(requirementsClassAdValue);
         return this;
     }
 
