@@ -89,7 +89,7 @@ public class JobTest {
         CondorJob job = new CondorJobBuilder().name("asdfasdfasdffffffffffffffasdfasdfasdfasdfasdfa")
                 .executable(executable).retry(3).preScript("/bin/echo asdf").postScript("/bin/echo qwer")
                 .addArgument("someClassName").addArgument("asdfasdf").addArgument("--foo", "bar")
-                .addArgument("--fuzz", "buzz").build();
+                .addArgument("--fuzz", "buzz").priority(5).build();
 
         Map<String, String> defaultRSLAttributeMap = new HashMap<String, String>();
         defaultRSLAttributeMap.put("count", "1");
@@ -113,7 +113,7 @@ public class JobTest {
         graph.addVertex(job);
 
         CondorJobBuilder builder = new CondorJobBuilder().name("b").retry(4);
-        builder.executable(executable).addArgument("qwerqwer").addArgument("--foo", "bar")
+        builder.executable(executable).priority(5).addArgument("qwerqwer").addArgument("--foo", "bar")
                 .addArgument("--fuzz", "buzz");
 
         ClassAdvertisement classAd = ClassAdvertisementFactory.getClassAd(
