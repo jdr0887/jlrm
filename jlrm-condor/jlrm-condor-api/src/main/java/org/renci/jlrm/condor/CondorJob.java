@@ -176,7 +176,7 @@ public class CondorJob extends Job {
         String arg = String.format("&& (%s)", expression);
         String requirementsClassAdValue = this.requirementsClassAd.getValue() != null ? String.format("%s %s",
                 this.requirementsClassAd.getValue(), arg) : arg;
-        this.argumentsClassAd.setValue(requirementsClassAdValue);
+        this.requirementsClassAd.setValue(requirementsClassAdValue);
     }
 
     public void addTransferInput(String file) {
