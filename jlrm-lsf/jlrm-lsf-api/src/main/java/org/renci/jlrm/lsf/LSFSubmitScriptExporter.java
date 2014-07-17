@@ -22,7 +22,6 @@ public class LSFSubmitScriptExporter<T extends LSFJob> {
         FileWriter submitFileWriter = new FileWriter(submitFile);
 
         submitFileWriter.write("#!/bin/bash\n\n");
-        submitFileWriter.write("set -e\n\n");
 
         if (StringUtils.isNotEmpty(job.getQueueName())) {
             submitFileWriter.write(String.format("#BSUB -q %s%n", job.getQueueName()));
