@@ -8,13 +8,66 @@ import java.io.StringReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.renci.jlrm.pbs.PBSJobStatusInfo;
 import org.renci.jlrm.pbs.PBSJobStatusType;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class Scratch {
+
+    @Test
+    public void testParseXml() {
+
+        try {
+            String output = IOUtils.toString(this.getClass().getClassLoader()
+                    .getResourceAsStream("org/renci/jlrm/pbs/ssh/asdf.xml"));
+
+            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            StringReader sr = new StringReader(output);
+            InputSource inputSource = new InputSource(sr);
+            Document document = documentBuilder.parse(inputSource);
+            XPath xpath = XPathFactory.newInstance().newXPath();
+
+            NodeList jobNodeList = (NodeList) xpath.evaluate("/Data/Job", document, XPathConstants.NODESET);
+
+            for (int i = 0; i < jobNodeList.getLength(); i++) {
+                Node a = jobNodeList.item(i);
+                NodeList childNodes = a.getChildNodes();
+                for (int j = 0; j < childNodes.getLength(); j++) {
+                    Node b = childNodes.item(j);
+                    if (b.getNodeName().equals("Job_Id")) {
+                        System.out.println(b.getTextContent());
+                    }
+                    if (b.getNodeName().equals("Job_Name")) {
+                        System.out.println(b.getTextContent());
+                    }
+                    if (b.getNodeName().equals("job_state")) {
+                        System.out.println(b.getTextContent());
+                    }
+                    if (b.getNodeName().equals("queue")) {
+                        System.out.println(b.getTextContent());
+                    }
+                }
+            }
+        } catch (XPathExpressionException | IOException | ParserConfigurationException | SAXException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     @Test
     public void testPattern() {
