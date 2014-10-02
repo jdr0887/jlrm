@@ -1,42 +1,9 @@
 <document>
   <body>
-    <section name="About MaPSeq">
-      <p>The Massively Parallel Sequencing project (MaPSeq), jointly
-      developed by UNC Research Computing and RENCI, is a service
-      oriented application (SOA) that facilitates and manages the
-      execution of the computational aspect of sequencing projects. As
-      an OSGi-based plugin architecture, MaPSeq provides researchers
-      with a framework facilitating the construction, deployment, and
-      activation of sequence analysis workflows.  Designed to
-      opportunistically make use of available institution-wide
-      computational resources, MaPSeq enables researchers to perform
-      and manage elaborate analysis workflow on a specified set of
-      data while keeping the data centralized and secure.</p>
+    <section name="About jLRM">
+      <p></p>
     </section>
     <section name="Assumptions &amp; Goals">
-      <subsection name="Data Security">
-	<p>The nature of the data being processed by MaPSeq is highly
-	sensitive.  As such, all data is transfered using secure
-	protocols.</p>
-      </subsection>
-      <subsection name="Site Agnostic Jobs">
-	<p>The MaPSeq Pipeline developer can specify where a job can
-	run or not.  Site-agnostic jobs require data transfer
-	instructions &amp; paths to files to be relative.
-	Site-specific jobs require the use of absolute paths.</p>
-      </subsection>
-    </section>
-    <section name="Technologies Used">
-      <p>
-	<ul>
-	  <li><a href="http://activemq.apache.org/">Apache ActiveMQ</a></li>
-	  <li><a href="http://cxf.apache.org/">Apache CXF</a></li>
-	  <li><a href="http://karaf.apache.org/">Apache Karaf</a></li>
-	  <li><a href="http://openjpa.apache.org/">Apache OpenJPA</a></li>
-	  <li><a href="http://research.cs.wisc.edu/htcondor/">HTCondor</a></li>
-	  <li><a href="http://www.postgresql.org/">PostgreSQL</a></li>
-	</ul>
-      </p>
     </section>
   </body>
 </document>
