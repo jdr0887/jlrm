@@ -1,0 +1,8 @@
+<document>
+  <body>
+    <section name="Download">
+      <p><a href="http://archiva.renci.org:8080/repository/internal/edu/unc/mapseq/distribution/mapseq-client/">Latest Client Release</a></p>
+      <p><a href="http://archiva.renci.org:8080/repository/internal/edu/unc/mapseq/distribution/mapseq-server/">Latest Server Release</a></p>
+    </section>
+  </body>
+</document>
