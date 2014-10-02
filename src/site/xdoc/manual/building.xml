@@ -4,7 +4,7 @@
   <body>
     <section name="Building">
       <subsection name="Prerequisites">
-	<p>MaPSeq is %100 Java and is built using the Apache Maven build system.</p>
+	<p>jLRM is %100 Java and is built using the Apache Maven build system.</p>
 	<p>Prerequisites include:</p>
 	<ul>
 	  <li>Java 1.7+ (ensure JAVA_HOME is set in your environment)</li>
@@ -66,8 +66,7 @@
 	</table>
       </subsection>
       <subsection name="Misc.">
-	<p>Setting the following helps ensure that the MaPSeq builds
-	successfully:</p>
+	<p>Setting the following helps ensure successful builds:</p>
 	<pre>
 export JAVA_OPTS="-XX:MaxPermSize=768m -XX:-UseSplitVerifier -Xmx4g"
 export MAVEN_OPTS="$JAVA_OPTS"
