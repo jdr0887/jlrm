@@ -37,7 +37,7 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
 
         Set<LSFJobStatusInfo> jobStatusSet = new HashSet<LSFJobStatusInfo>();
 
-        String command = "bjobs | tail -n+2 | grep RUN | awk '{print $1,$3,$4,$7}' && bjobs | tail -n+2 | grep PEND | awk '{print $1,$3,$4,$6}'";
+        String command = "bjobs -w | tail -n+2 | awk '{print $1,$3,$4,$7}'";
         String output = SSHConnectionUtil.execute(command, site.getUsername(), site.getSubmitHost());
 
         try {
