@@ -21,15 +21,21 @@
     <jaxb.version>2.2.7</jaxb.version>
     <slf4j.version>1.7.2</slf4j.version>
   </properties>
-  <url>https://ci-dev.renci.org/site/jLRM</url>
   <issueManagement>
-    <system>gForge</system>
-    <url>https://code.renci.org/gf/project/jlrm/tracker/</url>
+    <system>GitHub Issues</system>
+    <url>https://github.com/jdr0887/jlrm/issues</url>
   </issueManagement>
+  <licenses>    
+    <license>
+      <name>RENCI Open Source Software License</name>
+      <url>LICENSE</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   <scm>
-    <developerConnection>scm:git:ssh://${user.name}@code.renci.org/gitroot/jlrm</developerConnection>
-    <connection>scm:git:ssh://developername@code.renci.org/gitroot/jlrm</connection>
-    <tag>HEAD</tag>
+    <url>https://github.com/jdr0887/jlrm</url>
+    <developerConnection>scm:git:git@github.com:jdr0887/jlrm.git</developerConnection>
+    <connection>scm:git:git@github.com:jdr0887/jlrm.git</connection>
   </scm>
   <dependencyManagement>
     <dependencies>
