@@ -22,7 +22,6 @@
     <menu name="Overview">
       <item name="Home" href="index.html"/>
       <item name="FAQ" href="faq.html"/>
-      <item name="Download" href="download.html"/>
     </menu>
     <menu name="Documentation">
       <item name="Manual" href="manual/index.html">
