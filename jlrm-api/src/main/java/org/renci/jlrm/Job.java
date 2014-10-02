@@ -1,6 +1,7 @@
 package org.renci.jlrm;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -12,7 +13,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Job", propOrder = {})
 @XmlRootElement(name = "job")
-public class Job {
+public class Job implements Serializable {
+
+    private static final long serialVersionUID = 5760998445998689534L;
 
     @XmlAttribute
     protected String id;
