@@ -22,6 +22,8 @@ import org.renci.jlrm.Job;
 @XmlRootElement(name = "condorJob")
 public class CondorJob extends Job {
 
+    private static final long serialVersionUID = -4003065479653041431L;
+
     @XmlElementWrapper(name = "classAdvertisements")
     @XmlElement(name = "classAd")
     private Set<ClassAdvertisement> classAdvertisments = new HashSet<ClassAdvertisement>();
