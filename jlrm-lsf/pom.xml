@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.renci</groupId>
     <artifactId>jlrm</artifactId>
-    <version>0.4.5-SNAPSHOT</version>
+    <version>0.4.5</version>
   </parent>
   <name>jLRM :: LSF</name>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.renci.jlrm</groupId>
   <artifactId>jlrm-lsf</artifactId>
-  <version>0.4.5-SNAPSHOT</version>
+  <version>0.4.5</version>
   <packaging>pom</packaging>
   <modules>
     <module>jlrm-lsf-api</module>
