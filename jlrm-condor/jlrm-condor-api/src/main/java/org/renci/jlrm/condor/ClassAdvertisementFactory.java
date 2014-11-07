@@ -209,7 +209,7 @@ public class ClassAdvertisementFactory {
         // ret.add(getClassAd(CLASS_AD_KEY_ARGUMENTS));
         // ret.add(getClassAd(CLASS_AD_KEY_REQUIREMENTS));
         ret.add(getClassAd(CLASS_AD_KEY_COPY_TO_SPOOL));
-        ret.add(getClassAd(CLASS_AD_KEY_GET_ENV));
+        // ret.add(getClassAd(CLASS_AD_KEY_GET_ENV));
         ret.add(getClassAd(CLASS_AD_KEY_NOTIFICATION));
         ret.add(getClassAd(CLASS_AD_KEY_STREAM_ERROR));
         ret.add(getClassAd(CLASS_AD_KEY_STREAM_OUTPUT));
