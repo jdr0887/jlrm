@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.renci</groupId>
     <artifactId>jlrm</artifactId>
-    <version>0.4.5</version>
+    <version>0.4.6-SNAPSHOT</version>
   </parent>
   <name>jLRM :: Condor</name>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.renci.jlrm</groupId>
   <artifactId>jlrm-condor</artifactId>
-  <version>0.4.5</version>
+  <version>0.4.6-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
     <module>jlrm-condor-api</module>
