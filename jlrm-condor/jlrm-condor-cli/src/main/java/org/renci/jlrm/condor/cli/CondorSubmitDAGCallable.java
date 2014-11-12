@@ -30,7 +30,7 @@ public class CondorSubmitDAGCallable implements Callable<Integer> {
 
     @Override
     public Integer call() throws JLRMException {
-        logger.info("ENTERING call()");
+        logger.debug("ENTERING call()");
 
         try {
 

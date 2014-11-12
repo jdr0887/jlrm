@@ -25,7 +25,7 @@ public class SSHConnectionUtil {
     private static final Logger logger = LoggerFactory.getLogger(SSHConnectionUtil.class);
 
     public static String execute(String command, String username, String host) throws JLRMException {
-        logger.info("ENTERING execute()");
+        logger.debug("ENTERING execute()");
         String ret = null;
 
         String home = System.getProperty("user.home");
@@ -136,7 +136,7 @@ public class SSHConnectionUtil {
     public static void transferSubmitScript(String username, String host, String remoteWorkDir,
             boolean transferExecutable, File executable, boolean transferInputs, List<File> inputFileList,
             File submitFile) throws JLRMException {
-        logger.info("ENTERING transferSubmitScript()");
+        logger.debug("ENTERING transferSubmitScript()");
 
         String home = System.getProperty("user.home");
         String knownHostsFilename = home + "/.ssh/known_hosts";

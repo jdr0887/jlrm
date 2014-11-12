@@ -38,7 +38,7 @@ public class CondorSubmitCallable implements Callable<CondorJob> {
 
     @Override
     public CondorJob call() throws JLRMException {
-        logger.info("ENTERING call()");
+        logger.debug("ENTERING call()");
 
         File workDir = IOUtils.createWorkDirectory(submitDir, job.getName());
         CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();

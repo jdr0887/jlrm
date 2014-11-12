@@ -36,7 +36,7 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
 
     @Override
     public Set<SLURMJobStatusInfo> call() throws JLRMException {
-        logger.info("ENTERING call()");
+        logger.debug("ENTERING call()");
 
         Set<SLURMJobStatusInfo> jobStatusSet = new HashSet<SLURMJobStatusInfo>();
         try {

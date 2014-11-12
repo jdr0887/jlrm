@@ -17,7 +17,7 @@ public class SLURMSubmitScriptExporter<T extends SLURMJob> {
     }
 
     public T export(File workDir, T job) throws IOException {
-        logger.info("ENTERING export(File, SBATCHJob)");
+        logger.debug("ENTERING export(File, SBATCHJob)");
         File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
         FileWriter submitFileWriter = new FileWriter(submitFile);
 

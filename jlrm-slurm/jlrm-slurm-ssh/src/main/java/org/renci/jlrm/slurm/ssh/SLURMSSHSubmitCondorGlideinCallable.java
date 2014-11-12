@@ -61,7 +61,7 @@ public class SLURMSSHSubmitCondorGlideinCallable implements Callable<SLURMSSHJob
      * @return number of glide-ins submitted
      */
     public SLURMSSHJob call() throws JLRMException {
-        logger.info("ENTERING call()");
+        logger.debug("ENTERING call()");
 
         try {
             Properties velocityProperties = new Properties();

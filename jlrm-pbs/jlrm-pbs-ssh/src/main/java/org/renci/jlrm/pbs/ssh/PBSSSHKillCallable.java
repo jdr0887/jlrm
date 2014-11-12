@@ -28,7 +28,7 @@ public class PBSSSHKillCallable implements Callable<Void> {
 
     @Override
     public Void call() throws JLRMException {
-        logger.info("ENTERING call()");
+        logger.debug("ENTERING call()");
         String command = String.format("qdel %s", jobId);
         SSHConnectionUtil.execute(command, site.getUsername(), site.getSubmitHost());
         return null;

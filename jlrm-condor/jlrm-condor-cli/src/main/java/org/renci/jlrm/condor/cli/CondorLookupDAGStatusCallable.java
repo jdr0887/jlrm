@@ -26,7 +26,7 @@ public class CondorLookupDAGStatusCallable implements Callable<CondorJobStatusTy
 
     @Override
     public CondorJobStatusType call() throws JLRMException {
-        logger.info("ENTERING call()");
+        logger.debug("ENTERING call()");
         CondorJobStatusType ret = CondorDAGLogParser.getInstance().parse(dagmanOutFile);
         return ret;
     }

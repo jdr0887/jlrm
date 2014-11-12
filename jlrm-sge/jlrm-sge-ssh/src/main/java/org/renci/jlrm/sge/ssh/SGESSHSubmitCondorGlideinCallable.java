@@ -74,7 +74,7 @@ public class SGESSHSubmitCondorGlideinCallable implements Callable<SGESSHJob> {
      * @return number of glide-ins submitted
      */
     public SGESSHJob call() throws JLRMException {
-        logger.info("ENTERING call()");
+        logger.debug("ENTERING call()");
 
         try {
             Properties velocityProperties = new Properties();

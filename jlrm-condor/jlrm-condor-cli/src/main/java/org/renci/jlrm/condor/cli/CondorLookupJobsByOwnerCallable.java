@@ -33,7 +33,7 @@ public class CondorLookupJobsByOwnerCallable implements Callable<Map<String, Lis
 
     @Override
     public Map<String, List<ClassAdvertisement>> call() throws JLRMException {
-        logger.info("ENTERING call()");
+        logger.debug("ENTERING call()");
 
         Map<String, List<ClassAdvertisement>> classAdMap = new HashMap<String, List<ClassAdvertisement>>();
 

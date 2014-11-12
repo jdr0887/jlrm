@@ -59,7 +59,7 @@ public class PBSSSHSubmitCondorGlideinCallable implements Callable<PBSSSHJob> {
      * @return number of glide-ins submitted
      */
     public PBSSSHJob call() throws JLRMException {
-        logger.info("ENTERING call()");
+        logger.debug("ENTERING call()");
 
         try {
             Properties velocityProperties = new Properties();

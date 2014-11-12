@@ -28,7 +28,7 @@ public class SLURMSSHKillCallable implements Callable<Void> {
 
     @Override
     public Void call() throws JLRMException {
-        logger.info("ENTERING call()");
+        logger.debug("ENTERING call()");
         String command = String.format("scancel %s", jobId);
         SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
         return null;

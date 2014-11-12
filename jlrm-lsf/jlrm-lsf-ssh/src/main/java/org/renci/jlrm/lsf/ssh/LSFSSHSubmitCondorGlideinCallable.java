@@ -62,7 +62,7 @@ public class LSFSSHSubmitCondorGlideinCallable implements Callable<LSFSSHJob> {
      * @return number of glide-ins submitted
      */
     public LSFSSHJob call() throws JLRMException {
-        logger.info("ENTERING call()");
+        logger.debug("ENTERING call()");
 
         try {
             Properties velocityProperties = new Properties();

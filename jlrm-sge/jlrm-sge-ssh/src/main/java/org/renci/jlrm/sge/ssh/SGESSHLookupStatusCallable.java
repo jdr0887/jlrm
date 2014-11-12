@@ -41,7 +41,7 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
 
     @Override
     public Set<SGEJobStatusInfo> call() throws JLRMException {
-        logger.info("ENTERING call()");
+        logger.debug("ENTERING call()");
         Set<SGEJobStatusInfo> jobStatusSet = new HashSet<SGEJobStatusInfo>();
         try {
 

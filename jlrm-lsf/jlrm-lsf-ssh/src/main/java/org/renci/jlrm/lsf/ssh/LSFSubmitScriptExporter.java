@@ -17,7 +17,7 @@ public class LSFSubmitScriptExporter<T extends LSFSSHJob> {
     }
 
     public T export(File workDir, String remoteWorkDir, T job) throws IOException {
-        logger.info("ENTERING export(File, LSFJob)");
+        logger.debug("ENTERING export(File, LSFJob)");
         File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
 
         FileWriter submitFileWriter = new FileWriter(submitFile);
@@ -74,7 +74,7 @@ public class LSFSubmitScriptExporter<T extends LSFSSHJob> {
     }
 
     public T export(File workDir, T job) throws IOException {
-        logger.info("ENTERING export(File, LSFJob)");
+        logger.debug("ENTERING export(File, LSFJob)");
         File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
         FileWriter submitFileWriter = new FileWriter(submitFile);
 

@@ -41,7 +41,7 @@ public class PBSSSHSubmitCallable implements Callable<PBSSSHJob> {
 
     @Override
     public PBSSSHJob call() throws JLRMException {
-        logger.info("ENTERING call()");
+        logger.debug("ENTERING call()");
         try {
 
             String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s",

@@ -40,7 +40,7 @@ public class SLURMSSHSubmitCallable implements Callable<SLURMSSHJob> {
 
     @Override
     public SLURMSSHJob call() throws JLRMException {
-        logger.info("ENTERING call()");
+        logger.debug("ENTERING call()");
 
         try {
             String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s",

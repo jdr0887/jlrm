@@ -46,7 +46,7 @@ public class PBSSSHLookupStatusCallable implements Callable<Set<PBSJobStatusInfo
 
     @Override
     public Set<PBSJobStatusInfo> call() throws JLRMException {
-        logger.info("ENTERING call()");
+        logger.debug("ENTERING call()");
 
         Set<PBSJobStatusInfo> jobStatusSet = new HashSet<PBSJobStatusInfo>();
 

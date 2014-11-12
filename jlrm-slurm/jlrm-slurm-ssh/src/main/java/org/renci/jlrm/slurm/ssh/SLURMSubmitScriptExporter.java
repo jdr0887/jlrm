@@ -17,7 +17,7 @@ public class SLURMSubmitScriptExporter<T extends SLURMSSHJob> {
     }
 
     public T export(File workDir, String remoteWorkDir, T job) throws IOException {
-        logger.info("ENTERING export(File, String, T)");
+        logger.debug("ENTERING export(File, String, T)");
         File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
 
         FileWriter submitFileWriter = new FileWriter(submitFile);
@@ -71,7 +71,7 @@ public class SLURMSubmitScriptExporter<T extends SLURMSSHJob> {
     }
 
     public T export(File workDir, T job) throws IOException {
-        logger.info("ENTERING export(File, LSFJob)");
+        logger.debug("ENTERING export(File, LSFJob)");
         File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
         FileWriter submitFileWriter = new FileWriter(submitFile);
 
