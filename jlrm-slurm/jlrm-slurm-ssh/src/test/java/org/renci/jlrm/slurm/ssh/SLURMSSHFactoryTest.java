@@ -40,38 +40,6 @@ public class SLURMSSHFactoryTest {
     }
 
     @Test
-    public void testGlideinSubmit() {
-
-        Site site = new Site();
-        site.setName("Topsail");
-        site.setSubmitHost("topsail-sn.unc.edu");
-        site.setUsername("pipeline");
-
-        Queue queue = new Queue();
-        queue.setName("queue16");
-        queue.setRunTime(5760L);
-
-        File submitDir = new File("/tmp");
-        try {
-            SLURMSSHSubmitCondorGlideinCallable callable = new SLURMSSHSubmitCondorGlideinCallable();
-            callable.setCollectorHost("biodev2.its.unc.edu");
-            callable.setUsername("rc_renci.svc");
-            callable.setSite(site);
-            callable.setJobName("glidein");
-            callable.setQueue(queue);
-            callable.setSubmitDir(submitDir);
-            callable.setRequiredMemory(40);
-            callable.setHostAllowRead("*.unc.edu");
-            callable.setHostAllowWrite("*.unc.edu");
-            SLURMSSHJob job = callable.call();
-            System.out.println(job.getId());
-        } catch (JLRMException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Test
     public void testLookupStatus() {
 
         Site site = new Site();
