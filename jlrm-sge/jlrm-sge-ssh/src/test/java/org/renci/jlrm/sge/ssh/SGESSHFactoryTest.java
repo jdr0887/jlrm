@@ -40,29 +40,6 @@ public class SGESSHFactoryTest {
     }
 
     @Test
-    public void testGlideinSubmit() {
-
-        Site site = new Site();
-        site.setSubmitHost("swprod.bioinf.unc.edu");
-        site.setUsername("jreilly");
-
-        Queue queue = new Queue();
-        queue.setName("all.q");
-        queue.setRunTime(2880L);
-
-        File submitDir = new File("/tmp");
-        try {
-            SGESSHSubmitCondorGlideinCallable callable = new SGESSHSubmitCondorGlideinCallable(site, queue, submitDir,
-                    "glidein", "swprod.bioinf.unc.edu", "*.its.unc.edu", "*.its.unc.edu", 40);
-            SGESSHJob job = callable.call();
-            System.out.println(job.getId());
-        } catch (JLRMException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Test
     public void testLookupStatus() {
 
         Site site = new Site();
