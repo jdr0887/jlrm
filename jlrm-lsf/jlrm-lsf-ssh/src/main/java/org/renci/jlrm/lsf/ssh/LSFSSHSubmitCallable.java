@@ -25,17 +25,14 @@ public class LSFSSHSubmitCallable implements Callable<LSFSSHJob> {
 
     private Site site;
 
-    private File submitDir;
-
     public LSFSSHSubmitCallable() {
         super();
     }
 
-    public LSFSSHSubmitCallable(LSFSSHJob job, Site site, File submitDir) {
+    public LSFSSHSubmitCallable(LSFSSHJob job, Site site) {
         super();
         this.job = job;
         this.site = site;
-        this.submitDir = submitDir;
     }
 
     @Override
@@ -105,14 +102,6 @@ public class LSFSSHSubmitCallable implements Callable<LSFSSHJob> {
 
     public void setSite(Site site) {
         this.site = site;
-    }
-
-    public File getSubmitDir() {
-        return submitDir;
-    }
-
-    public void setSubmitDir(File submitDir) {
-        this.submitDir = submitDir;
     }
 
 }
