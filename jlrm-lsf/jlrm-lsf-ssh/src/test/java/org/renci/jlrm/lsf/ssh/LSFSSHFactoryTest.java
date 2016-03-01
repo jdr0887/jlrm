@@ -30,53 +30,12 @@ public class LSFSSHFactoryTest {
             LSFSSHSubmitCallable runnable = new LSFSSHSubmitCallable();
             runnable.setJob(job);
             runnable.setSite(site);
-            runnable.setSubmitDir(new File("/tmp"));
             job = runnable.call();
             System.out.println(job.getId());
         } catch (JLRMException e) {
             e.printStackTrace();
         }
 
-    }
-
-    @Test
-    public void testGlideinSubmit() {
-
-        // for (int i = 0; i < 10; ++i) {
-
-        Site site = new Site();
-        site.setName("Kure");
-        site.setSubmitHost("biodev1.its.unc.edu");
-        site.setUsername("rc_lbg.svc");
-
-        Queue queue = new Queue();
-        queue.setName("pseq_tcga");
-        queue.setRunTime(5760L);
-        queue.setNumberOfProcessors(8);
-
-        File submitDir = new File("/tmp");
-
-        try {
-
-            LSFSSHSubmitCondorGlideinCallable callable = new LSFSSHSubmitCondorGlideinCallable();
-            callable.setCollectorHost("gnet641.its.unc.edu");
-            callable.setUsername("rc_lbg.svc");
-            callable.setSite(site);
-            callable.setJobName("glidein");
-            callable.setQueue(queue);
-            callable.setSubmitDir(submitDir);
-            callable.setRequiredMemory(40);
-            callable.setHostAllowRead("*.unc.edu");
-            callable.setHostAllowWrite("*.unc.edu");
-
-            LSFSSHJob job = callable.call();
-            System.out.println(job.getId());
-
-        } catch (JLRMException e) {
-            e.printStackTrace();
-        }
-
-        // }
     }
 
     @Test
