@@ -8,6 +8,8 @@ import org.renci.jlrm.pbs.PBSJob;
 
 public class PBSSSHJob extends PBSJob {
 
+    private static final long serialVersionUID = 5783144158593562541L;
+
     private Boolean transferInputs = Boolean.FALSE;
 
     private Boolean transferExecutable = Boolean.FALSE;
