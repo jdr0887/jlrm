@@ -102,7 +102,7 @@ public class SSHConnectionUtil {
             }
 
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } catch (JSchException e) {
             logger.error("JSchException", e);
             throw new JLRMException("JSchException: " + e.getMessage());
