@@ -2,7 +2,7 @@
   <parent>
     <groupId>org.renci</groupId>
     <artifactId>parent</artifactId>
-    <version>0.0.11</version>    
+    <version>0.0.12</version>    
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Java Local Resource Management</name>
@@ -11,7 +11,7 @@
   <version>0.4.8-SNAPSHOT</version>
   <packaging>pom</packaging>
   <properties>
-    <renci.commons.version>0.2.2</renci.commons.version>
+    <renci.commons.version>0.2.3</renci.commons.version>
     <commons.discovery.version>0.5</commons.discovery.version>
     <commons.beanutils.version>1.8.3</commons.beanutils.version>
     <commons.io.version>2.4</commons.io.version>
