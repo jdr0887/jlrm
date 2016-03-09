@@ -19,15 +19,15 @@ public class SLURMSSHFactoryTest {
     public void testBasicSubmit() {
 
         Site site = new Site();
-        site.setSubmitHost("topsail-sn.unc.edu");
-        site.setUsername("jdr0887");
+        site.setSubmitHost("ht0.renci.org");
+        site.setUsername("mapseq");
 
         Queue queue = new Queue();
-        queue.setName("queue16");
+        queue.setName("batch");
         queue.setRunTime(2880L);
 
         SLURMSSHJob job = new SLURMSSHJobBuilder().name("test").executable(new File("/bin/hostname")).hostCount(1)
-                .numberOfProcessors(1).project("TCGA").queueName("queue16").output(new File("test.out"))
+                .numberOfProcessors(1).project("TCGA").queueName("batch").output(new File("test.out"))
                 .error(new File("test.err")).build();
 
         try {
