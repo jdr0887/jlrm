@@ -8,6 +8,8 @@ import org.renci.jlrm.slurm.SLURMJob;
 
 public class SLURMSSHJob extends SLURMJob {
 
+    private static final long serialVersionUID = -4585163763638553836L;
+
     private Boolean transferInputs = Boolean.FALSE;
 
     private Boolean transferExecutable = Boolean.FALSE;
