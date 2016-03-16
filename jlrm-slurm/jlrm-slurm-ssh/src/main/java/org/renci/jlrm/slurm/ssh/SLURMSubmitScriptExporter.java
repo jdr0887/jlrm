@@ -37,9 +37,9 @@ public class SLURMSubmitScriptExporter<T extends SLURMSSHJob> {
             submitFileWriter.write(String.format("#SBATCH -t %d%n", job.getWallTime()));
         }
 
-        // if (job.getMemory() != null) {
-        // submitFileWriter.write(String.format("#SBATCH --mem %s%n", job.getMemory()));
-        // }
+        if (job.getMemory() != null) {
+            submitFileWriter.write(String.format("#SBATCH --mem=%s%n", job.getMemory()));
+        }
 
         submitFileWriter.write(String.format("#SBATCH -i %s%n", "/dev/null"));
 
@@ -80,7 +80,7 @@ public class SLURMSubmitScriptExporter<T extends SLURMSSHJob> {
         submitFileWriter.write(String.format("#SBATCH -J %s%n", job.getName()));
 
         if (StringUtils.isNotEmpty(job.getQueueName())) {
-            submitFileWriter.write(String.format("#SBATCH - %s%n", job.getQueueName()));
+            submitFileWriter.write(String.format("#SBATCH -p %s%n", job.getQueueName()));
         }
 
         if (StringUtils.isNotEmpty(job.getProject())) {
@@ -92,7 +92,7 @@ public class SLURMSubmitScriptExporter<T extends SLURMSSHJob> {
         }
 
         if (job.getMemory() != null) {
-            submitFileWriter.write(String.format("#SBATCH --mem %s%n", job.getMemory()));
+            submitFileWriter.write(String.format("#SBATCH --mem=%s%n", job.getMemory()));
         }
 
         submitFileWriter.write(String.format("#SBATCH -i %s%n", "/dev/null"));
