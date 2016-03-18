@@ -41,10 +41,10 @@ public class SSHConnectionUtil {
             public void log(int level, String msg) {
                 switch (level) {
                     case DEBUG:
-                        logger.debug(msg);
+		        //logger.debug(msg);
                         break;
                     case INFO:
-                        logger.info(msg);
+		        //logger.info(msg);
                         break;
                     case WARN:
                         logger.warn(msg);
