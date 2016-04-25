@@ -1,0 +1,368 @@
+09/16/13 08:13:11 Setting maximum accepts per cycle 8.
+09/16/13 08:13:11 Setting maximum file descriptors to 20000.
+09/16/13 08:13:11 ******************************************************
+09/16/13 08:13:11 ** condor_scheduniv_exec.935319.0 (CONDOR_DAGMAN) STARTING UP
+09/16/13 08:13:11 ** /nas02/apps/condor-7.8.7/bin/condor_dagman
+09/16/13 08:13:11 ** SubsystemInfo: name=DAGMAN type=DAGMAN(10) class=DAEMON(1)
+09/16/13 08:13:11 ** Configuration: subsystem:DAGMAN local:<NONE> class:DAEMON
+09/16/13 08:13:11 ** $CondorVersion: 7.8.7 Dec 12 2012 BuildID: 86173 $
+09/16/13 08:13:11 ** $CondorPlatform: x86_64_rhap_5.8 $
+09/16/13 08:13:11 ** PID = 13534
+09/16/13 08:13:11 ** Log last touched time unavailable (No such file or directory)
+09/16/13 08:13:11 ******************************************************
+09/16/13 08:13:11 Using config source: /nas02/apps/condor-7.8.7/etc/condor_config
+09/16/13 08:13:11 Using local config sources: 
+09/16/13 08:13:11    /nas02/apps/condor-7.8.7/config/biodev2/condor_config.biodev2
+09/16/13 08:13:11    /nas02/apps/condor-7.8.7/config/biodev2/condor_config.biodev2
+09/16/13 08:13:11 DaemonCore: command socket at <152.19.197.180:41186>
+09/16/13 08:13:11 DaemonCore: private command socket at <152.19.197.180:41186>
+09/16/13 08:13:11 Setting maximum accepts per cycle 8.
+09/16/13 08:13:11 DAGMAN_USE_STRICT setting: 0
+09/16/13 08:13:11 DAGMAN_VERBOSITY setting: 3
+09/16/13 08:13:11 DAGMAN_DEBUG_CACHE_SIZE setting: 5242880
+09/16/13 08:13:11 DAGMAN_DEBUG_CACHE_ENABLE setting: False
+09/16/13 08:13:11 DAGMAN_SUBMIT_DELAY setting: 0
+09/16/13 08:13:11 DAGMAN_MAX_SUBMIT_ATTEMPTS setting: 6
+09/16/13 08:13:11 DAGMAN_STARTUP_CYCLE_DETECT setting: False
+09/16/13 08:13:11 DAGMAN_MAX_SUBMITS_PER_INTERVAL setting: 5
+09/16/13 08:13:11 DAGMAN_USER_LOG_SCAN_INTERVAL setting: 5
+09/16/13 08:13:11 allow_events (DAGMAN_IGNORE_DUPLICATE_JOB_EXECUTION, DAGMAN_ALLOW_EVENTS) setting: 114
+09/16/13 08:13:11 DAGMAN_RETRY_SUBMIT_FIRST setting: True
+09/16/13 08:13:11 DAGMAN_RETRY_NODE_FIRST setting: False
+09/16/13 08:13:11 DAGMAN_MAX_JOBS_IDLE setting: 0
+09/16/13 08:13:11 DAGMAN_MAX_JOBS_SUBMITTED setting: 0
+09/16/13 08:13:11 DAGMAN_MAX_PRE_SCRIPTS setting: 0
+09/16/13 08:13:11 DAGMAN_MAX_POST_SCRIPTS setting: 0
+09/16/13 08:13:11 DAGMAN_ALLOW_LOG_ERROR setting: False
+09/16/13 08:13:11 DAGMAN_MUNGE_NODE_NAMES setting: True
+09/16/13 08:13:11 DAGMAN_PROHIBIT_MULTI_JOBS setting: False
+09/16/13 08:13:11 DAGMAN_SUBMIT_DEPTH_FIRST setting: False
+09/16/13 08:13:11 DAGMAN_ALWAYS_RUN_POST setting: True
+09/16/13 08:13:11 DAGMAN_ABORT_DUPLICATES setting: True
+09/16/13 08:13:11 DAGMAN_ABORT_ON_SCARY_SUBMIT setting: True
+09/16/13 08:13:11 DAGMAN_PENDING_REPORT_INTERVAL setting: 600
+09/16/13 08:13:11 DAGMAN_AUTO_RESCUE setting: True
+09/16/13 08:13:11 DAGMAN_MAX_RESCUE_NUM setting: 100
+09/16/13 08:13:11 DAGMAN_WRITE_PARTIAL_RESCUE setting: True
+09/16/13 08:13:11 DAGMAN_DEFAULT_NODE_LOG setting: null
+09/16/13 08:13:11 DAGMAN_GENERATE_SUBDAG_SUBMITS setting: True
+09/16/13 08:13:11 ALL_DEBUG setting: 
+09/16/13 08:13:11 DAGMAN_DEBUG setting: 
+09/16/13 08:13:11 argv[0] == "condor_scheduniv_exec.935319.0"
+09/16/13 08:13:11 argv[1] == "-Lockfile"
+09/16/13 08:13:11 argv[2] == "NIDAUCSFSymlink.dag.lock"
+09/16/13 08:13:11 argv[3] == "-AutoRescue"
+09/16/13 08:13:11 argv[4] == "1"
+09/16/13 08:13:11 argv[5] == "-DoRescueFrom"
+09/16/13 08:13:11 argv[6] == "0"
+09/16/13 08:13:11 argv[7] == "-Dag"
+09/16/13 08:13:11 argv[8] == "NIDAUCSFSymlink.dag"
+09/16/13 08:13:11 argv[9] == "-CsdVersion"
+09/16/13 08:13:11 argv[10] == "$CondorVersion: 7.8.7 Dec 12 2012 BuildID: 86173 $"
+09/16/13 08:13:11 argv[11] == "-Force"
+09/16/13 08:13:11 argv[12] == "-Dagman"
+09/16/13 08:13:11 argv[13] == "/nas02/apps/condor-7.8.7/bin/condor_dagman"
+09/16/13 08:13:11 Default node log file is: </nas02/home/r/c/rc_renci.svc/.mapseq/submit/2013-09-16/NIDAUCSFSymlink/026170c5-d09d-4f31-865f-b5f0e2d90807/NIDAUCSFSymlink.dag.nodes.log>
+09/16/13 08:13:11 DAG Lockfile will be written to NIDAUCSFSymlink.dag.lock
+09/16/13 08:13:11 DAG Input file is NIDAUCSFSymlink.dag
+09/16/13 08:13:11 Parsing 1 dagfiles
+09/16/13 08:13:11 Parsing NIDAUCSFSymlink.dag ...
+09/16/13 08:13:11 Dag contains 15 total jobs
+09/16/13 08:13:11 Sleeping for 12 seconds to ensure ProcessId uniqueness
+09/16/13 08:13:23 Bootstrapping...
+09/16/13 08:13:23 Number of pre-completed nodes: 0
+09/16/13 08:13:23 Registering condor_event_timer...
+09/16/13 08:13:24 Sleeping for one second for log file consistency
+09/16/13 08:13:25 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-16/NIDAUCSFSymlink/026170c5-d09d-4f31-865f-b5f0e2d90807/SymlinkCLI_1.log
+09/16/13 08:13:25 Submitting Condor Node SymlinkCLI_1 job(s)...
+09/16/13 08:13:25 submitting: condor_submit -a dag_node_name' '=' 'SymlinkCLI_1 -a +DAGManJobId' '=' '935319 -a DAGManJobId' '=' '935319 -a submit_event_notes' '=' 'DAG' 'Node:' 'SymlinkCLI_1 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" SymlinkCLI_1.sub
+09/16/13 08:13:25 From submit: Submitting job(s).
+09/16/13 08:13:25 From submit: 1 job(s) submitted to cluster 935325.
+09/16/13 08:13:25 	assigned Condor ID (935325.0.0)
+09/16/13 08:13:25 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-16/NIDAUCSFSymlink/026170c5-d09d-4f31-865f-b5f0e2d90807/SymlinkCLI_2.log
+09/16/13 08:13:25 Submitting Condor Node SymlinkCLI_2 job(s)...
+09/16/13 08:13:25 submitting: condor_submit -a dag_node_name' '=' 'SymlinkCLI_2 -a +DAGManJobId' '=' '935319 -a DAGManJobId' '=' '935319 -a submit_event_notes' '=' 'DAG' 'Node:' 'SymlinkCLI_2 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" SymlinkCLI_2.sub
+09/16/13 08:13:25 From submit: Submitting job(s).
+09/16/13 08:13:25 From submit: 1 job(s) submitted to cluster 935327.
+09/16/13 08:13:25 	assigned Condor ID (935327.0.0)
+09/16/13 08:13:25 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-16/NIDAUCSFSymlink/026170c5-d09d-4f31-865f-b5f0e2d90807/SymlinkCLI_3.log
+09/16/13 08:13:25 Submitting Condor Node SymlinkCLI_3 job(s)...
+09/16/13 08:13:25 submitting: condor_submit -a dag_node_name' '=' 'SymlinkCLI_3 -a +DAGManJobId' '=' '935319 -a DAGManJobId' '=' '935319 -a submit_event_notes' '=' 'DAG' 'Node:' 'SymlinkCLI_3 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" SymlinkCLI_3.sub
+09/16/13 08:13:25 From submit: Submitting job(s).
+09/16/13 08:13:25 From submit: 1 job(s) submitted to cluster 935329.
+09/16/13 08:13:25 	assigned Condor ID (935329.0.0)
+09/16/13 08:13:25 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-16/NIDAUCSFSymlink/026170c5-d09d-4f31-865f-b5f0e2d90807/SymlinkCLI_4.log
+09/16/13 08:13:25 Submitting Condor Node SymlinkCLI_4 job(s)...
+09/16/13 08:13:25 submitting: condor_submit -a dag_node_name' '=' 'SymlinkCLI_4 -a +DAGManJobId' '=' '935319 -a DAGManJobId' '=' '935319 -a submit_event_notes' '=' 'DAG' 'Node:' 'SymlinkCLI_4 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" SymlinkCLI_4.sub
+09/16/13 08:13:25 From submit: Submitting job(s).
+09/16/13 08:13:25 From submit: 1 job(s) submitted to cluster 935331.
+09/16/13 08:13:25 	assigned Condor ID (935331.0.0)
+09/16/13 08:13:25 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-16/NIDAUCSFSymlink/026170c5-d09d-4f31-865f-b5f0e2d90807/SymlinkCLI_5.log
+09/16/13 08:13:25 Submitting Condor Node SymlinkCLI_5 job(s)...
+09/16/13 08:13:25 submitting: condor_submit -a dag_node_name' '=' 'SymlinkCLI_5 -a +DAGManJobId' '=' '935319 -a DAGManJobId' '=' '935319 -a submit_event_notes' '=' 'DAG' 'Node:' 'SymlinkCLI_5 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" SymlinkCLI_5.sub
+09/16/13 08:13:25 From submit: Submitting job(s).
+09/16/13 08:13:25 From submit: 1 job(s) submitted to cluster 935333.
+09/16/13 08:13:25 	assigned Condor ID (935333.0.0)
+09/16/13 08:13:25 Just submitted 5 jobs this cycle...
+09/16/13 08:13:25 Currently monitoring 5 Condor log file(s)
+09/16/13 08:13:25 Event: ULOG_SUBMIT for Condor Node SymlinkCLI_4 (935331.0.0)
+09/16/13 08:13:25 Number of idle job procs: 1
+09/16/13 08:13:25 Event: ULOG_SUBMIT for Condor Node SymlinkCLI_1 (935325.0.0)
+09/16/13 08:13:25 Number of idle job procs: 2
+09/16/13 08:13:25 Event: ULOG_SUBMIT for Condor Node SymlinkCLI_3 (935329.0.0)
+09/16/13 08:13:25 Number of idle job procs: 3
+09/16/13 08:13:25 Event: ULOG_SUBMIT for Condor Node SymlinkCLI_5 (935333.0.0)
+09/16/13 08:13:25 Number of idle job procs: 4
+09/16/13 08:13:25 Event: ULOG_SUBMIT for Condor Node SymlinkCLI_2 (935327.0.0)
+09/16/13 08:13:25 Number of idle job procs: 5
+09/16/13 08:13:25 Of 15 nodes total:
+09/16/13 08:13:25  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/16/13 08:13:25   ===     ===      ===     ===     ===        ===      ===
+09/16/13 08:13:25     0       0        5       0      10          0        0
+09/16/13 08:13:25 0 job proc(s) currently held
+09/16/13 08:13:30 Sleeping for one second for log file consistency
+09/16/13 08:13:31 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-16/NIDAUCSFSymlink/026170c5-d09d-4f31-865f-b5f0e2d90807/SymlinkCLI_6.log
+09/16/13 08:13:31 Submitting Condor Node SymlinkCLI_6 job(s)...
+09/16/13 08:13:31 submitting: condor_submit -a dag_node_name' '=' 'SymlinkCLI_6 -a +DAGManJobId' '=' '935319 -a DAGManJobId' '=' '935319 -a submit_event_notes' '=' 'DAG' 'Node:' 'SymlinkCLI_6 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" SymlinkCLI_6.sub
+09/16/13 08:13:31 From submit: Submitting job(s).
+09/16/13 08:13:31 From submit: 1 job(s) submitted to cluster 935340.
+09/16/13 08:13:31 	assigned Condor ID (935340.0.0)
+09/16/13 08:13:31 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-16/NIDAUCSFSymlink/026170c5-d09d-4f31-865f-b5f0e2d90807/SymlinkCLI_7.log
+09/16/13 08:13:32 Submitting Condor Node SymlinkCLI_7 job(s)...
+09/16/13 08:13:32 submitting: condor_submit -a dag_node_name' '=' 'SymlinkCLI_7 -a +DAGManJobId' '=' '935319 -a DAGManJobId' '=' '935319 -a submit_event_notes' '=' 'DAG' 'Node:' 'SymlinkCLI_7 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" SymlinkCLI_7.sub
+09/16/13 08:13:32 From submit: Submitting job(s).
+09/16/13 08:13:32 From submit: 1 job(s) submitted to cluster 935342.
+09/16/13 08:13:32 	assigned Condor ID (935342.0.0)
+09/16/13 08:13:32 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-16/NIDAUCSFSymlink/026170c5-d09d-4f31-865f-b5f0e2d90807/SymlinkCLI_8.log
+09/16/13 08:13:32 Submitting Condor Node SymlinkCLI_8 job(s)...
+09/16/13 08:13:32 submitting: condor_submit -a dag_node_name' '=' 'SymlinkCLI_8 -a +DAGManJobId' '=' '935319 -a DAGManJobId' '=' '935319 -a submit_event_notes' '=' 'DAG' 'Node:' 'SymlinkCLI_8 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" SymlinkCLI_8.sub
+09/16/13 08:13:32 From submit: Submitting job(s).
+09/16/13 08:13:32 From submit: 1 job(s) submitted to cluster 935344.
+09/16/13 08:13:32 	assigned Condor ID (935344.0.0)
+09/16/13 08:13:32 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-16/NIDAUCSFSymlink/026170c5-d09d-4f31-865f-b5f0e2d90807/SymlinkCLI_9.log
+09/16/13 08:13:32 Submitting Condor Node SymlinkCLI_9 job(s)...
+09/16/13 08:13:32 submitting: condor_submit -a dag_node_name' '=' 'SymlinkCLI_9 -a +DAGManJobId' '=' '935319 -a DAGManJobId' '=' '935319 -a submit_event_notes' '=' 'DAG' 'Node:' 'SymlinkCLI_9 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" SymlinkCLI_9.sub
+09/16/13 08:13:32 From submit: Submitting job(s).
+09/16/13 08:13:32 From submit: 1 job(s) submitted to cluster 935346.
+09/16/13 08:13:32 	assigned Condor ID (935346.0.0)
+09/16/13 08:13:32 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-16/NIDAUCSFSymlink/026170c5-d09d-4f31-865f-b5f0e2d90807/SymlinkCLI_10.log
+09/16/13 08:13:32 Submitting Condor Node SymlinkCLI_10 job(s)...
+09/16/13 08:13:32 submitting: condor_submit -a dag_node_name' '=' 'SymlinkCLI_10 -a +DAGManJobId' '=' '935319 -a DAGManJobId' '=' '935319 -a submit_event_notes' '=' 'DAG' 'Node:' 'SymlinkCLI_10 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" SymlinkCLI_10.sub
+09/16/13 08:13:32 From submit: Submitting job(s).
+09/16/13 08:13:32 From submit: 1 job(s) submitted to cluster 935348.
+09/16/13 08:13:32 	assigned Condor ID (935348.0.0)
+09/16/13 08:13:32 Just submitted 5 jobs this cycle...
+09/16/13 08:13:32 Currently monitoring 10 Condor log file(s)
+09/16/13 08:13:32 Event: ULOG_EXECUTE for Condor Node SymlinkCLI_4 (935331.0.0)
+09/16/13 08:13:32 Number of idle job procs: 4
+09/16/13 08:13:32 Event: ULOG_EXECUTE for Condor Node SymlinkCLI_5 (935333.0.0)
+09/16/13 08:13:32 Number of idle job procs: 3
+09/16/13 08:13:32 Event: ULOG_EXECUTE for Condor Node SymlinkCLI_3 (935329.0.0)
+09/16/13 08:13:32 Number of idle job procs: 2
+09/16/13 08:13:32 Event: ULOG_EXECUTE for Condor Node SymlinkCLI_1 (935325.0.0)
+09/16/13 08:13:32 Number of idle job procs: 1
+09/16/13 08:13:32 Event: ULOG_EXECUTE for Condor Node SymlinkCLI_2 (935327.0.0)
+09/16/13 08:13:32 Number of idle job procs: 0
+09/16/13 08:13:32 Event: ULOG_SUBMIT for Condor Node SymlinkCLI_6 (935340.0.0)
+09/16/13 08:13:32 Number of idle job procs: 1
+09/16/13 08:13:32 Event: ULOG_SUBMIT for Condor Node SymlinkCLI_7 (935342.0.0)
+09/16/13 08:13:32 Number of idle job procs: 2
+09/16/13 08:13:32 Event: ULOG_SUBMIT for Condor Node SymlinkCLI_8 (935344.0.0)
+09/16/13 08:13:32 Number of idle job procs: 3
+09/16/13 08:13:32 Event: ULOG_SUBMIT for Condor Node SymlinkCLI_9 (935346.0.0)
+09/16/13 08:13:32 Number of idle job procs: 4
+09/16/13 08:13:32 Event: ULOG_SUBMIT for Condor Node SymlinkCLI_10 (935348.0.0)
+09/16/13 08:13:32 Number of idle job procs: 5
+09/16/13 08:13:32 Of 15 nodes total:
+09/16/13 08:13:32  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/16/13 08:13:32   ===     ===      ===     ===     ===        ===      ===
+09/16/13 08:13:32     0       0       10       0       5          0        0
+09/16/13 08:13:32 0 job proc(s) currently held
+09/16/13 08:13:37 Sleeping for one second for log file consistency
+09/16/13 08:13:38 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-16/NIDAUCSFSymlink/026170c5-d09d-4f31-865f-b5f0e2d90807/SymlinkCLI_11.log
+09/16/13 08:13:38 Submitting Condor Node SymlinkCLI_11 job(s)...
+09/16/13 08:13:38 submitting: condor_submit -a dag_node_name' '=' 'SymlinkCLI_11 -a +DAGManJobId' '=' '935319 -a DAGManJobId' '=' '935319 -a submit_event_notes' '=' 'DAG' 'Node:' 'SymlinkCLI_11 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" SymlinkCLI_11.sub
+09/16/13 08:13:38 From submit: Submitting job(s).
+09/16/13 08:13:38 From submit: 1 job(s) submitted to cluster 935356.
+09/16/13 08:13:38 	assigned Condor ID (935356.0.0)
+09/16/13 08:13:38 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-16/NIDAUCSFSymlink/026170c5-d09d-4f31-865f-b5f0e2d90807/SymlinkCLI_12.log
+09/16/13 08:13:38 Submitting Condor Node SymlinkCLI_12 job(s)...
+09/16/13 08:13:38 submitting: condor_submit -a dag_node_name' '=' 'SymlinkCLI_12 -a +DAGManJobId' '=' '935319 -a DAGManJobId' '=' '935319 -a submit_event_notes' '=' 'DAG' 'Node:' 'SymlinkCLI_12 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" SymlinkCLI_12.sub
+09/16/13 08:13:38 From submit: Submitting job(s).
+09/16/13 08:13:38 From submit: 1 job(s) submitted to cluster 935358.
+09/16/13 08:13:38 	assigned Condor ID (935358.0.0)
+09/16/13 08:13:38 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-16/NIDAUCSFSymlink/026170c5-d09d-4f31-865f-b5f0e2d90807/SymlinkCLI_13.log
+09/16/13 08:13:38 Submitting Condor Node SymlinkCLI_13 job(s)...
+09/16/13 08:13:38 submitting: condor_submit -a dag_node_name' '=' 'SymlinkCLI_13 -a +DAGManJobId' '=' '935319 -a DAGManJobId' '=' '935319 -a submit_event_notes' '=' 'DAG' 'Node:' 'SymlinkCLI_13 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" SymlinkCLI_13.sub
+09/16/13 08:13:38 From submit: Submitting job(s).
+09/16/13 08:13:38 From submit: 1 job(s) submitted to cluster 935360.
+09/16/13 08:13:38 	assigned Condor ID (935360.0.0)
+09/16/13 08:13:38 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-16/NIDAUCSFSymlink/026170c5-d09d-4f31-865f-b5f0e2d90807/SymlinkCLI_14.log
+09/16/13 08:13:38 Submitting Condor Node SymlinkCLI_14 job(s)...
+09/16/13 08:13:38 submitting: condor_submit -a dag_node_name' '=' 'SymlinkCLI_14 -a +DAGManJobId' '=' '935319 -a DAGManJobId' '=' '935319 -a submit_event_notes' '=' 'DAG' 'Node:' 'SymlinkCLI_14 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" SymlinkCLI_14.sub
+09/16/13 08:13:38 From submit: Submitting job(s).
+09/16/13 08:13:38 From submit: 1 job(s) submitted to cluster 935362.
+09/16/13 08:13:38 	assigned Condor ID (935362.0.0)
+09/16/13 08:13:38 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-16/NIDAUCSFSymlink/026170c5-d09d-4f31-865f-b5f0e2d90807/SymlinkCLI_15.log
+09/16/13 08:13:38 Submitting Condor Node SymlinkCLI_15 job(s)...
+09/16/13 08:13:38 submitting: condor_submit -a dag_node_name' '=' 'SymlinkCLI_15 -a +DAGManJobId' '=' '935319 -a DAGManJobId' '=' '935319 -a submit_event_notes' '=' 'DAG' 'Node:' 'SymlinkCLI_15 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" SymlinkCLI_15.sub
+09/16/13 08:13:38 From submit: Submitting job(s).
+09/16/13 08:13:38 From submit: 1 job(s) submitted to cluster 935363.
+09/16/13 08:13:38 	assigned Condor ID (935363.0.0)
+09/16/13 08:13:38 Just submitted 5 jobs this cycle...
+09/16/13 08:13:38 Currently monitoring 15 Condor log file(s)
+09/16/13 08:13:38 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_4 (935331.0.0)
+09/16/13 08:13:38 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_3 (935329.0.0)
+09/16/13 08:13:38 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_5 (935333.0.0)
+09/16/13 08:13:38 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_1 (935325.0.0)
+09/16/13 08:13:38 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_2 (935327.0.0)
+09/16/13 08:13:38 Event: ULOG_SUBMIT for Condor Node SymlinkCLI_12 (935358.0.0)
+09/16/13 08:13:38 Number of idle job procs: 6
+09/16/13 08:13:38 Event: ULOG_SUBMIT for Condor Node SymlinkCLI_15 (935363.0.0)
+09/16/13 08:13:38 Number of idle job procs: 7
+09/16/13 08:13:38 Event: ULOG_SUBMIT for Condor Node SymlinkCLI_13 (935360.0.0)
+09/16/13 08:13:38 Number of idle job procs: 8
+09/16/13 08:13:38 Event: ULOG_SUBMIT for Condor Node SymlinkCLI_11 (935356.0.0)
+09/16/13 08:13:38 Number of idle job procs: 9
+09/16/13 08:13:38 Event: ULOG_SUBMIT for Condor Node SymlinkCLI_14 (935362.0.0)
+09/16/13 08:13:38 Number of idle job procs: 10
+09/16/13 08:13:38 Of 15 nodes total:
+09/16/13 08:13:38  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/16/13 08:13:38   ===     ===      ===     ===     ===        ===      ===
+09/16/13 08:13:38     0       0       15       0       0          0        0
+09/16/13 08:13:38 0 job proc(s) currently held
+09/16/13 08:13:43 Currently monitoring 15 Condor log file(s)
+09/16/13 08:13:43 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_5 (935333.0.0)
+09/16/13 08:13:43 Event: ULOG_JOB_TERMINATED for Condor Node SymlinkCLI_5 (935333.0.0)
+09/16/13 08:13:43 Node SymlinkCLI_5 job proc (935333.0.0) completed successfully.
+09/16/13 08:13:43 Node SymlinkCLI_5 job completed
+09/16/13 08:13:43 Number of idle job procs: 10
+09/16/13 08:13:43 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_4 (935331.0.0)
+09/16/13 08:13:43 Event: ULOG_JOB_TERMINATED for Condor Node SymlinkCLI_4 (935331.0.0)
+09/16/13 08:13:43 Node SymlinkCLI_4 job proc (935331.0.0) completed successfully.
+09/16/13 08:13:43 Node SymlinkCLI_4 job completed
+09/16/13 08:13:43 Number of idle job procs: 10
+09/16/13 08:13:43 Of 15 nodes total:
+09/16/13 08:13:43  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/16/13 08:13:43   ===     ===      ===     ===     ===        ===      ===
+09/16/13 08:13:43     2       0       13       0       0          0        0
+09/16/13 08:13:43 0 job proc(s) currently held
+09/16/13 08:13:48 Currently monitoring 13 Condor log file(s)
+09/16/13 08:13:48 Event: ULOG_EXECUTE for Condor Node SymlinkCLI_15 (935363.0.0)
+09/16/13 08:13:48 Number of idle job procs: 9
+09/16/13 08:13:48 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_3 (935329.0.0)
+09/16/13 08:13:48 Event: ULOG_JOB_TERMINATED for Condor Node SymlinkCLI_3 (935329.0.0)
+09/16/13 08:13:48 Node SymlinkCLI_3 job proc (935329.0.0) completed successfully.
+09/16/13 08:13:48 Node SymlinkCLI_3 job completed
+09/16/13 08:13:48 Number of idle job procs: 9
+09/16/13 08:13:48 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_1 (935325.0.0)
+09/16/13 08:13:48 Event: ULOG_JOB_TERMINATED for Condor Node SymlinkCLI_1 (935325.0.0)
+09/16/13 08:13:48 Node SymlinkCLI_1 job proc (935325.0.0) completed successfully.
+09/16/13 08:13:48 Node SymlinkCLI_1 job completed
+09/16/13 08:13:48 Number of idle job procs: 9
+09/16/13 08:13:48 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_2 (935327.0.0)
+09/16/13 08:13:48 Event: ULOG_JOB_TERMINATED for Condor Node SymlinkCLI_2 (935327.0.0)
+09/16/13 08:13:48 Node SymlinkCLI_2 job proc (935327.0.0) completed successfully.
+09/16/13 08:13:48 Node SymlinkCLI_2 job completed
+09/16/13 08:13:48 Number of idle job procs: 9
+09/16/13 08:13:48 Event: ULOG_EXECUTE for Condor Node SymlinkCLI_11 (935356.0.0)
+09/16/13 08:13:48 Number of idle job procs: 8
+09/16/13 08:13:48 Event: ULOG_EXECUTE for Condor Node SymlinkCLI_14 (935362.0.0)
+09/16/13 08:13:48 Number of idle job procs: 7
+09/16/13 08:13:48 Event: ULOG_EXECUTE for Condor Node SymlinkCLI_12 (935358.0.0)
+09/16/13 08:13:48 Number of idle job procs: 6
+09/16/13 08:13:48 Event: ULOG_EXECUTE for Condor Node SymlinkCLI_13 (935360.0.0)
+09/16/13 08:13:48 Number of idle job procs: 5
+09/16/13 08:13:48 Event: ULOG_EXECUTE for Condor Node SymlinkCLI_9 (935346.0.0)
+09/16/13 08:13:48 Number of idle job procs: 4
+09/16/13 08:13:48 Event: ULOG_EXECUTE for Condor Node SymlinkCLI_10 (935348.0.0)
+09/16/13 08:13:48 Number of idle job procs: 3
+09/16/13 08:13:48 Event: ULOG_EXECUTE for Condor Node SymlinkCLI_7 (935342.0.0)
+09/16/13 08:13:48 Number of idle job procs: 2
+09/16/13 08:13:48 Event: ULOG_EXECUTE for Condor Node SymlinkCLI_8 (935344.0.0)
+09/16/13 08:13:48 Number of idle job procs: 1
+09/16/13 08:13:48 Event: ULOG_EXECUTE for Condor Node SymlinkCLI_6 (935340.0.0)
+09/16/13 08:13:48 Number of idle job procs: 0
+09/16/13 08:13:48 Of 15 nodes total:
+09/16/13 08:13:48  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/16/13 08:13:48   ===     ===      ===     ===     ===        ===      ===
+09/16/13 08:13:48     5       0       10       0       0          0        0
+09/16/13 08:13:48 0 job proc(s) currently held
+09/16/13 08:13:53 Currently monitoring 10 Condor log file(s)
+09/16/13 08:13:53 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_15 (935363.0.0)
+09/16/13 08:13:53 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_14 (935362.0.0)
+09/16/13 08:13:58 Currently monitoring 10 Condor log file(s)
+09/16/13 08:13:58 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_11 (935356.0.0)
+09/16/13 08:13:58 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_12 (935358.0.0)
+09/16/13 08:13:58 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_13 (935360.0.0)
+09/16/13 08:13:58 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_8 (935344.0.0)
+09/16/13 08:13:58 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_9 (935346.0.0)
+09/16/13 08:13:58 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_15 (935363.0.0)
+09/16/13 08:13:58 Event: ULOG_JOB_TERMINATED for Condor Node SymlinkCLI_15 (935363.0.0)
+09/16/13 08:13:58 Node SymlinkCLI_15 job proc (935363.0.0) completed successfully.
+09/16/13 08:13:58 Node SymlinkCLI_15 job completed
+09/16/13 08:13:58 Number of idle job procs: 0
+09/16/13 08:13:58 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_7 (935342.0.0)
+09/16/13 08:13:58 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_6 (935340.0.0)
+09/16/13 08:13:58 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_10 (935348.0.0)
+09/16/13 08:13:58 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_14 (935362.0.0)
+09/16/13 08:13:58 Event: ULOG_JOB_TERMINATED for Condor Node SymlinkCLI_14 (935362.0.0)
+09/16/13 08:13:58 Node SymlinkCLI_14 job proc (935362.0.0) completed successfully.
+09/16/13 08:13:58 Node SymlinkCLI_14 job completed
+09/16/13 08:13:58 Number of idle job procs: 0
+09/16/13 08:13:58 Of 15 nodes total:
+09/16/13 08:13:58  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/16/13 08:13:58   ===     ===      ===     ===     ===        ===      ===
+09/16/13 08:13:58     7       0        8       0       0          0        0
+09/16/13 08:13:58 0 job proc(s) currently held
+09/16/13 08:14:03 Currently monitoring 8 Condor log file(s)
+09/16/13 08:14:03 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_11 (935356.0.0)
+09/16/13 08:14:03 Event: ULOG_JOB_TERMINATED for Condor Node SymlinkCLI_11 (935356.0.0)
+09/16/13 08:14:03 Node SymlinkCLI_11 job proc (935356.0.0) completed successfully.
+09/16/13 08:14:03 Node SymlinkCLI_11 job completed
+09/16/13 08:14:03 Number of idle job procs: 0
+09/16/13 08:14:03 Event: ULOG_JOB_TERMINATED for Condor Node SymlinkCLI_7 (935342.0.0)
+09/16/13 08:14:03 Node SymlinkCLI_7 job proc (935342.0.0) completed successfully.
+09/16/13 08:14:03 Node SymlinkCLI_7 job completed
+09/16/13 08:14:03 Number of idle job procs: 0
+09/16/13 08:14:03 Event: ULOG_JOB_TERMINATED for Condor Node SymlinkCLI_6 (935340.0.0)
+09/16/13 08:14:03 Node SymlinkCLI_6 job proc (935340.0.0) completed successfully.
+09/16/13 08:14:03 Node SymlinkCLI_6 job completed
+09/16/13 08:14:03 Number of idle job procs: 0
+09/16/13 08:14:03 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_12 (935358.0.0)
+09/16/13 08:14:03 Event: ULOG_JOB_TERMINATED for Condor Node SymlinkCLI_12 (935358.0.0)
+09/16/13 08:14:03 Node SymlinkCLI_12 job proc (935358.0.0) completed successfully.
+09/16/13 08:14:03 Node SymlinkCLI_12 job completed
+09/16/13 08:14:03 Number of idle job procs: 0
+09/16/13 08:14:03 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_13 (935360.0.0)
+09/16/13 08:14:03 Event: ULOG_JOB_TERMINATED for Condor Node SymlinkCLI_13 (935360.0.0)
+09/16/13 08:14:03 Node SymlinkCLI_13 job proc (935360.0.0) completed successfully.
+09/16/13 08:14:03 Node SymlinkCLI_13 job completed
+09/16/13 08:14:03 Number of idle job procs: 0
+09/16/13 08:14:03 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_8 (935344.0.0)
+09/16/13 08:14:03 Event: ULOG_JOB_TERMINATED for Condor Node SymlinkCLI_8 (935344.0.0)
+09/16/13 08:14:03 Node SymlinkCLI_8 job proc (935344.0.0) completed successfully.
+09/16/13 08:14:03 Node SymlinkCLI_8 job completed
+09/16/13 08:14:03 Number of idle job procs: 0
+09/16/13 08:14:03 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_9 (935346.0.0)
+09/16/13 08:14:03 Event: ULOG_JOB_TERMINATED for Condor Node SymlinkCLI_9 (935346.0.0)
+09/16/13 08:14:03 Node SymlinkCLI_9 job proc (935346.0.0) completed successfully.
+09/16/13 08:14:03 Node SymlinkCLI_9 job completed
+09/16/13 08:14:03 Number of idle job procs: 0
+09/16/13 08:14:03 Event: ULOG_IMAGE_SIZE for Condor Node SymlinkCLI_10 (935348.0.0)
+09/16/13 08:14:03 Event: ULOG_JOB_TERMINATED for Condor Node SymlinkCLI_10 (935348.0.0)
+09/16/13 08:14:03 Node SymlinkCLI_10 job proc (935348.0.0) completed successfully.
+09/16/13 08:14:03 Node SymlinkCLI_10 job completed
+09/16/13 08:14:03 Number of idle job procs: 0
+09/16/13 08:14:03 Of 15 nodes total:
+09/16/13 08:14:03  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/16/13 08:14:03   ===     ===      ===     ===     ===        ===      ===
+09/16/13 08:14:03    15       0        0       0       0          0        0
+09/16/13 08:14:03 0 job proc(s) currently held
+09/16/13 08:14:03 All jobs Completed!
+09/16/13 08:14:03 Note: 0 total job deferrals because of -MaxJobs limit (0)
+09/16/13 08:14:03 Note: 0 total job deferrals because of -MaxIdle limit (0)
+09/16/13 08:14:03 Note: 0 total job deferrals because of node category throttles
+09/16/13 08:14:03 Note: 0 total PRE script deferrals because of -MaxPre limit (0)
+09/16/13 08:14:03 Note: 0 total POST script deferrals because of -MaxPost limit (0)
+09/16/13 08:14:03 **** condor_scheduniv_exec.935319.0 (condor_DAGMAN) pid 13534 EXITING WITH STATUS 0

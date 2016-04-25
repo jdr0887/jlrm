@@ -1,0 +1,114 @@
+09/25/13 10:06:03 Setting maximum accepts per cycle 8.
+09/25/13 10:06:03 Setting maximum file descriptors to 20000.
+09/25/13 10:06:03 ******************************************************
+09/25/13 10:06:03 ** condor_scheduniv_exec.1144901.0 (CONDOR_DAGMAN) STARTING UP
+09/25/13 10:06:03 ** /nas02/apps/condor-7.8.7/bin/condor_dagman
+09/25/13 10:06:03 ** SubsystemInfo: name=DAGMAN type=DAGMAN(10) class=DAEMON(1)
+09/25/13 10:06:03 ** Configuration: subsystem:DAGMAN local:<NONE> class:DAEMON
+09/25/13 10:06:03 ** $CondorVersion: 7.8.7 Dec 12 2012 BuildID: 86173 $
+09/25/13 10:06:03 ** $CondorPlatform: x86_64_rhap_5.8 $
+09/25/13 10:06:03 ** PID = 19594
+09/25/13 10:06:03 ** Log last touched time unavailable (No such file or directory)
+09/25/13 10:06:03 ******************************************************
+09/25/13 10:06:03 Using config source: /nas02/apps/condor-7.8.7/etc/condor_config
+09/25/13 10:06:03 Using local config sources: 
+09/25/13 10:06:03    /nas02/apps/condor-7.8.7/config/biodev2/condor_config.biodev2
+09/25/13 10:06:03    /nas02/apps/condor-7.8.7/config/biodev2/condor_config.biodev2
+09/25/13 10:06:03 DaemonCore: command socket at <152.19.197.180:40044>
+09/25/13 10:06:03 DaemonCore: private command socket at <152.19.197.180:40044>
+09/25/13 10:06:03 Setting maximum accepts per cycle 8.
+09/25/13 10:06:03 DAGMAN_USE_STRICT setting: 0
+09/25/13 10:06:03 DAGMAN_VERBOSITY setting: 3
+09/25/13 10:06:03 DAGMAN_DEBUG_CACHE_SIZE setting: 5242880
+09/25/13 10:06:03 DAGMAN_DEBUG_CACHE_ENABLE setting: False
+09/25/13 10:06:03 DAGMAN_SUBMIT_DELAY setting: 0
+09/25/13 10:06:03 DAGMAN_MAX_SUBMIT_ATTEMPTS setting: 6
+09/25/13 10:06:03 DAGMAN_STARTUP_CYCLE_DETECT setting: False
+09/25/13 10:06:03 DAGMAN_MAX_SUBMITS_PER_INTERVAL setting: 5
+09/25/13 10:06:03 DAGMAN_USER_LOG_SCAN_INTERVAL setting: 5
+09/25/13 10:06:03 allow_events (DAGMAN_IGNORE_DUPLICATE_JOB_EXECUTION, DAGMAN_ALLOW_EVENTS) setting: 114
+09/25/13 10:06:03 DAGMAN_RETRY_SUBMIT_FIRST setting: True
+09/25/13 10:06:03 DAGMAN_RETRY_NODE_FIRST setting: False
+09/25/13 10:06:03 DAGMAN_MAX_JOBS_IDLE setting: 0
+09/25/13 10:06:03 DAGMAN_MAX_JOBS_SUBMITTED setting: 0
+09/25/13 10:06:03 DAGMAN_MAX_PRE_SCRIPTS setting: 0
+09/25/13 10:06:03 DAGMAN_MAX_POST_SCRIPTS setting: 0
+09/25/13 10:06:03 DAGMAN_ALLOW_LOG_ERROR setting: False
+09/25/13 10:06:03 DAGMAN_MUNGE_NODE_NAMES setting: True
+09/25/13 10:06:03 DAGMAN_PROHIBIT_MULTI_JOBS setting: False
+09/25/13 10:06:03 DAGMAN_SUBMIT_DEPTH_FIRST setting: False
+09/25/13 10:06:03 DAGMAN_ALWAYS_RUN_POST setting: True
+09/25/13 10:06:03 DAGMAN_ABORT_DUPLICATES setting: True
+09/25/13 10:06:03 DAGMAN_ABORT_ON_SCARY_SUBMIT setting: True
+09/25/13 10:06:03 DAGMAN_PENDING_REPORT_INTERVAL setting: 600
+09/25/13 10:06:03 DAGMAN_AUTO_RESCUE setting: True
+09/25/13 10:06:03 DAGMAN_MAX_RESCUE_NUM setting: 100
+09/25/13 10:06:03 DAGMAN_WRITE_PARTIAL_RESCUE setting: True
+09/25/13 10:06:03 DAGMAN_DEFAULT_NODE_LOG setting: null
+09/25/13 10:06:03 DAGMAN_GENERATE_SUBDAG_SUBMITS setting: True
+09/25/13 10:06:03 ALL_DEBUG setting: 
+09/25/13 10:06:03 DAGMAN_DEBUG setting: 
+09/25/13 10:06:03 argv[0] == "condor_scheduniv_exec.1144901.0"
+09/25/13 10:06:03 argv[1] == "-Lockfile"
+09/25/13 10:06:03 argv[2] == "NIDAUCSFClean.dag.lock"
+09/25/13 10:06:03 argv[3] == "-AutoRescue"
+09/25/13 10:06:03 argv[4] == "1"
+09/25/13 10:06:03 argv[5] == "-DoRescueFrom"
+09/25/13 10:06:03 argv[6] == "0"
+09/25/13 10:06:03 argv[7] == "-Dag"
+09/25/13 10:06:03 argv[8] == "NIDAUCSFClean.dag"
+09/25/13 10:06:03 argv[9] == "-CsdVersion"
+09/25/13 10:06:03 argv[10] == "$CondorVersion: 7.8.7 Dec 12 2012 BuildID: 86173 $"
+09/25/13 10:06:03 argv[11] == "-Force"
+09/25/13 10:06:03 argv[12] == "-Dagman"
+09/25/13 10:06:03 argv[13] == "/nas02/apps/condor-7.8.7/bin/condor_dagman"
+09/25/13 10:06:03 Default node log file is: </nas02/home/r/c/rc_renci.svc/.mapseq/submit/2013-09-25/NIDAUCSFClean/0409113a-6490-4a51-9ff7-bc2ecc8139e8/NIDAUCSFClean.dag.nodes.log>
+09/25/13 10:06:03 DAG Lockfile will be written to NIDAUCSFClean.dag.lock
+09/25/13 10:06:03 DAG Input file is NIDAUCSFClean.dag
+09/25/13 10:06:03 Parsing 1 dagfiles
+09/25/13 10:06:03 Parsing NIDAUCSFClean.dag ...
+09/25/13 10:06:03 Dag contains 1 total jobs
+09/25/13 10:06:03 Sleeping for 12 seconds to ensure ProcessId uniqueness
+09/25/13 10:06:15 Bootstrapping...
+09/25/13 10:06:15 Number of pre-completed nodes: 0
+09/25/13 10:06:15 Registering condor_event_timer...
+09/25/13 10:06:16 Sleeping for one second for log file consistency
+09/25/13 10:06:17 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-25/NIDAUCSFClean/0409113a-6490-4a51-9ff7-bc2ecc8139e8/RemoveCLI_1.log
+09/25/13 10:06:17 Submitting Condor Node RemoveCLI_1 job(s)...
+09/25/13 10:06:17 submitting: condor_submit -a dag_node_name' '=' 'RemoveCLI_1 -a +DAGManJobId' '=' '1144901 -a DAGManJobId' '=' '1144901 -a submit_event_notes' '=' 'DAG' 'Node:' 'RemoveCLI_1 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" RemoveCLI_1.sub
+09/25/13 10:06:18 From submit: Submitting job(s).
+09/25/13 10:06:18 From submit: 1 job(s) submitted to cluster 1144935.
+09/25/13 10:06:18 	assigned Condor ID (1144935.0.0)
+09/25/13 10:06:18 Just submitted 1 job this cycle...
+09/25/13 10:06:18 Currently monitoring 1 Condor log file(s)
+09/25/13 10:06:18 Event: ULOG_SUBMIT for Condor Node RemoveCLI_1 (1144935.0.0)
+09/25/13 10:06:18 Number of idle job procs: 1
+09/25/13 10:06:18 Of 1 nodes total:
+09/25/13 10:06:18  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/25/13 10:06:18   ===     ===      ===     ===     ===        ===      ===
+09/25/13 10:06:18     0       0        1       0       0          0        0
+09/25/13 10:06:18 0 job proc(s) currently held
+09/25/13 10:11:38 Currently monitoring 1 Condor log file(s)
+09/25/13 10:11:38 Event: ULOG_EXECUTE for Condor Node RemoveCLI_1 (1144935.0.0)
+09/25/13 10:11:38 Number of idle job procs: 0
+09/25/13 10:11:38 Event: ULOG_IMAGE_SIZE for Condor Node RemoveCLI_1 (1144935.0.0)
+09/25/13 10:11:38 Event: ULOG_JOB_HELD for Condor Node RemoveCLI_1 (1144935.0.0)
+09/25/13 10:11:38 Number of idle job procs: 1
+09/25/13 10:11:38 Of 1 nodes total:
+09/25/13 10:11:38  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/25/13 10:11:38   ===     ===      ===     ===     ===        ===      ===
+09/25/13 10:11:38     0       0        1       0       0          0        0
+09/25/13 10:11:38 1 job proc(s) currently held
+09/25/13 10:13:19 Received SIGUSR1
+09/25/13 10:13:19 Aborting DAG...
+09/25/13 10:13:19 Writing Rescue DAG to NIDAUCSFClean.dag.rescue001...
+09/25/13 10:13:19 Removing submitted jobs...
+09/25/13 10:13:19 Removing any/all submitted Condor/Stork jobs...
+09/25/13 10:13:19 Running: condor_rm -const DAGManJobId' '==' '1144901
+09/25/13 10:13:20 Note: 0 total job deferrals because of -MaxJobs limit (0)
+09/25/13 10:13:20 Note: 0 total job deferrals because of -MaxIdle limit (0)
+09/25/13 10:13:20 Note: 0 total job deferrals because of node category throttles
+09/25/13 10:13:20 Note: 0 total PRE script deferrals because of -MaxPre limit (0)
+09/25/13 10:13:20 Note: 0 total POST script deferrals because of -MaxPost limit (0)
+09/25/13 10:13:20 Warning: ReadMultipleUserLogs destructor called, but still monitoring 1 log(s)!
+09/25/13 10:13:20 **** condor_scheduniv_exec.1144901.0 (condor_DAGMAN) pid 19594 EXITING WITH STATUS 2

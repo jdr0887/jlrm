@@ -1,0 +1,1302 @@
+04/23/16 16:34:26 Setting maximum file descriptors to 30000.
+04/23/16 16:34:26 ******************************************************
+04/23/16 16:34:26 ** condor_scheduniv_exec.1463.0 (CONDOR_DAGMAN) STARTING UP
+04/23/16 16:34:26 ** /projects/mapseq/apps/condor-8.4.4-rhel7/bin/condor_dagman
+04/23/16 16:34:26 ** SubsystemInfo: name=DAGMAN type=DAGMAN(10) class=DAEMON(1)
+04/23/16 16:34:26 ** Configuration: subsystem:DAGMAN local:<NONE> class:DAEMON
+04/23/16 16:34:26 ** $CondorVersion: 8.4.4 Feb 03 2016 BuildID: 355883 $
+04/23/16 16:34:26 ** $CondorPlatform: x86_64_RedHat7 $
+04/23/16 16:34:26 ** PID = 20609
+04/23/16 16:34:26 ** Log last touched time unavailable (No such file or directory)
+04/23/16 16:34:26 ******************************************************
+04/23/16 16:34:26 Using config source: /projects/mapseq/apps/condor-8.4.4-rhel7/etc/condor_config
+04/23/16 16:34:26 Using local config sources: 
+04/23/16 16:34:26    /projects/mapseq/apps/condor-8.4.4-rhel7/config/mps/condor_config
+04/23/16 16:34:26    /projects/mapseq/apps/condor-8.4.4-rhel7/config/mps/condor_config
+04/23/16 16:34:26 config Macros = 182, Sorted = 181, StringBytes = 5384, TablesBytes = 6608
+04/23/16 16:34:26 CLASSAD_CACHING is ENABLED
+04/23/16 16:34:26 Daemon Log is logging: D_ALWAYS D_ERROR
+04/23/16 16:34:26 DaemonCore: No command port requested.
+04/23/16 16:34:26 DAGMAN_USE_STRICT setting: 1
+04/23/16 16:34:26 DAGMAN_VERBOSITY setting: 3
+04/23/16 16:34:26 DAGMAN_DEBUG_CACHE_SIZE setting: 5242880
+04/23/16 16:34:26 DAGMAN_DEBUG_CACHE_ENABLE setting: False
+04/23/16 16:34:26 DAGMAN_SUBMIT_DELAY setting: 0
+04/23/16 16:34:26 DAGMAN_MAX_SUBMIT_ATTEMPTS setting: 6
+04/23/16 16:34:26 DAGMAN_STARTUP_CYCLE_DETECT setting: False
+04/23/16 16:34:26 DAGMAN_MAX_SUBMITS_PER_INTERVAL setting: 5
+04/23/16 16:34:26 DAGMAN_USER_LOG_SCAN_INTERVAL setting: 5
+04/23/16 16:34:26 DAGMAN_DEFAULT_PRIORITY setting: 0
+04/23/16 16:34:26 DAGMAN_SUPPRESS_NOTIFICATION setting: True
+04/23/16 16:34:26 allow_events (DAGMAN_ALLOW_EVENTS) setting: 114
+04/23/16 16:34:26 DAGMAN_RETRY_SUBMIT_FIRST setting: True
+04/23/16 16:34:26 DAGMAN_RETRY_NODE_FIRST setting: False
+04/23/16 16:34:26 DAGMAN_MAX_JOBS_IDLE setting: 1000
+04/23/16 16:34:26 DAGMAN_MAX_JOBS_SUBMITTED setting: 0
+04/23/16 16:34:26 DAGMAN_MAX_PRE_SCRIPTS setting: 20
+04/23/16 16:34:26 DAGMAN_MAX_POST_SCRIPTS setting: 20
+04/23/16 16:34:26 DAGMAN_ALLOW_LOG_ERROR setting: False
+04/23/16 16:34:26 DAGMAN_MUNGE_NODE_NAMES setting: True
+04/23/16 16:34:26 DAGMAN_PROHIBIT_MULTI_JOBS setting: False
+04/23/16 16:34:26 DAGMAN_SUBMIT_DEPTH_FIRST setting: False
+04/23/16 16:34:26 DAGMAN_ALWAYS_RUN_POST setting: True
+04/23/16 16:34:26 DAGMAN_ABORT_DUPLICATES setting: True
+04/23/16 16:34:26 DAGMAN_ABORT_ON_SCARY_SUBMIT setting: True
+04/23/16 16:34:26 DAGMAN_PENDING_REPORT_INTERVAL setting: 600
+04/23/16 16:34:26 DAGMAN_AUTO_RESCUE setting: True
+04/23/16 16:34:26 DAGMAN_MAX_RESCUE_NUM setting: 100
+04/23/16 16:34:26 DAGMAN_WRITE_PARTIAL_RESCUE setting: True
+04/23/16 16:34:26 DAGMAN_DEFAULT_NODE_LOG setting: @(DAG_DIR)/@(DAG_FILE).nodes.log
+04/23/16 16:34:26 DAGMAN_GENERATE_SUBDAG_SUBMITS setting: True
+04/23/16 16:34:26 DAGMAN_MAX_JOB_HOLDS setting: 100
+04/23/16 16:34:26 DAGMAN_HOLD_CLAIM_TIME setting: 20
+04/23/16 16:34:26 ALL_DEBUG setting: 
+04/23/16 16:34:26 DAGMAN_DEBUG setting: 
+04/23/16 16:34:26 DAGMAN_SUPPRESS_JOB_LOGS setting: False
+04/23/16 16:34:26 argv[0] == "condor_scheduniv_exec.1463.0"
+04/23/16 16:34:26 argv[1] == "-Lockfile"
+04/23/16 16:34:26 argv[2] == "GSBaseline.dag.lock"
+04/23/16 16:34:26 argv[3] == "-AutoRescue"
+04/23/16 16:34:26 argv[4] == "1"
+04/23/16 16:34:26 argv[5] == "-DoRescueFrom"
+04/23/16 16:34:26 argv[6] == "0"
+04/23/16 16:34:26 argv[7] == "-Dag"
+04/23/16 16:34:26 argv[8] == "GSBaseline.dag"
+04/23/16 16:34:26 argv[9] == "-Suppress_notification"
+04/23/16 16:34:26 argv[10] == "-CsdVersion"
+04/23/16 16:34:26 argv[11] == "$CondorVersion: 8.4.4 Feb 03 2016 BuildID: 355883 $"
+04/23/16 16:34:26 argv[12] == "-Force"
+04/23/16 16:34:26 argv[13] == "-Dagman"
+04/23/16 16:34:26 argv[14] == "/projects/mapseq/apps/condor-8.4.4-rhel7/bin/condor_dagman"
+04/23/16 16:34:26 Warning: failed to get attribute DAGNodeName
+04/23/16 16:34:26 Default node log file is: </projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log>
+04/23/16 16:34:26 DAG Lockfile will be written to GSBaseline.dag.lock
+04/23/16 16:34:26 DAG Input file is GSBaseline.dag
+04/23/16 16:34:26 Parsing 1 dagfiles
+04/23/16 16:34:26 Parsing GSBaseline.dag ...
+04/23/16 16:34:26 Dag contains 24 total jobs
+04/23/16 16:34:26 Sleeping for 3 seconds to ensure ProcessId uniqueness
+04/23/16 16:34:29 Bootstrapping...
+04/23/16 16:34:29 Number of pre-completed nodes: 0
+04/23/16 16:34:29 MultiLogFiles: truncating log file /projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log
+04/23/16 16:34:29 DAG status: 0 (DAG_STATUS_OK)
+04/23/16 16:34:29 Of 24 nodes total:
+04/23/16 16:34:29  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/23/16 16:34:29   ===     ===      ===     ===     ===        ===      ===
+04/23/16 16:34:29     0       0        0       0       3         21        0
+04/23/16 16:34:29 0 job proc(s) currently held
+04/23/16 16:34:29 Registering condor_event_timer...
+04/23/16 16:34:30 Submitting Condor Node WriteVCFHeaderCLI_1 job(s)...
+04/23/16 16:34:30 Adding a DAGMan workflow log /projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log
+04/23/16 16:34:30 Masking the events recorded in the DAGMAN workflow log
+04/23/16 16:34:30 Mask for workflow log is 0,1,2,4,5,7,9,10,11,12,13,16,17,24,27
+04/23/16 16:34:30 submitting: /projects/mapseq/apps/condor-8.4.4-rhel7/bin/condor_submit -a dag_node_name' '=' 'WriteVCFHeaderCLI_1 -a +DAGManJobId' '=' '1463 -a DAGManJobId' '=' '1463 -a submit_event_notes' '=' 'DAG' 'Node:' 'WriteVCFHeaderCLI_1 -a dagman_log' '=' '/projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log -a +DAGManNodesMask' '=' '"0,1,2,4,5,7,9,10,11,12,13,16,17,24,27" -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" -a notification' '=' 'never WriteVCFHeaderCLI_1.sub
+04/23/16 16:34:30 From submit: Submitting job(s).
+04/23/16 16:34:30 From submit: 1 job(s) submitted to cluster 1470.
+04/23/16 16:34:30 	assigned Condor ID (1470.0.0)
+04/23/16 16:34:30 Submitting Condor Node FastQCCLI_2 job(s)...
+04/23/16 16:34:30 Adding a DAGMan workflow log /projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log
+04/23/16 16:34:30 Masking the events recorded in the DAGMAN workflow log
+04/23/16 16:34:30 Mask for workflow log is 0,1,2,4,5,7,9,10,11,12,13,16,17,24,27
+04/23/16 16:34:30 submitting: /projects/mapseq/apps/condor-8.4.4-rhel7/bin/condor_submit -a dag_node_name' '=' 'FastQCCLI_2 -a +DAGManJobId' '=' '1463 -a DAGManJobId' '=' '1463 -a submit_event_notes' '=' 'DAG' 'Node:' 'FastQCCLI_2 -a dagman_log' '=' '/projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log -a +DAGManNodesMask' '=' '"0,1,2,4,5,7,9,10,11,12,13,16,17,24,27" -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" -a +KeepClaimIdle' '=' '20 -a notification' '=' 'never FastQCCLI_2.sub
+04/23/16 16:34:30 From submit: Submitting job(s).
+04/23/16 16:34:30 From submit: 1 job(s) submitted to cluster 1479.
+04/23/16 16:34:30 	assigned Condor ID (1479.0.0)
+04/23/16 16:34:30 Submitting Condor Node FastQCCLI_4 job(s)...
+04/23/16 16:34:30 Adding a DAGMan workflow log /projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log
+04/23/16 16:34:30 Masking the events recorded in the DAGMAN workflow log
+04/23/16 16:34:30 Mask for workflow log is 0,1,2,4,5,7,9,10,11,12,13,16,17,24,27
+04/23/16 16:34:30 submitting: /projects/mapseq/apps/condor-8.4.4-rhel7/bin/condor_submit -a dag_node_name' '=' 'FastQCCLI_4 -a +DAGManJobId' '=' '1463 -a DAGManJobId' '=' '1463 -a submit_event_notes' '=' 'DAG' 'Node:' 'FastQCCLI_4 -a dagman_log' '=' '/projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log -a +DAGManNodesMask' '=' '"0,1,2,4,5,7,9,10,11,12,13,16,17,24,27" -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" -a +KeepClaimIdle' '=' '20 -a notification' '=' 'never FastQCCLI_4.sub
+04/23/16 16:34:30 From submit: Submitting job(s).
+04/23/16 16:34:30 From submit: 1 job(s) submitted to cluster 1487.
+04/23/16 16:34:30 	assigned Condor ID (1487.0.0)
+04/23/16 16:34:30 Just submitted 3 jobs this cycle...
+04/23/16 16:34:30 Currently monitoring 1 Condor log file(s)
+04/23/16 16:34:30 Reassigning the id of job WriteVCFHeaderCLI_1 from (1470.0.0) to (1470.0.0)
+04/23/16 16:34:30 Event: ULOG_SUBMIT for Condor Node WriteVCFHeaderCLI_1 (1470.0.0)
+04/23/16 16:34:30 Number of idle job procs: 1
+04/23/16 16:34:30 Reassigning the id of job FastQCCLI_2 from (1479.0.0) to (1479.0.0)
+04/23/16 16:34:30 Event: ULOG_SUBMIT for Condor Node FastQCCLI_2 (1479.0.0)
+04/23/16 16:34:30 Number of idle job procs: 2
+04/23/16 16:34:30 Reassigning the id of job FastQCCLI_4 from (1487.0.0) to (1487.0.0)
+04/23/16 16:34:30 Event: ULOG_SUBMIT for Condor Node FastQCCLI_4 (1487.0.0)
+04/23/16 16:34:30 Number of idle job procs: 3
+04/23/16 16:34:30 DAG status: 0 (DAG_STATUS_OK)
+04/23/16 16:34:30 Of 24 nodes total:
+04/23/16 16:34:30  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/23/16 16:34:30   ===     ===      ===     ===     ===        ===      ===
+04/23/16 16:34:30     0       0        3       0       0         21        0
+04/23/16 16:34:30 0 job proc(s) currently held
+04/23/16 16:34:51 Currently monitoring 1 Condor log file(s)
+04/23/16 16:34:51 Event: ULOG_EXECUTE for Condor Node FastQCCLI_4 (1487.0.0)
+04/23/16 16:34:51 Number of idle job procs: 2
+04/23/16 16:34:56 Currently monitoring 1 Condor log file(s)
+04/23/16 16:34:56 Event: ULOG_EXECUTE for Condor Node FastQCCLI_2 (1479.0.0)
+04/23/16 16:34:56 Number of idle job procs: 1
+04/23/16 16:35:01 Currently monitoring 1 Condor log file(s)
+04/23/16 16:35:01 Event: ULOG_EXECUTE for Condor Node WriteVCFHeaderCLI_1 (1470.0.0)
+04/23/16 16:35:01 Number of idle job procs: 0
+04/23/16 16:35:06 Currently monitoring 1 Condor log file(s)
+04/23/16 16:35:06 Event: ULOG_JOB_HELD for Condor Node WriteVCFHeaderCLI_1 (1470.0.0)
+04/23/16 16:35:06   Hold reason: The job attribute OnExitHold expression '( ExitBySignal == true ) || ( ExitCode != 0 )' evaluated to TRUE
+04/23/16 16:35:06 Number of idle job procs: 1
+04/23/16 16:35:06 DAG status: 0 (DAG_STATUS_OK)
+04/23/16 16:35:06 Of 24 nodes total:
+04/23/16 16:35:06  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/23/16 16:35:06   ===     ===      ===     ===     ===        ===      ===
+04/23/16 16:35:06     0       0        3       0       0         21        0
+04/23/16 16:35:06 1 job proc(s) currently held
+04/23/16 16:42:46 Currently monitoring 1 Condor log file(s)
+04/23/16 16:42:46 Event: ULOG_JOB_TERMINATED for Condor Node FastQCCLI_4 (1487.0.0)
+04/23/16 16:42:46 Number of idle job procs: 1
+04/23/16 16:42:46 Node FastQCCLI_4 job proc (1487.0.0) completed successfully.
+04/23/16 16:42:46 Node FastQCCLI_4 job completed
+04/23/16 16:42:46 DAG status: 0 (DAG_STATUS_OK)
+04/23/16 16:42:46 Of 24 nodes total:
+04/23/16 16:42:46  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/23/16 16:42:46   ===     ===      ===     ===     ===        ===      ===
+04/23/16 16:42:46     1       0        2       0       1         20        0
+04/23/16 16:42:46 1 job proc(s) currently held
+04/23/16 16:42:51 Submitting Condor Node BWAAlignCLI_5 job(s)...
+04/23/16 16:42:51 Adding a DAGMan workflow log /projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log
+04/23/16 16:42:51 Masking the events recorded in the DAGMAN workflow log
+04/23/16 16:42:51 Mask for workflow log is 0,1,2,4,5,7,9,10,11,12,13,16,17,24,27
+04/23/16 16:42:51 submitting: /projects/mapseq/apps/condor-8.4.4-rhel7/bin/condor_submit -a dag_node_name' '=' 'BWAAlignCLI_5 -a +DAGManJobId' '=' '1463 -a DAGManJobId' '=' '1463 -a submit_event_notes' '=' 'DAG' 'Node:' 'BWAAlignCLI_5 -a dagman_log' '=' '/projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log -a +DAGManNodesMask' '=' '"0,1,2,4,5,7,9,10,11,12,13,16,17,24,27" -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"FastQCCLI_4" -a +KeepClaimIdle' '=' '20 -a notification' '=' 'never BWAAlignCLI_5.sub
+04/23/16 16:42:51 From submit: Submitting job(s).
+04/23/16 16:42:51 From submit: 1 job(s) submitted to cluster 1491.
+04/23/16 16:42:51 	assigned Condor ID (1491.0.0)
+04/23/16 16:42:51 Just submitted 1 job this cycle...
+04/23/16 16:42:51 Currently monitoring 1 Condor log file(s)
+04/23/16 16:42:51 Event: ULOG_JOB_TERMINATED for Condor Node FastQCCLI_2 (1479.0.0)
+04/23/16 16:42:51 Number of idle job procs: 1
+04/23/16 16:42:51 Node FastQCCLI_2 job proc (1479.0.0) completed successfully.
+04/23/16 16:42:51 Node FastQCCLI_2 job completed
+04/23/16 16:42:51 Reassigning the id of job BWAAlignCLI_5 from (1491.0.0) to (1491.0.0)
+04/23/16 16:42:51 Event: ULOG_SUBMIT for Condor Node BWAAlignCLI_5 (1491.0.0)
+04/23/16 16:42:51 Number of idle job procs: 2
+04/23/16 16:42:51 DAG status: 0 (DAG_STATUS_OK)
+04/23/16 16:42:51 Of 24 nodes total:
+04/23/16 16:42:51  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/23/16 16:42:51   ===     ===      ===     ===     ===        ===      ===
+04/23/16 16:42:51     2       0        2       0       1         19        0
+04/23/16 16:42:51 1 job proc(s) currently held
+04/23/16 16:42:56 Submitting Condor Node BWAAlignCLI_3 job(s)...
+04/23/16 16:42:56 Adding a DAGMan workflow log /projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log
+04/23/16 16:42:56 Masking the events recorded in the DAGMAN workflow log
+04/23/16 16:42:56 Mask for workflow log is 0,1,2,4,5,7,9,10,11,12,13,16,17,24,27
+04/23/16 16:42:56 submitting: /projects/mapseq/apps/condor-8.4.4-rhel7/bin/condor_submit -a dag_node_name' '=' 'BWAAlignCLI_3 -a +DAGManJobId' '=' '1463 -a DAGManJobId' '=' '1463 -a submit_event_notes' '=' 'DAG' 'Node:' 'BWAAlignCLI_3 -a dagman_log' '=' '/projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log -a +DAGManNodesMask' '=' '"0,1,2,4,5,7,9,10,11,12,13,16,17,24,27" -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"FastQCCLI_2" -a +KeepClaimIdle' '=' '20 -a notification' '=' 'never BWAAlignCLI_3.sub
+04/23/16 16:42:56 From submit: Submitting job(s).
+04/23/16 16:42:56 From submit: 1 job(s) submitted to cluster 1493.
+04/23/16 16:42:56 	assigned Condor ID (1493.0.0)
+04/23/16 16:42:56 Just submitted 1 job this cycle...
+04/23/16 16:42:56 Currently monitoring 1 Condor log file(s)
+04/23/16 16:42:56 Reassigning the id of job BWAAlignCLI_3 from (1493.0.0) to (1493.0.0)
+04/23/16 16:42:56 Event: ULOG_SUBMIT for Condor Node BWAAlignCLI_3 (1493.0.0)
+04/23/16 16:42:56 Number of idle job procs: 3
+04/23/16 16:42:56 DAG status: 0 (DAG_STATUS_OK)
+04/23/16 16:42:56 Of 24 nodes total:
+04/23/16 16:42:56  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/23/16 16:42:56   ===     ===      ===     ===     ===        ===      ===
+04/23/16 16:42:56     2       0        3       0       0         19        0
+04/23/16 16:42:56 1 job proc(s) currently held
+04/23/16 16:43:06 Currently monitoring 1 Condor log file(s)
+04/23/16 16:43:06 Event: ULOG_EXECUTE for Condor Node BWAAlignCLI_5 (1491.0.0)
+04/23/16 16:43:06 Number of idle job procs: 2
+04/23/16 16:43:06 Event: ULOG_EXECUTE for Condor Node BWAAlignCLI_3 (1493.0.0)
+04/23/16 16:43:06 Number of idle job procs: 1
+04/23/16 16:53:07 601 seconds since last log event
+04/23/16 16:53:07 Pending DAG nodes:
+04/23/16 16:53:07   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 16:53:07   Node BWAAlignCLI_3, Condor ID 1493, status STATUS_SUBMITTED
+04/23/16 16:53:07   Node BWAAlignCLI_5, Condor ID 1491, status STATUS_SUBMITTED
+04/23/16 17:03:07 1201 seconds since last log event
+04/23/16 17:03:07 Pending DAG nodes:
+04/23/16 17:03:07   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 17:03:07   Node BWAAlignCLI_3, Condor ID 1493, status STATUS_SUBMITTED
+04/23/16 17:03:07   Node BWAAlignCLI_5, Condor ID 1491, status STATUS_SUBMITTED
+04/23/16 17:13:08 1802 seconds since last log event
+04/23/16 17:13:08 Pending DAG nodes:
+04/23/16 17:13:08   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 17:13:08   Node BWAAlignCLI_3, Condor ID 1493, status STATUS_SUBMITTED
+04/23/16 17:13:08   Node BWAAlignCLI_5, Condor ID 1491, status STATUS_SUBMITTED
+04/23/16 17:23:09 2403 seconds since last log event
+04/23/16 17:23:09 Pending DAG nodes:
+04/23/16 17:23:09   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 17:23:09   Node BWAAlignCLI_3, Condor ID 1493, status STATUS_SUBMITTED
+04/23/16 17:23:09   Node BWAAlignCLI_5, Condor ID 1491, status STATUS_SUBMITTED
+04/23/16 17:33:09 3003 seconds since last log event
+04/23/16 17:33:09 Pending DAG nodes:
+04/23/16 17:33:09   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 17:33:09   Node BWAAlignCLI_3, Condor ID 1493, status STATUS_SUBMITTED
+04/23/16 17:33:09   Node BWAAlignCLI_5, Condor ID 1491, status STATUS_SUBMITTED
+04/23/16 17:39:25 Currently monitoring 1 Condor log file(s)
+04/23/16 17:39:25 Event: ULOG_JOB_TERMINATED for Condor Node BWAAlignCLI_3 (1493.0.0)
+04/23/16 17:39:25 Number of idle job procs: 1
+04/23/16 17:39:25 Node BWAAlignCLI_3 job proc (1493.0.0) completed successfully.
+04/23/16 17:39:25 Node BWAAlignCLI_3 job completed
+04/23/16 17:39:25 DAG status: 0 (DAG_STATUS_OK)
+04/23/16 17:39:25 Of 24 nodes total:
+04/23/16 17:39:25  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/23/16 17:39:25   ===     ===      ===     ===     ===        ===      ===
+04/23/16 17:39:25     3       0        2       0       0         19        0
+04/23/16 17:39:25 1 job proc(s) currently held
+04/23/16 17:49:25 600 seconds since last log event
+04/23/16 17:49:25 Pending DAG nodes:
+04/23/16 17:49:25   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 17:49:25   Node BWAAlignCLI_5, Condor ID 1491, status STATUS_SUBMITTED
+04/23/16 17:59:26 1201 seconds since last log event
+04/23/16 17:59:26 Pending DAG nodes:
+04/23/16 17:59:26   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 17:59:26   Node BWAAlignCLI_5, Condor ID 1491, status STATUS_SUBMITTED
+04/23/16 18:01:16 Currently monitoring 1 Condor log file(s)
+04/23/16 18:01:16 Event: ULOG_JOB_TERMINATED for Condor Node BWAAlignCLI_5 (1491.0.0)
+04/23/16 18:01:16 Number of idle job procs: 1
+04/23/16 18:01:16 Node BWAAlignCLI_5 job proc (1491.0.0) completed successfully.
+04/23/16 18:01:16 Node BWAAlignCLI_5 job completed
+04/23/16 18:01:16 DAG status: 0 (DAG_STATUS_OK)
+04/23/16 18:01:16 Of 24 nodes total:
+04/23/16 18:01:16  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/23/16 18:01:16   ===     ===      ===     ===     ===        ===      ===
+04/23/16 18:01:16     4       0        1       0       1         18        0
+04/23/16 18:01:16 1 job proc(s) currently held
+04/23/16 18:01:21 Submitting Condor Node BWASAMPairedEndCLI_6 job(s)...
+04/23/16 18:01:21 Adding a DAGMan workflow log /projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log
+04/23/16 18:01:21 Masking the events recorded in the DAGMAN workflow log
+04/23/16 18:01:21 Mask for workflow log is 0,1,2,4,5,7,9,10,11,12,13,16,17,24,27
+04/23/16 18:01:21 submitting: /projects/mapseq/apps/condor-8.4.4-rhel7/bin/condor_submit -a dag_node_name' '=' 'BWASAMPairedEndCLI_6 -a +DAGManJobId' '=' '1463 -a DAGManJobId' '=' '1463 -a submit_event_notes' '=' 'DAG' 'Node:' 'BWASAMPairedEndCLI_6 -a dagman_log' '=' '/projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log -a +DAGManNodesMask' '=' '"0,1,2,4,5,7,9,10,11,12,13,16,17,24,27" -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"BWAAlignCLI_3,BWAAlignCLI_5" -a +KeepClaimIdle' '=' '20 -a notification' '=' 'never BWASAMPairedEndCLI_6.sub
+04/23/16 18:01:21 From submit: Submitting job(s).
+04/23/16 18:01:21 From submit: 1 job(s) submitted to cluster 1542.
+04/23/16 18:01:21 	assigned Condor ID (1542.0.0)
+04/23/16 18:01:21 Just submitted 1 job this cycle...
+04/23/16 18:01:21 Currently monitoring 1 Condor log file(s)
+04/23/16 18:01:21 Reassigning the id of job BWASAMPairedEndCLI_6 from (1542.0.0) to (1542.0.0)
+04/23/16 18:01:21 Event: ULOG_SUBMIT for Condor Node BWASAMPairedEndCLI_6 (1542.0.0)
+04/23/16 18:01:21 Number of idle job procs: 2
+04/23/16 18:01:21 DAG status: 0 (DAG_STATUS_OK)
+04/23/16 18:01:21 Of 24 nodes total:
+04/23/16 18:01:21  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/23/16 18:01:21   ===     ===      ===     ===     ===        ===      ===
+04/23/16 18:01:21     4       0        2       0       0         18        0
+04/23/16 18:01:21 1 job proc(s) currently held
+04/23/16 18:07:56 Currently monitoring 1 Condor log file(s)
+04/23/16 18:07:56 Event: ULOG_EXECUTE for Condor Node BWASAMPairedEndCLI_6 (1542.0.0)
+04/23/16 18:07:56 Number of idle job procs: 1
+04/23/16 18:17:57 601 seconds since last log event
+04/23/16 18:17:57 Pending DAG nodes:
+04/23/16 18:17:57   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 18:17:57   Node BWASAMPairedEndCLI_6, Condor ID 1542, status STATUS_SUBMITTED
+04/23/16 18:27:57 1201 seconds since last log event
+04/23/16 18:27:57 Pending DAG nodes:
+04/23/16 18:27:57   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 18:27:57   Node BWASAMPairedEndCLI_6, Condor ID 1542, status STATUS_SUBMITTED
+04/23/16 18:37:58 1802 seconds since last log event
+04/23/16 18:37:58 Pending DAG nodes:
+04/23/16 18:37:58   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 18:37:58   Node BWASAMPairedEndCLI_6, Condor ID 1542, status STATUS_SUBMITTED
+04/23/16 18:41:43 Currently monitoring 1 Condor log file(s)
+04/23/16 18:41:43 Event: ULOG_JOB_TERMINATED for Condor Node BWASAMPairedEndCLI_6 (1542.0.0)
+04/23/16 18:41:43 Number of idle job procs: 1
+04/23/16 18:41:43 Node BWASAMPairedEndCLI_6 job proc (1542.0.0) completed successfully.
+04/23/16 18:41:43 Node BWASAMPairedEndCLI_6 job completed
+04/23/16 18:41:43 DAG status: 0 (DAG_STATUS_OK)
+04/23/16 18:41:43 Of 24 nodes total:
+04/23/16 18:41:43  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/23/16 18:41:43   ===     ===      ===     ===     ===        ===      ===
+04/23/16 18:41:43     5       0        1       0       1         17        0
+04/23/16 18:41:43 1 job proc(s) currently held
+04/23/16 18:41:48 Submitting Condor Node PicardAddOrReplaceReadGroupsCLI_7 job(s)...
+04/23/16 18:41:48 Adding a DAGMan workflow log /projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log
+04/23/16 18:41:48 Masking the events recorded in the DAGMAN workflow log
+04/23/16 18:41:48 Mask for workflow log is 0,1,2,4,5,7,9,10,11,12,13,16,17,24,27
+04/23/16 18:41:48 submitting: /projects/mapseq/apps/condor-8.4.4-rhel7/bin/condor_submit -a dag_node_name' '=' 'PicardAddOrReplaceReadGroupsCLI_7 -a +DAGManJobId' '=' '1463 -a DAGManJobId' '=' '1463 -a submit_event_notes' '=' 'DAG' 'Node:' 'PicardAddOrReplaceReadGroupsCLI_7 -a dagman_log' '=' '/projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log -a +DAGManNodesMask' '=' '"0,1,2,4,5,7,9,10,11,12,13,16,17,24,27" -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"BWASAMPairedEndCLI_6" -a +KeepClaimIdle' '=' '20 -a notification' '=' 'never PicardAddOrReplaceReadGroupsCLI_7.sub
+04/23/16 18:41:48 From submit: Submitting job(s).
+04/23/16 18:41:48 From submit: 1 job(s) submitted to cluster 1548.
+04/23/16 18:41:48 	assigned Condor ID (1548.0.0)
+04/23/16 18:41:48 Just submitted 1 job this cycle...
+04/23/16 18:41:48 Currently monitoring 1 Condor log file(s)
+04/23/16 18:41:48 Reassigning the id of job PicardAddOrReplaceReadGroupsCLI_7 from (1548.0.0) to (1548.0.0)
+04/23/16 18:41:48 Event: ULOG_SUBMIT for Condor Node PicardAddOrReplaceReadGroupsCLI_7 (1548.0.0)
+04/23/16 18:41:48 Number of idle job procs: 2
+04/23/16 18:41:48 DAG status: 0 (DAG_STATUS_OK)
+04/23/16 18:41:48 Of 24 nodes total:
+04/23/16 18:41:48  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/23/16 18:41:48   ===     ===      ===     ===     ===        ===      ===
+04/23/16 18:41:48     5       0        2       0       0         17        0
+04/23/16 18:41:48 1 job proc(s) currently held
+04/23/16 18:47:14 Currently monitoring 1 Condor log file(s)
+04/23/16 18:47:14 Event: ULOG_EXECUTE for Condor Node PicardAddOrReplaceReadGroupsCLI_7 (1548.0.0)
+04/23/16 18:47:14 Number of idle job procs: 1
+04/23/16 18:57:14 600 seconds since last log event
+04/23/16 18:57:14 Pending DAG nodes:
+04/23/16 18:57:14   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 18:57:14   Node PicardAddOrReplaceReadGroupsCLI_7, Condor ID 1548, status STATUS_SUBMITTED
+04/23/16 19:07:15 1201 seconds since last log event
+04/23/16 19:07:15 Pending DAG nodes:
+04/23/16 19:07:15   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 19:07:15   Node PicardAddOrReplaceReadGroupsCLI_7, Condor ID 1548, status STATUS_SUBMITTED
+04/23/16 19:17:16 1802 seconds since last log event
+04/23/16 19:17:16 Pending DAG nodes:
+04/23/16 19:17:16   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 19:17:16   Node PicardAddOrReplaceReadGroupsCLI_7, Condor ID 1548, status STATUS_SUBMITTED
+04/23/16 19:27:16 2402 seconds since last log event
+04/23/16 19:27:16 Pending DAG nodes:
+04/23/16 19:27:16   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 19:27:16   Node PicardAddOrReplaceReadGroupsCLI_7, Condor ID 1548, status STATUS_SUBMITTED
+04/23/16 19:37:17 3003 seconds since last log event
+04/23/16 19:37:17 Pending DAG nodes:
+04/23/16 19:37:17   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 19:37:17   Node PicardAddOrReplaceReadGroupsCLI_7, Condor ID 1548, status STATUS_SUBMITTED
+04/23/16 19:43:57 Currently monitoring 1 Condor log file(s)
+04/23/16 19:43:57 Event: ULOG_JOB_TERMINATED for Condor Node PicardAddOrReplaceReadGroupsCLI_7 (1548.0.0)
+04/23/16 19:43:57 Number of idle job procs: 1
+04/23/16 19:43:57 Node PicardAddOrReplaceReadGroupsCLI_7 job proc (1548.0.0) completed successfully.
+04/23/16 19:43:57 Node PicardAddOrReplaceReadGroupsCLI_7 job completed
+04/23/16 19:43:57 DAG status: 0 (DAG_STATUS_OK)
+04/23/16 19:43:57 Of 24 nodes total:
+04/23/16 19:43:57  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/23/16 19:43:57   ===     ===      ===     ===     ===        ===      ===
+04/23/16 19:43:57     6       0        1       0       1         16        0
+04/23/16 19:43:57 1 job proc(s) currently held
+04/23/16 19:44:02 Submitting Condor Node SAMToolsIndexCLI_8 job(s)...
+04/23/16 19:44:02 Adding a DAGMan workflow log /projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log
+04/23/16 19:44:02 Masking the events recorded in the DAGMAN workflow log
+04/23/16 19:44:02 Mask for workflow log is 0,1,2,4,5,7,9,10,11,12,13,16,17,24,27
+04/23/16 19:44:02 submitting: /projects/mapseq/apps/condor-8.4.4-rhel7/bin/condor_submit -a dag_node_name' '=' 'SAMToolsIndexCLI_8 -a +DAGManJobId' '=' '1463 -a DAGManJobId' '=' '1463 -a submit_event_notes' '=' 'DAG' 'Node:' 'SAMToolsIndexCLI_8 -a dagman_log' '=' '/projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log -a +DAGManNodesMask' '=' '"0,1,2,4,5,7,9,10,11,12,13,16,17,24,27" -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"PicardAddOrReplaceReadGroupsCLI_7" -a +KeepClaimIdle' '=' '20 -a notification' '=' 'never SAMToolsIndexCLI_8.sub
+04/23/16 19:44:02 From submit: Submitting job(s).
+04/23/16 19:44:02 From submit: 1 job(s) submitted to cluster 1556.
+04/23/16 19:44:02 	assigned Condor ID (1556.0.0)
+04/23/16 19:44:02 Just submitted 1 job this cycle...
+04/23/16 19:44:02 Currently monitoring 1 Condor log file(s)
+04/23/16 19:44:02 Reassigning the id of job SAMToolsIndexCLI_8 from (1556.0.0) to (1556.0.0)
+04/23/16 19:44:02 Event: ULOG_SUBMIT for Condor Node SAMToolsIndexCLI_8 (1556.0.0)
+04/23/16 19:44:02 Number of idle job procs: 2
+04/23/16 19:44:02 DAG status: 0 (DAG_STATUS_OK)
+04/23/16 19:44:02 Of 24 nodes total:
+04/23/16 19:44:02  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/23/16 19:44:02   ===     ===      ===     ===     ===        ===      ===
+04/23/16 19:44:02     6       0        2       0       0         16        0
+04/23/16 19:44:02 1 job proc(s) currently held
+04/23/16 19:54:03 601 seconds since last log event
+04/23/16 19:54:03 Pending DAG nodes:
+04/23/16 19:54:03   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 19:54:03   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 20:04:04 1202 seconds since last log event
+04/23/16 20:04:04 Pending DAG nodes:
+04/23/16 20:04:04   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 20:04:04   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 20:14:04 1802 seconds since last log event
+04/23/16 20:14:04 Pending DAG nodes:
+04/23/16 20:14:04   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 20:14:04   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 20:24:05 2403 seconds since last log event
+04/23/16 20:24:05 Pending DAG nodes:
+04/23/16 20:24:05   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 20:24:05   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 20:34:05 3003 seconds since last log event
+04/23/16 20:34:05 Pending DAG nodes:
+04/23/16 20:34:05   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 20:34:05   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 20:44:05 3603 seconds since last log event
+04/23/16 20:44:05 Pending DAG nodes:
+04/23/16 20:44:05   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 20:44:05   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 20:54:06 4204 seconds since last log event
+04/23/16 20:54:06 Pending DAG nodes:
+04/23/16 20:54:06   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 20:54:06   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 21:04:06 4804 seconds since last log event
+04/23/16 21:04:06 Pending DAG nodes:
+04/23/16 21:04:06   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 21:04:06   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 21:14:07 5405 seconds since last log event
+04/23/16 21:14:07 Pending DAG nodes:
+04/23/16 21:14:07   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 21:14:07   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 21:24:08 6006 seconds since last log event
+04/23/16 21:24:08 Pending DAG nodes:
+04/23/16 21:24:08   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 21:24:08   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 21:25:33 Currently monitoring 1 Condor log file(s)
+04/23/16 21:25:33 Event: ULOG_EXECUTE for Condor Node SAMToolsIndexCLI_8 (1556.0.0)
+04/23/16 21:25:33 Number of idle job procs: 1
+04/23/16 21:25:43 Currently monitoring 1 Condor log file(s)
+04/23/16 21:25:43 Event: ULOG_JOB_HELD for Condor Node SAMToolsIndexCLI_8 (1556.0.0)
+04/23/16 21:25:43   Hold reason: The job attribute OnExitHold expression '( ExitBySignal == true ) || ( ExitCode != 0 )' evaluated to TRUE
+04/23/16 21:25:43 Number of idle job procs: 2
+04/23/16 21:25:43 DAG status: 0 (DAG_STATUS_OK)
+04/23/16 21:25:43 Of 24 nodes total:
+04/23/16 21:25:43  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/23/16 21:25:43   ===     ===      ===     ===     ===        ===      ===
+04/23/16 21:25:43     6       0        2       0       0         16        0
+04/23/16 21:25:43 2 job proc(s) currently held
+04/23/16 21:35:43 600 seconds since last log event
+04/23/16 21:35:43 Pending DAG nodes:
+04/23/16 21:35:43   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 21:35:43   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 21:45:44 1201 seconds since last log event
+04/23/16 21:45:44 Pending DAG nodes:
+04/23/16 21:45:44   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 21:45:44   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 21:55:44 1801 seconds since last log event
+04/23/16 21:55:44 Pending DAG nodes:
+04/23/16 21:55:44   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 21:55:44   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 22:05:45 2402 seconds since last log event
+04/23/16 22:05:45 Pending DAG nodes:
+04/23/16 22:05:45   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 22:05:45   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 22:15:46 3003 seconds since last log event
+04/23/16 22:15:46 Pending DAG nodes:
+04/23/16 22:15:46   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 22:15:46   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 22:25:46 3603 seconds since last log event
+04/23/16 22:25:46 Pending DAG nodes:
+04/23/16 22:25:46   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 22:25:46   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 22:35:47 4204 seconds since last log event
+04/23/16 22:35:47 Pending DAG nodes:
+04/23/16 22:35:47   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 22:35:47   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 22:45:47 4804 seconds since last log event
+04/23/16 22:45:47 Pending DAG nodes:
+04/23/16 22:45:47   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 22:45:47   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 22:55:47 5404 seconds since last log event
+04/23/16 22:55:47 Pending DAG nodes:
+04/23/16 22:55:47   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 22:55:47   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 23:05:47 6004 seconds since last log event
+04/23/16 23:05:47 Pending DAG nodes:
+04/23/16 23:05:47   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 23:05:47   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 23:15:47 6604 seconds since last log event
+04/23/16 23:15:47 Pending DAG nodes:
+04/23/16 23:15:47   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 23:15:47   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 23:25:48 7205 seconds since last log event
+04/23/16 23:25:48 Pending DAG nodes:
+04/23/16 23:25:48   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 23:25:48   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 23:35:49 7806 seconds since last log event
+04/23/16 23:35:49 Pending DAG nodes:
+04/23/16 23:35:49   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 23:35:49   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 23:45:49 8406 seconds since last log event
+04/23/16 23:45:49 Pending DAG nodes:
+04/23/16 23:45:49   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 23:45:49   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/23/16 23:55:50 9007 seconds since last log event
+04/23/16 23:55:50 Pending DAG nodes:
+04/23/16 23:55:50   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/23/16 23:55:50   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 00:05:51 9608 seconds since last log event
+04/24/16 00:05:51 Pending DAG nodes:
+04/24/16 00:05:51   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 00:05:51   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 00:15:51 10208 seconds since last log event
+04/24/16 00:15:51 Pending DAG nodes:
+04/24/16 00:15:51   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 00:15:51   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 00:25:52 10809 seconds since last log event
+04/24/16 00:25:52 Pending DAG nodes:
+04/24/16 00:25:52   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 00:25:52   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 00:35:52 11409 seconds since last log event
+04/24/16 00:35:52 Pending DAG nodes:
+04/24/16 00:35:52   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 00:35:52   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 00:45:52 12009 seconds since last log event
+04/24/16 00:45:52 Pending DAG nodes:
+04/24/16 00:45:52   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 00:45:52   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 00:55:53 12610 seconds since last log event
+04/24/16 00:55:53 Pending DAG nodes:
+04/24/16 00:55:53   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 00:55:53   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 01:05:53 13210 seconds since last log event
+04/24/16 01:05:53 Pending DAG nodes:
+04/24/16 01:05:53   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 01:05:53   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 01:15:54 13811 seconds since last log event
+04/24/16 01:15:54 Pending DAG nodes:
+04/24/16 01:15:54   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 01:15:54   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 01:25:54 14411 seconds since last log event
+04/24/16 01:25:54 Pending DAG nodes:
+04/24/16 01:25:54   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 01:25:54   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 01:35:55 15012 seconds since last log event
+04/24/16 01:35:55 Pending DAG nodes:
+04/24/16 01:35:55   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 01:35:55   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 01:45:56 15613 seconds since last log event
+04/24/16 01:45:56 Pending DAG nodes:
+04/24/16 01:45:56   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 01:45:56   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 01:55:56 16213 seconds since last log event
+04/24/16 01:55:56 Pending DAG nodes:
+04/24/16 01:55:56   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 01:55:56   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 02:05:57 16814 seconds since last log event
+04/24/16 02:05:57 Pending DAG nodes:
+04/24/16 02:05:57   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 02:05:57   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 02:15:58 17415 seconds since last log event
+04/24/16 02:15:58 Pending DAG nodes:
+04/24/16 02:15:58   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 02:15:58   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 02:25:58 18015 seconds since last log event
+04/24/16 02:25:58 Pending DAG nodes:
+04/24/16 02:25:58   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 02:25:58   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 02:35:59 18616 seconds since last log event
+04/24/16 02:35:59 Pending DAG nodes:
+04/24/16 02:35:59   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 02:35:59   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 02:45:59 19216 seconds since last log event
+04/24/16 02:45:59 Pending DAG nodes:
+04/24/16 02:45:59   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 02:45:59   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 02:56:00 19817 seconds since last log event
+04/24/16 02:56:00 Pending DAG nodes:
+04/24/16 02:56:00   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 02:56:00   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 03:06:01 20418 seconds since last log event
+04/24/16 03:06:01 Pending DAG nodes:
+04/24/16 03:06:01   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 03:06:01   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 03:16:01 21018 seconds since last log event
+04/24/16 03:16:01 Pending DAG nodes:
+04/24/16 03:16:01   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 03:16:01   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 03:26:02 21619 seconds since last log event
+04/24/16 03:26:02 Pending DAG nodes:
+04/24/16 03:26:02   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 03:26:02   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 03:36:03 22220 seconds since last log event
+04/24/16 03:36:03 Pending DAG nodes:
+04/24/16 03:36:03   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 03:36:03   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 03:46:03 22820 seconds since last log event
+04/24/16 03:46:03 Pending DAG nodes:
+04/24/16 03:46:03   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 03:46:03   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 03:56:04 23421 seconds since last log event
+04/24/16 03:56:04 Pending DAG nodes:
+04/24/16 03:56:04   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 03:56:04   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 04:06:05 24022 seconds since last log event
+04/24/16 04:06:05 Pending DAG nodes:
+04/24/16 04:06:05   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 04:06:05   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 04:16:05 24622 seconds since last log event
+04/24/16 04:16:05 Pending DAG nodes:
+04/24/16 04:16:05   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 04:16:05   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 04:26:06 25223 seconds since last log event
+04/24/16 04:26:06 Pending DAG nodes:
+04/24/16 04:26:06   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 04:26:06   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 04:36:06 25823 seconds since last log event
+04/24/16 04:36:06 Pending DAG nodes:
+04/24/16 04:36:06   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 04:36:06   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 04:46:07 26424 seconds since last log event
+04/24/16 04:46:07 Pending DAG nodes:
+04/24/16 04:46:07   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 04:46:07   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 04:56:08 27025 seconds since last log event
+04/24/16 04:56:08 Pending DAG nodes:
+04/24/16 04:56:08   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 04:56:08   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 05:06:08 27625 seconds since last log event
+04/24/16 05:06:08 Pending DAG nodes:
+04/24/16 05:06:08   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 05:06:08   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 05:16:09 28226 seconds since last log event
+04/24/16 05:16:09 Pending DAG nodes:
+04/24/16 05:16:09   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 05:16:09   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 05:26:10 28827 seconds since last log event
+04/24/16 05:26:10 Pending DAG nodes:
+04/24/16 05:26:10   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 05:26:10   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 05:36:10 29427 seconds since last log event
+04/24/16 05:36:10 Pending DAG nodes:
+04/24/16 05:36:10   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 05:36:10   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 05:46:11 30028 seconds since last log event
+04/24/16 05:46:11 Pending DAG nodes:
+04/24/16 05:46:11   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 05:46:11   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 05:56:11 30628 seconds since last log event
+04/24/16 05:56:11 Pending DAG nodes:
+04/24/16 05:56:11   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 05:56:11   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 06:06:12 31229 seconds since last log event
+04/24/16 06:06:12 Pending DAG nodes:
+04/24/16 06:06:12   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 06:06:12   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 06:16:13 31830 seconds since last log event
+04/24/16 06:16:13 Pending DAG nodes:
+04/24/16 06:16:13   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 06:16:13   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 06:26:13 32430 seconds since last log event
+04/24/16 06:26:13 Pending DAG nodes:
+04/24/16 06:26:13   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 06:26:13   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 06:36:14 33031 seconds since last log event
+04/24/16 06:36:14 Pending DAG nodes:
+04/24/16 06:36:14   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 06:36:14   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 06:46:14 33631 seconds since last log event
+04/24/16 06:46:14 Pending DAG nodes:
+04/24/16 06:46:14   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 06:46:14   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 06:56:15 34232 seconds since last log event
+04/24/16 06:56:15 Pending DAG nodes:
+04/24/16 06:56:15   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 06:56:15   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 07:06:16 34833 seconds since last log event
+04/24/16 07:06:16 Pending DAG nodes:
+04/24/16 07:06:16   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 07:06:16   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 07:16:16 35433 seconds since last log event
+04/24/16 07:16:16 Pending DAG nodes:
+04/24/16 07:16:16   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 07:16:16   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 07:26:17 36034 seconds since last log event
+04/24/16 07:26:17 Pending DAG nodes:
+04/24/16 07:26:17   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 07:26:17   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 07:36:18 36635 seconds since last log event
+04/24/16 07:36:18 Pending DAG nodes:
+04/24/16 07:36:18   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 07:36:18   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 07:46:18 37235 seconds since last log event
+04/24/16 07:46:18 Pending DAG nodes:
+04/24/16 07:46:18   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 07:46:18   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 07:56:19 37836 seconds since last log event
+04/24/16 07:56:19 Pending DAG nodes:
+04/24/16 07:56:19   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 07:56:19   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 08:06:19 38436 seconds since last log event
+04/24/16 08:06:19 Pending DAG nodes:
+04/24/16 08:06:19   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 08:06:19   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 08:16:20 39037 seconds since last log event
+04/24/16 08:16:20 Pending DAG nodes:
+04/24/16 08:16:20   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 08:16:20   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 08:26:21 39638 seconds since last log event
+04/24/16 08:26:21 Pending DAG nodes:
+04/24/16 08:26:21   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 08:26:21   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 08:36:21 40238 seconds since last log event
+04/24/16 08:36:21 Pending DAG nodes:
+04/24/16 08:36:21   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 08:36:21   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 08:46:22 40839 seconds since last log event
+04/24/16 08:46:22 Pending DAG nodes:
+04/24/16 08:46:22   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 08:46:22   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 08:56:23 41440 seconds since last log event
+04/24/16 08:56:23 Pending DAG nodes:
+04/24/16 08:56:23   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 08:56:23   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 09:06:23 42040 seconds since last log event
+04/24/16 09:06:23 Pending DAG nodes:
+04/24/16 09:06:23   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 09:06:23   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 09:16:24 42641 seconds since last log event
+04/24/16 09:16:24 Pending DAG nodes:
+04/24/16 09:16:24   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 09:16:24   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 09:26:24 43241 seconds since last log event
+04/24/16 09:26:24 Pending DAG nodes:
+04/24/16 09:26:24   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 09:26:24   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 09:36:25 43842 seconds since last log event
+04/24/16 09:36:25 Pending DAG nodes:
+04/24/16 09:36:25   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 09:36:25   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 09:46:26 44443 seconds since last log event
+04/24/16 09:46:26 Pending DAG nodes:
+04/24/16 09:46:26   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 09:46:26   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 09:56:26 45043 seconds since last log event
+04/24/16 09:56:26 Pending DAG nodes:
+04/24/16 09:56:26   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 09:56:26   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 10:06:27 45644 seconds since last log event
+04/24/16 10:06:27 Pending DAG nodes:
+04/24/16 10:06:27   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 10:06:27   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 10:16:28 46245 seconds since last log event
+04/24/16 10:16:28 Pending DAG nodes:
+04/24/16 10:16:28   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 10:16:28   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 10:26:28 46845 seconds since last log event
+04/24/16 10:26:28 Pending DAG nodes:
+04/24/16 10:26:28   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 10:26:28   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 10:36:29 47446 seconds since last log event
+04/24/16 10:36:29 Pending DAG nodes:
+04/24/16 10:36:29   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 10:36:29   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 10:46:29 48046 seconds since last log event
+04/24/16 10:46:29 Pending DAG nodes:
+04/24/16 10:46:29   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 10:46:29   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 10:56:30 48647 seconds since last log event
+04/24/16 10:56:30 Pending DAG nodes:
+04/24/16 10:56:30   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 10:56:30   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 11:06:30 49247 seconds since last log event
+04/24/16 11:06:30 Pending DAG nodes:
+04/24/16 11:06:30   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 11:06:30   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 11:16:30 49847 seconds since last log event
+04/24/16 11:16:30 Pending DAG nodes:
+04/24/16 11:16:30   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 11:16:30   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 11:26:31 50448 seconds since last log event
+04/24/16 11:26:31 Pending DAG nodes:
+04/24/16 11:26:31   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 11:26:31   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 11:36:32 51049 seconds since last log event
+04/24/16 11:36:32 Pending DAG nodes:
+04/24/16 11:36:32   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 11:36:32   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 11:46:32 51649 seconds since last log event
+04/24/16 11:46:32 Pending DAG nodes:
+04/24/16 11:46:32   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 11:46:32   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 11:56:33 52250 seconds since last log event
+04/24/16 11:56:33 Pending DAG nodes:
+04/24/16 11:56:33   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 11:56:33   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 12:06:33 52850 seconds since last log event
+04/24/16 12:06:33 Pending DAG nodes:
+04/24/16 12:06:33   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 12:06:33   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 12:16:34 53451 seconds since last log event
+04/24/16 12:16:34 Pending DAG nodes:
+04/24/16 12:16:34   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 12:16:34   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 12:26:35 54052 seconds since last log event
+04/24/16 12:26:35 Pending DAG nodes:
+04/24/16 12:26:35   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 12:26:35   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 12:36:35 54652 seconds since last log event
+04/24/16 12:36:35 Pending DAG nodes:
+04/24/16 12:36:35   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 12:36:35   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 12:46:36 55253 seconds since last log event
+04/24/16 12:46:36 Pending DAG nodes:
+04/24/16 12:46:36   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 12:46:36   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 12:56:36 55853 seconds since last log event
+04/24/16 12:56:36 Pending DAG nodes:
+04/24/16 12:56:36   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 12:56:36   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 13:06:37 56454 seconds since last log event
+04/24/16 13:06:37 Pending DAG nodes:
+04/24/16 13:06:37   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 13:06:37   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 13:16:38 57055 seconds since last log event
+04/24/16 13:16:38 Pending DAG nodes:
+04/24/16 13:16:38   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 13:16:38   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 13:26:38 57655 seconds since last log event
+04/24/16 13:26:38 Pending DAG nodes:
+04/24/16 13:26:38   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 13:26:38   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 13:36:39 58256 seconds since last log event
+04/24/16 13:36:39 Pending DAG nodes:
+04/24/16 13:36:39   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 13:36:39   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 13:46:40 58857 seconds since last log event
+04/24/16 13:46:40 Pending DAG nodes:
+04/24/16 13:46:40   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 13:46:40   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 13:56:40 59457 seconds since last log event
+04/24/16 13:56:40 Pending DAG nodes:
+04/24/16 13:56:40   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 13:56:40   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 14:06:41 60058 seconds since last log event
+04/24/16 14:06:41 Pending DAG nodes:
+04/24/16 14:06:41   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 14:06:41   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 14:16:41 60658 seconds since last log event
+04/24/16 14:16:41 Pending DAG nodes:
+04/24/16 14:16:41   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 14:16:41   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 14:26:42 61259 seconds since last log event
+04/24/16 14:26:42 Pending DAG nodes:
+04/24/16 14:26:42   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 14:26:42   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 14:36:43 61860 seconds since last log event
+04/24/16 14:36:43 Pending DAG nodes:
+04/24/16 14:36:43   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 14:36:43   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 14:46:43 62460 seconds since last log event
+04/24/16 14:46:43 Pending DAG nodes:
+04/24/16 14:46:43   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 14:46:43   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 14:56:44 63061 seconds since last log event
+04/24/16 14:56:44 Pending DAG nodes:
+04/24/16 14:56:44   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 14:56:44   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 15:06:44 63661 seconds since last log event
+04/24/16 15:06:44 Pending DAG nodes:
+04/24/16 15:06:44   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 15:06:44   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 15:16:45 64262 seconds since last log event
+04/24/16 15:16:45 Pending DAG nodes:
+04/24/16 15:16:45   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 15:16:45   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 15:26:46 64863 seconds since last log event
+04/24/16 15:26:46 Pending DAG nodes:
+04/24/16 15:26:46   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 15:26:46   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 15:36:46 65463 seconds since last log event
+04/24/16 15:36:46 Pending DAG nodes:
+04/24/16 15:36:46   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 15:36:46   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 15:46:47 66064 seconds since last log event
+04/24/16 15:46:47 Pending DAG nodes:
+04/24/16 15:46:47   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 15:46:47   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 15:56:48 66665 seconds since last log event
+04/24/16 15:56:48 Pending DAG nodes:
+04/24/16 15:56:48   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 15:56:48   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 16:06:48 67265 seconds since last log event
+04/24/16 16:06:48 Pending DAG nodes:
+04/24/16 16:06:48   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 16:06:48   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 16:16:49 67866 seconds since last log event
+04/24/16 16:16:49 Pending DAG nodes:
+04/24/16 16:16:49   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 16:16:49   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 16:26:49 68466 seconds since last log event
+04/24/16 16:26:49 Pending DAG nodes:
+04/24/16 16:26:49   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 16:26:49   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 16:36:49 69066 seconds since last log event
+04/24/16 16:36:49 Pending DAG nodes:
+04/24/16 16:36:49   Node WriteVCFHeaderCLI_1, Condor ID 1470, status STATUS_SUBMITTED
+04/24/16 16:36:49   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 16:39:34 Currently monitoring 1 Condor log file(s)
+04/24/16 16:39:34 Event: ULOG_JOB_ABORTED for Condor Node WriteVCFHeaderCLI_1 (1470.0.0)
+04/24/16 16:39:34 Number of idle job procs: 1
+04/24/16 16:39:34 Retrying node WriteVCFHeaderCLI_1 (retry #1 of 3)...
+04/24/16 16:39:34 DAG status: 0 (DAG_STATUS_OK)
+04/24/16 16:39:34 Of 24 nodes total:
+04/24/16 16:39:34  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/24/16 16:39:34   ===     ===      ===     ===     ===        ===      ===
+04/24/16 16:39:34     6       0        1       0       1         16        0
+04/24/16 16:39:34 2 job proc(s) currently held
+04/24/16 16:39:39 Reassigning the id of job WriteVCFHeaderCLI_1 from (1470.0.0) to (-1.-1.-1)
+04/24/16 16:39:39 Submitting Condor Node WriteVCFHeaderCLI_1 job(s)...
+04/24/16 16:39:39 Adding a DAGMan workflow log /projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log
+04/24/16 16:39:39 Masking the events recorded in the DAGMAN workflow log
+04/24/16 16:39:39 Mask for workflow log is 0,1,2,4,5,7,9,10,11,12,13,16,17,24,27
+04/24/16 16:39:39 submitting: /projects/mapseq/apps/condor-8.4.4-rhel7/bin/condor_submit -a dag_node_name' '=' 'WriteVCFHeaderCLI_1 -a +DAGManJobId' '=' '1463 -a DAGManJobId' '=' '1463 -a submit_event_notes' '=' 'DAG' 'Node:' 'WriteVCFHeaderCLI_1 -a dagman_log' '=' '/projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log -a +DAGManNodesMask' '=' '"0,1,2,4,5,7,9,10,11,12,13,16,17,24,27" -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" -a notification' '=' 'never WriteVCFHeaderCLI_1.sub
+04/24/16 16:39:39 From submit: Submitting job(s).
+04/24/16 16:39:39 From submit: 1 job(s) submitted to cluster 1595.
+04/24/16 16:39:39 	assigned Condor ID (1595.0.0)
+04/24/16 16:39:39 Just submitted 1 job this cycle...
+04/24/16 16:39:39 Currently monitoring 1 Condor log file(s)
+04/24/16 16:39:39 Reassigning the id of job WriteVCFHeaderCLI_1 from (1595.0.0) to (1595.0.0)
+04/24/16 16:39:39 Event: ULOG_SUBMIT for Condor Node WriteVCFHeaderCLI_1 (1595.0.0)
+04/24/16 16:39:39 Number of idle job procs: 2
+04/24/16 16:39:39 DAG status: 0 (DAG_STATUS_OK)
+04/24/16 16:39:39 Of 24 nodes total:
+04/24/16 16:39:39  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/24/16 16:39:39   ===     ===      ===     ===     ===        ===      ===
+04/24/16 16:39:39     6       0        2       0       0         16        0
+04/24/16 16:39:39 2 job proc(s) currently held
+04/24/16 16:49:40 601 seconds since last log event
+04/24/16 16:49:40 Pending DAG nodes:
+04/24/16 16:49:40   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 16:49:40   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 16:59:41 1202 seconds since last log event
+04/24/16 16:59:41 Pending DAG nodes:
+04/24/16 16:59:41   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 16:59:41   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 17:09:41 1802 seconds since last log event
+04/24/16 17:09:41 Pending DAG nodes:
+04/24/16 17:09:41   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 17:09:41   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 17:19:42 2403 seconds since last log event
+04/24/16 17:19:42 Pending DAG nodes:
+04/24/16 17:19:42   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 17:19:42   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 17:29:42 3003 seconds since last log event
+04/24/16 17:29:42 Pending DAG nodes:
+04/24/16 17:29:42   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 17:29:42   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 17:39:43 3604 seconds since last log event
+04/24/16 17:39:43 Pending DAG nodes:
+04/24/16 17:39:43   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 17:39:43   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 17:49:44 4205 seconds since last log event
+04/24/16 17:49:44 Pending DAG nodes:
+04/24/16 17:49:44   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 17:49:44   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 17:59:44 4805 seconds since last log event
+04/24/16 17:59:44 Pending DAG nodes:
+04/24/16 17:59:44   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 17:59:44   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 18:09:45 5406 seconds since last log event
+04/24/16 18:09:45 Pending DAG nodes:
+04/24/16 18:09:45   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 18:09:45   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 18:19:46 6007 seconds since last log event
+04/24/16 18:19:46 Pending DAG nodes:
+04/24/16 18:19:46   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 18:19:46   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 18:29:46 6607 seconds since last log event
+04/24/16 18:29:46 Pending DAG nodes:
+04/24/16 18:29:46   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 18:29:46   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 18:39:47 7208 seconds since last log event
+04/24/16 18:39:47 Pending DAG nodes:
+04/24/16 18:39:47   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 18:39:47   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 18:49:47 7808 seconds since last log event
+04/24/16 18:49:47 Pending DAG nodes:
+04/24/16 18:49:47   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 18:49:47   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 18:59:48 8409 seconds since last log event
+04/24/16 18:59:48 Pending DAG nodes:
+04/24/16 18:59:48   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 18:59:48   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 19:09:49 9010 seconds since last log event
+04/24/16 19:09:49 Pending DAG nodes:
+04/24/16 19:09:49   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 19:09:49   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 19:19:49 9610 seconds since last log event
+04/24/16 19:19:49 Pending DAG nodes:
+04/24/16 19:19:49   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 19:19:49   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 19:29:50 10211 seconds since last log event
+04/24/16 19:29:50 Pending DAG nodes:
+04/24/16 19:29:50   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 19:29:50   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 19:39:50 10811 seconds since last log event
+04/24/16 19:39:50 Pending DAG nodes:
+04/24/16 19:39:50   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 19:39:50   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 19:49:51 11412 seconds since last log event
+04/24/16 19:49:51 Pending DAG nodes:
+04/24/16 19:49:51   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 19:49:51   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 19:59:52 12013 seconds since last log event
+04/24/16 19:59:52 Pending DAG nodes:
+04/24/16 19:59:52   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 19:59:52   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 20:09:52 12613 seconds since last log event
+04/24/16 20:09:52 Pending DAG nodes:
+04/24/16 20:09:52   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 20:09:52   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 20:19:53 13214 seconds since last log event
+04/24/16 20:19:53 Pending DAG nodes:
+04/24/16 20:19:53   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 20:19:53   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 20:29:54 13815 seconds since last log event
+04/24/16 20:29:54 Pending DAG nodes:
+04/24/16 20:29:54   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 20:29:54   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 20:39:54 14415 seconds since last log event
+04/24/16 20:39:54 Pending DAG nodes:
+04/24/16 20:39:54   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 20:39:54   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 20:49:55 15016 seconds since last log event
+04/24/16 20:49:55 Pending DAG nodes:
+04/24/16 20:49:55   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 20:49:55   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 20:59:56 15617 seconds since last log event
+04/24/16 20:59:56 Pending DAG nodes:
+04/24/16 20:59:56   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 20:59:56   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 21:09:56 16217 seconds since last log event
+04/24/16 21:09:56 Pending DAG nodes:
+04/24/16 21:09:56   Node WriteVCFHeaderCLI_1, Condor ID 1595, status STATUS_SUBMITTED
+04/24/16 21:09:56   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 21:11:01 Currently monitoring 1 Condor log file(s)
+04/24/16 21:11:01 Event: ULOG_EXECUTE for Condor Node WriteVCFHeaderCLI_1 (1595.0.0)
+04/24/16 21:11:01 Number of idle job procs: 1
+04/24/16 21:11:06 Currently monitoring 1 Condor log file(s)
+04/24/16 21:11:06 Event: ULOG_JOB_TERMINATED for Condor Node WriteVCFHeaderCLI_1 (1595.0.0)
+04/24/16 21:11:06 Number of idle job procs: 1
+04/24/16 21:11:06 Node WriteVCFHeaderCLI_1 job proc (1595.0.0) completed successfully.
+04/24/16 21:11:06 Node WriteVCFHeaderCLI_1 job completed
+04/24/16 21:11:06 DAG status: 0 (DAG_STATUS_OK)
+04/24/16 21:11:06 Of 24 nodes total:
+04/24/16 21:11:06  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/24/16 21:11:06   ===     ===      ===     ===     ===        ===      ===
+04/24/16 21:11:06     7       0        1       0       0         16        0
+04/24/16 21:11:06 2 job proc(s) currently held
+04/24/16 21:21:07 601 seconds since last log event
+04/24/16 21:21:07 Pending DAG nodes:
+04/24/16 21:21:07   Node SAMToolsIndexCLI_8, Condor ID 1556, status STATUS_SUBMITTED
+04/24/16 21:29:57 Currently monitoring 1 Condor log file(s)
+04/24/16 21:29:57 Event: ULOG_JOB_ABORTED for Condor Node SAMToolsIndexCLI_8 (1556.0.0)
+04/24/16 21:29:57 Number of idle job procs: 0
+04/24/16 21:29:57 Retrying node SAMToolsIndexCLI_8 (retry #1 of 3)...
+04/24/16 21:29:57 DAG status: 0 (DAG_STATUS_OK)
+04/24/16 21:29:57 Of 24 nodes total:
+04/24/16 21:29:57  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/24/16 21:29:57   ===     ===      ===     ===     ===        ===      ===
+04/24/16 21:29:57     7       0        0       0       1         16        0
+04/24/16 21:29:57 2 job proc(s) currently held
+04/24/16 21:30:02 Reassigning the id of job SAMToolsIndexCLI_8 from (1556.0.0) to (-1.-1.-1)
+04/24/16 21:30:02 Submitting Condor Node SAMToolsIndexCLI_8 job(s)...
+04/24/16 21:30:02 Adding a DAGMan workflow log /projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log
+04/24/16 21:30:02 Masking the events recorded in the DAGMAN workflow log
+04/24/16 21:30:02 Mask for workflow log is 0,1,2,4,5,7,9,10,11,12,13,16,17,24,27
+04/24/16 21:30:02 submitting: /projects/mapseq/apps/condor-8.4.4-rhel7/bin/condor_submit -a dag_node_name' '=' 'SAMToolsIndexCLI_8 -a +DAGManJobId' '=' '1463 -a DAGManJobId' '=' '1463 -a submit_event_notes' '=' 'DAG' 'Node:' 'SAMToolsIndexCLI_8 -a dagman_log' '=' '/projects/mapseq/apps/mapseq-client-0.6.30/submit/2016-04-23/GSBaseline/017f07b3-498f-4226-8144-90da50cecb60/./GSBaseline.dag.nodes.log -a +DAGManNodesMask' '=' '"0,1,2,4,5,7,9,10,11,12,13,16,17,24,27" -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"PicardAddOrReplaceReadGroupsCLI_7" -a +KeepClaimIdle' '=' '20 -a notification' '=' 'never SAMToolsIndexCLI_8.sub
+04/24/16 21:30:03 From submit: Submitting job(s).
+04/24/16 21:30:03 From submit: 1 job(s) submitted to cluster 1604.
+04/24/16 21:30:03 	assigned Condor ID (1604.0.0)
+04/24/16 21:30:03 Just submitted 1 job this cycle...
+04/24/16 21:30:03 Currently monitoring 1 Condor log file(s)
+04/24/16 21:30:03 Reassigning the id of job SAMToolsIndexCLI_8 from (1604.0.0) to (1604.0.0)
+04/24/16 21:30:03 Event: ULOG_SUBMIT for Condor Node SAMToolsIndexCLI_8 (1604.0.0)
+04/24/16 21:30:03 Number of idle job procs: 1
+04/24/16 21:30:03 DAG status: 0 (DAG_STATUS_OK)
+04/24/16 21:30:03 Of 24 nodes total:
+04/24/16 21:30:03  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/24/16 21:30:03   ===     ===      ===     ===     ===        ===      ===
+04/24/16 21:30:03     7       0        1       0       0         16        0
+04/24/16 21:30:03 2 job proc(s) currently held
+04/24/16 21:30:18 Currently monitoring 1 Condor log file(s)
+04/24/16 21:30:18 Event: ULOG_EXECUTE for Condor Node SAMToolsIndexCLI_8 (1604.0.0)
+04/24/16 21:30:18 Number of idle job procs: 0
+04/24/16 21:30:28 Currently monitoring 1 Condor log file(s)
+04/24/16 21:30:28 Event: ULOG_JOB_HELD for Condor Node SAMToolsIndexCLI_8 (1604.0.0)
+04/24/16 21:30:28   Hold reason: The job attribute OnExitHold expression '( ExitBySignal == true ) || ( ExitCode != 0 )' evaluated to TRUE
+04/24/16 21:30:28 Number of idle job procs: 1
+04/24/16 21:30:28 DAG status: 0 (DAG_STATUS_OK)
+04/24/16 21:30:28 Of 24 nodes total:
+04/24/16 21:30:28  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/24/16 21:30:28   ===     ===      ===     ===     ===        ===      ===
+04/24/16 21:30:28     7       0        1       0       0         16        0
+04/24/16 21:30:28 3 job proc(s) currently held
+04/24/16 21:40:28 600 seconds since last log event
+04/24/16 21:40:28 Pending DAG nodes:
+04/24/16 21:40:28   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/24/16 21:50:29 1201 seconds since last log event
+04/24/16 21:50:29 Pending DAG nodes:
+04/24/16 21:50:29   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/24/16 22:00:29 1801 seconds since last log event
+04/24/16 22:00:29 Pending DAG nodes:
+04/24/16 22:00:29   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/24/16 22:10:30 2402 seconds since last log event
+04/24/16 22:10:30 Pending DAG nodes:
+04/24/16 22:10:30   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/24/16 22:20:31 3003 seconds since last log event
+04/24/16 22:20:31 Pending DAG nodes:
+04/24/16 22:20:31   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/24/16 22:30:31 3603 seconds since last log event
+04/24/16 22:30:31 Pending DAG nodes:
+04/24/16 22:30:31   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/24/16 22:40:32 4204 seconds since last log event
+04/24/16 22:40:32 Pending DAG nodes:
+04/24/16 22:40:32   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/24/16 22:50:33 4805 seconds since last log event
+04/24/16 22:50:33 Pending DAG nodes:
+04/24/16 22:50:33   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/24/16 23:00:33 5405 seconds since last log event
+04/24/16 23:00:33 Pending DAG nodes:
+04/24/16 23:00:33   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/24/16 23:10:34 6006 seconds since last log event
+04/24/16 23:10:34 Pending DAG nodes:
+04/24/16 23:10:34   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/24/16 23:20:34 6606 seconds since last log event
+04/24/16 23:20:34 Pending DAG nodes:
+04/24/16 23:20:34   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/24/16 23:30:35 7207 seconds since last log event
+04/24/16 23:30:35 Pending DAG nodes:
+04/24/16 23:30:35   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/24/16 23:40:36 7808 seconds since last log event
+04/24/16 23:40:36 Pending DAG nodes:
+04/24/16 23:40:36   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/24/16 23:50:36 8408 seconds since last log event
+04/24/16 23:50:36 Pending DAG nodes:
+04/24/16 23:50:36   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 00:00:37 9009 seconds since last log event
+04/25/16 00:00:37 Pending DAG nodes:
+04/25/16 00:00:37   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 00:10:37 9609 seconds since last log event
+04/25/16 00:10:37 Pending DAG nodes:
+04/25/16 00:10:37   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 00:20:38 10210 seconds since last log event
+04/25/16 00:20:38 Pending DAG nodes:
+04/25/16 00:20:38   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 00:30:39 10811 seconds since last log event
+04/25/16 00:30:39 Pending DAG nodes:
+04/25/16 00:30:39   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 00:40:39 11411 seconds since last log event
+04/25/16 00:40:39 Pending DAG nodes:
+04/25/16 00:40:39   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 00:50:40 12012 seconds since last log event
+04/25/16 00:50:40 Pending DAG nodes:
+04/25/16 00:50:40   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 01:00:40 12612 seconds since last log event
+04/25/16 01:00:40 Pending DAG nodes:
+04/25/16 01:00:40   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 01:10:41 13213 seconds since last log event
+04/25/16 01:10:41 Pending DAG nodes:
+04/25/16 01:10:41   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 01:20:42 13814 seconds since last log event
+04/25/16 01:20:42 Pending DAG nodes:
+04/25/16 01:20:42   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 01:30:42 14414 seconds since last log event
+04/25/16 01:30:42 Pending DAG nodes:
+04/25/16 01:30:42   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 01:40:43 15015 seconds since last log event
+04/25/16 01:40:43 Pending DAG nodes:
+04/25/16 01:40:43   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 01:50:44 15616 seconds since last log event
+04/25/16 01:50:44 Pending DAG nodes:
+04/25/16 01:50:44   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 02:00:44 16216 seconds since last log event
+04/25/16 02:00:44 Pending DAG nodes:
+04/25/16 02:00:44   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 02:10:45 16817 seconds since last log event
+04/25/16 02:10:45 Pending DAG nodes:
+04/25/16 02:10:45   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 02:20:45 17417 seconds since last log event
+04/25/16 02:20:45 Pending DAG nodes:
+04/25/16 02:20:45   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 02:30:46 18018 seconds since last log event
+04/25/16 02:30:46 Pending DAG nodes:
+04/25/16 02:30:46   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 02:40:47 18619 seconds since last log event
+04/25/16 02:40:47 Pending DAG nodes:
+04/25/16 02:40:47   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 02:50:47 19219 seconds since last log event
+04/25/16 02:50:47 Pending DAG nodes:
+04/25/16 02:50:47   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 03:00:48 19820 seconds since last log event
+04/25/16 03:00:48 Pending DAG nodes:
+04/25/16 03:00:48   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 03:10:48 20420 seconds since last log event
+04/25/16 03:10:48 Pending DAG nodes:
+04/25/16 03:10:48   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 03:20:48 21020 seconds since last log event
+04/25/16 03:20:48 Pending DAG nodes:
+04/25/16 03:20:48   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 03:30:49 21621 seconds since last log event
+04/25/16 03:30:49 Pending DAG nodes:
+04/25/16 03:30:49   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 03:40:49 22221 seconds since last log event
+04/25/16 03:40:49 Pending DAG nodes:
+04/25/16 03:40:49   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 03:50:50 22822 seconds since last log event
+04/25/16 03:50:50 Pending DAG nodes:
+04/25/16 03:50:50   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 04:00:51 23423 seconds since last log event
+04/25/16 04:00:51 Pending DAG nodes:
+04/25/16 04:00:51   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 04:10:51 24023 seconds since last log event
+04/25/16 04:10:51 Pending DAG nodes:
+04/25/16 04:10:51   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 04:20:52 24624 seconds since last log event
+04/25/16 04:20:52 Pending DAG nodes:
+04/25/16 04:20:52   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 04:30:52 25224 seconds since last log event
+04/25/16 04:30:52 Pending DAG nodes:
+04/25/16 04:30:52   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 04:40:53 25825 seconds since last log event
+04/25/16 04:40:53 Pending DAG nodes:
+04/25/16 04:40:53   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 04:50:54 26426 seconds since last log event
+04/25/16 04:50:54 Pending DAG nodes:
+04/25/16 04:50:54   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 05:00:54 27026 seconds since last log event
+04/25/16 05:00:54 Pending DAG nodes:
+04/25/16 05:00:54   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 05:10:55 27627 seconds since last log event
+04/25/16 05:10:55 Pending DAG nodes:
+04/25/16 05:10:55   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 05:20:55 28227 seconds since last log event
+04/25/16 05:20:55 Pending DAG nodes:
+04/25/16 05:20:55   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 05:30:55 28827 seconds since last log event
+04/25/16 05:30:55 Pending DAG nodes:
+04/25/16 05:30:55   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 05:40:56 29428 seconds since last log event
+04/25/16 05:40:56 Pending DAG nodes:
+04/25/16 05:40:56   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 05:50:56 30028 seconds since last log event
+04/25/16 05:50:56 Pending DAG nodes:
+04/25/16 05:50:56   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 06:00:56 30628 seconds since last log event
+04/25/16 06:00:56 Pending DAG nodes:
+04/25/16 06:00:56   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 06:10:56 31228 seconds since last log event
+04/25/16 06:10:56 Pending DAG nodes:
+04/25/16 06:10:56   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 06:20:56 31828 seconds since last log event
+04/25/16 06:20:56 Pending DAG nodes:
+04/25/16 06:20:56   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 06:30:57 32429 seconds since last log event
+04/25/16 06:30:57 Pending DAG nodes:
+04/25/16 06:30:57   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 06:40:58 33030 seconds since last log event
+04/25/16 06:40:58 Pending DAG nodes:
+04/25/16 06:40:58   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 06:50:58 33630 seconds since last log event
+04/25/16 06:50:58 Pending DAG nodes:
+04/25/16 06:50:58   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 07:00:58 34230 seconds since last log event
+04/25/16 07:00:58 Pending DAG nodes:
+04/25/16 07:00:58   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 07:10:58 34830 seconds since last log event
+04/25/16 07:10:58 Pending DAG nodes:
+04/25/16 07:10:58   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 07:20:59 35431 seconds since last log event
+04/25/16 07:20:59 Pending DAG nodes:
+04/25/16 07:20:59   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 07:31:00 36032 seconds since last log event
+04/25/16 07:31:00 Pending DAG nodes:
+04/25/16 07:31:00   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 07:41:00 36632 seconds since last log event
+04/25/16 07:41:00 Pending DAG nodes:
+04/25/16 07:41:00   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 07:51:01 37233 seconds since last log event
+04/25/16 07:51:01 Pending DAG nodes:
+04/25/16 07:51:01   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 08:01:02 37834 seconds since last log event
+04/25/16 08:01:02 Pending DAG nodes:
+04/25/16 08:01:02   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 08:11:02 38434 seconds since last log event
+04/25/16 08:11:02 Pending DAG nodes:
+04/25/16 08:11:02   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 08:21:03 39035 seconds since last log event
+04/25/16 08:21:03 Pending DAG nodes:
+04/25/16 08:21:03   Node SAMToolsIndexCLI_8, Condor ID 1604, status STATUS_SUBMITTED
+04/25/16 08:23:34 Received SIGUSR1
+04/25/16 08:23:34 Aborting DAG...
+04/25/16 08:23:34 Writing Rescue DAG to GSBaseline.dag.rescue001...
+04/25/16 08:23:34 Removing submitted jobs...
+04/25/16 08:23:34 Note: 0 total job deferrals because of -MaxJobs limit (0)
+04/25/16 08:23:34 Note: 0 total job deferrals because of -MaxIdle limit (1000)
+04/25/16 08:23:34 Note: 0 total job deferrals because of node category throttles
+04/25/16 08:23:34 Note: 0 total PRE script deferrals because of -MaxPre limit (20) or DEFER
+04/25/16 08:23:34 Note: 0 total POST script deferrals because of -MaxPost limit (20) or DEFER
+04/25/16 08:23:34 DAG status: 4 (DAG_STATUS_RM)
+04/25/16 08:23:34 Of 24 nodes total:
+04/25/16 08:23:34  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+04/25/16 08:23:34   ===     ===      ===     ===     ===        ===      ===
+04/25/16 08:23:34     7       0        1       0       0         16        0
+04/25/16 08:23:34 3 job proc(s) currently held
+04/25/16 08:23:34 Wrote metrics file GSBaseline.dag.metrics.
+04/25/16 08:23:34 Metrics not sent because of PEGASUS_METRICS or CONDOR_DEVELOPERS setting.
+04/25/16 08:23:34 **** condor_scheduniv_exec.1463.0 (condor_DAGMAN) pid 20609 EXITING WITH STATUS 2

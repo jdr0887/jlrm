@@ -1,0 +1,232 @@
+09/14/13 00:19:34 Setting maximum accepts per cycle 8.
+09/14/13 00:19:34 Setting maximum file descriptors to 20000.
+09/14/13 00:19:34 ******************************************************
+09/14/13 00:19:34 ** condor_scheduniv_exec.922799.0 (CONDOR_DAGMAN) STARTING UP
+09/14/13 00:19:34 ** /nas02/apps/condor-7.8.7/bin/condor_dagman
+09/14/13 00:19:34 ** SubsystemInfo: name=DAGMAN type=DAGMAN(10) class=DAEMON(1)
+09/14/13 00:19:34 ** Configuration: subsystem:DAGMAN local:<NONE> class:DAEMON
+09/14/13 00:19:34 ** $CondorVersion: 7.8.7 Dec 12 2012 BuildID: 86173 $
+09/14/13 00:19:34 ** $CondorPlatform: x86_64_rhap_5.8 $
+09/14/13 00:19:34 ** PID = 22535
+09/14/13 00:19:34 ** Log last touched time unavailable (No such file or directory)
+09/14/13 00:19:34 ******************************************************
+09/14/13 00:19:34 Using config source: /nas02/apps/condor-7.8.7/etc/condor_config
+09/14/13 00:19:34 Using local config sources: 
+09/14/13 00:19:34    /nas02/apps/condor-7.8.7/config/biodev2/condor_config.biodev2
+09/14/13 00:19:34    /nas02/apps/condor-7.8.7/config/biodev2/condor_config.biodev2
+09/14/13 00:19:34 DaemonCore: command socket at <152.19.197.180:40915>
+09/14/13 00:19:34 DaemonCore: private command socket at <152.19.197.180:40915>
+09/14/13 00:19:34 Setting maximum accepts per cycle 8.
+09/14/13 00:19:34 DAGMAN_USE_STRICT setting: 0
+09/14/13 00:19:34 DAGMAN_VERBOSITY setting: 3
+09/14/13 00:19:34 DAGMAN_DEBUG_CACHE_SIZE setting: 5242880
+09/14/13 00:19:34 DAGMAN_DEBUG_CACHE_ENABLE setting: False
+09/14/13 00:19:34 DAGMAN_SUBMIT_DELAY setting: 0
+09/14/13 00:19:34 DAGMAN_MAX_SUBMIT_ATTEMPTS setting: 6
+09/14/13 00:19:34 DAGMAN_STARTUP_CYCLE_DETECT setting: False
+09/14/13 00:19:34 DAGMAN_MAX_SUBMITS_PER_INTERVAL setting: 5
+09/14/13 00:19:34 DAGMAN_USER_LOG_SCAN_INTERVAL setting: 5
+09/14/13 00:19:34 allow_events (DAGMAN_IGNORE_DUPLICATE_JOB_EXECUTION, DAGMAN_ALLOW_EVENTS) setting: 114
+09/14/13 00:19:34 DAGMAN_RETRY_SUBMIT_FIRST setting: True
+09/14/13 00:19:34 DAGMAN_RETRY_NODE_FIRST setting: False
+09/14/13 00:19:34 DAGMAN_MAX_JOBS_IDLE setting: 0
+09/14/13 00:19:34 DAGMAN_MAX_JOBS_SUBMITTED setting: 0
+09/14/13 00:19:34 DAGMAN_MAX_PRE_SCRIPTS setting: 0
+09/14/13 00:19:34 DAGMAN_MAX_POST_SCRIPTS setting: 0
+09/14/13 00:19:34 DAGMAN_ALLOW_LOG_ERROR setting: False
+09/14/13 00:19:34 DAGMAN_MUNGE_NODE_NAMES setting: True
+09/14/13 00:19:34 DAGMAN_PROHIBIT_MULTI_JOBS setting: False
+09/14/13 00:19:34 DAGMAN_SUBMIT_DEPTH_FIRST setting: False
+09/14/13 00:19:34 DAGMAN_ALWAYS_RUN_POST setting: True
+09/14/13 00:19:34 DAGMAN_ABORT_DUPLICATES setting: True
+09/14/13 00:19:34 DAGMAN_ABORT_ON_SCARY_SUBMIT setting: True
+09/14/13 00:19:34 DAGMAN_PENDING_REPORT_INTERVAL setting: 600
+09/14/13 00:19:34 DAGMAN_AUTO_RESCUE setting: True
+09/14/13 00:19:34 DAGMAN_MAX_RESCUE_NUM setting: 100
+09/14/13 00:19:34 DAGMAN_WRITE_PARTIAL_RESCUE setting: True
+09/14/13 00:19:34 DAGMAN_DEFAULT_NODE_LOG setting: null
+09/14/13 00:19:34 DAGMAN_GENERATE_SUBDAG_SUBMITS setting: True
+09/14/13 00:19:34 ALL_DEBUG setting: 
+09/14/13 00:19:34 DAGMAN_DEBUG setting: 
+09/14/13 00:19:34 argv[0] == "condor_scheduniv_exec.922799.0"
+09/14/13 00:19:34 argv[1] == "-Lockfile"
+09/14/13 00:19:34 argv[2] == "NIDAUCSFVariantCalling.dag.lock"
+09/14/13 00:19:34 argv[3] == "-AutoRescue"
+09/14/13 00:19:34 argv[4] == "1"
+09/14/13 00:19:34 argv[5] == "-DoRescueFrom"
+09/14/13 00:19:34 argv[6] == "0"
+09/14/13 00:19:34 argv[7] == "-Dag"
+09/14/13 00:19:34 argv[8] == "NIDAUCSFVariantCalling.dag"
+09/14/13 00:19:34 argv[9] == "-CsdVersion"
+09/14/13 00:19:34 argv[10] == "$CondorVersion: 7.8.7 Dec 12 2012 BuildID: 86173 $"
+09/14/13 00:19:34 argv[11] == "-Force"
+09/14/13 00:19:34 argv[12] == "-Dagman"
+09/14/13 00:19:34 argv[13] == "/nas02/apps/condor-7.8.7/bin/condor_dagman"
+09/14/13 00:19:34 Default node log file is: </nas02/home/r/c/rc_renci.svc/.mapseq/submit/2013-09-14/NIDAUCSFVariantCalling/3218a373-479e-4338-8184-735e867f899c/NIDAUCSFVariantCalling.dag.nodes.log>
+09/14/13 00:19:34 DAG Lockfile will be written to NIDAUCSFVariantCalling.dag.lock
+09/14/13 00:19:34 DAG Input file is NIDAUCSFVariantCalling.dag
+09/14/13 00:19:34 Parsing 1 dagfiles
+09/14/13 00:19:34 Parsing NIDAUCSFVariantCalling.dag ...
+09/14/13 00:19:34 Dag contains 5 total jobs
+09/14/13 00:19:34 Sleeping for 12 seconds to ensure ProcessId uniqueness
+09/14/13 00:19:46 Bootstrapping...
+09/14/13 00:19:46 Number of pre-completed nodes: 0
+09/14/13 00:19:46 Registering condor_event_timer...
+09/14/13 00:19:47 Sleeping for one second for log file consistency
+09/14/13 00:19:48 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-14/NIDAUCSFVariantCalling/3218a373-479e-4338-8184-735e867f899c/PicardMarkDuplicatesCLI_1.log
+09/14/13 00:19:48 Submitting Condor Node PicardMarkDuplicatesCLI_1 job(s)...
+09/14/13 00:19:48 submitting: condor_submit -a dag_node_name' '=' 'PicardMarkDuplicatesCLI_1 -a +DAGManJobId' '=' '922799 -a DAGManJobId' '=' '922799 -a submit_event_notes' '=' 'DAG' 'Node:' 'PicardMarkDuplicatesCLI_1 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"" -a +KeepClaimIdle' '=' '20 PicardMarkDuplicatesCLI_1.sub
+09/14/13 00:19:48 From submit: Submitting job(s).
+09/14/13 00:19:48 From submit: 1 job(s) submitted to cluster 922802.
+09/14/13 00:19:48 	assigned Condor ID (922802.0.0)
+09/14/13 00:19:48 Just submitted 1 job this cycle...
+09/14/13 00:19:48 Currently monitoring 1 Condor log file(s)
+09/14/13 00:19:48 Event: ULOG_SUBMIT for Condor Node PicardMarkDuplicatesCLI_1 (922802.0.0)
+09/14/13 00:19:48 Number of idle job procs: 1
+09/14/13 00:19:48 Of 5 nodes total:
+09/14/13 00:19:48  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/14/13 00:19:48   ===     ===      ===     ===     ===        ===      ===
+09/14/13 00:19:48     0       0        1       0       0          4        0
+09/14/13 00:19:48 0 job proc(s) currently held
+09/14/13 00:20:13 Currently monitoring 1 Condor log file(s)
+09/14/13 00:20:13 Event: ULOG_EXECUTE for Condor Node PicardMarkDuplicatesCLI_1 (922802.0.0)
+09/14/13 00:20:13 Number of idle job procs: 0
+09/14/13 00:20:23 Currently monitoring 1 Condor log file(s)
+09/14/13 00:20:23 Event: ULOG_IMAGE_SIZE for Condor Node PicardMarkDuplicatesCLI_1 (922802.0.0)
+09/14/13 00:25:18 Currently monitoring 1 Condor log file(s)
+09/14/13 00:25:18 Event: ULOG_IMAGE_SIZE for Condor Node PicardMarkDuplicatesCLI_1 (922802.0.0)
+09/14/13 00:30:23 Currently monitoring 1 Condor log file(s)
+09/14/13 00:30:23 Event: ULOG_IMAGE_SIZE for Condor Node PicardMarkDuplicatesCLI_1 (922802.0.0)
+09/14/13 00:36:03 Currently monitoring 1 Condor log file(s)
+09/14/13 00:36:03 Event: ULOG_JOB_TERMINATED for Condor Node PicardMarkDuplicatesCLI_1 (922802.0.0)
+09/14/13 00:36:03 Node PicardMarkDuplicatesCLI_1 job proc (922802.0.0) completed successfully.
+09/14/13 00:36:03 Node PicardMarkDuplicatesCLI_1 job completed
+09/14/13 00:36:03 Number of idle job procs: 0
+09/14/13 00:36:03 Of 5 nodes total:
+09/14/13 00:36:03  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/14/13 00:36:03   ===     ===      ===     ===     ===        ===      ===
+09/14/13 00:36:03     1       0        0       0       1          3        0
+09/14/13 00:36:03 0 job proc(s) currently held
+09/14/13 00:36:08 Sleeping for one second for log file consistency
+09/14/13 00:36:09 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-14/NIDAUCSFVariantCalling/3218a373-479e-4338-8184-735e867f899c/SAMToolsIndexCLI_2.log
+09/14/13 00:36:09 Submitting Condor Node SAMToolsIndexCLI_2 job(s)...
+09/14/13 00:36:09 submitting: condor_submit -a dag_node_name' '=' 'SAMToolsIndexCLI_2 -a +DAGManJobId' '=' '922799 -a DAGManJobId' '=' '922799 -a submit_event_notes' '=' 'DAG' 'Node:' 'SAMToolsIndexCLI_2 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"PicardMarkDuplicatesCLI_1" -a +KeepClaimIdle' '=' '20 SAMToolsIndexCLI_2.sub
+09/14/13 00:36:09 From submit: Submitting job(s).
+09/14/13 00:36:09 From submit: 1 job(s) submitted to cluster 922842.
+09/14/13 00:36:09 	assigned Condor ID (922842.0.0)
+09/14/13 00:36:09 Just submitted 1 job this cycle...
+09/14/13 00:36:09 Currently monitoring 1 Condor log file(s)
+09/14/13 00:36:09 Event: ULOG_SUBMIT for Condor Node SAMToolsIndexCLI_2 (922842.0.0)
+09/14/13 00:36:09 Number of idle job procs: 1
+09/14/13 00:36:09 Of 5 nodes total:
+09/14/13 00:36:09  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/14/13 00:36:09   ===     ===      ===     ===     ===        ===      ===
+09/14/13 00:36:09     1       0        1       0       0          3        0
+09/14/13 00:36:09 0 job proc(s) currently held
+09/14/13 00:36:34 Currently monitoring 1 Condor log file(s)
+09/14/13 00:36:34 Event: ULOG_EXECUTE for Condor Node SAMToolsIndexCLI_2 (922842.0.0)
+09/14/13 00:36:34 Number of idle job procs: 0
+09/14/13 00:36:44 Currently monitoring 1 Condor log file(s)
+09/14/13 00:36:44 Event: ULOG_IMAGE_SIZE for Condor Node SAMToolsIndexCLI_2 (922842.0.0)
+09/14/13 00:40:09 Currently monitoring 1 Condor log file(s)
+09/14/13 00:40:09 Event: ULOG_IMAGE_SIZE for Condor Node SAMToolsIndexCLI_2 (922842.0.0)
+09/14/13 00:40:09 Event: ULOG_JOB_TERMINATED for Condor Node SAMToolsIndexCLI_2 (922842.0.0)
+09/14/13 00:40:09 Node SAMToolsIndexCLI_2 job proc (922842.0.0) completed successfully.
+09/14/13 00:40:09 Node SAMToolsIndexCLI_2 job completed
+09/14/13 00:40:09 Number of idle job procs: 0
+09/14/13 00:40:09 Of 5 nodes total:
+09/14/13 00:40:09  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/14/13 00:40:09   ===     ===      ===     ===     ===        ===      ===
+09/14/13 00:40:09     2       0        0       0       2          1        0
+09/14/13 00:40:09 0 job proc(s) currently held
+09/14/13 00:40:14 Sleeping for one second for log file consistency
+09/14/13 00:40:15 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-14/NIDAUCSFVariantCalling/3218a373-479e-4338-8184-735e867f899c/SAMToolsFlagstatCLI_3.log
+09/14/13 00:40:15 Submitting Condor Node SAMToolsFlagstatCLI_3 job(s)...
+09/14/13 00:40:15 submitting: condor_submit -a dag_node_name' '=' 'SAMToolsFlagstatCLI_3 -a +DAGManJobId' '=' '922799 -a DAGManJobId' '=' '922799 -a submit_event_notes' '=' 'DAG' 'Node:' 'SAMToolsFlagstatCLI_3 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"SAMToolsIndexCLI_2" SAMToolsFlagstatCLI_3.sub
+09/14/13 00:40:15 From submit: Submitting job(s).
+09/14/13 00:40:15 From submit: 1 job(s) submitted to cluster 922845.
+09/14/13 00:40:15 	assigned Condor ID (922845.0.0)
+09/14/13 00:40:15 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-14/NIDAUCSFVariantCalling/3218a373-479e-4338-8184-735e867f899c/GATKDepthOfCoverageCLI_4.log
+09/14/13 00:40:15 Submitting Condor Node GATKDepthOfCoverageCLI_4 job(s)...
+09/14/13 00:40:15 submitting: condor_submit -a dag_node_name' '=' 'GATKDepthOfCoverageCLI_4 -a +DAGManJobId' '=' '922799 -a DAGManJobId' '=' '922799 -a submit_event_notes' '=' 'DAG' 'Node:' 'GATKDepthOfCoverageCLI_4 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"SAMToolsIndexCLI_2" -a +KeepClaimIdle' '=' '20 GATKDepthOfCoverageCLI_4.sub
+09/14/13 00:40:15 From submit: Submitting job(s).
+09/14/13 00:40:15 From submit: 1 job(s) submitted to cluster 922846.
+09/14/13 00:40:15 	assigned Condor ID (922846.0.0)
+09/14/13 00:40:15 Just submitted 2 jobs this cycle...
+09/14/13 00:40:15 Currently monitoring 2 Condor log file(s)
+09/14/13 00:40:15 Event: ULOG_SUBMIT for Condor Node GATKDepthOfCoverageCLI_4 (922846.0.0)
+09/14/13 00:40:15 Number of idle job procs: 1
+09/14/13 00:40:15 Event: ULOG_SUBMIT for Condor Node SAMToolsFlagstatCLI_3 (922845.0.0)
+09/14/13 00:40:15 Number of idle job procs: 2
+09/14/13 00:40:15 Of 5 nodes total:
+09/14/13 00:40:15  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/14/13 00:40:15   ===     ===      ===     ===     ===        ===      ===
+09/14/13 00:40:15     2       0        2       0       0          1        0
+09/14/13 00:40:15 0 job proc(s) currently held
+09/14/13 00:40:20 Currently monitoring 2 Condor log file(s)
+09/14/13 00:40:20 Event: ULOG_EXECUTE for Condor Node SAMToolsFlagstatCLI_3 (922845.0.0)
+09/14/13 00:40:20 Number of idle job procs: 1
+09/14/13 00:40:20 Event: ULOG_EXECUTE for Condor Node GATKDepthOfCoverageCLI_4 (922846.0.0)
+09/14/13 00:40:20 Number of idle job procs: 0
+09/14/13 00:40:30 Currently monitoring 2 Condor log file(s)
+09/14/13 00:40:30 Event: ULOG_IMAGE_SIZE for Condor Node SAMToolsFlagstatCLI_3 (922845.0.0)
+09/14/13 00:40:30 Event: ULOG_IMAGE_SIZE for Condor Node GATKDepthOfCoverageCLI_4 (922846.0.0)
+09/14/13 00:43:40 Currently monitoring 2 Condor log file(s)
+09/14/13 00:43:40 Event: ULOG_IMAGE_SIZE for Condor Node SAMToolsFlagstatCLI_3 (922845.0.0)
+09/14/13 00:43:40 Event: ULOG_JOB_TERMINATED for Condor Node SAMToolsFlagstatCLI_3 (922845.0.0)
+09/14/13 00:43:40 Node SAMToolsFlagstatCLI_3 job proc (922845.0.0) completed successfully.
+09/14/13 00:43:40 Node SAMToolsFlagstatCLI_3 job completed
+09/14/13 00:43:40 Number of idle job procs: 0
+09/14/13 00:43:40 Of 5 nodes total:
+09/14/13 00:43:40  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/14/13 00:43:40   ===     ===      ===     ===     ===        ===      ===
+09/14/13 00:43:40     3       0        1       0       0          1        0
+09/14/13 00:43:40 0 job proc(s) currently held
+09/14/13 00:45:30 Currently monitoring 1 Condor log file(s)
+09/14/13 00:45:30 Event: ULOG_IMAGE_SIZE for Condor Node GATKDepthOfCoverageCLI_4 (922846.0.0)
+09/14/13 00:55:30 Currently monitoring 1 Condor log file(s)
+09/14/13 00:55:30 Event: ULOG_IMAGE_SIZE for Condor Node GATKDepthOfCoverageCLI_4 (922846.0.0)
+09/14/13 01:05:30 Currently monitoring 1 Condor log file(s)
+09/14/13 01:05:30 Event: ULOG_IMAGE_SIZE for Condor Node GATKDepthOfCoverageCLI_4 (922846.0.0)
+09/14/13 01:10:30 Currently monitoring 1 Condor log file(s)
+09/14/13 01:10:30 Event: ULOG_IMAGE_SIZE for Condor Node GATKDepthOfCoverageCLI_4 (922846.0.0)
+09/14/13 01:15:30 Currently monitoring 1 Condor log file(s)
+09/14/13 01:15:30 Event: ULOG_IMAGE_SIZE for Condor Node GATKDepthOfCoverageCLI_4 (922846.0.0)
+09/14/13 01:21:35 Currently monitoring 1 Condor log file(s)
+09/14/13 01:21:35 Event: ULOG_JOB_TERMINATED for Condor Node GATKDepthOfCoverageCLI_4 (922846.0.0)
+09/14/13 01:21:35 Node GATKDepthOfCoverageCLI_4 job proc (922846.0.0) completed successfully.
+09/14/13 01:21:35 Node GATKDepthOfCoverageCLI_4 job completed
+09/14/13 01:21:35 Number of idle job procs: 0
+09/14/13 01:21:35 Of 5 nodes total:
+09/14/13 01:21:35  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/14/13 01:21:35   ===     ===      ===     ===     ===        ===      ===
+09/14/13 01:21:35     4       0        0       0       1          0        0
+09/14/13 01:21:35 0 job proc(s) currently held
+09/14/13 01:21:40 Sleeping for one second for log file consistency
+09/14/13 01:21:41 MultiLogFiles: truncating log file /nas02/home/r/c/rc_renci.svc/mapseq/submit/2013-09-14/NIDAUCSFVariantCalling/3218a373-479e-4338-8184-735e867f899c/GATKUnifiedGenotyperCLI_5.log
+09/14/13 01:21:41 Submitting Condor Node GATKUnifiedGenotyperCLI_5 job(s)...
+09/14/13 01:21:41 submitting: condor_submit -a dag_node_name' '=' 'GATKUnifiedGenotyperCLI_5 -a +DAGManJobId' '=' '922799 -a DAGManJobId' '=' '922799 -a submit_event_notes' '=' 'DAG' 'Node:' 'GATKUnifiedGenotyperCLI_5 -a DAG_STATUS' '=' '0 -a FAILED_COUNT' '=' '0 -a +DAGParentNodeNames' '=' '"GATKDepthOfCoverageCLI_4" GATKUnifiedGenotyperCLI_5.sub
+09/14/13 01:21:41 From submit: Submitting job(s).
+09/14/13 01:21:41 From submit: 1 job(s) submitted to cluster 922983.
+09/14/13 01:21:41 	assigned Condor ID (922983.0.0)
+09/14/13 01:21:41 Just submitted 1 job this cycle...
+09/14/13 01:21:41 Currently monitoring 1 Condor log file(s)
+09/14/13 01:21:41 Event: ULOG_SUBMIT for Condor Node GATKUnifiedGenotyperCLI_5 (922983.0.0)
+09/14/13 01:21:41 Number of idle job procs: 1
+09/14/13 01:21:41 Of 5 nodes total:
+09/14/13 01:21:41  Done     Pre   Queued    Post   Ready   Un-Ready   Failed
+09/14/13 01:21:41   ===     ===      ===     ===     ===        ===      ===
+09/14/13 01:21:41     4       0        1       0       0          0        0
+09/14/13 01:21:41 0 job proc(s) currently held
+09/14/13 01:21:46 Currently monitoring 1 Condor log file(s)
+09/14/13 01:21:46 Event: ULOG_EXECUTE for Condor Node GATKUnifiedGenotyperCLI_5 (922983.0.0)
+09/14/13 01:21:46 Number of idle job procs: 0
+09/14/13 01:21:56 Currently monitoring 1 Condor log file(s)
+09/14/13 01:21:56 Event: ULOG_IMAGE_SIZE for Condor Node GATKUnifiedGenotyperCLI_5 (922983.0.0)
+09/14/13 01:26:56 Currently monitoring 1 Condor log file(s)
+09/14/13 01:26:56 Event: ULOG_IMAGE_SIZE for Condor Node GATKUnifiedGenotyperCLI_5 (922983.0.0)
+09/14/13 01:28:51 Currently monitoring 1 Condor log file(s)
+09/14/13 01:28:51 Event: ULOG_JOB_TERMINATED for Condor Node GATKUnifiedGenotyperCLI_5 (922983.0.0)
+09/14/13 01:28:51 Node GATKUnifiedGenotyperCLI_5 job proc (922983.0.0) completed successfully.
+09/14/13 01:28:51 Node GATKUnifiedGenotyperCLI_5 job completed
+09/14/13 01:28:51 Number of idle job procs: 0
