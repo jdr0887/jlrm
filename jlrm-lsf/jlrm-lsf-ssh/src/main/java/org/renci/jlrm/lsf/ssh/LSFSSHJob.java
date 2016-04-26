@@ -8,6 +8,8 @@ import org.renci.jlrm.lsf.LSFJob;
 
 public class LSFSSHJob extends LSFJob {
 
+    private static final long serialVersionUID = 5169666827892951127L;
+
     private boolean transferInputs = Boolean.FALSE;
 
     private boolean transferExecutable = Boolean.FALSE;
@@ -29,6 +31,7 @@ public class LSFSSHJob extends LSFJob {
         this.error = builder.error();
         this.numberOfProcessors = builder.numberOfProcessors();
         this.memory = builder.memory();
+        this.disk = builder.disk();
         this.duration = builder.duration();
         this.durationTimeUnit = builder.durationTimeUnit();
         // from LSFJobBuilder

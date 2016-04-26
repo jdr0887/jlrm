@@ -54,7 +54,7 @@ public class SGEJobBuilder extends JobBuilder {
         return this;
     }
 
-    public SGEJobBuilder memory(Integer memory) {
+    public SGEJobBuilder memory(String memory) {
         this.memory = memory;
         return this;
     }

@@ -67,6 +67,7 @@ public class CondorJob extends Job {
         this.error = builder.error();
         this.numberOfProcessors = builder.numberOfProcessors();
         this.memory = builder.memory();
+        this.disk = builder.disk();
         this.duration = builder.duration();
         this.durationTimeUnit = builder.durationTimeUnit();
         // from CondorJobBuilder
@@ -182,15 +183,15 @@ public class CondorJob extends Job {
 
     public void addArgument(String flag, Object value, String delimiter) {
         String arg = String.format("%s%s%s", flag, delimiter, value.toString());
-        String argumentsClassAdValue = this.argumentsClassAd.getValue() != null ? String.format("%s %s",
-                this.argumentsClassAd.getValue(), arg) : arg;
+        String argumentsClassAdValue = this.argumentsClassAd.getValue() != null
+                ? String.format("%s %s", this.argumentsClassAd.getValue(), arg) : arg;
         this.argumentsClassAd.setValue(argumentsClassAdValue);
     }
 
     public void addRequirement(String expression) {
         String arg = String.format("&& (%s)", expression);
-        String requirementsClassAdValue = this.requirementsClassAd.getValue() != null ? String.format("%s %s",
-                this.requirementsClassAd.getValue(), arg) : arg;
+        String requirementsClassAdValue = this.requirementsClassAd.getValue() != null
+                ? String.format("%s %s", this.requirementsClassAd.getValue(), arg) : arg;
         this.requirementsClassAd.setValue(requirementsClassAdValue);
     }
 
@@ -260,11 +261,11 @@ public class CondorJob extends Job {
 
     @Override
     public String toString() {
-        return String
-                .format("CondorJob [cluster=%s, jobId=%s, retry=%s, preScript=%s, postScript=%s, siteName=%s, initialDirectory=%s, priority=%s, argumentsClassAd=%s, requirementsClassAd=%s, id=%s, name=%s, executable=%s, submitFile=%s, output=%s, error=%s, numberOfProcessors=%s, memory=%s, duration=%s, durationTimeUnit=%s]",
-                        cluster, jobId, retry, preScript, postScript, siteName, initialDirectory, priority,
-                        argumentsClassAd, requirementsClassAd, id, name, executable, submitFile, output, error,
-                        numberOfProcessors, memory, duration, durationTimeUnit);
+        return String.format(
+                "CondorJob [cluster=%s, jobId=%s, retry=%s, preScript=%s, postScript=%s, siteName=%s, initialDirectory=%s, priority=%s, argumentsClassAd=%s, requirementsClassAd=%s, id=%s, name=%s, executable=%s, submitFile=%s, output=%s, error=%s, numberOfProcessors=%s, memory=%s, duration=%s, durationTimeUnit=%s]",
+                cluster, jobId, retry, preScript, postScript, siteName, initialDirectory, priority, argumentsClassAd,
+                requirementsClassAd, id, name, executable, submitFile, output, error, numberOfProcessors, memory,
+                duration, durationTimeUnit);
     }
 
     @Override

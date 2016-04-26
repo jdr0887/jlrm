@@ -33,7 +33,9 @@ public class Job implements Serializable {
 
     protected Integer numberOfProcessors = 1;
 
-    protected Integer memory = 4 * 1024;
+    protected String memory = "2048";
+
+    protected String disk;
 
     protected long duration;
 
@@ -63,6 +65,14 @@ public class Job implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getDisk() {
+        return disk;
+    }
+
+    public void setDisk(String disk) {
+        this.disk = disk;
     }
 
     public String getName() {
@@ -113,11 +123,11 @@ public class Job implements Serializable {
         this.numberOfProcessors = numberOfProcessors;
     }
 
-    public Integer getMemory() {
+    public String getMemory() {
         return memory;
     }
 
-    public void setMemory(Integer memory) {
+    public void setMemory(String memory) {
         this.memory = memory;
     }
 
@@ -139,9 +149,10 @@ public class Job implements Serializable {
 
     @Override
     public String toString() {
-        return "Job [id=" + id + ", name=" + name + ", executable=" + executable + ", submitFile=" + submitFile
-                + ", output=" + output + ", error=" + error + ", numberOfProcessors=" + numberOfProcessors
-                + ", memory=" + memory + ", duration=" + duration + ", durationTimeUnit=" + durationTimeUnit + "]";
+        return String.format(
+                "Job [id=%s, name=%s, executable=%s, submitFile=%s, output=%s, error=%s, numberOfProcessors=%s, memory=%s, disk=%s, duration=%s, durationTimeUnit=%s]",
+                id, name, executable, submitFile, output, error, numberOfProcessors, memory, disk, duration,
+                durationTimeUnit);
     }
 
     @Override

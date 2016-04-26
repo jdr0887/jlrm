@@ -19,7 +19,9 @@ public class JobBuilder {
 
     protected Integer numberOfProcessors = 1;
 
-    protected Integer memory = 4 * 1024;
+    protected String memory = "2GB";
+
+    protected String disk = "5GB";
 
     protected long duration;
 
@@ -35,6 +37,15 @@ public class JobBuilder {
 
     public JobBuilder id(String id) {
         this.id = id;
+        return this;
+    }
+
+    public String disk() {
+        return disk;
+    }
+
+    public JobBuilder disk(String disk) {
+        this.disk = disk;
         return this;
     }
 
@@ -92,11 +103,11 @@ public class JobBuilder {
         return this;
     }
 
-    public Integer memory() {
+    public String memory() {
         return memory;
     }
 
-    public JobBuilder memory(Integer memory) {
+    public JobBuilder memory(String memory) {
         this.memory = memory;
         return this;
     }

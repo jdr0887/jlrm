@@ -31,6 +31,7 @@ public class PBSSSHJob extends PBSJob {
         this.error = builder.error();
         this.numberOfProcessors = builder.numberOfProcessors();
         this.memory = builder.memory();
+        this.disk = builder.disk();
         this.duration = builder.duration();
         this.durationTimeUnit = builder.durationTimeUnit();
         // from LSFJobBuilder

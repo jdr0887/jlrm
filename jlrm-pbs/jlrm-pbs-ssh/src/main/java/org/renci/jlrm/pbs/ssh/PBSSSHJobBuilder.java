@@ -84,7 +84,7 @@ public class PBSSSHJobBuilder extends PBSJobBuilder {
         return this;
     }
 
-    public PBSSSHJobBuilder memory(Integer memory) {
+    public PBSSSHJobBuilder memory(String memory) {
         this.memory = memory;
         return this;
     }

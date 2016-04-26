@@ -32,7 +32,7 @@ public class JobTest {
         CondorJobBuilder builder = new CondorJobBuilder().name(String.format("%s_%d", "GATKDepthOfCoverageCLI", 1));
 
         // condor attributes
-        builder.retry(3).memory(2048).numberOfProcessors(8).siteName("Kure").initialDirectory("/tmp")
+        builder.retry(3).memory("2GB").numberOfProcessors(8).siteName("Kure").initialDirectory("/tmp")
                 .addRequirement(String.format("JRLM_USER == \"%s\"", System.getProperty("user.name")));
 
         // actual job attributes

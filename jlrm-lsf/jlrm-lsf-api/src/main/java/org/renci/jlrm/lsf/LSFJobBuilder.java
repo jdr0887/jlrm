@@ -54,7 +54,7 @@ public class LSFJobBuilder extends JobBuilder {
         return this;
     }
 
-    public LSFJobBuilder memory(Integer memory) {
+    public LSFJobBuilder memory(String memory) {
         this.memory = memory;
         return this;
     }

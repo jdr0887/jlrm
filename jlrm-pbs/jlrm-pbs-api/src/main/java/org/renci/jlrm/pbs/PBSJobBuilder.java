@@ -54,7 +54,7 @@ public class PBSJobBuilder extends JobBuilder {
         return this;
     }
 
-    public PBSJobBuilder memory(Integer memory) {
+    public PBSJobBuilder memory(String memory) {
         this.memory = memory;
         return this;
     }

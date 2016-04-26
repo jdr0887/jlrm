@@ -84,7 +84,7 @@ public class SLURMSSHJobBuilder extends SLURMJobBuilder {
         return this;
     }
 
-    public SLURMSSHJobBuilder memory(Integer memory) {
+    public SLURMSSHJobBuilder memory(String memory) {
         this.memory = memory;
         return this;
     }

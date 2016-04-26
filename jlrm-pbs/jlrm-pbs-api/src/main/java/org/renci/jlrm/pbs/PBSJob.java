@@ -4,6 +4,8 @@ import org.renci.jlrm.Job;
 
 public class PBSJob extends Job {
 
+    private static final long serialVersionUID = -47993939893782293L;
+
     protected String queueName = "default";
 
     protected String project;
@@ -27,6 +29,7 @@ public class PBSJob extends Job {
         this.error = builder.error();
         this.numberOfProcessors = builder.numberOfProcessors();
         this.memory = builder.memory();
+        this.disk = builder.disk();
         this.duration = builder.duration();
         this.durationTimeUnit = builder.durationTimeUnit();
         // from LSFJobBuilder

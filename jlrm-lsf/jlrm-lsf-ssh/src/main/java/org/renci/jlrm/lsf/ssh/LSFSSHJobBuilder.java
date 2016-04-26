@@ -84,7 +84,7 @@ public class LSFSSHJobBuilder extends LSFJobBuilder {
         return this;
     }
 
-    public LSFSSHJobBuilder memory(Integer memory) {
+    public LSFSSHJobBuilder memory(String memory) {
         this.memory = memory;
         return this;
     }

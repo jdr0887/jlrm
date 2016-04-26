@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.junit.Test;
 import org.renci.jlrm.JLRMException;
-import org.renci.jlrm.Queue;
 import org.renci.jlrm.Site;
 import org.renci.jlrm.lsf.LSFJobStatusInfo;
 

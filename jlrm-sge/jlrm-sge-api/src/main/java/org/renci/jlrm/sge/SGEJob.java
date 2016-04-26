@@ -4,6 +4,8 @@ import org.renci.jlrm.Job;
 
 public class SGEJob extends Job {
 
+    private static final long serialVersionUID = 2496405773219470965L;
+
     protected String queueName;
 
     protected String project;
@@ -27,6 +29,7 @@ public class SGEJob extends Job {
         this.error = builder.error();
         this.numberOfProcessors = builder.numberOfProcessors();
         this.memory = builder.memory();
+        this.disk = builder.disk();
         this.duration = builder.duration();
         this.durationTimeUnit = builder.durationTimeUnit();
         // from SGEJobBuilder

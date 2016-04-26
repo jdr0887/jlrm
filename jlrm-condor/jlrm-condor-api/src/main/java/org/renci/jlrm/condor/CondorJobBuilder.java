@@ -267,7 +267,7 @@ public class CondorJobBuilder extends JobBuilder {
         return this;
     }
 
-    public CondorJobBuilder memory(Integer memory) {
+    public CondorJobBuilder memory(String memory) {
         this.memory = memory;
         ClassAdvertisement requestMemoryClassAd = new ClassAdvertisement(
                 ClassAdvertisementFactory.CLASS_AD_KEY_REQUEST_MEMORY, ClassAdvertisementType.INTEGER);

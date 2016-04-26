@@ -92,7 +92,7 @@ public class SGESubmitScriptExporter<T extends SGESSHJob> {
         }
 
         if (job.getMemory() != null) {
-            submitFileWriter.write(String.format("#$ -l mf=%dG%n", job.getMemory() / 1024));
+            submitFileWriter.write(String.format("#$ -l mf=%s%n", job.getMemory()));
         }
         submitFileWriter.write(String.format("#$ -i %s%n", "/dev/null"));
 

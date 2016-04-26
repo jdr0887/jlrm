@@ -8,6 +8,8 @@ import org.renci.jlrm.sge.SGEJob;
 
 public class SGESSHJob extends SGEJob {
 
+    private static final long serialVersionUID = -3637899659269488349L;
+
     private Boolean transferInputs = Boolean.FALSE;
 
     private Boolean transferExecutable = Boolean.FALSE;
@@ -29,6 +31,7 @@ public class SGESSHJob extends SGEJob {
         this.error = builder.error();
         this.numberOfProcessors = builder.numberOfProcessors();
         this.memory = builder.memory();
+        this.disk = builder.disk();
         this.duration = builder.duration();
         this.durationTimeUnit = builder.durationTimeUnit();
         // from LSFJobBuilder
