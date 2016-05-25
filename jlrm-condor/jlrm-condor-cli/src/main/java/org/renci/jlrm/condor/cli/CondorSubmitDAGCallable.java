@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 public class CondorSubmitDAGCallable implements Callable<Integer> {
 
-    private final Logger logger = LoggerFactory.getLogger(CondorSubmitDAGCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(CondorSubmitDAGCallable.class);
 
     private File dagSubmitScript;
 

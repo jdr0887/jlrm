@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 public class SLURMSSHKillCallable implements Callable<Void> {
 
-    private final Logger logger = LoggerFactory.getLogger(SLURMSSHKillCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(SLURMSSHKillCallable.class);
 
     private Site site;
 

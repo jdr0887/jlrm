@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 public class SGELookupStatusCallable implements Callable<SGEJobStatusType> {
 
-    private final Logger logger = LoggerFactory.getLogger(SGELookupStatusCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(SGELookupStatusCallable.class);
 
     private SGEJob job;
 

@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 public class PBSSSHSubmitCallable implements Callable<PBSSSHJob> {
 
-    private final Logger logger = LoggerFactory.getLogger(PBSSSHSubmitCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(PBSSSHSubmitCallable.class);
 
     private Site site;
 

@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 public class SGESubmitScriptExporter<T extends SGESSHJob> {
 
-    private final Logger logger = LoggerFactory.getLogger(SGESubmitScriptExporter.class);
+    private static final Logger logger = LoggerFactory.getLogger(SGESubmitScriptExporter.class);
 
     public SGESubmitScriptExporter() {
         super();

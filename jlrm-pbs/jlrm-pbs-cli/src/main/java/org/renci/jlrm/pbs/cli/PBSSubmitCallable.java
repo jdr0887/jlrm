@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 public class PBSSubmitCallable implements Callable<PBSJob> {
 
-    private final Logger logger = LoggerFactory.getLogger(PBSSubmitCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(PBSSubmitCallable.class);
 
     private final Executor executor = BashExecutor.getInstance();
 

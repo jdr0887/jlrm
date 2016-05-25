@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 public class CondorSubmitCallable implements Callable<CondorJob> {
 
-    private final Logger logger = LoggerFactory.getLogger(CondorSubmitCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(CondorSubmitCallable.class);
 
     private final Executor executor = BashExecutor.getInstance();
 

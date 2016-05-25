@@ -13,9 +13,9 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
 import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.JobStatusInfo;
 import org.renci.jlrm.Site;
 import org.renci.jlrm.commons.ssh.SSHConnectionUtil;
-import org.renci.jlrm.sge.SGEJobStatusInfo;
 import org.renci.jlrm.sge.SGEJobStatusType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +24,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo>> {
+public class SGESSHLookupStatusCallable implements Callable<Set<JobStatusInfo>> {
 
-    private final Logger logger = LoggerFactory.getLogger(SGESSHLookupStatusCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(SGESSHLookupStatusCallable.class);
 
     private Site site;
 
@@ -40,9 +40,9 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
     }
 
     @Override
-    public Set<SGEJobStatusInfo> call() throws JLRMException {
+    public Set<JobStatusInfo> call() throws JLRMException {
         logger.debug("ENTERING call()");
-        Set<SGEJobStatusInfo> jobStatusSet = new HashSet<SGEJobStatusInfo>();
+        Set<JobStatusInfo> jobStatusSet = new HashSet<JobStatusInfo>();
         try {
 
             String command = String.format("qstat -s prs -r -xml");
@@ -77,6 +77,7 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
                             for (SGEJobStatusType type : SGEJobStatusType.values()) {
                                 if (type.getValue().equals(status)) {
                                     statusType = type;
+                                    break;
                                 }
                             }
                         }
@@ -84,7 +85,7 @@ public class SGESSHLookupStatusCallable implements Callable<Set<SGEJobStatusInfo
                             queueName = childNode.getTextContent();
                         }
                     }
-                    SGEJobStatusInfo info = new SGEJobStatusInfo(jobId, statusType, queueName, jobName);
+                    JobStatusInfo info = new JobStatusInfo(jobId, statusType.toString(), queueName, jobName);
                     jobStatusSet.add(info);
                 }
             }

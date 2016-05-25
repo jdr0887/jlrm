@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 public class LSFSubmitScriptExporter<T extends LSFJob> {
 
-    private final Logger logger = LoggerFactory.getLogger(LSFSubmitScriptExporter.class);
+    private static final Logger logger = LoggerFactory.getLogger(LSFSubmitScriptExporter.class);
 
     public LSFSubmitScriptExporter() {
         super();

@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 public class LSFSSHSubmitCallable implements Callable<LSFSSHJob> {
 
-    private final Logger logger = LoggerFactory.getLogger(LSFSSHSubmitCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(LSFSSHSubmitCallable.class);
 
     private LSFSSHJob job;
 

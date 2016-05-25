@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 public class CondorLookupStatusCallable implements Callable<CondorJobStatusType> {
 
-    private final Logger logger = LoggerFactory.getLogger(CondorLookupStatusCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(CondorLookupStatusCallable.class);
 
     private final Executor executor = BashExecutor.getInstance();
 

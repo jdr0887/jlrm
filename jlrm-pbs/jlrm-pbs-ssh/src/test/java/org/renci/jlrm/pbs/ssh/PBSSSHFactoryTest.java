@@ -5,8 +5,8 @@ import java.util.Set;
 
 import org.junit.Test;
 import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.JobStatusInfo;
 import org.renci.jlrm.Site;
-import org.renci.jlrm.pbs.PBSJobStatusInfo;
 
 public class PBSSSHFactoryTest {
 
@@ -45,8 +45,8 @@ public class PBSSSHFactoryTest {
         PBSSSHLookupStatusCallable callable = new PBSSSHLookupStatusCallable(site);
 
         try {
-            Set<PBSJobStatusInfo> results = callable.call();
-            for (PBSJobStatusInfo info : results) {
+            Set<JobStatusInfo> results = callable.call();
+            for (JobStatusInfo info : results) {
                 System.out.println(info.toString());
             }
         } catch (JLRMException e) {

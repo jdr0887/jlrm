@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 public class LSFLookupStatusCallable implements Callable<LSFJobStatusType> {
 
-    private final Logger logger = LoggerFactory.getLogger(LSFLookupStatusCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(LSFLookupStatusCallable.class);
 
     private final Executor executor = BashExecutor.getInstance();
 

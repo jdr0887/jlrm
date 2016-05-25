@@ -15,7 +15,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.junit.Test;
-import org.renci.jlrm.sge.SGEJobStatusInfo;
+import org.renci.jlrm.JobStatusInfo;
 import org.renci.jlrm.sge.SGEJobStatusType;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -114,6 +114,7 @@ public class Scratch {
                         for (SGEJobStatusType type : SGEJobStatusType.values()) {
                             if (type.getValue().equals(status)) {
                                 statusType = type;
+                                break;
                             }
                         }
                     }
@@ -121,7 +122,7 @@ public class Scratch {
                         queueName = childNode.getTextContent();
                     }
                 }
-                System.out.println(new SGEJobStatusInfo(jobId, statusType, queueName, jobName));
+                System.out.println(new JobStatusInfo(jobId, statusType.toString(), queueName, jobName));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

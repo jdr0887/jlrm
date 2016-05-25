@@ -16,9 +16,9 @@ import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.lang3.StringUtils;
 import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.JobStatusInfo;
 import org.renci.jlrm.Site;
 import org.renci.jlrm.commons.ssh.SSHConnectionUtil;
-import org.renci.jlrm.pbs.PBSJobStatusInfo;
 import org.renci.jlrm.pbs.PBSJobStatusType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +29,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class PBSSSHLookupStatusCallable implements Callable<Set<PBSJobStatusInfo>> {
+public class PBSSSHLookupStatusCallable implements Callable<Set<JobStatusInfo>> {
 
-    private final Logger logger = LoggerFactory.getLogger(PBSSSHLookupStatusCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(PBSSSHLookupStatusCallable.class);
 
     private Site site;
 
@@ -45,10 +45,10 @@ public class PBSSSHLookupStatusCallable implements Callable<Set<PBSJobStatusInfo
     }
 
     @Override
-    public Set<PBSJobStatusInfo> call() throws JLRMException {
+    public Set<JobStatusInfo> call() throws JLRMException {
         logger.debug("ENTERING call()");
 
-        Set<PBSJobStatusInfo> jobStatusSet = new HashSet<PBSJobStatusInfo>();
+        Set<JobStatusInfo> jobStatusSet = new HashSet<JobStatusInfo>();
 
         try {
             String output = SSHConnectionUtil.execute("qstat -fx", site.getUsername(), site.getSubmitHost());
@@ -66,7 +66,7 @@ public class PBSSSHLookupStatusCallable implements Callable<Set<PBSJobStatusInfo
                 NodeList childNodes = a.getChildNodes();
                 for (int j = 0; j < childNodes.getLength(); j++) {
                     Node b = childNodes.item(j);
-                    PBSJobStatusInfo info = new PBSJobStatusInfo();
+                    JobStatusInfo info = new JobStatusInfo();
                     String nodeName = b.getNodeName();
                     if (StringUtils.isNotEmpty(nodeName)) {
                         switch (nodeName) {
@@ -81,9 +81,10 @@ public class PBSSSHLookupStatusCallable implements Callable<Set<PBSJobStatusInfo
                                 for (PBSJobStatusType type : PBSJobStatusType.values()) {
                                     if (type.getValue().equals(b.getTextContent())) {
                                         statusType = type;
+                                        break;
                                     }
                                 }
-                                info.setType(statusType);
+                                info.setStatus(statusType.toString());
                                 break;
                             case "queue":
                                 info.setQueue(b.getTextContent());
@@ -95,7 +96,8 @@ public class PBSSSHLookupStatusCallable implements Callable<Set<PBSJobStatusInfo
                     }
                 }
             }
-        } catch (XPathExpressionException | DOMException | ParserConfigurationException | SAXException | IOException e) {
+        } catch (XPathExpressionException | DOMException | ParserConfigurationException | SAXException
+                | IOException e) {
             logger.error("IOException", e);
             throw new JLRMException("IOException: " + e.getMessage());
         }

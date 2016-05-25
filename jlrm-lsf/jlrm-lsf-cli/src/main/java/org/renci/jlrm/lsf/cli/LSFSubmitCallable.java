@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 public class LSFSubmitCallable implements Callable<LSFJob> {
 
-    private final Logger logger = LoggerFactory.getLogger(LSFSubmitCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(LSFSubmitCallable.class);
 
     private final Executor executor = BashExecutor.getInstance();
 

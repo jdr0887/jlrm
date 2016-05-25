@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 public class CondorLookupJobsByOwnerCallable implements Callable<Map<String, List<ClassAdvertisement>>> {
 
-    private final Logger logger = LoggerFactory.getLogger(CondorLookupJobsByOwnerCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(CondorLookupJobsByOwnerCallable.class);
 
     private String username;
 

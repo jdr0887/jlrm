@@ -1,6 +1,5 @@
 package org.renci.jlrm.slurm.ssh;
 
-import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.Calendar;
@@ -12,16 +11,16 @@ import java.util.concurrent.Callable;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.JobStatusInfo;
 import org.renci.jlrm.Site;
 import org.renci.jlrm.commons.ssh.SSHConnectionUtil;
-import org.renci.jlrm.slurm.SLURMJobStatusInfo;
 import org.renci.jlrm.slurm.SLURMJobStatusType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatusInfo>> {
+public class SLURMSSHLookupStatusCallable implements Callable<Set<JobStatusInfo>> {
 
-    private final Logger logger = LoggerFactory.getLogger(SLURMSSHLookupStatusCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(SLURMSSHLookupStatusCallable.class);
 
     private Site site;
 
@@ -35,10 +34,10 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
     }
 
     @Override
-    public Set<SLURMJobStatusInfo> call() throws JLRMException {
+    public Set<JobStatusInfo> call() throws JLRMException {
         logger.debug("ENTERING call()");
 
-        Set<SLURMJobStatusInfo> jobStatusSet = new HashSet<SLURMJobStatusInfo>();
+        Set<JobStatusInfo> jobStatusSet = new HashSet<JobStatusInfo>();
         try {
 
             Calendar calendar = Calendar.getInstance();
@@ -65,17 +64,14 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<SLURMJobStatus
                                 break;
                             }
                         }
-                        SLURMJobStatusInfo info = new SLURMJobStatusInfo(lineSplit[0], statusType, lineSplit[2],
+                        JobStatusInfo info = new JobStatusInfo(lineSplit[0], statusType.toString(), lineSplit[2],
                                 lineSplit[3]);
-                        logger.info("JobStatus is {}", info.toString());
+                        logger.debug("JobStatus is {}", info.toString());
                         jobStatusSet.add(info);
                     }
                 }
             }
 
-        } catch (IOException e) {
-            logger.error("IOException", e);
-            throw new JLRMException("IOException: " + e.getMessage());
         } catch (Exception e) {
             logger.error("Exception", e);
             throw new JLRMException("Exception: " + e.getMessage());

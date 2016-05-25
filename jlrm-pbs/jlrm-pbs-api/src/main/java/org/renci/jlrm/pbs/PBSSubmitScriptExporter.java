@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 public class PBSSubmitScriptExporter<T extends PBSJob> {
 
-    private final Logger logger = LoggerFactory.getLogger(PBSSubmitScriptExporter.class);
+    private static final Logger logger = LoggerFactory.getLogger(PBSSubmitScriptExporter.class);
 
     public PBSSubmitScriptExporter() {
         super();

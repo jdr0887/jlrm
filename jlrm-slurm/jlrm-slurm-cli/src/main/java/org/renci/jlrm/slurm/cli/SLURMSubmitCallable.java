@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 public class SLURMSubmitCallable implements Callable<SLURMJob> {
 
-    private final Logger logger = LoggerFactory.getLogger(SLURMSubmitCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(SLURMSubmitCallable.class);
 
     private SLURMJob job;
 

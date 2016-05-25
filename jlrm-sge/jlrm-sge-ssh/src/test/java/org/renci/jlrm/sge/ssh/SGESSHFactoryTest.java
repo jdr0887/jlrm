@@ -5,9 +5,9 @@ import java.util.Set;
 
 import org.junit.Test;
 import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.JobStatusInfo;
 import org.renci.jlrm.Queue;
 import org.renci.jlrm.Site;
-import org.renci.jlrm.sge.SGEJobStatusInfo;
 
 public class SGESSHFactoryTest {
 
@@ -48,9 +48,9 @@ public class SGESSHFactoryTest {
 
         try {
             SGESSHLookupStatusCallable callable = new SGESSHLookupStatusCallable(site);
-            Set<SGEJobStatusInfo> results = callable.call();
+            Set<JobStatusInfo> results = callable.call();
 
-            for (SGEJobStatusInfo info : results) {
+            for (JobStatusInfo info : results) {
                 System.out.println(info.toString());
             }
 

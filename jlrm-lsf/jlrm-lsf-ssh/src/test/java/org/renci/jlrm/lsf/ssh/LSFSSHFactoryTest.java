@@ -5,8 +5,8 @@ import java.util.Set;
 
 import org.junit.Test;
 import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.JobStatusInfo;
 import org.renci.jlrm.Site;
-import org.renci.jlrm.lsf.LSFJobStatusInfo;
 
 public class LSFSSHFactoryTest {
 
@@ -48,8 +48,8 @@ public class LSFSSHFactoryTest {
         LSFSSHLookupStatusCallable callable = new LSFSSHLookupStatusCallable(site);
 
         try {
-            Set<LSFJobStatusInfo> results = callable.call();
-            for (LSFJobStatusInfo info : results) {
+            Set<JobStatusInfo> results = callable.call();
+            for (JobStatusInfo info : results) {
                 System.out.println(info.toString());
             }
 

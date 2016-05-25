@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 public class SGESSHSubmitCallable implements Callable<SGESSHJob> {
 
-    private final Logger logger = LoggerFactory.getLogger(SGESSHSubmitCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(SGESSHSubmitCallable.class);
 
     private Site site;
 

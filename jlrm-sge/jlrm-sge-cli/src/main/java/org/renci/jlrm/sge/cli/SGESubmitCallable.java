@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 public class SGESubmitCallable implements Callable<SGEJob> {
 
-    private final Logger logger = LoggerFactory.getLogger(SGESubmitCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(SGESubmitCallable.class);
 
     private SGEJob job;
 

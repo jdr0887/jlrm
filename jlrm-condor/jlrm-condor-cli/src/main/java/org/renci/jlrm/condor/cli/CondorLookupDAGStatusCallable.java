@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public class CondorLookupDAGStatusCallable implements Callable<CondorJobStatusType> {
 
-    private final Logger logger = LoggerFactory.getLogger(CondorLookupDAGStatusCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(CondorLookupDAGStatusCallable.class);
 
     private File dagmanOutFile;
 

@@ -9,16 +9,16 @@ import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.StringUtils;
 import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.JobStatusInfo;
 import org.renci.jlrm.Site;
 import org.renci.jlrm.commons.ssh.SSHConnectionUtil;
-import org.renci.jlrm.lsf.LSFJobStatusInfo;
 import org.renci.jlrm.lsf.LSFJobStatusType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo>> {
+public class LSFSSHLookupStatusCallable implements Callable<Set<JobStatusInfo>> {
 
-    private final Logger logger = LoggerFactory.getLogger(LSFSSHLookupStatusCallable.class);
+    private static final Logger logger = LoggerFactory.getLogger(LSFSSHLookupStatusCallable.class);
 
     private Site site;
 
@@ -32,10 +32,10 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
     }
 
     @Override
-    public Set<LSFJobStatusInfo> call() throws JLRMException {
+    public Set<JobStatusInfo> call() throws JLRMException {
         logger.debug("ENTERING call()");
 
-        Set<LSFJobStatusInfo> jobStatusSet = new HashSet<LSFJobStatusInfo>();
+        Set<JobStatusInfo> jobStatusSet = new HashSet<JobStatusInfo>();
 
         String command = "bjobs -w | tail -n+2 | awk '{print $1,$3,$4,$7}'";
         String output = SSHConnectionUtil.execute(command, site.getUsername(), site.getSubmitHost());
@@ -54,9 +54,10 @@ public class LSFSSHLookupStatusCallable implements Callable<Set<LSFJobStatusInfo
                             for (LSFJobStatusType type : LSFJobStatusType.values()) {
                                 if (type.getValue().equals(lineSplit[1])) {
                                     statusType = type;
+                                    break;
                                 }
                             }
-                            LSFJobStatusInfo info = new LSFJobStatusInfo(lineSplit[0], statusType, lineSplit[2],
+                            JobStatusInfo info = new JobStatusInfo(lineSplit[0], statusType.toString(), lineSplit[2],
                                     lineSplit[3]);
                             jobStatusSet.add(info);
                         }

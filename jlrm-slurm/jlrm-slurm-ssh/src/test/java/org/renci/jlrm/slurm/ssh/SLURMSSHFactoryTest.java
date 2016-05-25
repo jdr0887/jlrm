@@ -5,9 +5,9 @@ import java.util.Set;
 
 import org.junit.Test;
 import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.JobStatusInfo;
 import org.renci.jlrm.Queue;
 import org.renci.jlrm.Site;
-import org.renci.jlrm.slurm.SLURMJobStatusInfo;
 
 public class SLURMSSHFactoryTest {
 
@@ -49,8 +49,8 @@ public class SLURMSSHFactoryTest {
 
         SLURMSSHLookupStatusCallable callable = new SLURMSSHLookupStatusCallable(site);
         try {
-            Set<SLURMJobStatusInfo> results = callable.call();
-            for (SLURMJobStatusInfo info : results) {
+            Set<JobStatusInfo> results = callable.call();
+            for (JobStatusInfo info : results) {
                 System.out.println(info.toString());
             }
         } catch (JLRMException e) {

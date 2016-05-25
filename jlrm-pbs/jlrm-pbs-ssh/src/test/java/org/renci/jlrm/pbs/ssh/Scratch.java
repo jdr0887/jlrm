@@ -19,7 +19,7 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
-import org.renci.jlrm.pbs.PBSJobStatusInfo;
+import org.renci.jlrm.JobStatusInfo;
 import org.renci.jlrm.pbs.PBSJobStatusType;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -33,8 +33,8 @@ public class Scratch {
     public void testParseXml() {
 
         try {
-            String output = IOUtils.toString(this.getClass().getClassLoader()
-                    .getResourceAsStream("org/renci/jlrm/pbs/ssh/asdf.xml"));
+            String output = IOUtils
+                    .toString(this.getClass().getClassLoader().getResourceAsStream("org/renci/jlrm/pbs/ssh/asdf.xml"));
 
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             StringReader sr = new StringReader(output);
@@ -80,8 +80,8 @@ public class Scratch {
     @Test
     public void parseLookupStatusCommand() {
         try {
-            String output = IOUtils.toString(this.getClass().getClassLoader()
-                    .getResourceAsStream("org/renci/jlrm/pbs/ssh/lookupStatus.txt"));
+            String output = IOUtils.toString(
+                    this.getClass().getClassLoader().getResourceAsStream("org/renci/jlrm/pbs/ssh/lookupStatus.txt"));
 
             LineNumberReader lnr = new LineNumberReader(new StringReader(output));
             boolean canRead = false;
@@ -102,10 +102,12 @@ public class Scratch {
                             for (PBSJobStatusType type : PBSJobStatusType.values()) {
                                 if (type.getValue().equals(lineSplit[1])) {
                                     statusType = type;
+                                    break;
                                 }
                             }
                             String jobId = lineSplit[0].substring(0, lineSplit[0].indexOf("."));
-                            PBSJobStatusInfo info = new PBSJobStatusInfo(jobId, statusType, lineSplit[2], lineSplit[3]);
+                            JobStatusInfo info = new JobStatusInfo(jobId, statusType.toString(), lineSplit[2],
+                                    lineSplit[3]);
                             System.out.println(info.toString());
                         }
                     }

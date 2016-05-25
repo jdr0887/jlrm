@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 public class SLURMSubmitScriptExporter<T extends SLURMJob> {
 
-    private final Logger logger = LoggerFactory.getLogger(SLURMSubmitScriptExporter.class);
+    private static final Logger logger = LoggerFactory.getLogger(SLURMSubmitScriptExporter.class);
 
     public SLURMSubmitScriptExporter() {
         super();
