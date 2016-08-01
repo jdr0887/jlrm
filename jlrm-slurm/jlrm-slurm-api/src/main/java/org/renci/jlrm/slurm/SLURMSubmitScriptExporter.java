@@ -41,6 +41,10 @@ public class SLURMSubmitScriptExporter<T extends SLURMJob> {
             submitFileWriter.write(String.format("#SBATCH --mem %s%n", job.getMemory()));
         }
 
+        if (StringUtils.isNotEmpty(job.getConstraint())) {
+            submitFileWriter.write(String.format("#SBATCH -C %s%n", job.getConstraint()));
+        }
+
         submitFileWriter.write(String.format("#SBATCH -i %s%n", "/dev/null"));
 
         job.setOutput(new File(String.format("%s/%s.out", workDir.getAbsolutePath(), job.getOutput().getName())));
