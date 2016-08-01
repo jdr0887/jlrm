@@ -14,13 +14,14 @@ public class SLURMJob extends Job {
 
     protected Integer hostCount;
 
+    protected String constraint;
+
     public SLURMJob() {
         super();
     }
 
     public SLURMJob(SLURMJobBuilder builder) {
         super();
-        // from JobBuilder
         this.id = builder.id();
         this.name = builder.name();
         this.executable = builder.executable();
@@ -32,7 +33,7 @@ public class SLURMJob extends Job {
         this.disk = builder.disk();
         this.duration = builder.duration();
         this.durationTimeUnit = builder.durationTimeUnit();
-        // from SGEJobBuilder
+        this.constraint = builder.constraint();
         this.queueName = builder.queueName();
         this.project = builder.project();
         this.wallTime = builder.wallTime();
@@ -69,6 +70,14 @@ public class SLURMJob extends Job {
 
     public void setHostCount(Integer hostCount) {
         this.hostCount = hostCount;
+    }
+
+    public String getConstraint() {
+        return constraint;
+    }
+
+    public void setConstraint(String constraint) {
+        this.constraint = constraint;
     }
 
 }

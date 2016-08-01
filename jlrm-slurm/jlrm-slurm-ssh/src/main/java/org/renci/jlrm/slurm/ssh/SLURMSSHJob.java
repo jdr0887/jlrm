@@ -22,7 +22,6 @@ public class SLURMSSHJob extends SLURMJob {
 
     public SLURMSSHJob(SLURMSSHJobBuilder builder) {
         super();
-        // from JobBuilder
         this.id = builder.id();
         this.name = builder.name();
         this.executable = builder.executable();
@@ -33,12 +32,11 @@ public class SLURMSSHJob extends SLURMJob {
         this.memory = builder.memory();
         this.duration = builder.duration();
         this.durationTimeUnit = builder.durationTimeUnit();
-        // from LSFJobBuilder
         this.queueName = builder.queueName();
+        this.constraint = builder.constraint();
         this.project = builder.project();
         this.wallTime = builder.wallTime();
         this.hostCount = builder.hostCount();
-        // from LSFJobBuilder
         this.transferInputs = builder.transferInputs();
         this.transferExecutable = builder.transferExecutable();
         this.inputFiles = builder.inputFiles();

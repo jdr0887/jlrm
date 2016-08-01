@@ -15,6 +15,8 @@ public class SLURMJobBuilder extends JobBuilder {
 
     protected Integer hostCount;
 
+    protected String constraint;
+
     public SLURMJobBuilder() {
         super();
     }
@@ -84,6 +86,15 @@ public class SLURMJobBuilder extends JobBuilder {
 
     public SLURMJobBuilder project(String project) {
         this.project = project;
+        return this;
+    }
+
+    public String constraint() {
+        return constraint;
+    }
+
+    public SLURMJobBuilder constraint(String constraint) {
+        this.constraint = constraint;
         return this;
     }
 

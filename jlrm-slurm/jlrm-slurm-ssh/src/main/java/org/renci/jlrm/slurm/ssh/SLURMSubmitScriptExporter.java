@@ -37,6 +37,10 @@ public class SLURMSubmitScriptExporter<T extends SLURMSSHJob> {
             submitFileWriter.write(String.format("#SBATCH -t %d%n", job.getWallTime()));
         }
 
+        if (StringUtils.isNotEmpty(job.getConstraint())) {
+            submitFileWriter.write(String.format("#SBATCH -C %s%n", job.getWallTime()));
+        }
+
         if (job.getMemory() != null) {
             submitFileWriter.write(String.format("#SBATCH --mem=%s%n", job.getMemory()));
         }
