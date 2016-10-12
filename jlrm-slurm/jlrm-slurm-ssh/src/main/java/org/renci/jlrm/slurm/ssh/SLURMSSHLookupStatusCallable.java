@@ -59,7 +59,7 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<JobStatusInfo>
                     String[] lineSplit = StringUtils.split(line, '|');
                     if (lineSplit != null && lineSplit.length == 4) {
                         for (SLURMJobStatusType type : SLURMJobStatusType.values()) {
-                            if (type.toString().equals(lineSplit[1])) {
+                            if (StringUtils.isNotEmpty(lineSplit[1]) && lineSplit[1].contains(type.toString())) {
                                 statusType = type;
                                 break;
                             }
