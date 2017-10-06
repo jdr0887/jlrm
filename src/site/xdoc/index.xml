@@ -1,9 +1,10 @@
 <document>
   <body>
-    <section name="About jLRM">
-      <p></p>
-    </section>
-    <section name="Assumptions &amp; Goals">
+    <section name="jLRM">
+      <p>jLRM is a project that provides a bridge between Java &amp;
+      common batch scheduling systems.  jLRM offers CLI &amp; SSH
+      implementations to HTCondor, SLURM, SGE, LSF, &amp; PBS
+      schedulers.</p>
     </section>
   </body>
 </document>
