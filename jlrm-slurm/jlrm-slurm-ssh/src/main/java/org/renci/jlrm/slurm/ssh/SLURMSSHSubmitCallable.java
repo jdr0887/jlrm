@@ -61,9 +61,9 @@ public class SLURMSSHSubmitCallable implements Callable<SLURMSSHJob> {
             SLURMSubmitScriptExporter<SLURMSSHJob> exporter = new SLURMSubmitScriptExporter<SLURMSSHJob>();
             this.job = exporter.export(localWorkDir, remoteWorkDir, this.job);
 
-            SSHConnectionUtil.transferSubmitScript(site.getUsername(), site.getSubmitHost(), remoteWorkDir,
-                    this.job.getTransferExecutable(), this.job.getExecutable(), this.job.getTransferInputs(),
-                    this.job.getInputFiles(), job.getSubmitFile());
+            SSHConnectionUtil.transferSubmitScript(site, remoteWorkDir, this.job.getTransferExecutable(),
+                    this.job.getExecutable(), this.job.getTransferInputs(), this.job.getInputFiles(),
+                    job.getSubmitFile());
 
             command = String.format("sbatch %s/%s", remoteWorkDir, job.getSubmitFile().getName());
             String submitOutput = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());

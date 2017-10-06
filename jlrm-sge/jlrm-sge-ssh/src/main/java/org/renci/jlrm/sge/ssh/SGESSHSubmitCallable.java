@@ -62,9 +62,9 @@ public class SGESSHSubmitCallable implements Callable<SGESSHJob> {
             SGESubmitScriptExporter<SGESSHJob> exporter = new SGESubmitScriptExporter<SGESSHJob>();
             this.job = exporter.export(localWorkDir, remoteWorkDir, this.job);
 
-            SSHConnectionUtil.transferSubmitScript(site.getUsername(), site.getSubmitHost(), remoteWorkDir,
-                    this.job.getTransferExecutable(), this.job.getExecutable(), this.job.getTransferInputs(),
-                    this.job.getInputFiles(), job.getSubmitFile());
+            SSHConnectionUtil.transferSubmitScript(site, remoteWorkDir, this.job.getTransferExecutable(),
+                    this.job.getExecutable(), this.job.getTransferInputs(), this.job.getInputFiles(),
+                    job.getSubmitFile());
 
             String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
 
