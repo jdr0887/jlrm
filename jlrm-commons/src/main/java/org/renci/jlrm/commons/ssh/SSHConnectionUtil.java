@@ -6,10 +6,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,10 +43,10 @@ public class SSHConnectionUtil {
             public void log(int level, String msg) {
                 switch (level) {
                     case DEBUG:
-		        //logger.debug(msg);
+                        // logger.debug(msg);
                         break;
                     case INFO:
-		        //logger.info(msg);
+                        // logger.info(msg);
                         break;
                     case WARN:
                         logger.warn(msg);
@@ -102,7 +104,7 @@ public class SSHConnectionUtil {
             }
 
         } catch (InterruptedException e) {
-            //e.printStackTrace();
+            // e.printStackTrace();
         } catch (JSchException e) {
             logger.error("JSchException", e);
             throw new JLRMException("JSchException: " + e.getMessage());
@@ -133,9 +135,8 @@ public class SSHConnectionUtil {
         return ret;
     }
 
-    public static void transferSubmitScript(String username, String host, String remoteWorkDir,
-            boolean transferExecutable, File executable, boolean transferInputs, List<File> inputFileList,
-            File submitFile) throws JLRMException {
+    public static void transferSubmitScript(Site site, String remoteWorkDir, boolean transferExecutable,
+            File executable, boolean transferInputs, List<File> inputFileList, File submitFile) throws JLRMException {
         logger.debug("ENTERING transferSubmitScript()");
 
         String home = System.getProperty("user.home");
@@ -148,7 +149,7 @@ public class SSHConnectionUtil {
         try {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
-            session = sch.getSession(username, host, 22);
+            session = sch.getSession(site.getUsername(), site.getSubmitHost(), 22);
             session.connect(30000);
 
             logger.debug("session.isConnected() = {}", session.isConnected());
@@ -184,6 +185,52 @@ public class SSHConnectionUtil {
         } catch (SftpException e) {
             logger.error("SftpException", e);
             throw new JLRMException("SftpException: " + e.getMessage());
+        } finally {
+            if (sftpChannel != null) {
+                sftpChannel.disconnect();
+                logger.debug("sftpChannel.isConnected() = {}", sftpChannel.isConnected());
+            }
+            if (session != null) {
+                session.disconnect();
+                logger.debug("session.isConnected() = {}", session.isConnected());
+            }
+        }
+
+    }
+
+    public static void transferOutputs(Site site, String remoteWorkDir, File destinationDir, String... outputs)
+            throws JLRMException {
+        logger.debug("ENTERING transferSubmitScript()");
+
+        String home = System.getProperty("user.home");
+        String knownHostsFilename = home + "/.ssh/known_hosts";
+
+        JSch sch = new JSch();
+        Session session = null;
+        ChannelSftp sftpChannel = null;
+
+        try {
+            sch.addIdentity(home + "/.ssh/id_rsa");
+            sch.setKnownHosts(knownHostsFilename);
+            session = sch.getSession(site.getUsername(), site.getSubmitHost(), 22);
+            session.connect(30000);
+
+            logger.debug("session.isConnected() = {}", session.isConnected());
+
+            sftpChannel = (ChannelSftp) session.openChannel("sftp");
+            sftpChannel.connect(5 * 1000);
+
+            logger.debug("sftpChannel.isConnected() = {}", sftpChannel.isConnected());
+
+            sftpChannel.cd(remoteWorkDir);
+
+            for (String output : Arrays.asList(outputs)) {
+                sftpChannel.get(output, String.format("%s/%s", destinationDir.getAbsolutePath(), output));
+            }
+
+        } catch (JSchException | SftpException e) {
+            logger.error(e.getMessage(), e);
+            throw new JLRMException(e);
         } finally {
             if (sftpChannel != null) {
                 sftpChannel.disconnect();
