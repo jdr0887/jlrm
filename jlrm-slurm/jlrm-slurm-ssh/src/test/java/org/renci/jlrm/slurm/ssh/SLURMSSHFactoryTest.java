@@ -8,6 +8,7 @@ import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.JobStatusInfo;
 import org.renci.jlrm.Queue;
 import org.renci.jlrm.Site;
+import org.renci.jlrm.commons.ssh.SSHConnectionUtil;
 
 public class SLURMSSHFactoryTest {
 
@@ -57,6 +58,15 @@ public class SLURMSSHFactoryTest {
             e.printStackTrace();
         }
 
+    }
+
+    @Test
+    public void testGet() throws Exception {
+        Site site = new Site("ht0.renci.org", "jdr0887");
+
+        SSHConnectionUtil.transferOutputs(site,
+                "/home/jdr0887/.chat/jobs/2017-10-06/c1ab1e61-9bcb-4174-b5fe-b3849efc2be5", new File("/tmp"),
+                "12_0001.txt.map");
     }
 
 }
