@@ -10,6 +10,9 @@
   <artifactId>jlrm-slurm</artifactId>
   <version>0.4.16-SNAPSHOT</version>
   <packaging>pom</packaging>
+  <properties>
+    <maven.site.plugin.skip>true</maven.site.plugin.skip>        
+  </properties>  
   <modules>
     <module>jlrm-slurm-api</module>
     <module>jlrm-slurm-cli</module>
