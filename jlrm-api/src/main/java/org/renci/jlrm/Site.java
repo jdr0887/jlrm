@@ -22,6 +22,20 @@ public class Site {
 
     private List<Queue> queueList;
 
+    public Site(String submitHost, String username) {
+        super();
+        this.submitHost = submitHost;
+        this.username = username;
+    }
+
+    public Site(String submitHost, String username, String name, String project) {
+        super();
+        this.submitHost = submitHost;
+        this.username = username;
+        this.name = name;
+        this.project = project;
+    }
+
     public Site() {
         super();
     }
