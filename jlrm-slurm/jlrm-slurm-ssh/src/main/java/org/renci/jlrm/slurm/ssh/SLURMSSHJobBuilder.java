@@ -23,7 +23,7 @@ public class SLURMSSHJobBuilder extends SLURMJobBuilder {
         return transferInputs;
     }
 
-    public SLURMSSHJobBuilder setTransferInputs(Boolean transferInputs) {
+    public SLURMSSHJobBuilder transferInputs(Boolean transferInputs) {
         this.transferInputs = transferInputs;
         return this;
     }
