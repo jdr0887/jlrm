@@ -68,6 +68,7 @@ public class SSHConnectionUtil {
             sch.addIdentity(String.format("%s/.ssh/id_rsa", home));
             sch.setKnownHosts(String.format("%s/.ssh/known_hosts", home));
             session = sch.getSession(username, host, 22);
+            session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
             session.connect(30 * 1000);
 
             logger.debug("session.isConnected() = {}", session.isConnected());
@@ -150,6 +151,7 @@ public class SSHConnectionUtil {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
             session = sch.getSession(site.getUsername(), site.getSubmitHost(), 22);
+            session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
             session.connect(30000);
 
             logger.debug("session.isConnected() = {}", session.isConnected());
@@ -213,6 +215,7 @@ public class SSHConnectionUtil {
             sch.addIdentity(home + "/.ssh/id_rsa");
             sch.setKnownHosts(knownHostsFilename);
             session = sch.getSession(site.getUsername(), site.getSubmitHost(), 22);
+            session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
             session.connect(30000);
 
             logger.debug("session.isConnected() = {}", session.isConnected());
