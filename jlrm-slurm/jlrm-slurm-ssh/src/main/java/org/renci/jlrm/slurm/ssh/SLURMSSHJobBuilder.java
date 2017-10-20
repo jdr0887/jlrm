@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.Range;
 import org.renci.jlrm.slurm.SLURMJobBuilder;
 
 public class SLURMSSHJobBuilder extends SLURMJobBuilder {
 
-    private boolean transferInputs = Boolean.FALSE;
+    private Boolean transferInputs = Boolean.FALSE;
 
-    private boolean transferExecutable = Boolean.FALSE;
+    private Boolean transferExecutable = Boolean.FALSE;
 
     private List<File> inputFiles = new ArrayList<File>();
 
@@ -47,6 +48,11 @@ public class SLURMSSHJobBuilder extends SLURMJobBuilder {
 
     public void addInputFile(File inputFile) {
         inputFiles.add(inputFile);
+    }
+
+    public SLURMSSHJobBuilder array(Range<Integer> array) {
+        this.array = array;
+        return this;
     }
 
     public SLURMSSHJobBuilder id(String id) {

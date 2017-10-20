@@ -1,5 +1,6 @@
 package org.renci.jlrm.slurm;
 
+import org.apache.commons.lang3.Range;
 import org.renci.jlrm.Job;
 
 public class SLURMJob extends Job {
@@ -16,6 +17,8 @@ public class SLURMJob extends Job {
 
     protected String constraint;
 
+    protected Range<Integer> array;
+
     public SLURMJob() {
         super();
     }
@@ -29,6 +32,7 @@ public class SLURMJob extends Job {
         this.output = builder.output();
         this.error = builder.error();
         this.numberOfProcessors = builder.numberOfProcessors();
+        this.array = builder.array();
         this.memory = builder.memory();
         this.disk = builder.disk();
         this.duration = builder.duration();
@@ -46,6 +50,14 @@ public class SLURMJob extends Job {
 
     public void setQueueName(String queueName) {
         this.queueName = queueName;
+    }
+
+    public Range<Integer> getArray() {
+        return array;
+    }
+
+    public void setArray(Range<Integer> array) {
+        this.array = array;
     }
 
     public String getProject() {

@@ -24,6 +24,8 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<JobStatusInfo>
 
     private Site site;
 
+    private String id;
+
     public SLURMSSHLookupStatusCallable() {
         super();
     }
@@ -31,6 +33,12 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<JobStatusInfo>
     public SLURMSSHLookupStatusCallable(Site site) {
         super();
         this.site = site;
+    }
+
+    public SLURMSSHLookupStatusCallable(Site site, String id) {
+        super();
+        this.site = site;
+        this.id = id;
     }
 
     @Override
@@ -48,6 +56,12 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<JobStatusInfo>
             String command = String.format(
                     "sacct -S %s -P -o JobID -o State -o Partition -o JobName | grep -v \"\\.batch\" | tail -n+2",
                     dateFormat);
+
+            if (StringUtils.isNotEmpty(id)) {
+                command = String.format(
+                        "sacct -S %s -P -o JobID -o State -o Partition -o JobName | grep %s | grep -v \"\\.batch\" | tail -n+2",
+                        dateFormat, id);
+            }
 
             String output = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
 

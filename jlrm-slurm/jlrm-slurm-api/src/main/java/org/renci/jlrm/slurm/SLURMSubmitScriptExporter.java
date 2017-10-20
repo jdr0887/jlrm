@@ -33,6 +33,11 @@ public class SLURMSubmitScriptExporter<T extends SLURMJob> {
             submitFileWriter.write(String.format("#SBATCH -A %s%n", job.getProject()));
         }
 
+        if (job.getArray() != null) {
+            submitFileWriter.write(
+                    String.format("#SBATCH --array=%s-%s%n", job.getArray().getMinimum(), job.getArray().getMaximum()));
+        }
+
         if (job.getWallTime() != null) {
             submitFileWriter.write(String.format("#SBATCH -t %d%n", job.getWallTime() / 60));
         }
@@ -46,9 +51,6 @@ public class SLURMSubmitScriptExporter<T extends SLURMJob> {
         }
 
         submitFileWriter.write(String.format("#SBATCH -i %s%n", "/dev/null"));
-
-        job.setOutput(new File(String.format("%s/%s.out", workDir.getAbsolutePath(), job.getOutput().getName())));
-        job.setError(new File(String.format("%s/%s.err", workDir.getAbsolutePath(), job.getError().getName())));
 
         submitFileWriter.write(String.format("#SBATCH -o %s%n", job.getOutput().getAbsolutePath()));
         submitFileWriter.write(String.format("#SBATCH -e %s%n", job.getError().getAbsolutePath()));

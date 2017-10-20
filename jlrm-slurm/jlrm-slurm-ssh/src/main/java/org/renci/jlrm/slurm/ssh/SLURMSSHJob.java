@@ -28,6 +28,7 @@ public class SLURMSSHJob extends SLURMJob {
         this.submitFile = builder.submitFile();
         this.output = builder.output();
         this.error = builder.error();
+        this.array = builder.array();
         this.numberOfProcessors = builder.numberOfProcessors();
         this.memory = builder.memory();
         this.duration = builder.duration();

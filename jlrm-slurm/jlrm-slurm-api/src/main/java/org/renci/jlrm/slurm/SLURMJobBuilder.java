@@ -3,6 +3,7 @@ package org.renci.jlrm.slurm;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.Range;
 import org.renci.jlrm.JobBuilder;
 
 public class SLURMJobBuilder extends JobBuilder {
@@ -17,8 +18,19 @@ public class SLURMJobBuilder extends JobBuilder {
 
     protected String constraint;
 
+    protected Range<Integer> array;
+
     public SLURMJobBuilder() {
         super();
+    }
+
+    public SLURMJobBuilder array(Range<Integer> array) {
+        this.array = array;
+        return this;
+    }
+
+    public Range<Integer> array() {
+        return this.array;
     }
 
     public SLURMJobBuilder id(String id) {
