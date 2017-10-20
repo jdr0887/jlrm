@@ -136,6 +136,61 @@ public class SSHConnectionUtil {
         return ret;
     }
 
+    public static void transferInputs(Site site, String remoteWorkDir, List<File> inputFileList) throws JLRMException {
+        transferInputs(site, remoteWorkDir, 0644, inputFileList);
+    }
+
+    public static void transferInputs(Site site, String remoteWorkDir, int mod, List<File> inputFileList)
+            throws JLRMException {
+
+        logger.debug("ENTERING transferSubmitScript()");
+
+        String home = System.getProperty("user.home");
+        String knownHostsFilename = home + "/.ssh/known_hosts";
+
+        JSch sch = new JSch();
+        Session session = null;
+        ChannelSftp sftpChannel = null;
+
+        try {
+            sch.addIdentity(home + "/.ssh/id_rsa");
+            sch.setKnownHosts(knownHostsFilename);
+            session = sch.getSession(site.getUsername(), site.getSubmitHost(), 22);
+            session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
+            session.connect(30000);
+
+            logger.debug("session.isConnected() = {}", session.isConnected());
+
+            sftpChannel = (ChannelSftp) session.openChannel("sftp");
+            sftpChannel.connect(5 * 1000);
+
+            logger.debug("sftpChannel.isConnected() = {}", sftpChannel.isConnected());
+
+            sftpChannel.cd(remoteWorkDir);
+
+            if (inputFileList != null && inputFileList.size() > 0) {
+                for (File inputFile : inputFileList) {
+                    sftpChannel.put(new FileInputStream(inputFile), inputFile.getName(), ChannelSftp.OVERWRITE);
+                    sftpChannel.chmod(mod, inputFile.getName());
+                }
+            }
+
+        } catch (Exception e) {
+            logger.error("Exception", e);
+            throw new JLRMException(e);
+        } finally {
+            if (sftpChannel != null) {
+                sftpChannel.disconnect();
+                logger.debug("sftpChannel.isConnected() = {}", sftpChannel.isConnected());
+            }
+            if (session != null) {
+                session.disconnect();
+                logger.debug("session.isConnected() = {}", session.isConnected());
+            }
+        }
+
+    }
+
     public static void transferSubmitScript(Site site, String remoteWorkDir, boolean transferExecutable,
             File executable, boolean transferInputs, List<File> inputFileList, File submitFile) throws JLRMException {
         logger.debug("ENTERING transferSubmitScript()");
