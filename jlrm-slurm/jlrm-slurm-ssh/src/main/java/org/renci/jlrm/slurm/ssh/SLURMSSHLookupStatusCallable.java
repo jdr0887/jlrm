@@ -54,12 +54,11 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<JobStatusInfo>
             String dateFormat = DateFormatUtils.format(calendar, "MMdd");
 
             String command = String.format(
-                    "sacct -S %s -P -o JobID -o State -o Partition -o JobName | grep -v \"\\.batch\" | tail -n+2",
-                    dateFormat);
+                    "sacct -S %s -P -o JobID -o State -o Partition -o JobName | grep -v \"\\.batch\"", dateFormat);
 
             if (StringUtils.isNotEmpty(id)) {
                 command = String.format(
-                        "sacct -S %s -P -o JobID -o State -o Partition -o JobName | grep %s | grep -v \"\\.batch\" | tail -n+2",
+                        "sacct -S %s -P -o JobID -o State -o Partition -o JobName | grep %s | grep -v \"\\.batch\"",
                         dateFormat, id);
             }
 
