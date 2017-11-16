@@ -1,7 +1,6 @@
 package org.renci.jlrm.slurm.cli;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.concurrent.Callable;
@@ -12,7 +11,6 @@ import org.renci.common.exec.BashExecutor;
 import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
-import org.renci.common.exec.ExecutorException;
 import org.renci.jlrm.IOUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.slurm.SLURMJob;
@@ -75,15 +73,12 @@ public class SLURMSubmitCallable implements Callable<SLURMJob> {
                 }
 
             }
-            return job;
-        } catch (ExecutorException e) {
-            e.printStackTrace();
-            throw new JLRMException("ExecutorException: " + e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new JLRMException("IOException: " + e.getMessage());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new JLRMException("Exception: " + e.getMessage());
         }
 
+        return job;
     }
 
     public SLURMJob getJob() {
