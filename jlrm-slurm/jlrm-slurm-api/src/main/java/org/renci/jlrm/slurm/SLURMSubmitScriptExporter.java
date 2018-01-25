@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.apache.commons.lang3.Range;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +34,13 @@ public class SLURMSubmitScriptExporter<T extends SLURMJob> {
         }
 
         if (job.getArray() != null) {
-            submitFileWriter.write(
-                    String.format("#SBATCH --array=%s-%s%n", job.getArray().getMinimum(), job.getArray().getMaximum()));
+            Range<Integer> arrayRange = job.getArray();
+            if (arrayRange.getMinimum().equals(arrayRange.getMaximum())) {
+                submitFileWriter.write(String.format("#SBATCH --array=%s%n", job.getArray().getMinimum()));
+            } else {
+                submitFileWriter.write(String.format("#SBATCH --array=%s-%s%n", job.getArray().getMinimum(),
+                        job.getArray().getMaximum()));
+            }
         }
 
         if (job.getWallTime() != null) {
