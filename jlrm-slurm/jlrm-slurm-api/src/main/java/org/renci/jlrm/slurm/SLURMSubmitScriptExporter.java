@@ -25,7 +25,7 @@ public class SLURMSubmitScriptExporter<T extends SLURMJob> {
         submitFileWriter.write(String.format("#SBATCH -J %s%n", job.getName()));
 
         if (StringUtils.isNotEmpty(job.getQueueName())) {
-            submitFileWriter.write(String.format("#SBATCH - %s%n", job.getQueueName()));
+            submitFileWriter.write(String.format("#SBATCH -p %s%n", job.getQueueName()));
         }
 
         if (StringUtils.isNotEmpty(job.getProject())) {
