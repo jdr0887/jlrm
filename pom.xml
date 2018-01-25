@@ -202,6 +202,7 @@
       <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-site-plugin</artifactId>
+	<version>${maven.site.plugin.version}</version>
 	<configuration>
           <skip>${maven.site.plugin.skip}</skip>
 	</configuration>
