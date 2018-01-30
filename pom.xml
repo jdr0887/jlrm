@@ -8,7 +8,7 @@
   <name>Java Local Resource Management</name>
   <groupId>org.renci</groupId>
   <artifactId>jlrm</artifactId>
-  <version>0.4.24</version>
+  <version>0.4.25-SNAPSHOT</version>
   <packaging>pom</packaging>
   <properties>
     <maven.site.plugin.skip>false</maven.site.plugin.skip>        
@@ -36,7 +36,7 @@
     <url>https://github.com/jdr0887/jlrm</url>
     <developerConnection>scm:git:git@github.com:jdr0887/jlrm.git</developerConnection>
     <connection>scm:git:git@github.com:jdr0887/jlrm.git</connection>
-    <tag>jlrm-0.4.24</tag>
+    <tag>HEAD</tag>
   </scm>
   <dependencyManagement>
     <dependencies>
@@ -103,37 +103,37 @@
       <dependency>
 	<groupId>org.renci.jlrm</groupId>
 	<artifactId>jlrm-commons</artifactId>
-	<version>0.4.24</version>
+	<version>0.4.25-SNAPSHOT</version>
       </dependency>
       <dependency>
 	<groupId>org.renci.jlrm</groupId>
 	<artifactId>jlrm-api</artifactId>
-	<version>0.4.24</version>
+	<version>0.4.25-SNAPSHOT</version>
       </dependency>
       <dependency>
 	<groupId>org.renci.jlrm.jlrm-condor</groupId>
 	<artifactId>jlrm-condor-api</artifactId>
-	<version>0.4.24</version>
+	<version>0.4.25-SNAPSHOT</version>
       </dependency>
       <dependency>
 	<groupId>org.renci.jlrm.jlrm-lsf</groupId>
 	<artifactId>jlrm-lsf-api</artifactId>
-	<version>0.4.24</version>
+	<version>0.4.25-SNAPSHOT</version>
       </dependency>
       <dependency>
 	<groupId>org.renci.jlrm.jlrm-sge</groupId>
 	<artifactId>jlrm-sge-api</artifactId>
-	<version>0.4.24</version>
+	<version>0.4.25-SNAPSHOT</version>
       </dependency>
       <dependency>
 	<groupId>org.renci.jlrm.jlrm-pbs</groupId>
 	<artifactId>jlrm-pbs-api</artifactId>
-	<version>0.4.24</version>
+	<version>0.4.25-SNAPSHOT</version>
       </dependency>
       <dependency>
 	<groupId>org.renci.jlrm.jlrm-slurm</groupId>
 	<artifactId>jlrm-slurm-api</artifactId>
-	<version>0.4.24</version>
+	<version>0.4.25-SNAPSHOT</version>
       </dependency>
       <dependency>
       	<groupId>org.slf4j</groupId>
