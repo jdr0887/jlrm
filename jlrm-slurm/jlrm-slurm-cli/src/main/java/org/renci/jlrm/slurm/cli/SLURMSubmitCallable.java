@@ -3,10 +3,13 @@ package org.renci.jlrm.slurm.cli;
 import java.io.File;
 import java.io.LineNumberReader;
 import java.io.StringReader;
+import java.util.Date;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.renci.common.exec.BashExecutor;
 import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
@@ -25,6 +28,11 @@ public class SLURMSubmitCallable implements Callable<SLURMJob> {
 
     private File submitDir;
 
+    public SLURMSubmitCallable(SLURMJob job) {
+        super();
+        this.job = job;
+    }
+
     public SLURMSubmitCallable(SLURMJob job, File submitDir) {
         super();
         this.job = job;
@@ -33,6 +41,14 @@ public class SLURMSubmitCallable implements Callable<SLURMJob> {
 
     @Override
     public SLURMJob call() throws JLRMException {
+
+        if (submitDir == null) {
+            File jlrmDir = new File(System.getProperty("user.home"), ".jlrm");
+            File jobsDir = new File(jlrmDir, "jobs");
+            File dateDir = new File(jobsDir, DateFormatUtils.ISO_DATE_FORMAT.format(new Date()));
+            File submitDir = new File(dateDir, UUID.randomUUID().toString());
+            submitDir.mkdirs();
+        }
 
         try {
 
