@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.renci</groupId>
     <artifactId>jlrm</artifactId>
-    <version>0.4.23-SNAPSHOT</version>
+    <version>0.4.23</version>
   </parent>
   <name>jLRM :: SLURM</name>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.renci.jlrm</groupId>
   <artifactId>jlrm-slurm</artifactId>
-  <version>0.4.23-SNAPSHOT</version>
+  <version>0.4.23</version>
   <packaging>pom</packaging>
   <properties>
     <maven.site.plugin.skip>true</maven.site.plugin.skip>        
