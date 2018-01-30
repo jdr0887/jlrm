@@ -3,12 +3,12 @@
   <parent>
     <groupId>org.renci.jlrm</groupId>
     <artifactId>jlrm-sge</artifactId>
-    <version>0.4.23</version>
+    <version>0.4.24-SNAPSHOT</version>
   </parent>
   <name>jLRM :: SGE :: SSH</name>
   <groupId>org.renci.jlrm.jlrm-sge</groupId>
   <artifactId>jlrm-sge-ssh</artifactId>
-  <version>0.4.23</version>
+  <version>0.4.24-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <properties>
     <maven.site.plugin.skip>true</maven.site.plugin.skip>        
