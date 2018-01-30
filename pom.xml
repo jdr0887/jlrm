@@ -2,7 +2,7 @@
   <parent>
     <groupId>org.renci</groupId>
     <artifactId>parent</artifactId>
-    <version>0.0.15</version>    
+    <version>0.0.16</version>    
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Java Local Resource Management</name>
@@ -199,6 +199,14 @@
 	  <target>1.8</target>
 	</configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+	  <arguments>-Dmaven.javadoc.skip=true</arguments>
+          <preparationGoals>clean install</preparationGoals>
+        </configuration>
+      </plugin>      
       <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-site-plugin</artifactId>
