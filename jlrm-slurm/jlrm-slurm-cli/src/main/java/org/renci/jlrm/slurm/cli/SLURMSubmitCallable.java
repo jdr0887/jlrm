@@ -11,7 +11,6 @@ import org.renci.common.exec.BashExecutor;
 import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
-import org.renci.jlrm.IOUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.slurm.SLURMJob;
 import org.renci.jlrm.slurm.SLURMSubmitScriptExporter;
@@ -35,12 +34,10 @@ public class SLURMSubmitCallable implements Callable<SLURMJob> {
     @Override
     public SLURMJob call() throws JLRMException {
 
-        File workDir = IOUtils.createWorkDirectory(this.submitDir, job.getName());
-
         try {
 
             SLURMSubmitScriptExporter<SLURMJob> exporter = new SLURMSubmitScriptExporter<SLURMJob>();
-            this.job = exporter.export(workDir, job);
+            this.job = exporter.export(submitDir, job);
 
             String command = String.format("sbatch %s", job.getSubmitFile().getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
@@ -55,7 +52,6 @@ public class SLURMSubmitCallable implements Callable<SLURMJob> {
                 throw new JLRMException(output.getStderr().toString());
             } else {
                 LineNumberReader lnr = new LineNumberReader(new StringReader(output.getStdout().toString()));
-
                 String line;
                 while ((line = lnr.readLine()) != null) {
                     if (line.indexOf("batch job") != -1) {
@@ -65,13 +61,11 @@ public class SLURMSubmitCallable implements Callable<SLURMJob> {
                         if (!matcher.matches()) {
                             throw new JLRMException("failed to parse the jobid number");
                         } else {
-                            matcher.find();
                             job.setId(matcher.group(1));
                         }
                         break;
                     }
                 }
-
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
