@@ -17,7 +17,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.renci.jlrm.JobStatusInfo;
 import org.renci.jlrm.pbs.PBSJobStatusType;

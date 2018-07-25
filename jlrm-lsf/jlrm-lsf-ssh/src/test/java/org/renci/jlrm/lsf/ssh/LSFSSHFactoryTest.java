@@ -17,21 +17,19 @@ public class LSFSSHFactoryTest {
     @Test
     public void testBasicSubmit() {
 
-        Site site = new Site();
-        site.setSubmitHost("biodev1.its.unc.edu");
-        site.setUsername("jreilly");
-        LSFSSHJobBuilder builder = new LSFSSHJobBuilder().name("test").executable(new File("/bin/hostname"));
-        builder.hostCount(1).numberOfProcessors(1);
-        builder.project("TCGA").queueName("prenci").output(new File("test.out")).error(new File("test.err"));
-
-        LSFSSHJob job = builder.build();
         try {
+            Site site = new Site();
+            site.setSubmitHost("biodev1.its.unc.edu");
+            site.setUsername("jreilly");
+            LSFSSHJob job = LSFSSHJob.builder().name("test").executable(new File("/bin/hostname")).hostCount(1)
+                    .numberOfProcessors(1).project("TCGA").queueName("prenci").output(new File("test.out"))
+                    .error(new File("test.err")).build();
             LSFSSHSubmitCallable runnable = new LSFSSHSubmitCallable();
             runnable.setJob(job);
             runnable.setSite(site);
             job = runnable.call();
             System.out.println(job.getId());
-        } catch (JLRMException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -39,15 +37,15 @@ public class LSFSSHFactoryTest {
 
     @Test
     public void testLookupStatus() {
-
-        Site site = new Site();
-        site.setName("Kure");
-        site.setSubmitHost("biodev1.its.unc.edu");
-        site.setUsername("rc_renci.svc");
-
-        LSFSSHLookupStatusCallable callable = new LSFSSHLookupStatusCallable(site);
-
         try {
+
+            Site site = new Site();
+            site.setName("Kure");
+            site.setSubmitHost("biodev1.its.unc.edu");
+            site.setUsername("rc_renci.svc");
+
+            LSFSSHLookupStatusCallable callable = new LSFSSHLookupStatusCallable(site);
+
             Set<JobStatusInfo> results = callable.call();
             for (JobStatusInfo info : results) {
                 System.out.println(info.toString());

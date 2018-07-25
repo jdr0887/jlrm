@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.JobStatusInfo;
 import org.renci.jlrm.Site;

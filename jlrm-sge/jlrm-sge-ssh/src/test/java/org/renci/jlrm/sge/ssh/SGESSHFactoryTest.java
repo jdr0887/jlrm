@@ -26,7 +26,7 @@ public class SGESSHFactoryTest {
         queue.setName("all.q");
         queue.setRunTime(2880L);
 
-        SGESSHJob job = new SGESSHJobBuilder().name("test").executable(new File("/bin/hostname")).hostCount(1)
+        SGESSHJob job = SGESSHJob.builder().name("test").executable(new File("/bin/hostname")).hostCount(1)
                 .numberOfProcessors(1).project("TCGA").queueName("all.q").output(new File("test.out"))
                 .error(new File("test.err")).build();
 

@@ -19,22 +19,22 @@ public class SLURMSSHFactoryTest {
     @Test
     public void testBasicSubmit() {
 
-        Site site = new Site();
-        site.setSubmitHost("ht0.renci.org");
-        site.setUsername("mapseq");
-
-        Queue queue = new Queue();
-        queue.setName("batch");
-        queue.setRunTime(2880L);
-
-        SLURMSSHJob job = new SLURMSSHJobBuilder().name("test").executable(new File("/bin/hostname")).hostCount(1)
-                .numberOfProcessors(1).project("TCGA").queueName("batch").output(new File("test.out"))
-                .error(new File("test.err")).build();
-
         try {
+            Site site = new Site();
+            site.setSubmitHost("ht0.renci.org");
+            site.setUsername("mapseq");
+
+            Queue queue = new Queue();
+            queue.setName("batch");
+            queue.setRunTime(2880L);
+
+            SLURMSSHJob job = SLURMSSHJob.builder().name("test").executable(new File("/bin/hostname")).hostCount(1)
+                    .numberOfProcessors(1).project("TCGA").queueName("batch").output(new File("test.out"))
+                    .error(new File("test.err")).build();
+
             job = new SLURMSSHSubmitCallable(site, job, new File("/tmp")).call();
             System.out.println(job.getId());
-        } catch (JLRMException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -48,7 +48,7 @@ public class SLURMSSHFactoryTest {
         site.setSubmitHost("topsail-sn.unc.edu");
         site.setUsername("pipeline");
 
-        SLURMSSHLookupStatusCallable callable = new SLURMSSHLookupStatusCallable(site);
+        SLURMSSHLookupStatusCallable callable = new SLURMSSHLookupStatusCallable(site, null);
         try {
             Set<JobStatusInfo> results = callable.call();
             for (JobStatusInfo info : results) {

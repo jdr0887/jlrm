@@ -1,95 +1,50 @@
 package org.renci.jlrm.slurm;
 
+import java.io.File;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.commons.lang3.Range;
 import org.renci.jlrm.Job;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = { "array" })
 public class SLURMJob extends Job {
 
     private static final long serialVersionUID = -2381336994166389859L;
 
-    protected String queueName;
+    private String queueName;
 
-    protected String project;
+    private String project;
 
-    protected Long wallTime;
+    private Long wallTime;
 
-    protected Integer hostCount;
+    private Integer hostCount;
 
-    protected String constraint;
+    private String constraint;
 
-    protected Range<Integer> array;
+    private Range<Integer> array;
 
-    public SLURMJob() {
-        super();
-    }
-
-    public SLURMJob(SLURMJobBuilder builder) {
-        super();
-        this.id = builder.id();
-        this.name = builder.name();
-        this.executable = builder.executable();
-        this.submitFile = builder.submitFile();
-        this.output = builder.output();
-        this.error = builder.error();
-        this.numberOfProcessors = builder.numberOfProcessors();
-        this.array = builder.array();
-        this.memory = builder.memory();
-        this.disk = builder.disk();
-        this.duration = builder.duration();
-        this.durationTimeUnit = builder.durationTimeUnit();
-        this.constraint = builder.constraint();
-        this.queueName = builder.queueName();
-        this.project = builder.project();
-        this.wallTime = builder.wallTime();
-        this.hostCount = builder.hostCount();
-    }
-
-    public String getQueueName() {
-        return queueName;
-    }
-
-    public void setQueueName(String queueName) {
+    @Builder
+    public SLURMJob(String id, String name, File executable, File submitFile, File output, File error,
+            Integer numberOfProcessors, String memory, String disk, long duration, TimeUnit durationTimeUnit,
+            String queueName, String project, Long wallTime, Integer hostCount, String constraint,
+            Range<Integer> array) {
+        super(id, name, executable, submitFile, output, error, numberOfProcessors, memory, disk, duration,
+                durationTimeUnit);
         this.queueName = queueName;
-    }
-
-    public Range<Integer> getArray() {
-        return array;
-    }
-
-    public void setArray(Range<Integer> array) {
-        this.array = array;
-    }
-
-    public String getProject() {
-        return project;
-    }
-
-    public void setProject(String project) {
         this.project = project;
-    }
-
-    public Long getWallTime() {
-        return wallTime;
-    }
-
-    public void setWallTime(Long wallTime) {
         this.wallTime = wallTime;
-    }
-
-    public Integer getHostCount() {
-        return hostCount;
-    }
-
-    public void setHostCount(Integer hostCount) {
         this.hostCount = hostCount;
-    }
-
-    public String getConstraint() {
-        return constraint;
-    }
-
-    public void setConstraint(String constraint) {
         this.constraint = constraint;
+        this.array = array;
     }
 
 }

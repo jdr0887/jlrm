@@ -1,62 +1,59 @@
 package org.renci.jlrm.lsf.ssh;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Site;
 import org.renci.jlrm.commons.ssh.SSHConnectionUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Slf4j
 public class LSFSSHSubmitCallable implements Callable<LSFSSHJob> {
-
-    private static final Logger logger = LoggerFactory.getLogger(LSFSSHSubmitCallable.class);
 
     private LSFSSHJob job;
 
     private Site site;
 
-    public LSFSSHSubmitCallable() {
-        super();
-    }
-
-    public LSFSSHSubmitCallable(LSFSSHJob job, Site site) {
-        super();
-        this.job = job;
-        this.site = site;
-    }
-
     @Override
-    public LSFSSHJob call() throws JLRMException {
-
-        String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s",
-                DateFormatUtils.ISO_DATE_FORMAT.format(new Date()), UUID.randomUUID().toString());
-        String command = String.format("(mkdir -p $HOME/%s && echo $HOME)", remoteWorkDirSuffix);
-
-        String remoteHome = SSHConnectionUtil.execute(command, site.getUsername(), site.getSubmitHost());
-
-        String remoteWorkDir = String.format("%s/%s", remoteHome, remoteWorkDirSuffix);
-        logger.info("remoteWorkDir: {}", remoteWorkDir);
-
-        File tmpDir = new File(System.getProperty("java.io.tmpdir"));
-        File myDir = new File(tmpDir, System.getProperty("user.name"));
-        File localWorkDir = new File(myDir, UUID.randomUUID().toString());
-        localWorkDir.mkdirs();
-        logger.info("localWorkDir: {}", localWorkDir.getAbsolutePath());
+    public LSFSSHJob call() throws Exception {
 
         try {
 
-            LSFSubmitScriptExporter<LSFSSHJob> exporter = new LSFSubmitScriptExporter<LSFSSHJob>();
-            this.job = exporter.export(localWorkDir, remoteWorkDir, this.job);
+            String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s",
+                    DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.format(new Date()), UUID.randomUUID().toString());
+            String command = String.format("(mkdir -p $HOME/%s && echo $HOME)", remoteWorkDirSuffix);
+
+            String remoteHome = SSHConnectionUtil.execute(command, site.getUsername(), site.getSubmitHost());
+
+            String remoteWorkDir = String.format("%s/%s", remoteHome, remoteWorkDirSuffix);
+            log.info("remoteWorkDir: {}", remoteWorkDir);
+
+            File tmpDir = new File(System.getProperty("java.io.tmpdir"));
+            File myDir = new File(tmpDir, System.getProperty("user.name"));
+            File localWorkDir = new File(myDir, UUID.randomUUID().toString());
+            localWorkDir.mkdirs();
+            log.info("localWorkDir: {}", localWorkDir.getAbsolutePath());
+
+            this.job = Executors.newSingleThreadExecutor()
+                    .submit(new LSFSubmitScriptRemoteExporter<LSFSSHJob>(localWorkDir, remoteWorkDir, this.job)).get();
 
             SSHConnectionUtil.transferSubmitScript(site, remoteWorkDir, this.job.getTransferExecutable(),
                     this.job.getExecutable(), this.job.getTransferInputs(), this.job.getInputFiles(),
@@ -70,7 +67,7 @@ public class LSFSSHSubmitCallable implements Callable<LSFSSHJob> {
             String line;
             while ((line = lnr.readLine()) != null) {
                 if (line.indexOf("submitted") != -1) {
-                    logger.info("line = " + line);
+                    log.info("line = " + line);
                     Pattern pattern = Pattern.compile("^Job.+<(\\d*)> is submitted.+\\.$");
                     Matcher matcher = pattern.matcher(line);
                     if (!matcher.matches()) {
@@ -81,27 +78,11 @@ public class LSFSSHSubmitCallable implements Callable<LSFSSHJob> {
                     break;
                 }
             }
-        } catch (IOException e) {
-            logger.error("IOException: {}", e.getMessage());
-            throw new JLRMException("IOException: " + e.getMessage());
+        } catch (Exception e) {
+            log.error("IOException: {}", e.getMessage());
+            throw e;
         }
         return job;
-    }
-
-    public LSFSSHJob getJob() {
-        return job;
-    }
-
-    public void setJob(LSFSSHJob job) {
-        this.job = job;
-    }
-
-    public Site getSite() {
-        return site;
-    }
-
-    public void setSite(Site site) {
-        this.site = site;
     }
 
 }

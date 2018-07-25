@@ -12,21 +12,21 @@ import org.renci.common.exec.ExecutorException;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.lsf.LSFJob;
 import org.renci.jlrm.lsf.LSFJobStatusType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+@AllArgsConstructor
+@Getter
+@Setter
+@Slf4j
 public class LSFLookupStatusCallable implements Callable<LSFJobStatusType> {
-
-    private static final Logger logger = LoggerFactory.getLogger(LSFLookupStatusCallable.class);
 
     private final Executor executor = BashExecutor.getInstance();
 
     private LSFJob job;
-
-    public LSFLookupStatusCallable(LSFJob job) {
-        super();
-        this.job = job;
-    }
 
     @Override
     public LSFJobStatusType call() throws JLRMException {
@@ -39,7 +39,7 @@ public class LSFLookupStatusCallable implements Callable<LSFJobStatusType> {
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             String stdout = output.getStdout().toString();
             if (output.getExitCode() != 0) {
-                logger.warn("output.getStderr() = {}", output.getStderr().toString());
+                log.warn("output.getStderr() = {}", output.getStderr().toString());
                 throw new JLRMException("Problem looking up status: " + output.getStderr().toString());
             } else {
 
@@ -60,20 +60,12 @@ public class LSFLookupStatusCallable implements Callable<LSFJobStatusType> {
 
             }
         } catch (ExecutorException e) {
-            logger.error("ExecutorException", e);
+            log.error("ExecutorException", e);
             throw new JLRMException("Problem running: " + command);
         }
-        logger.info("JobStatus = {}", ret);
+        log.info("JobStatus = {}", ret);
         return ret;
 
-    }
-
-    public LSFJob getJob() {
-        return job;
-    }
-
-    public void setJob(LSFJob job) {
-        this.job = job;
     }
 
 }

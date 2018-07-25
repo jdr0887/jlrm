@@ -57,4 +57,13 @@ public class ParseDAGTest {
         return ret;
     }
 
+    @Test
+    public void test() throws JLRMException {
+        File f = new File("/tmp/NCGenesBaselineMem.dag.dagman.out");
+        CondorJobStatusType ret = CondorDAGLogParser.getInstance().parse(f);
+        System.out.println(ret);
+        assertTrue(ret == CondorJobStatusType.REMOVED);
+    }
+
+    
 }

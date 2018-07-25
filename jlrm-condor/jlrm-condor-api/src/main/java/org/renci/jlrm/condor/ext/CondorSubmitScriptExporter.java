@@ -64,10 +64,9 @@ public class CondorSubmitScriptExporter {
             boolean includeGlideinRequirements) {
         logger.debug("ENTERING export(String dagName, File workDir, Graph<JobNode, JobEdge> graph)");
 
-        CondorJob dagSubmitJob = new CondorJob();
-        dagSubmitJob.setName(dagName);
         File dagFile = new File(workDir, dagName + ".dag");
-        dagSubmitJob.setSubmitFile(dagFile);
+
+        CondorJob dagSubmitJob = CondorJob.builder().name(dagName).submitFile(dagFile).build();
 
         try {
 
@@ -93,7 +92,8 @@ public class CondorSubmitScriptExporter {
                     job.getClassAdvertisments().add(classAd);
 
                     if (includeGlideinRequirements) {
-                        job.addRequirement(String.format("TARGET.JLRM_USER == \"%s\"", System.getProperty("user.name")));
+                        job.addRequirement(
+                                String.format("TARGET.JLRM_USER == \"%s\"", System.getProperty("user.name")));
                         job.addRequirement("TARGET.IS_GLIDEIN == True");
                     }
 
@@ -113,8 +113,8 @@ public class CondorSubmitScriptExporter {
                                 job.getName(), job.getPostScript()));
                     }
                     if (job.getRetry() != null && job.getRetry() > 1) {
-                        dagFileWriter.write(String.format("%n%1$-10s %2$-10s %3$d%n", "RETRY", job.getName(),
-                                job.getRetry()));
+                        dagFileWriter.write(
+                                String.format("%n%1$-10s %2$-10s %3$d%n", "RETRY", job.getName(), job.getRetry()));
                     }
                     dagFileWriter.flush();
                 }

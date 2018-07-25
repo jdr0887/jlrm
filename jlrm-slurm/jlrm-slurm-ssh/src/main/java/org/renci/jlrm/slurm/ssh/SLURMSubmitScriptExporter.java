@@ -4,88 +4,30 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.concurrent.Callable;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang3.Range;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 
-public class SLURMSubmitScriptExporter<T extends SLURMSSHJob> {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
-    private static final Logger logger = LoggerFactory.getLogger(SLURMSubmitScriptExporter.class);
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Slf4j
+public class SLURMSubmitScriptExporter implements Callable<SLURMSSHJob> {
 
-    public SLURMSubmitScriptExporter() {
-        super();
-    }
+    private File workDir;
 
-    public T export(File workDir, String remoteWorkDir, T job) throws IOException {
-        logger.debug("ENTERING export(File, String, T)");
+    private SLURMSSHJob job;
+
+    public SLURMSSHJob call() throws IOException {
         File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
-
-        try (FileWriter fw = new FileWriter(submitFile); BufferedWriter bw = new BufferedWriter(fw)) {
-
-            bw.write("#!/bin/bash\n\n");
-            bw.write(String.format("#SBATCH -J %s%n", job.getName()));
-
-            if (StringUtils.isNotEmpty(job.getQueueName())) {
-                bw.write(String.format("#SBATCH -p %s%n", job.getQueueName()));
-            }
-
-            if (StringUtils.isNotEmpty(job.getProject())) {
-                bw.write(String.format("#SBATCH -A %s%n", job.getProject()));
-            }
-
-            if (job.getArray() != null) {
-                Range<Integer> arrayRange = job.getArray();
-                if (arrayRange.getMinimum().equals(arrayRange.getMaximum())) {
-                    bw.write(String.format("#SBATCH --array=%s%n", job.getArray().getMinimum()));
-                } else {
-                    bw.write(String.format("#SBATCH --array=%s-%s%n", job.getArray().getMinimum(),
-                            job.getArray().getMaximum()));
-                }
-            }
-
-            if (job.getWallTime() != null) {
-                bw.write(String.format("#SBATCH -t %d%n", job.getWallTime()));
-            }
-
-            if (StringUtils.isNotEmpty(job.getConstraint())) {
-                bw.write(String.format("#SBATCH -C %s%n", job.getConstraint()));
-            }
-
-            if (job.getMemory() != null) {
-                bw.write(String.format("#SBATCH --mem=%s%n", job.getMemory()));
-            }
-
-            bw.write(String.format("#SBATCH -i %s%n", "/dev/null"));
-
-            bw.write(String.format("#SBATCH -o %s%n", job.getOutput().getAbsolutePath()));
-            bw.write(String.format("#SBATCH -e %s%n", job.getError().getAbsolutePath()));
-
-            if (job.getHostCount() != null) {
-                bw.write(String.format("#SBATCH -N %d%n", job.getHostCount()));
-            }
-
-            if (job.getNumberOfProcessors() != null) {
-                bw.write(String.format("#SBATCH -n %d%n", job.getNumberOfProcessors()));
-            }
-
-            if (job.getTransferExecutable()) {
-                bw.write(remoteWorkDir + File.separator + job.getExecutable().getName());
-            } else {
-                bw.write(job.getExecutable().getAbsolutePath());
-            }
-            bw.flush();
-        }
-        job.setSubmitFile(submitFile);
-
-        return job;
-    }
-
-    public T export(File workDir, T job) throws IOException {
-        logger.debug("ENTERING export(File, LSFJob)");
-        File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
-
+        log.info("writing: {}", submitFile.getAbsolutePath());
         try (FileWriter fw = new FileWriter(submitFile); BufferedWriter bw = new BufferedWriter(fw)) {
 
             bw.write("#!/bin/bash\n\n");

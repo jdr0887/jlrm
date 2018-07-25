@@ -3,12 +3,38 @@ package org.renci.jlrm.slurm.ssh;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import org.renci.jlrm.slurm.SLURMJob;
+import org.apache.commons.lang3.Range;
+import org.renci.jlrm.Job;
 
-public class SLURMSSHJob extends SLURMJob {
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true, exclude = { "array" })
+@Getter
+@Setter
+@ToString(callSuper = true)
+public class SLURMSSHJob extends Job {
 
     private static final long serialVersionUID = -4585163763638553836L;
+
+    private String queueName;
+
+    private String project;
+
+    private Long wallTime;
+
+    private Integer hostCount;
+
+    private String constraint;
+
+    private Range<Integer> array;
 
     private Boolean transferInputs = Boolean.FALSE;
 
@@ -16,54 +42,21 @@ public class SLURMSSHJob extends SLURMJob {
 
     private List<File> inputFiles = new ArrayList<File>();
 
-    public SLURMSSHJob() {
-        super();
-    }
-
-    public SLURMSSHJob(SLURMSSHJobBuilder builder) {
-        super();
-        this.id = builder.id();
-        this.name = builder.name();
-        this.executable = builder.executable();
-        this.submitFile = builder.submitFile();
-        this.output = builder.output();
-        this.error = builder.error();
-        this.array = builder.array();
-        this.numberOfProcessors = builder.numberOfProcessors();
-        this.memory = builder.memory();
-        this.duration = builder.duration();
-        this.durationTimeUnit = builder.durationTimeUnit();
-        this.queueName = builder.queueName();
-        this.constraint = builder.constraint();
-        this.project = builder.project();
-        this.wallTime = builder.wallTime();
-        this.hostCount = builder.hostCount();
-        this.transferInputs = builder.transferInputs();
-        this.transferExecutable = builder.transferExecutable();
-        this.inputFiles = builder.inputFiles();
-    }
-
-    public Boolean getTransferInputs() {
-        return transferInputs;
-    }
-
-    public void setTransferInputs(Boolean transferInputs) {
+    @Builder
+    public SLURMSSHJob(String id, String name, File executable, File submitFile, File output, File error,
+            Integer numberOfProcessors, String memory, String disk, long duration, TimeUnit durationTimeUnit,
+            String queueName, String project, Long wallTime, Integer hostCount, String constraint, Range<Integer> array,
+            Boolean transferInputs, Boolean transferExecutable, List<File> inputFiles) {
+        super(id, name, executable, submitFile, output, error, numberOfProcessors, memory, disk, duration,
+                durationTimeUnit);
+        this.queueName = queueName;
+        this.project = project;
+        this.wallTime = wallTime;
+        this.hostCount = hostCount;
+        this.constraint = constraint;
+        this.array = array;
         this.transferInputs = transferInputs;
-    }
-
-    public Boolean getTransferExecutable() {
-        return transferExecutable;
-    }
-
-    public void setTransferExecutable(Boolean transferExecutable) {
         this.transferExecutable = transferExecutable;
-    }
-
-    public List<File> getInputFiles() {
-        return inputFiles;
-    }
-
-    public void setInputFiles(List<File> inputFiles) {
         this.inputFiles = inputFiles;
     }
 

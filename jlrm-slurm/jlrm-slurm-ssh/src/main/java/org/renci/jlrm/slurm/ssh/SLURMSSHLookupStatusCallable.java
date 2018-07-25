@@ -8,42 +8,33 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.JobStatusInfo;
 import org.renci.jlrm.Site;
 import org.renci.jlrm.commons.ssh.SSHConnectionUtil;
 import org.renci.jlrm.slurm.SLURMJobStatusType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Slf4j
 public class SLURMSSHLookupStatusCallable implements Callable<Set<JobStatusInfo>> {
-
-    private static final Logger logger = LoggerFactory.getLogger(SLURMSSHLookupStatusCallable.class);
 
     private Site site;
 
     private String id;
 
-    public SLURMSSHLookupStatusCallable() {
-        super();
-    }
-
-    public SLURMSSHLookupStatusCallable(Site site) {
-        super();
-        this.site = site;
-    }
-
-    public SLURMSSHLookupStatusCallable(Site site, String id) {
-        super();
-        this.site = site;
-        this.id = id;
-    }
-
     @Override
     public Set<JobStatusInfo> call() throws JLRMException {
-        logger.debug("ENTERING call()");
 
         Set<JobStatusInfo> jobStatusSet = new HashSet<JobStatusInfo>();
         try {
@@ -64,40 +55,34 @@ public class SLURMSSHLookupStatusCallable implements Callable<Set<JobStatusInfo>
 
             String output = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
 
-            LineNumberReader lnr = new LineNumberReader(new StringReader(output));
-            String line;
-            while ((line = lnr.readLine()) != null) {
-                SLURMJobStatusType statusType = SLURMJobStatusType.COMPLETED;
-                if (StringUtils.isNotEmpty(line)) {
-                    String[] lineSplit = StringUtils.split(line, '|');
-                    if (lineSplit != null && lineSplit.length == 4) {
-                        for (SLURMJobStatusType type : SLURMJobStatusType.values()) {
-                            if (StringUtils.isNotEmpty(lineSplit[1]) && lineSplit[1].contains(type.toString())) {
-                                statusType = type;
-                                break;
+            try (StringReader sr = new StringReader(output); LineNumberReader lnr = new LineNumberReader(sr)) {
+                String line;
+                while ((line = lnr.readLine()) != null) {
+                    SLURMJobStatusType statusType = SLURMJobStatusType.COMPLETED;
+                    if (StringUtils.isNotEmpty(line)) {
+                        String[] lineSplit = StringUtils.split(line, '|');
+                        if (lineSplit != null && lineSplit.length == 4) {
+                            for (SLURMJobStatusType type : SLURMJobStatusType.values()) {
+                                if (StringUtils.isNotEmpty(lineSplit[1]) && lineSplit[1].contains(type.toString())) {
+                                    statusType = type;
+                                    break;
+                                }
                             }
+                            JobStatusInfo info = new JobStatusInfo(lineSplit[0], statusType.toString(), lineSplit[2],
+                                    lineSplit[3]);
+                            log.debug("JobStatus is {}", info.toString());
+                            jobStatusSet.add(info);
                         }
-                        JobStatusInfo info = new JobStatusInfo(lineSplit[0], statusType.toString(), lineSplit[2],
-                                lineSplit[3]);
-                        logger.debug("JobStatus is {}", info.toString());
-                        jobStatusSet.add(info);
                     }
                 }
+
             }
 
         } catch (Exception e) {
-            logger.error("Exception", e);
+            log.error("Exception", e);
             throw new JLRMException("Exception: " + e.getMessage());
         }
         return jobStatusSet;
-    }
-
-    public Site getSite() {
-        return site;
-    }
-
-    public void setSite(Site site) {
-        this.site = site;
     }
 
 }

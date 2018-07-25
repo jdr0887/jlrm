@@ -8,27 +8,19 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
-import javax.xml.transform.TransformerConfigurationException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.ext.EdgeNameProvider;
-import org.jgrapht.ext.GraphMLExporter;
-import org.jgrapht.ext.VertexNameProvider;
-import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DirectedAcyclicGraph;
+import org.jgrapht.io.DOTExporter;
+import org.jgrapht.io.GraphMLExporter;
 import org.junit.Test;
-import org.renci.jlrm.condor.ext.CondorDOTExporter;
-import org.xml.sax.SAXException;
 
 public class Serialization {
 
     @Test
     public void testSerialization() {
 
-        CondorJob firstJob = new CondorJob();
-        firstJob.setDuration(1000);
-        firstJob.setId("asdfads");
-        firstJob.setInitialDirectory("/tmp");
+        CondorJob firstJob = CondorJob.builder().duration(1000).id("asdfasdf").initialDirectory("/tmp").build();
 
         firstJob.getClassAdvertisments()
                 .add(new ClassAdvertisement("executable", ClassAdvertisementType.STRING, "sub_1.sh"));
@@ -60,15 +52,12 @@ public class Serialization {
     }
 
     @Test
-    public void testGraphMLExport() {
+    public void testGraphMLExport() throws Exception {
 
-        DirectedGraph<CondorJob, CondorJobEdge> graph = new DefaultDirectedGraph<CondorJob, CondorJobEdge>(
+        DirectedAcyclicGraph<CondorJob, CondorJobEdge> graph = new DirectedAcyclicGraph<CondorJob, CondorJobEdge>(
                 CondorJobEdge.class);
 
-        CondorJob firstJob = new CondorJob();
-        firstJob.setDuration(1000);
-        firstJob.setId("asdfads");
-        firstJob.setInitialDirectory("/tmp");
+        CondorJob firstJob = CondorJob.builder().duration(1000).id("asdfasdf").initialDirectory("/tmp").build();
 
         firstJob.getClassAdvertisments()
                 .add(new ClassAdvertisement("executable", ClassAdvertisementType.STRING, "sub_1.sh"));
@@ -86,10 +75,7 @@ public class Serialization {
 
         graph.addVertex(firstJob);
 
-        CondorJob secondJob = new CondorJob();
-        secondJob.setDuration(1000);
-        secondJob.setId("asdfads");
-        secondJob.setInitialDirectory("/tmp");
+        CondorJob secondJob = CondorJob.builder().duration(1000).id("asdfasdf").initialDirectory("/tmp").build();
 
         secondJob.getClassAdvertisments()
                 .add(new ClassAdvertisement("executable", ClassAdvertisementType.STRING, "sub_1.sh"));
@@ -108,10 +94,7 @@ public class Serialization {
         graph.addVertex(secondJob);
         graph.addEdge(firstJob, secondJob);
 
-        CondorJob thirdJob = new CondorJob();
-        thirdJob.setDuration(1000);
-        thirdJob.setId("asdfads");
-        thirdJob.setInitialDirectory("/tmp");
+        CondorJob thirdJob = CondorJob.builder().duration(1000).id("asdfasdf").initialDirectory("/tmp").build();
 
         thirdJob.getClassAdvertisments()
                 .add(new ClassAdvertisement("executable", ClassAdvertisementType.STRING, "sub_1.sh"));
@@ -130,53 +113,25 @@ public class Serialization {
         graph.addVertex(thirdJob);
         graph.addEdge(secondJob, thirdJob);
 
-        VertexNameProvider<CondorJob> vertexNameProvider = new VertexNameProvider<CondorJob>() {
-
-            @Override
-            public String getVertexName(CondorJob arg0) {
-                return arg0.getName();
-            }
-
-        };
-
-        EdgeNameProvider<CondorJobEdge> edgeNameProvider = new EdgeNameProvider<CondorJobEdge>() {
-
-            @Override
-            public String getEdgeName(CondorJobEdge arg0) {
-                return arg0.getInputLabel();
-            }
-
-        };
-
         GraphMLExporter<CondorJob, CondorJobEdge> exporter = new GraphMLExporter<CondorJob, CondorJobEdge>(
-                vertexNameProvider, vertexNameProvider, edgeNameProvider, edgeNameProvider);
-        try {
-            exporter.export(new FileWriter(new File("/tmp/graphml.xml")), graph);
-        } catch (TransformerConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
-        }
+                a -> a.getName(), a -> a.getName(), a -> a.getInputLabel(), a -> a.getInputLabel());
+        exporter.exportGraph(graph, new FileWriter(new File("/tmp/graphml.xml")));
 
     }
 
     @Test
-    public void testDotExport() {
+    public void testDotExport() throws Exception {
 
-        DirectedGraph<CondorJob, CondorJobEdge> graph = new DefaultDirectedGraph<CondorJob, CondorJobEdge>(
+        DirectedAcyclicGraph<CondorJob, CondorJobEdge> graph = new DirectedAcyclicGraph<CondorJob, CondorJobEdge>(
                 CondorJobEdge.class);
 
-        CondorJob firstJob = new CondorJob();
-        firstJob.setDuration(1000);
-        firstJob.setId("1");
-        firstJob.setName("first");
-        firstJob.setInitialDirectory("/tmp");
+        CondorJob firstJob = CondorJob.builder().name("first").id("1").initialDirectory("/tmp").duration(1000).build();
         firstJob.addArgument("--asdf", "asdf", " ");
         firstJob.addArgument("--qwer", "qwer", " ");
         graph.addVertex(firstJob);
 
-        CondorJob secondJob = new CondorJob();
-        secondJob.setDuration(1000);
-        secondJob.setId("2");
-        secondJob.setName("second");
+        CondorJob secondJob = CondorJob.builder().name("second").id("2").initialDirectory("/tmp").duration(1000)
+                .build();
         secondJob.addArgument("--asdf", "asdf", " ");
         secondJob.addArgument("--qwer", "qwer", " ");
         secondJob.setInitialDirectory("/tmp");
@@ -184,51 +139,24 @@ public class Serialization {
         graph.addVertex(secondJob);
         graph.addEdge(firstJob, secondJob);
 
-        CondorJob thirdJob = new CondorJob();
-        thirdJob.setDuration(1000);
-        thirdJob.setId("3");
-        thirdJob.setName("third");
+        CondorJob thirdJob = CondorJob.builder().name("third").id("3").initialDirectory("/tmp").duration(1000).build();
         thirdJob.setInitialDirectory("/tmp");
         graph.addVertex(thirdJob);
         graph.addEdge(secondJob, thirdJob);
 
-        VertexNameProvider<CondorJob> vertexNameProvider = new VertexNameProvider<CondorJob>() {
-
-            @Override
-            public String getVertexName(CondorJob job) {
-
-                StringBuilder sb = new StringBuilder();
-                sb.append(job.getName());
-                if (StringUtils.isNotEmpty(job.getArgumentsClassAd().getValue())) {
-                    sb.append("\n");
-                    for (String arg : job.getArgumentsClassAd().getValue().split("(?<!\\G\\S+)\\s")) {
-                        sb.append(String.format("%s\n", arg));
-                    }
+        DOTExporter<CondorJob, CondorJobEdge> exporter = new DOTExporter<>(a -> a.getId(), a -> {
+            StringBuilder sb = new StringBuilder();
+            sb.append(a.getName());
+            if (StringUtils.isNotEmpty(a.getArgumentsClassAd().getValue())) {
+                sb.append("\n");
+                for (String arg : a.getArgumentsClassAd().getValue().split("(?<!\\G\\S+)\\s")) {
+                    sb.append(String.format("%s\n", arg));
                 }
-
-                return sb.toString();
             }
 
-        };
-
-        EdgeNameProvider<CondorJobEdge> edgeNameProvider = new EdgeNameProvider<CondorJobEdge>() {
-
-            @Override
-            public String getEdgeName(CondorJobEdge edge) {
-                CondorJob source = (CondorJob) edge.getSource();
-                source.getArgumentsClassAd();
-                return source.getArgumentsClassAd().getValue();
-            }
-
-        };
-
-        CondorDOTExporter<CondorJob, CondorJobEdge> exporter = new CondorDOTExporter<>(a -> a.getId(),
-                vertexNameProvider, null);
-        try {
-            exporter.export(new FileWriter(new File("/tmp/graph.dot")), graph);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            return sb.toString();
+        }, a -> ((CondorJob) a.getSource()).getArgumentsClassAd().getValue());
+        exporter.exportGraph(graph, new FileWriter(new File("/tmp/graph.dot")));
 
     }
 

@@ -1,19 +1,23 @@
 package org.renci.jlrm.condor;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.input.ReversedLinesFileReader;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.renci.jlrm.JLRMException;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class CondorDAGLogParser {
 
     private static final Pattern dagStatusPattern = Pattern.compile("^.+DAG status: (\\d*).+$");
@@ -49,74 +53,60 @@ public class CondorDAGLogParser {
             return ret;
         }
 
-        List<String> lines = new ArrayList<>();
-        // try (RandomAccessFile raf = new RandomAccessFile(logFile, "r")) {
-        // long length = raf.length();
-        // if (length > 1500) {
-        // raf.seek(length - 1500);
-        // String line;
-        // while ((line = raf.readLine()) != null) {
-        // lines.add(line);
-        // }
-        // }
-        // } catch (IOException e) {
-        // e.printStackTrace();
-        // }
-
-        try {
-            lines.addAll(FileUtils.readLines(logFile));
-            // Collections.reverse(lines.subList(0, lines.size()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Matcher matcher = null;
-
         int totalChildrenJobs = 0;
-        for (String line : lines) {
-            matcher = dagTotalJobsPattern.matcher(line);
-            if (matcher.matches()) {
-                String count = matcher.group(1);
-                if (StringUtils.isNotEmpty(count)) {
-                    totalChildrenJobs = Integer.valueOf(count);
-                    break;
+        try (FileReader fr = new FileReader(logFile); BufferedReader br = new BufferedReader(fr)) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                Matcher matcher = dagTotalJobsPattern.matcher(line);
+                if (matcher.matches()) {
+                    String count = matcher.group(1);
+                    if (StringUtils.isNotEmpty(count)) {
+                        totalChildrenJobs = Integer.valueOf(count);
+                        break;
+                    }
                 }
             }
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
         }
 
-        String lastLine = lines.get(lines.size() - 1);
-
         boolean hasExited = false;
-        int exitCode = 0;
 
-        matcher = dagExitStatusPattern.matcher(lastLine);
-        if (matcher.matches()) {
-            hasExited = true;
+        int exitCode = 0;
+        try (ReversedLinesFileReader fr = new ReversedLinesFileReader(logFile, StandardCharsets.UTF_8)) {
+            Matcher matcher = dagExitStatusPattern.matcher(fr.readLine());
             if (matcher.matches()) {
+                hasExited = true;
                 String code = matcher.group(1);
                 if (StringUtils.isNotEmpty(code)) {
                     exitCode = Integer.valueOf(code);
                 }
             }
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
         }
 
         CondorDAGJobStatusType dagJobStatusType = CondorDAGJobStatusType.OK;
-        ListIterator<String> reverseIter = lines.listIterator(lines.size());
+        try (ReversedLinesFileReader fr = new ReversedLinesFileReader(logFile, StandardCharsets.UTF_8)) {
+            String line;
+            while ((line = fr.readLine()) != null) {
+                Matcher matcher = dagStatusPattern.matcher(line);
+                if (matcher.matches()) {
+                    String code = matcher.group(1);
+                    if (StringUtils.isNotEmpty(code)) {
+                        CondorDAGJobStatusType type = Arrays.asList(CondorDAGJobStatusType.values()).stream()
+                                .filter(a -> a.getCode().equals(Integer.valueOf(code))).findFirst().orElse(null);
 
-        main: while (reverseIter.hasPrevious()) {
-            String line = reverseIter.previous();
-            matcher = dagStatusPattern.matcher(line);
-            if (matcher.matches()) {
-                String code = matcher.group(1);
-                if (StringUtils.isNotEmpty(code)) {
-                    for (CondorDAGJobStatusType type : CondorDAGJobStatusType.values()) {
-                        if (type.getCode() == Integer.valueOf(code)) {
+                        if (type != null) {
                             dagJobStatusType = type;
-                            break main;
                         }
+                        break;
+
                     }
                 }
             }
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
         }
 
         if (totalChildrenJobs == 0) {
@@ -126,31 +116,88 @@ public class CondorDAGLogParser {
             return ret;
         }
 
-        CondorJobTally tally = getLatestTally(lines, totalChildrenJobs);
+        CondorJobTally tally = new CondorJobTally();
+
+        try (ReversedLinesFileReader fr = new ReversedLinesFileReader(logFile, StandardCharsets.UTF_8)) {
+            String line;
+            while ((line = fr.readLine()) != null) {
+
+                Pattern pattern = Pattern.compile("^.+ (\\d*) job proc\\(s\\) currently held$");
+                Matcher matcher = pattern.matcher(line);
+                if (!matcher.matches()) {
+                    continue;
+                }
+
+                String heldCount = matcher.group(1);
+                tally.setHeld(Integer.valueOf(heldCount));
+
+                String tallies = fr.readLine();
+                pattern = Pattern.compile(
+                        "^(\\d*/\\d*/\\d*\\s.\\d*:\\d*:\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)");
+                matcher = pattern.matcher(tallies);
+                if (matcher.matches()) {
+
+                    String match = matcher.group(1);
+                    try {
+                        tally.setDate(DateUtils.parseDate(match, new String[] { "MM/dd/yy HH:mm:ss" }));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    match = matcher.group(2);
+                    tally.setDone(Integer.valueOf(match));
+
+                    match = matcher.group(3);
+                    tally.setPre(Integer.valueOf(match));
+
+                    match = matcher.group(4);
+                    tally.setQueued(Integer.valueOf(match));
+
+                    match = matcher.group(5);
+                    tally.setPost(Integer.valueOf(match));
+
+                    match = matcher.group(6);
+                    tally.setReady(Integer.valueOf(match));
+
+                    match = matcher.group(7);
+                    tally.setUnReady(Integer.valueOf(match));
+
+                    match = matcher.group(8);
+                    tally.setFailed(Integer.valueOf(match));
+
+                }
+
+                break;
+            }
+
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
 
         if (hasExited) {
             // find termination state
 
-            reverseIter = lines.listIterator(lines.size());
+            try (ReversedLinesFileReader fr = new ReversedLinesFileReader(logFile, StandardCharsets.UTF_8)) {
+                String line;
+                while ((line = fr.readLine()) != null) {
+                    if (line.contains("All jobs Completed") && tally.getDone().equals(totalChildrenJobs)) {
+                        ret = CondorJobStatusType.COMPLETED;
+                        break;
+                    }
 
-            while (reverseIter.hasPrevious()) {
-                String line = reverseIter.previous();
+                    if (line.contains("Running: condor_rm -const DAGManJobId")) {
+                        ret = CondorJobStatusType.REMOVED;
+                        break;
+                    }
 
-                if (line.contains("All jobs Completed") && tally.getDone().equals(totalChildrenJobs)) {
-                    ret = CondorJobStatusType.COMPLETED;
-                    break;
+                    if (line.contains("Aborting DAG")
+                            && (tally.getFailed() > 0 || dagJobStatusType.equals(CondorDAGJobStatusType.REMOVED))) {
+                        ret = CondorJobStatusType.REMOVED;
+                        break;
+                    }
                 }
-
-                if (line.contains("Running: condor_rm -const DAGManJobId")) {
-                    ret = CondorJobStatusType.REMOVED;
-                    break;
-                }
-
-                if (line.contains("Aborting DAG") && (tally.getFailed() > 0 || dagJobStatusType.equals(CondorDAGJobStatusType.REMOVED))) {
-                    ret = CondorJobStatusType.REMOVED;
-                    break;
-                }
-                
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
             }
 
         } else {
@@ -164,67 +211,6 @@ public class CondorDAGLogParser {
 
         return ret;
 
-    }
-
-    private CondorJobTally getLatestTally(List<String> dagLogOutFileLines, int totalChildrenJobs) {
-        CondorJobTally ret = new CondorJobTally();
-
-        ListIterator<String> lineIter = dagLogOutFileLines.listIterator(dagLogOutFileLines.size());
-        while (lineIter.hasPrevious()) {
-            String line = lineIter.previous();
-            if (line.contains(String.format("Of %d nodes total", totalChildrenJobs))) {
-                lineIter.next();
-                lineIter.next();
-                lineIter.next();
-                String tallies = lineIter.next();
-                Pattern pattern = Pattern.compile(
-                        "^(\\d*/\\d*/\\d*\\s.\\d*:\\d*:\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)\\s+(\\d*)");
-                Matcher matcher = pattern.matcher(tallies);
-                boolean matches = matcher.matches();
-                if (matches) {
-
-                    String match = matcher.group(1);
-                    try {
-                        ret.setDate(DateUtils.parseDate(match, new String[] { "MM/dd/yy HH:mm:ss" }));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-
-                    match = matcher.group(2);
-                    ret.setDone(Integer.valueOf(match));
-
-                    match = matcher.group(3);
-                    ret.setPre(Integer.valueOf(match));
-
-                    match = matcher.group(4);
-                    ret.setQueued(Integer.valueOf(match));
-
-                    match = matcher.group(5);
-                    ret.setPost(Integer.valueOf(match));
-
-                    match = matcher.group(6);
-                    ret.setReady(Integer.valueOf(match));
-
-                    match = matcher.group(7);
-                    ret.setUnReady(Integer.valueOf(match));
-
-                    match = matcher.group(8);
-                    ret.setFailed(Integer.valueOf(match));
-
-                }
-
-                String heldLine = lineIter.next();
-                pattern = Pattern.compile("^.+ (\\d*) job proc(s) currently held$");
-                matcher = pattern.matcher(heldLine);
-                matches = matcher.matches();
-                if (matches) {
-                    String heldCount = matcher.group(1);
-                    ret.setHeld(Integer.valueOf(heldCount));
-                }
-                break;
-            }
-        }
-        return ret;
     }
 
 }

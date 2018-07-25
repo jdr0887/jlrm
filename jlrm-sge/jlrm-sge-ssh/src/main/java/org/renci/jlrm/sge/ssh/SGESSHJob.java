@@ -3,12 +3,33 @@ package org.renci.jlrm.sge.ssh;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import org.renci.jlrm.sge.SGEJob;
+import org.renci.jlrm.Job;
 
-public class SGESSHJob extends SGEJob {
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
+@ToString(callSuper = true)
+public class SGESSHJob extends Job {
 
     private static final long serialVersionUID = -3637899659269488349L;
+
+    private String queueName;
+
+    private String project;
+
+    private Long wallTime;
+
+    private Integer hostCount;
 
     private Boolean transferInputs = Boolean.FALSE;
 
@@ -16,56 +37,19 @@ public class SGESSHJob extends SGEJob {
 
     private List<File> inputFiles = new ArrayList<File>();
 
-    public SGESSHJob() {
-        super();
-    }
-
-    public SGESSHJob(SGESSHJobBuilder builder) {
-        super();
-        // from JobBuilder
-        this.id = builder.id();
-        this.name = builder.name();
-        this.executable = builder.executable();
-        this.submitFile = builder.submitFile();
-        this.output = builder.output();
-        this.error = builder.error();
-        this.numberOfProcessors = builder.numberOfProcessors();
-        this.memory = builder.memory();
-        this.disk = builder.disk();
-        this.duration = builder.duration();
-        this.durationTimeUnit = builder.durationTimeUnit();
-        // from LSFJobBuilder
-        this.queueName = builder.queueName();
-        this.project = builder.project();
-        this.wallTime = builder.wallTime();
-        this.hostCount = builder.hostCount();
-        // from LSFJobBuilder
-        this.transferInputs = builder.transferInputs();
-        this.transferExecutable = builder.transferExecutable();
-        this.inputFiles = builder.inputFiles();
-    }
-
-    public Boolean getTransferInputs() {
-        return transferInputs;
-    }
-
-    public void setTransferInputs(Boolean transferInputs) {
+    @Builder
+    public SGESSHJob(String id, String name, File executable, File submitFile, File output, File error,
+            Integer numberOfProcessors, String memory, String disk, long duration, TimeUnit durationTimeUnit,
+            String queueName, String project, Long wallTime, Integer hostCount, Boolean transferInputs,
+            Boolean transferExecutable, List<File> inputFiles) {
+        super(id, name, executable, submitFile, output, error, numberOfProcessors, memory, disk, duration,
+                durationTimeUnit);
+        this.queueName = queueName;
+        this.project = project;
+        this.wallTime = wallTime;
+        this.hostCount = hostCount;
         this.transferInputs = transferInputs;
-    }
-
-    public Boolean getTransferExecutable() {
-        return transferExecutable;
-    }
-
-    public void setTransferExecutable(Boolean transferExecutable) {
         this.transferExecutable = transferExecutable;
-    }
-
-    public List<File> getInputFiles() {
-        return inputFiles;
-    }
-
-    public void setInputFiles(List<File> inputFiles) {
         this.inputFiles = inputFiles;
     }
 

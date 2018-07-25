@@ -10,7 +10,7 @@ import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Site;
 import org.renci.jlrm.commons.ssh.SSHConnectionUtil;
@@ -44,7 +44,7 @@ public class SGESSHSubmitCallable implements Callable<SGESSHJob> {
         try {
 
             String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s",
-                    DateFormatUtils.ISO_DATE_FORMAT.format(new Date()), UUID.randomUUID().toString());
+                    DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.format(new Date()), UUID.randomUUID().toString());
             String command = String.format("(mkdir -p $HOME/%s && echo $HOME)", remoteWorkDirSuffix);
 
             String remoteHome = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());

@@ -7,20 +7,28 @@ import java.io.StringReader;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Site;
 import org.renci.jlrm.commons.ssh.SSHConnectionUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Slf4j
 public class PBSSSHSubmitCallable implements Callable<PBSSSHJob> {
-
-    private static final Logger logger = LoggerFactory.getLogger(PBSSSHSubmitCallable.class);
 
     private Site site;
 
@@ -28,38 +36,26 @@ public class PBSSSHSubmitCallable implements Callable<PBSSSHJob> {
 
     private File submitDir;
 
-    public PBSSSHSubmitCallable() {
-        super();
-    }
-
-    public PBSSSHSubmitCallable(Site site, PBSSSHJob job, File submitDir) {
-        super();
-        this.site = site;
-        this.job = job;
-        this.submitDir = submitDir;
-    }
-
     @Override
-    public PBSSSHJob call() throws JLRMException {
-        logger.debug("ENTERING call()");
+    public PBSSSHJob call() throws Exception {
         try {
 
             String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s",
-                    DateFormatUtils.ISO_DATE_FORMAT.format(new Date()), UUID.randomUUID().toString());
+                    DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.format(new Date()), UUID.randomUUID().toString());
             String command = String.format("(mkdir -p $HOME/%s && echo $HOME)", remoteWorkDirSuffix);
             String remoteHome = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
 
             String remoteWorkDir = String.format("%s/%s", remoteHome, remoteWorkDirSuffix);
-            logger.info("remoteWorkDir: {}", remoteWorkDir);
+            log.info("remoteWorkDir: {}", remoteWorkDir);
 
             File tmpDir = new File(System.getProperty("java.io.tmpdir"));
             File myDir = new File(tmpDir, System.getProperty("user.name"));
             File localWorkDir = new File(myDir, UUID.randomUUID().toString());
             localWorkDir.mkdirs();
-            logger.info("localWorkDir: {}", localWorkDir.getAbsolutePath());
+            log.info("localWorkDir: {}", localWorkDir.getAbsolutePath());
 
-            PBSSubmitScriptExporter<PBSSSHJob> exporter = new PBSSubmitScriptExporter<PBSSSHJob>();
-            this.job = exporter.export(localWorkDir, remoteWorkDir, this.job);
+            this.job = Executors.newSingleThreadExecutor()
+                    .submit(new PBSSubmitScriptExporter<PBSSSHJob>(localWorkDir, remoteWorkDir, this.job)).get();
 
             SSHConnectionUtil.transferSubmitScript(site, remoteWorkDir, this.job.getTransferExecutable(),
                     this.job.getExecutable(), this.job.getTransferInputs(), this.job.getInputFiles(),
@@ -72,7 +68,7 @@ public class PBSSSHSubmitCallable implements Callable<PBSSSHJob> {
             LineNumberReader lnr = new LineNumberReader(new StringReader(submitOutput));
             String line = lnr.readLine();
             if (StringUtils.isNotEmpty(line)) {
-                logger.info("line: {}", line);
+                log.info("line: {}", line);
                 Pattern pattern = Pattern.compile("^(\\d+)\\..+");
                 Matcher matcher = pattern.matcher(line);
                 if (!matcher.matches()) {
@@ -82,34 +78,10 @@ public class PBSSSHSubmitCallable implements Callable<PBSSSHJob> {
                 }
             }
         } catch (IOException e) {
-            logger.error("IOException: {}", e.getMessage());
-            throw new JLRMException("IOException: " + e.getMessage());
+            log.error(e.getMessage(), e);
+            throw e;
         }
         return job;
-    }
-
-    public Site getSite() {
-        return site;
-    }
-
-    public void setSite(Site site) {
-        this.site = site;
-    }
-
-    public PBSSSHJob getJob() {
-        return job;
-    }
-
-    public void setJob(PBSSSHJob job) {
-        this.job = job;
-    }
-
-    public File getSubmitDir() {
-        return submitDir;
-    }
-
-    public void setSubmitDir(File submitDir) {
-        this.submitDir = submitDir;
     }
 
 }

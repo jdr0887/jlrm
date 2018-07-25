@@ -13,8 +13,8 @@ import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
 import org.renci.common.exec.ExecutorException;
-import org.renci.jlrm.IOUtils;
 import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.JLRMUtil;
 import org.renci.jlrm.condor.CondorJob;
 import org.renci.jlrm.condor.ext.CondorSubmitScriptExporter;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class CondorSubmitCallable implements Callable<CondorJob> {
     public CondorJob call() throws JLRMException {
         logger.debug("ENTERING call()");
 
-        File workDir = IOUtils.createWorkDirectory(submitDir, job.getName());
+        File workDir = JLRMUtil.createWorkDirectory(submitDir, job.getName());
         CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
         job = exporter.export(workDir, job);
 

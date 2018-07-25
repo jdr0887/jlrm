@@ -1,25 +1,32 @@
 package org.renci.jlrm.slurm.ssh;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Site;
 import org.renci.jlrm.commons.ssh.SSHConnectionUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Slf4j
 public class SLURMSSHSubmitCallable implements Callable<SLURMSSHJob> {
-
-    private static final Logger logger = LoggerFactory.getLogger(SLURMSSHSubmitCallable.class);
 
     private Site site;
 
@@ -27,39 +34,27 @@ public class SLURMSSHSubmitCallable implements Callable<SLURMSSHJob> {
 
     private File submitDir;
 
-    public SLURMSSHSubmitCallable() {
-        super();
-    }
-
-    public SLURMSSHSubmitCallable(Site site, SLURMSSHJob job, File submitDir) {
-        super();
-        this.site = site;
-        this.job = job;
-        this.submitDir = submitDir;
-    }
-
     @Override
-    public SLURMSSHJob call() throws JLRMException {
-        logger.debug("ENTERING call()");
+    public SLURMSSHJob call() throws Exception {
 
         try {
             String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s",
-                    DateFormatUtils.ISO_DATE_FORMAT.format(new Date()), UUID.randomUUID().toString());
+                    DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.format(new Date()), UUID.randomUUID().toString());
             String command = String.format("(mkdir -p $HOME/%s && echo $HOME)", remoteWorkDirSuffix);
             String remoteHome = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
 
-            logger.info("remoteHome: {}", remoteHome);
+            log.info("remoteHome: {}", remoteHome);
             String remoteWorkDir = String.format("%s/%s", remoteHome, remoteWorkDirSuffix);
-            logger.info("remoteWorkDir: {}", remoteWorkDir);
+            log.info("remoteWorkDir: {}", remoteWorkDir);
 
             File tmpDir = new File(System.getProperty("java.io.tmpdir"));
             File myDir = new File(tmpDir, System.getProperty("user.name"));
             File localWorkDir = new File(myDir, UUID.randomUUID().toString());
             localWorkDir.mkdirs();
-            logger.info("localWorkDir: {}", localWorkDir.getAbsolutePath());
+            log.info("localWorkDir: {}", localWorkDir.getAbsolutePath());
 
-            SLURMSubmitScriptExporter<SLURMSSHJob> exporter = new SLURMSubmitScriptExporter<SLURMSSHJob>();
-            this.job = exporter.export(localWorkDir, remoteWorkDir, this.job);
+            this.job = Executors.newSingleThreadExecutor()
+                    .submit(new SLURMSubmitScriptRemoteExporter(localWorkDir, remoteWorkDir, this.job)).get();
 
             SSHConnectionUtil.transferSubmitScript(site, remoteWorkDir, this.job.getTransferExecutable(),
                     this.job.getExecutable(), this.job.getTransferInputs(), this.job.getInputFiles(),
@@ -68,50 +63,28 @@ public class SLURMSSHSubmitCallable implements Callable<SLURMSSHJob> {
             command = String.format("sbatch %s/%s", remoteWorkDir, job.getSubmitFile().getName());
             String submitOutput = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
 
-            LineNumberReader lnr = new LineNumberReader(new StringReader(submitOutput));
-            String line;
-            while ((line = lnr.readLine()) != null) {
-                if (line.indexOf("batch job") != -1) {
-                    logger.info("line = " + line);
-                    Pattern pattern = Pattern.compile("^.+batch job (\\d*)$");
-                    Matcher matcher = pattern.matcher(line);
-                    if (!matcher.matches()) {
-                        throw new JLRMException("failed to parse the jobid number");
-                    } else {
-                        job.setId(matcher.group(1));
+            try (StringReader sr = new StringReader(submitOutput); LineNumberReader lnr = new LineNumberReader(sr)) {
+                String line;
+                while ((line = lnr.readLine()) != null) {
+                    if (line.indexOf("batch job") != -1) {
+                        log.info("line = " + line);
+                        Pattern pattern = Pattern.compile("^.+batch job (\\d*)$");
+                        Matcher matcher = pattern.matcher(line);
+                        if (!matcher.matches()) {
+                            throw new JLRMException("failed to parse the jobid number");
+                        } else {
+                            job.setId(matcher.group(1));
+                        }
+                        break;
                     }
-                    break;
                 }
             }
-        } catch (IOException e) {
-            logger.error("IOException: {}", e.getMessage());
-            throw new JLRMException("IOException: " + e.getMessage());
+
+        } catch (Exception e) {
+            log.error("IOException: {}", e.getMessage());
+            throw e;
         }
         return job;
-    }
-
-    public Site getSite() {
-        return site;
-    }
-
-    public void setSite(Site site) {
-        this.site = site;
-    }
-
-    public SLURMSSHJob getJob() {
-        return job;
-    }
-
-    public void setJob(SLURMSSHJob job) {
-        this.job = job;
-    }
-
-    public File getSubmitDir() {
-        return submitDir;
-    }
-
-    public void setSubmitDir(File submitDir) {
-        this.submitDir = submitDir;
     }
 
 }

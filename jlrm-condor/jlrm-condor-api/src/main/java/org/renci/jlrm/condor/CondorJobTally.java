@@ -100,9 +100,9 @@ public class CondorJobTally {
 
     @Override
     public String toString() {
-        return String
-                .format("CondorJobTally [date=%s, done=%s, pre=%s, queued=%s, post=%s, ready=%s, unReady=%s, failed=%s, held=%s]",
-                        date, done, pre, queued, post, ready, unReady, failed, held);
+        return String.format(
+                "CondorJobTally [date=%s, done=%s, pre=%s, queued=%s, post=%s, ready=%s, unReady=%s, failed=%s, held=%s]",
+                date, done, pre, queued, post, ready, unReady, failed, held);
     }
 
 }

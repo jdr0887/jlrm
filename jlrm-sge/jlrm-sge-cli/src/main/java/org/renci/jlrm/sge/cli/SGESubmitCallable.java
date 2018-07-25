@@ -1,10 +1,10 @@
 package org.renci.jlrm.sge.cli;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,17 +12,19 @@ import org.renci.common.exec.BashExecutor;
 import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
-import org.renci.common.exec.ExecutorException;
-import org.renci.jlrm.IOUtils;
 import org.renci.jlrm.JLRMException;
+import org.renci.jlrm.JLRMUtil;
 import org.renci.jlrm.sge.SGEJob;
 import org.renci.jlrm.sge.SGESubmitScriptExporter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+@Getter
+@Setter
+@Slf4j
 public class SGESubmitCallable implements Callable<SGEJob> {
-
-    private static final Logger logger = LoggerFactory.getLogger(SGESubmitCallable.class);
 
     private SGEJob job;
 
@@ -35,14 +37,14 @@ public class SGESubmitCallable implements Callable<SGEJob> {
     }
 
     @Override
-    public SGEJob call() throws JLRMException {
-
-        File workDir = IOUtils.createWorkDirectory(this.submitDir, job.getName());
+    public SGEJob call() throws Exception {
 
         try {
 
-            SGESubmitScriptExporter<SGEJob> exporter = new SGESubmitScriptExporter<SGEJob>();
-            this.job = exporter.export(workDir, job);
+            File workDir = JLRMUtil.createWorkDirectory(this.submitDir, job.getName());
+
+            this.job = Executors.newSingleThreadExecutor().submit(new SGESubmitScriptExporter<SGEJob>(workDir, job))
+                    .get();
 
             String command = String.format("qsub < %s", job.getSubmitFile().getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
@@ -50,10 +52,10 @@ public class SGESubmitCallable implements Callable<SGEJob> {
             Executor executor = BashExecutor.getInstance();
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             int exitCode = output.getExitCode();
-            logger.debug("executor.getStdout() = {}", output.getStdout().toString());
+            log.debug("executor.getStdout() = {}", output.getStdout().toString());
             if (exitCode != 0) { // failed
-                logger.debug("executor.getStderr() = {}", output.getStderr().toString());
-                logger.error(output.getStderr().toString());
+                log.debug("executor.getStderr() = {}", output.getStderr().toString());
+                log.error(output.getStderr().toString());
                 throw new JLRMException(output.getStderr().toString());
             } else {
                 LineNumberReader lnr = new LineNumberReader(new StringReader(output.getStdout().toString()));
@@ -61,7 +63,7 @@ public class SGESubmitCallable implements Callable<SGEJob> {
                 String line;
                 while ((line = lnr.readLine()) != null) {
                     if (line.indexOf("submitted") != -1) {
-                        logger.info("line = " + line);
+                        log.info("line = " + line);
                         Pattern pattern = Pattern.compile("^Job.+<(\\d*)> is submitted.+\\.$");
                         Matcher matcher = pattern.matcher(line);
                         if (!matcher.matches()) {
@@ -76,30 +78,11 @@ public class SGESubmitCallable implements Callable<SGEJob> {
 
             }
             return job;
-        } catch (ExecutorException e) {
-            e.printStackTrace();
-            throw new JLRMException("ExecutorException: " + e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new JLRMException("IOException: " + e.getMessage());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw e;
         }
 
-    }
-
-    public SGEJob getJob() {
-        return job;
-    }
-
-    public void setJob(SGEJob job) {
-        this.job = job;
-    }
-
-    public File getSubmitDir() {
-        return submitDir;
-    }
-
-    public void setSubmitDir(File submitDir) {
-        this.submitDir = submitDir;
     }
 
 }
