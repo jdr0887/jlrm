@@ -19,10 +19,12 @@ import org.renci.jlrm.pbs.PBSSubmitScriptExporter;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Slf4j
@@ -31,6 +33,14 @@ public class PBSSubmitCallable implements Callable<PBSJob> {
     private PBSJob job;
 
     private File submitDir;
+
+    private Boolean dryRun = Boolean.FALSE;
+
+    public PBSSubmitCallable(PBSJob job, File submitDir) {
+        super();
+        this.job = job;
+        this.submitDir = submitDir;
+    }
 
     @Override
     public PBSJob call() throws Exception {
@@ -42,6 +52,10 @@ public class PBSSubmitCallable implements Callable<PBSJob> {
             this.job = Executors.newSingleThreadExecutor().submit(new PBSSubmitScriptExporter<PBSJob>(workDir, job))
                     .get();
 
+            if (this.dryRun) {
+                return this.job;
+            }
+            
             String command = String.format("qsub < %s", job.getSubmitFile().getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
             input.setExitImmediately(Boolean.FALSE);
@@ -67,12 +81,12 @@ public class PBSSubmitCallable implements Callable<PBSJob> {
                     }
                 }
             }
-            return job;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw e;
         }
 
+        return job;
     }
 
 }

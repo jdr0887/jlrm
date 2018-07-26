@@ -36,6 +36,12 @@ public class SLURMSubmitCallable implements Callable<SLURMJob> {
 
     private Boolean dryRun = Boolean.FALSE;
 
+    public SLURMSubmitCallable(SLURMJob job, File submitDir) {
+        super();
+        this.job = job;
+        this.submitDir = submitDir;
+    }
+
     @Override
     public SLURMJob call() throws JLRMException {
 

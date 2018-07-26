@@ -19,20 +19,28 @@ import org.renci.jlrm.lsf.LSFSubmitScriptExporter;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Slf4j
 public class LSFSubmitCallable implements Callable<LSFJob> {
 
-    private final Executor executor = BashExecutor.getInstance();
-
     private LSFJob job;
 
     private File submitDir;
+
+    private Boolean dryRun = Boolean.FALSE;
+
+    public LSFSubmitCallable(LSFJob job, File submitDir) {
+        super();
+        this.job = job;
+        this.submitDir = submitDir;
+    }
 
     @Override
     public LSFJob call() throws Exception {
@@ -46,6 +54,7 @@ public class LSFSubmitCallable implements Callable<LSFJob> {
             String command = String.format("bsub < %s", job.getSubmitFile().getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
             input.setExitImmediately(Boolean.FALSE);
+            Executor executor = BashExecutor.getInstance();
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             int exitCode = output.getExitCode();
             log.debug("executor.getStdout() = {}", output.getStdout().toString());
@@ -73,12 +82,12 @@ public class LSFSubmitCallable implements Callable<LSFJob> {
                 }
 
             }
-            return job;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw e;
         }
 
+        return job;
     }
 
 }

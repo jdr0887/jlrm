@@ -1,7 +1,6 @@
 package org.renci.jlrm.condor.cli;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.concurrent.Callable;
@@ -12,23 +11,29 @@ import org.renci.common.exec.BashExecutor;
 import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
-import org.renci.common.exec.ExecutorException;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.JLRMUtil;
 import org.renci.jlrm.condor.CondorJob;
 import org.renci.jlrm.condor.ext.CondorSubmitScriptExporter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Slf4j
 public class CondorSubmitCallable implements Callable<CondorJob> {
-
-    private static final Logger logger = LoggerFactory.getLogger(CondorSubmitCallable.class);
-
-    private final Executor executor = BashExecutor.getInstance();
 
     private File submitDir;
 
     private CondorJob job;
+
+    private Boolean dryRun = Boolean.FALSE;
 
     public CondorSubmitCallable(File submitDir, CondorJob job) {
         super();
@@ -37,8 +42,7 @@ public class CondorSubmitCallable implements Callable<CondorJob> {
     }
 
     @Override
-    public CondorJob call() throws JLRMException {
-        logger.debug("ENTERING call()");
+    public CondorJob call() throws Exception {
 
         File workDir = JLRMUtil.createWorkDirectory(submitDir, job.getName());
         CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
@@ -49,13 +53,14 @@ public class CondorSubmitCallable implements Callable<CondorJob> {
             String command = String.format("condor_submit %s", job.getSubmitFile().getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
             input.setExitImmediately(Boolean.FALSE);
+            Executor executor = BashExecutor.getInstance();
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             int exitCode = output.getExitCode();
             LineNumberReader lnr = new LineNumberReader(new StringReader(output.getStdout().toString()));
-            logger.debug("executor.getStdout() = {}", output.getStdout().toString());
+            log.debug("executor.getStdout() = {}", output.getStdout().toString());
             String line;
             if (exitCode != 0) { // failed
-                logger.debug("executor.getStderr() = {}", output.getStderr().toString());
+                log.debug("executor.getStderr() = {}", output.getStderr().toString());
                 StringBuilder sb = new StringBuilder();
                 while ((line = lnr.readLine()) != null) {
                     sb.append(String.format("%s%n", line));
@@ -64,12 +69,12 @@ public class CondorSubmitCallable implements Callable<CondorJob> {
                 while ((line = lnr.readLine()) != null) {
                     sb.append(String.format("%s%n", line));
                 }
-                logger.error(sb.toString());
+                log.error(sb.toString());
                 throw new JLRMException(sb.toString());
             }
             while ((line = lnr.readLine()) != null) {
                 if (line.indexOf("submitted to cluster") != -1) {
-                    logger.info("line = " + line);
+                    log.info("line = " + line);
                     Pattern pattern = Pattern.compile("(\\d*) job\\(s\\) submitted to cluster (\\d*)\\.");
                     Matcher matcher = pattern.matcher(line);
                     if (!matcher.matches()) {
@@ -81,26 +86,11 @@ public class CondorSubmitCallable implements Callable<CondorJob> {
                     break;
                 }
             }
-            return job;
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            throw new JLRMException("Failed to parse cluster id: " + e.getMessage());
-        } catch (ExecutorException e) {
-            e.printStackTrace();
-            throw new JLRMException("ExecutorException: " + e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new JLRMException("IOException: " + e.getMessage());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw e;
         }
-
-    }
-
-    public CondorJob getJob() {
         return job;
-    }
-
-    public void setJob(CondorJob job) {
-        this.job = job;
     }
 
 }

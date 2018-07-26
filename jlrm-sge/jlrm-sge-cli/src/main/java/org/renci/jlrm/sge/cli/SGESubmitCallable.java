@@ -17,10 +17,14 @@ import org.renci.jlrm.JLRMUtil;
 import org.renci.jlrm.sge.SGEJob;
 import org.renci.jlrm.sge.SGESubmitScriptExporter;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Slf4j
@@ -29,6 +33,8 @@ public class SGESubmitCallable implements Callable<SGEJob> {
     private SGEJob job;
 
     private File submitDir;
+
+    private Boolean dryRun = Boolean.FALSE;
 
     public SGESubmitCallable(SGEJob job, File submitDir) {
         super();
@@ -45,6 +51,10 @@ public class SGESubmitCallable implements Callable<SGEJob> {
 
             this.job = Executors.newSingleThreadExecutor().submit(new SGESubmitScriptExporter<SGEJob>(workDir, job))
                     .get();
+
+            if (this.dryRun) {
+                return this.job;
+            }
 
             String command = String.format("qsub < %s", job.getSubmitFile().getAbsolutePath());
             CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
@@ -77,12 +87,12 @@ public class SGESubmitCallable implements Callable<SGEJob> {
                 }
 
             }
-            return job;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw e;
         }
 
+        return job;
     }
 
 }
