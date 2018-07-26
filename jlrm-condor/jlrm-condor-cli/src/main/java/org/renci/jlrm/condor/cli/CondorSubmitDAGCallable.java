@@ -1,7 +1,6 @@
 package org.renci.jlrm.condor.cli;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.concurrent.Callable;
@@ -12,16 +11,24 @@ import org.renci.common.exec.BashExecutor;
 import org.renci.common.exec.CommandInput;
 import org.renci.common.exec.CommandOutput;
 import org.renci.common.exec.Executor;
-import org.renci.common.exec.ExecutorException;
 import org.renci.jlrm.JLRMException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Slf4j
 public class CondorSubmitDAGCallable implements Callable<Integer> {
 
-    private static final Logger logger = LoggerFactory.getLogger(CondorSubmitDAGCallable.class);
-
     private File dagSubmitScript;
+
+    private Boolean dryRun;
 
     public CondorSubmitDAGCallable(File dagSubmitScript) {
         super();
@@ -29,8 +36,7 @@ public class CondorSubmitDAGCallable implements Callable<Integer> {
     }
 
     @Override
-    public Integer call() throws JLRMException {
-        logger.debug("ENTERING call()");
+    public Integer call() throws Exception {
 
         try {
 
@@ -41,10 +47,10 @@ public class CondorSubmitDAGCallable implements Callable<Integer> {
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             int exitCode = output.getExitCode();
             LineNumberReader lnr = new LineNumberReader(new StringReader(output.getStdout().toString()));
-            logger.debug("executor.getStdout() = {}", output.getStdout().toString());
+            log.debug("executor.getStdout() = {}", output.getStdout().toString());
             String line;
             if (exitCode != 0) { // failed
-                logger.debug("executor.getStderr() = {}", output.getStderr().toString());
+                log.debug("executor.getStderr() = {}", output.getStderr().toString());
                 StringBuilder sb = new StringBuilder();
                 while ((line = lnr.readLine()) != null) {
                     sb.append(String.format("%s%n", line));
@@ -53,14 +59,14 @@ public class CondorSubmitDAGCallable implements Callable<Integer> {
                 while ((line = lnr.readLine()) != null) {
                     sb.append(String.format("%s%n", line));
                 }
-                logger.error(sb.toString());
+                log.error(sb.toString());
                 throw new JLRMException(sb.toString());
             }
 
             Integer ret = null;
             while ((line = lnr.readLine()) != null) {
                 if (line.indexOf("submitted to cluster") != -1) {
-                    logger.info("line = " + line);
+                    log.info("line = " + line);
                     Pattern pattern = Pattern.compile("(\\d*) job\\(s\\) submitted to cluster (\\d*)\\.");
                     Matcher matcher = pattern.matcher(line);
                     if (!matcher.matches()) {
@@ -72,15 +78,9 @@ public class CondorSubmitDAGCallable implements Callable<Integer> {
             }
 
             return ret;
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            throw new JLRMException("Failed to parse cluster id: " + e.getMessage());
-        } catch (ExecutorException e) {
-            e.printStackTrace();
-            throw new JLRMException("ExecutorException: " + e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new JLRMException("IOException: " + e.getMessage());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw e;
         }
 
     }
