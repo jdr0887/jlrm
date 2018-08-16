@@ -27,9 +27,12 @@ public class SLURMJobStartMonitor implements Runnable {
 
     private Boolean jobFinished;
 
+    private Boolean terminateWhenThereAreFailures;
+
     public SLURMJobStartMonitor(SLURMJob job) {
         super();
         this.job = job;
+        this.terminateWhenThereAreFailures = Boolean.FALSE;
         this.jobFinished = Boolean.FALSE;
         this.failedTypes = new ArrayList<>();
         this.failedTypes.addAll(List.of(SLURMJobStatusType.CANCELLED, SLURMJobStatusType.FAILED,
@@ -127,9 +130,11 @@ public class SLURMJobStartMonitor implements Runnable {
                         relevantJobStatsInfos.stream()
                                 .filter(a -> this.failedTypes.contains(SLURMJobStatusType.valueOf(a.getStatus())))
                                 .forEach(a -> log.warn(a.toString()));
-                        log.warn("There were failed jobs...clean up by running: scancel {}", job.getId());
-                        jobFinished = true;
-                        return;
+                        if (terminateWhenThereAreFailures) {
+                            Executors.newSingleThreadExecutor().submit(new SLURMCancelJobCallable(job.getId()));
+                            jobFinished = true;
+                            return;
+                        }
                     }
 
                     jobFinished = false;
