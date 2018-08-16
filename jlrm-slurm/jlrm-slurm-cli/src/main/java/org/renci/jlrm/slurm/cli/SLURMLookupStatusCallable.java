@@ -19,18 +19,21 @@ import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.JobStatusInfo;
 import org.renci.jlrm.slurm.SLURMJob;
 import org.renci.jlrm.slurm.SLURMJobStatusType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Slf4j
 public class SLURMLookupStatusCallable implements Callable<Set<JobStatusInfo>> {
 
-    private static final Logger logger = LoggerFactory.getLogger(SLURMLookupStatusCallable.class);
-
     private SLURMJob job;
-
-    public SLURMLookupStatusCallable() {
-        super();
-    }
 
     @Override
     public Set<JobStatusInfo> call() throws JLRMException {
@@ -74,26 +77,18 @@ public class SLURMLookupStatusCallable implements Callable<Set<JobStatusInfo>> {
                         }
                         JobStatusInfo info = new JobStatusInfo(lineSplit[0], statusType.toString(), lineSplit[2],
                                 lineSplit[3]);
-                        logger.debug("JobStatus is {}", info.toString());
+                        log.debug("JobStatus is {}", info.toString());
                         jobStatusSet.add(info);
                     }
                 }
             }
 
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new JLRMException("Problem running: " + command);
         }
         return jobStatusSet;
 
-    }
-
-    public SLURMJob getJob() {
-        return job;
-    }
-
-    public void setJob(SLURMJob job) {
-        this.job = job;
     }
 
 }
