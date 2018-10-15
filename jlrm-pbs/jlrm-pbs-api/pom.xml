@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.renci.jlrm</groupId>
     <artifactId>jlrm-pbs</artifactId>
-    <version>0.4.29-SNAPSHOT</version>
+    <version>0.4.29</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>jLRM :: PBS :: API</name>
   <groupId>org.renci.jlrm.jlrm-pbs</groupId>
   <artifactId>jlrm-pbs-api</artifactId>
-  <version>0.4.29-SNAPSHOT</version>
+  <version>0.4.29</version>
   <packaging>bundle</packaging>
   <properties>
     <maven.site.plugin.skip>true</maven.site.plugin.skip>        
@@ -17,7 +17,7 @@
     <dependency>
       <groupId>org.renci.jlrm</groupId>
       <artifactId>jlrm-api</artifactId>
-      <version>0.4.29-SNAPSHOT</version>      
+      <version>0.4.29</version>      
     </dependency>
   </dependencies>
   <build>
