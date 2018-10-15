@@ -116,6 +116,15 @@ public class SLURMJobStartMonitor implements Runnable {
                     return;
                 }
 
+                long finishedJobsCount = relevantJobStatsInfos.stream()
+                        .filter(a -> this.finishedTypes.contains(SLURMJobStatusType.valueOf(a.getStatus()))).count();
+
+                if (!containsRunningJobs && !containsNotFinishedJobs && containsFinishedJobs
+                        && finishedJobsCount == relevantJobStatsInfos.size()) {
+                    jobFinished = true;
+                    return;
+                }
+
                 if (!containsRunningJobs && !containsNotFinishedJobs && !containsFinishedJobs && containsFailedJobs) {
                     relevantJobStatsInfos.stream()
                             .filter(a -> this.failedTypes.contains(SLURMJobStatusType.valueOf(a.getStatus())))
