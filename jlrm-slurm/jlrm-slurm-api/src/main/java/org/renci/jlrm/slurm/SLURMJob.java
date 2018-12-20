@@ -32,11 +32,13 @@ public class SLURMJob extends Job {
 
     private Range<Integer> array;
 
+    private Integer maxRunning;
+
     @Builder
     public SLURMJob(String id, String name, File executable, File submitFile, File output, File error,
             Integer numberOfProcessors, String memory, String disk, long duration, TimeUnit durationTimeUnit,
-            String queueName, String project, Long wallTime, Integer hostCount, String constraint,
-            Range<Integer> array) {
+            String queueName, String project, Long wallTime, Integer hostCount, String constraint, Range<Integer> array,
+            Integer maxRunning) {
         super(id, name, executable, submitFile, output, error, numberOfProcessors, memory, disk, duration,
                 durationTimeUnit);
         this.queueName = queueName;
@@ -45,6 +47,7 @@ public class SLURMJob extends Job {
         this.hostCount = hostCount;
         this.constraint = constraint;
         this.array = array;
+        this.maxRunning = maxRunning;
     }
 
 }
