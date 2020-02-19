@@ -12,12 +12,11 @@ import org.renci.common.exec.ExecutorException;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.sge.SGEJob;
 import org.renci.jlrm.sge.SGEJobStatusType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class SGELookupStatusCallable implements Callable<SGEJobStatusType> {
-
-    private static final Logger logger = LoggerFactory.getLogger(SGELookupStatusCallable.class);
 
     private SGEJob job;
 
@@ -32,13 +31,13 @@ public class SGELookupStatusCallable implements Callable<SGEJobStatusType> {
         SGEJobStatusType ret = SGEJobStatusType.DONE;
         String command = String.format("qstat -j %s | tail -n+2 | awk '{print $3}'", job.getId());
         try {
-            CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
+            CommandInput input = new CommandInput(command, job.getSubmitFile().getParent().toFile());
             input.setExitImmediately(Boolean.FALSE);
             Executor executor = BashExecutor.getInstance();
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             String stdout = output.getStdout().toString();
             if (output.getExitCode() != 0) {
-                logger.warn("output.getStderr() = {}", output.getStderr().toString());
+                log.warn("output.getStderr() = {}", output.getStderr().toString());
                 throw new JLRMException("Problem looking up status: " + output.getStderr().toString());
             } else {
 
@@ -59,10 +58,10 @@ public class SGELookupStatusCallable implements Callable<SGEJobStatusType> {
 
             }
         } catch (ExecutorException e) {
-            logger.error("ExecutorException", e);
+            log.error("ExecutorException", e);
             throw new JLRMException("Problem running: " + command);
         }
-        logger.info("JobStatus = {}", ret);
+        log.info("JobStatus = {}", ret);
         return ret;
 
     }

@@ -1,6 +1,7 @@
 package org.renci.jlrm.slurm.ssh;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -43,7 +44,7 @@ public class SLURMSSHJob extends Job {
     private List<File> inputFiles = new ArrayList<File>();
 
     @Builder
-    public SLURMSSHJob(String id, String name, File executable, File submitFile, File output, File error,
+    public SLURMSSHJob(String id, String name, Path executable, Path submitFile, Path output, Path error,
             Integer numberOfProcessors, String memory, String disk, long duration, TimeUnit durationTimeUnit,
             String queueName, String project, Long wallTime, Integer hostCount, String constraint, Range<Integer> array,
             Boolean transferInputs, Boolean transferExecutable, List<File> inputFiles) {

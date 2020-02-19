@@ -3,6 +3,7 @@ package org.renci.jlrm.condor.cli;
 import java.io.File;
 import java.io.LineNumberReader;
 import java.io.StringReader;
+import java.nio.file.Path;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,11 +27,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CondorSubmitDAGCallable implements Callable<Integer> {
 
-    private File dagSubmitScript;
+    private Path dagSubmitScript;
 
     private Boolean dryRun;
 
-    public CondorSubmitDAGCallable(File dagSubmitScript) {
+    public CondorSubmitDAGCallable(Path dagSubmitScript) {
         super();
         this.dagSubmitScript = dagSubmitScript;
     }
@@ -40,8 +41,8 @@ public class CondorSubmitDAGCallable implements Callable<Integer> {
 
         try {
 
-            String command = String.format("condor_submit_dag -force %s", dagSubmitScript.getName());
-            CommandInput input = new CommandInput(command, dagSubmitScript.getParentFile());
+            String command = String.format("condor_submit_dag -force %s", dagSubmitScript.toAbsolutePath().toString());
+            CommandInput input = new CommandInput(command, dagSubmitScript.getParent().toFile());
             input.setExitImmediately(Boolean.FALSE);
             Executor executor = BashExecutor.getInstance();
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));

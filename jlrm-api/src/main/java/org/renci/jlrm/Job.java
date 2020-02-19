@@ -1,7 +1,7 @@
 package org.renci.jlrm;
 
-import java.io.File;
 import java.io.Serializable;
+import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -36,13 +36,13 @@ public class Job implements Serializable {
     @XmlAttribute
     protected String name;
 
-    protected File executable;
+    protected Path executable;
 
-    protected File submitFile;
+    protected Path submitFile;
 
-    protected File output;
+    protected Path output;
 
-    protected File error;
+    protected Path error;
 
     protected Integer numberOfProcessors = 1;
 

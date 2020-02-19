@@ -3,6 +3,7 @@ package org.renci.jlrm.pbs.cli;
 import java.io.File;
 import java.io.LineNumberReader;
 import java.io.StringReader;
+import java.nio.file.Path;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
@@ -32,11 +33,11 @@ public class PBSSubmitCallable implements Callable<PBSJob> {
 
     private PBSJob job;
 
-    private File submitDir;
+    private Path submitDir;
 
     private Boolean dryRun = Boolean.FALSE;
 
-    public PBSSubmitCallable(PBSJob job, File submitDir) {
+    public PBSSubmitCallable(PBSJob job, Path submitDir) {
         super();
         this.job = job;
         this.submitDir = submitDir;
@@ -47,7 +48,7 @@ public class PBSSubmitCallable implements Callable<PBSJob> {
 
         try {
 
-            File workDir = JLRMUtil.createWorkDirectory(this.submitDir, job.getName());
+            Path workDir = JLRMUtil.createWorkDirectory(this.submitDir, job.getName());
 
             this.job = Executors.newSingleThreadExecutor().submit(new PBSSubmitScriptExporter<PBSJob>(workDir, job))
                     .get();
@@ -55,9 +56,9 @@ public class PBSSubmitCallable implements Callable<PBSJob> {
             if (this.dryRun) {
                 return this.job;
             }
-            
-            String command = String.format("qsub < %s", job.getSubmitFile().getAbsolutePath());
-            CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
+
+            String command = String.format("qsub < %s", job.getSubmitFile().toAbsolutePath().toString());
+            CommandInput input = new CommandInput(command, job.getSubmitFile().getParent().toFile());
             input.setExitImmediately(Boolean.FALSE);
             CommandOutput output = BashExecutor.getInstance().execute(input,
                     new File(System.getProperty("user.home"), ".bashrc"));

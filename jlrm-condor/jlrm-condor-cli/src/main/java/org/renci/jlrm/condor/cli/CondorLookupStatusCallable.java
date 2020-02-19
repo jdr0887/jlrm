@@ -36,7 +36,7 @@ public class CondorLookupStatusCallable implements Callable<CondorJobStatusType>
         String command = String.format("condor_q %d.%d -format '%s\\n' JobStatus", job.getCluster(), job.getJobId(),
                 "%s");
         try {
-            CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
+            CommandInput input = new CommandInput(command, job.getSubmitFile().getParent().toFile());
             input.setExitImmediately(Boolean.FALSE);
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));
             String stdout = output.getStdout().toString();

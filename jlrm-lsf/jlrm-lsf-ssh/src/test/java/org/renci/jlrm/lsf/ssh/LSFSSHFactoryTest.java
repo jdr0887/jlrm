@@ -1,6 +1,6 @@
 package org.renci.jlrm.lsf.ssh;
 
-import java.io.File;
+import java.nio.file.Paths;
 import java.util.Set;
 
 import org.junit.Test;
@@ -21,9 +21,9 @@ public class LSFSSHFactoryTest {
             Site site = new Site();
             site.setSubmitHost("biodev1.its.unc.edu");
             site.setUsername("jreilly");
-            LSFSSHJob job = LSFSSHJob.builder().name("test").executable(new File("/bin/hostname")).hostCount(1)
-                    .numberOfProcessors(1).project("TCGA").queueName("prenci").output(new File("test.out"))
-                    .error(new File("test.err")).build();
+            LSFSSHJob job = LSFSSHJob.builder().name("test").executable(Paths.get("/bin/hostname")).hostCount(1)
+                    .numberOfProcessors(1).project("TCGA").queueName("prenci").output(Paths.get("test.out"))
+                    .error(Paths.get("test.err")).build();
             LSFSSHSubmitCallable runnable = new LSFSSHSubmitCallable();
             runnable.setJob(job);
             runnable.setSite(site);

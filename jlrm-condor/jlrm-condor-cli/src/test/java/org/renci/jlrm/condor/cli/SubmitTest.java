@@ -1,6 +1,8 @@
 package org.renci.jlrm.condor.cli;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.jgrapht.graph.DirectedAcyclicGraph;
 import org.junit.Test;
@@ -22,7 +24,7 @@ public class SubmitTest {
             DirectedAcyclicGraph<CondorJob, CondorJobEdge> g = new DirectedAcyclicGraph<CondorJob, CondorJobEdge>(
                     CondorJobEdge.class);
 
-            File executable = new File("/bin/echo");
+            Path executable = Paths.get("/bin/echo");
             CondorJob job1 = CondorJob.builder().name("a").executable(executable).retry(3).build();
             job1.addArgument("foo").addArgument("--foo", "bar").addArgument("--fuzz", "buzz");
             ClassAdvertisement classAd = ClassAdvertisementFactory
@@ -48,9 +50,9 @@ public class SubmitTest {
             g.addEdge(job2, job4);
             g.addEdge(job3, job4);
 
-            File submitDir = new File("/tmp");
+            Path submitDir = Paths.get("/tmp");
 
-            File workDir = JLRMUtil.createWorkDirectory(submitDir, "asdfasdf");
+            Path workDir = JLRMUtil.createWorkDirectory(submitDir, "asdfasdf");
             CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
             CondorJob dagSubmitJob = exporter.export("asdfasdf", workDir, g, false);
             CondorSubmitDAGCallable callable = new CondorSubmitDAGCallable(dagSubmitJob.getSubmitFile());

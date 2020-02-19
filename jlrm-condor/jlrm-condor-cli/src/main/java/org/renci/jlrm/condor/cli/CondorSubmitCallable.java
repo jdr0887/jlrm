@@ -3,6 +3,7 @@ package org.renci.jlrm.condor.cli;
 import java.io.File;
 import java.io.LineNumberReader;
 import java.io.StringReader;
+import java.nio.file.Path;
 import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,13 +30,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CondorSubmitCallable implements Callable<CondorJob> {
 
-    private File submitDir;
+    private Path submitDir;
 
     private CondorJob job;
 
     private Boolean dryRun = Boolean.FALSE;
 
-    public CondorSubmitCallable(File submitDir, CondorJob job) {
+    public CondorSubmitCallable(Path submitDir, CondorJob job) {
         super();
         this.submitDir = submitDir;
         this.job = job;
@@ -44,14 +45,14 @@ public class CondorSubmitCallable implements Callable<CondorJob> {
     @Override
     public CondorJob call() throws Exception {
 
-        File workDir = JLRMUtil.createWorkDirectory(submitDir, job.getName());
+        Path workDir = JLRMUtil.createWorkDirectory(submitDir, job.getName());
         CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
         job = exporter.export(workDir, job);
 
         try {
 
-            String command = String.format("condor_submit %s", job.getSubmitFile().getAbsolutePath());
-            CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
+            String command = String.format("condor_submit %s", job.getSubmitFile().toAbsolutePath().toString());
+            CommandInput input = new CommandInput(command, job.getSubmitFile().getParent().toFile());
             input.setExitImmediately(Boolean.FALSE);
             Executor executor = BashExecutor.getInstance();
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));

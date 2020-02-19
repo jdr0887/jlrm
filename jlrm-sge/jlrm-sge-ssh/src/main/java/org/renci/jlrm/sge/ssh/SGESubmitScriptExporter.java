@@ -1,112 +1,123 @@
 package org.renci.jlrm.sge.ssh;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@NoArgsConstructor
+@Slf4j
 public class SGESubmitScriptExporter<T extends SGESSHJob> {
 
-    private static final Logger logger = LoggerFactory.getLogger(SGESubmitScriptExporter.class);
+    public T export(Path workDir, String remoteWorkDir, T job) throws IOException {
+        log.debug("ENTERING export(File, SGESSHJob)");
+        Path submitFile = Paths.get(workDir.toAbsolutePath().toString(), String.format("%s.sub", job.getName()));
 
-    public SGESubmitScriptExporter() {
-        super();
-    }
+        try (BufferedWriter bw = Files.newBufferedWriter(submitFile)) {
 
-    public T export(File workDir, String remoteWorkDir, T job) throws IOException {
-        logger.debug("ENTERING export(File, SGESSHJob)");
-        File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
+            bw.write("#!/bin/bash\n\n");
+            bw.write(String.format("#$ -V%n", job.getName()));
+            bw.write(String.format("#$ -N %s%n", job.getName()));
 
-        FileWriter submitFileWriter = new FileWriter(submitFile);
+            if (StringUtils.isNotEmpty(job.getQueueName())) {
+                bw.write(String.format("#$ -q %s%n", job.getQueueName()));
+            }
 
-        submitFileWriter.write("#!/bin/bash\n\n");
-        submitFileWriter.write(String.format("#$ -V%n", job.getName()));
-        submitFileWriter.write(String.format("#$ -N %s%n", job.getName()));
+            if (StringUtils.isNotEmpty(job.getProject())) {
+                bw.write(String.format("#$ -P %s%n", job.getProject()));
+            }
 
-        if (StringUtils.isNotEmpty(job.getQueueName())) {
-            submitFileWriter.write(String.format("#$ -q %s%n", job.getQueueName()));
+            if (job.getWallTime() != null) {
+                bw.write(String.format("#$ -l h_rt=%02d:%02d:00%n", (job.getWallTime() % 3600) / 60,
+                        (job.getWallTime() % 60)));
+            }
+
+            if (job.getMemory() != null) {
+                bw.write(String.format("#$ -l mf=%s%n", job.getMemory()));
+            }
+
+            bw.write(String.format("#$ -i %s%n", "/dev/null"));
+
+            job.setOutput(Paths.get(remoteWorkDir, String.format("%s.out", job.getOutput().getFileName().toString())));
+            job.setError(Paths.get(remoteWorkDir, String.format("%s.err", job.getError().getFileName().toString())));
+
+            bw.write(String.format("#$ -o %s%n", job.getOutput().toAbsolutePath().toString()));
+            bw.write(String.format("#$ -e %s%n", job.getError().toAbsolutePath().toString()));
+
+            if (job.getNumberOfProcessors() != null) {
+                bw.write(String.format("#$ -pe threads %d%n", job.getNumberOfProcessors()));
+            }
+
+            if (job.getTransferExecutable()) {
+                bw.write(remoteWorkDir + File.separator + job.getExecutable().getFileName().toString());
+            } else {
+                bw.write(job.getExecutable().toAbsolutePath().toString());
+            }
+
+            bw.flush();
+
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         }
 
-        if (StringUtils.isNotEmpty(job.getProject())) {
-            submitFileWriter.write(String.format("#$ -P %s%n", job.getProject()));
-        }
-
-        if (job.getWallTime() != null) {
-            submitFileWriter.write(String.format("#$ -l h_rt=%02d:%02d:00%n", (job.getWallTime() % 3600) / 60,
-                    (job.getWallTime() % 60)));
-        }
-
-        if (job.getMemory() != null) {
-            submitFileWriter.write(String.format("#$ -l mf=%s%n", job.getMemory()));
-        }
-
-        submitFileWriter.write(String.format("#$ -i %s%n", "/dev/null"));
-
-        job.setOutput(new File(String.format("%s/%s.out", remoteWorkDir, job.getOutput().getName())));
-        job.setError(new File(String.format("%s/%s.err", remoteWorkDir, job.getError().getName())));
-
-        submitFileWriter.write(String.format("#$ -o %s%n", job.getOutput().getAbsolutePath()));
-        submitFileWriter.write(String.format("#$ -e %s%n", job.getError().getAbsolutePath()));
-
-        if (job.getNumberOfProcessors() != null) {
-            submitFileWriter.write(String.format("#$ -pe threads %d%n", job.getNumberOfProcessors()));
-        }
-
-        if (job.getTransferExecutable()) {
-            submitFileWriter.write(remoteWorkDir + File.separator + job.getExecutable().getName());
-        } else {
-            submitFileWriter.write(job.getExecutable().getAbsolutePath());
-        }
-
-        submitFileWriter.flush();
-        submitFileWriter.close();
         job.setSubmitFile(submitFile);
 
         return job;
     }
 
-    public T export(File workDir, T job) throws IOException {
-        logger.debug("ENTERING export(File, LSFJob)");
-        File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
-        FileWriter submitFileWriter = new FileWriter(submitFile);
+    public T export(Path workDir, T job) throws IOException {
+        log.debug("ENTERING export(File, LSFJob)");
+        Path submitFile = Paths.get(workDir.toAbsolutePath().toString(), String.format("%s.sub", job.getName()));
 
-        submitFileWriter.write("#!/bin/bash\n\n");
-        submitFileWriter.write("set -e\n\n");
-        submitFileWriter.write(String.format("#$ -V%n", job.getName()));
-        submitFileWriter.write(String.format("#$ -N %s%n", job.getName()));
+        try (BufferedWriter bw = Files.newBufferedWriter(submitFile)) {
 
-        if (StringUtils.isNotEmpty(job.getQueueName())) {
-            submitFileWriter.write(String.format("#$ -q %s%n", job.getQueueName()));
+            bw.write("#!/bin/bash\n\n");
+            bw.write("set -e\n\n");
+            bw.write(String.format("#$ -V%n", job.getName()));
+            bw.write(String.format("#$ -N %s%n", job.getName()));
+
+            if (StringUtils.isNotEmpty(job.getQueueName())) {
+                bw.write(String.format("#$ -q %s%n", job.getQueueName()));
+            }
+
+            if (StringUtils.isNotEmpty(job.getProject())) {
+                bw.write(String.format("#$ -P %s%n", job.getProject()));
+            }
+
+            if (job.getWallTime() != null) {
+                bw.write(String.format("#$ -l h_rt=%02d:%02d:00%n", (job.getWallTime() % 3600) / 60,
+                        (job.getWallTime() % 60)));
+            }
+
+            if (job.getMemory() != null) {
+                bw.write(String.format("#$ -l mf=%s%n", job.getMemory()));
+            }
+            bw.write(String.format("#$ -i %s%n", "/dev/null"));
+
+            job.setOutput(
+                    Paths.get(workDir.toAbsolutePath().toString(), String.format("%s.out", job.getOutput().getFileName().toString())));
+            job.setError(
+                    Paths.get(workDir.toAbsolutePath().toString(), String.format("%s.err", job.getError().getFileName().toString())));
+
+            bw.write(String.format("#$ -o %s%n", job.getOutput().toAbsolutePath().toString()));
+            bw.write(String.format("#$ -e %s%n", job.getError().toAbsolutePath().toString()));
+            bw.write(String.format("#$ -pe threads %d%n", job.getNumberOfProcessors()));
+
+            bw.write(job.getExecutable().toAbsolutePath().toString());
+
+            bw.flush();
+
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         }
 
-        if (StringUtils.isNotEmpty(job.getProject())) {
-            submitFileWriter.write(String.format("#$ -P %s%n", job.getProject()));
-        }
-
-        if (job.getWallTime() != null) {
-            submitFileWriter.write(String.format("#$ -l h_rt=%02d:%02d:00%n", (job.getWallTime() % 3600) / 60,
-                    (job.getWallTime() % 60)));
-        }
-
-        if (job.getMemory() != null) {
-            submitFileWriter.write(String.format("#$ -l mf=%s%n", job.getMemory()));
-        }
-        submitFileWriter.write(String.format("#$ -i %s%n", "/dev/null"));
-
-        job.setOutput(new File(String.format("%s/%s.out", workDir.getAbsolutePath(), job.getOutput().getName())));
-        job.setError(new File(String.format("%s/%s.err", workDir.getAbsolutePath(), job.getError().getName())));
-
-        submitFileWriter.write(String.format("#$ -o %s%n", job.getOutput().getAbsolutePath()));
-        submitFileWriter.write(String.format("#$ -e %s%n", job.getError().getAbsolutePath()));
-        submitFileWriter.write(String.format("#$ -pe threads %d%n", job.getNumberOfProcessors()));
-
-        submitFileWriter.write(job.getExecutable().getAbsolutePath());
-
-        submitFileWriter.flush();
-        submitFileWriter.close();
         job.setSubmitFile(submitFile);
 
         return job;

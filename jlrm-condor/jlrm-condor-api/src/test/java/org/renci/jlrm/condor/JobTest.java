@@ -3,6 +3,8 @@ package org.renci.jlrm.condor;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +33,7 @@ public class JobTest {
 
         CondorJob job = CondorJob.builder().name(String.format("%s_%d", "GATKDepthOfCoverageCLI", 1)).retry(3)
                 .memory("2GB").numberOfProcessors(8).siteName("Kure").initialDirectory("/tmp")
-                .executable(new File("$HOME/bin/run-mapseq.sh")).build();
+                .executable(Paths.get("$HOME/bin/run-mapseq.sh")).build();
 
         // condor attributes
         job.addRequirement(String.format("JRLM_USER == \"%s\"", System.getProperty("user.name")));
@@ -54,7 +56,7 @@ public class JobTest {
         }
 
         CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
-        exporter.export(new File("/tmp"), job);
+        exporter.export(Paths.get("/tmp"), job);
 
         try {
             JAXBContext context = JAXBContext.newInstance(CondorJob.class);
@@ -82,7 +84,7 @@ public class JobTest {
 
         Graph<CondorJob, CondorJobEdge> graph = new DefaultDirectedGraph<CondorJob, CondorJobEdge>(CondorJobEdge.class);
 
-        File executable = new File("/bin/hostname");
+        Path executable = Paths.get("/bin/hostname");
         CondorJob job = CondorJob.builder().name("asdfasdfasdffffffffffffffasdfasdfasdfasdfasdfa")
                 .executable(executable).retry(3).preScript("/bin/echo asdf").postScript("/bin/echo qwer").priority(5)
                 .build();
@@ -162,7 +164,7 @@ public class JobTest {
         graph.addEdge(job2, job5);
 
         CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
-        exporter.export("asdfads", new File("/tmp"), graph, false);
+        exporter.export("asdfads", Paths.get("/tmp"), graph, false);
 
         try {
 
@@ -190,7 +192,7 @@ public class JobTest {
         DirectedAcyclicGraph<CondorJob, CondorJobEdge> graph1 = new DirectedAcyclicGraph<CondorJob, CondorJobEdge>(
                 CondorJobEdge.class);
 
-        CondorJob job = new CondorJobBuilder().name("asdf").executable(new File("/bin/hostname"))
+        CondorJob job = new CondorJobBuilder().name("asdf").executable(Paths.get("/bin/hostname"))
                 .preScript("/bin/echo foo").postScript("/bin/echo bar").build();
         job.addArgument("someClassName").addArgument("asdfasdf").addArgument("--fuzz", "buzz");
         graph1.addVertex(job);
@@ -199,7 +201,7 @@ public class JobTest {
         DirectedAcyclicGraph<CondorJob, CondorJobEdge> graph2 = new DirectedAcyclicGraph<CondorJob, CondorJobEdge>(
                 CondorJobEdge.class);
 
-        job = CondorJob.builder().name("qwer").executable(new File("/bin/hostname")).preScript("/bin/echo foo")
+        job = CondorJob.builder().name("qwer").executable(Paths.get("/bin/hostname")).preScript("/bin/echo foo")
                 .postScript("/bin/echo bar").build();
         job.addArgument("someClassName").addArgument("asdfasdf").addArgument("--foo", "bar");
         graph2.addVertex(job);
@@ -219,7 +221,7 @@ public class JobTest {
     @Test
     public void testSingleJob() throws Exception {
 
-        File executable = new File("/bin/echo");
+        Path executable = Paths.get("/bin/echo");
         CondorJob job2 = CondorJob.builder().name("b").executable(executable).build();
         job2.addArgument("asdfasdfasdf");
         ClassAdvertisement classAd = ClassAdvertisementFactory
@@ -228,7 +230,7 @@ public class JobTest {
         job2.getClassAdvertisments().add(classAd);
 
         CondorSubmitScriptExporter exporter = new CondorSubmitScriptExporter();
-        exporter.export(new File("/tmp"), job2);
+        exporter.export(Paths.get("/tmp"), job2);
 
     }
 

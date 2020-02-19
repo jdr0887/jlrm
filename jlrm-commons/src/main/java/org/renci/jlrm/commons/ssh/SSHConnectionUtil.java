@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
@@ -177,7 +178,7 @@ public class SSHConnectionUtil {
     }
 
     public static void transferSubmitScript(Site site, String remoteWorkDir, boolean transferExecutable,
-            File executable, boolean transferInputs, List<File> inputFileList, File submitFile) throws JLRMException {
+            Path executable, boolean transferInputs, List<File> inputFileList, Path submitFile) throws JLRMException {
         log.debug("ENTERING transferSubmitScript()");
 
         String home = System.getProperty("user.home");
@@ -204,8 +205,9 @@ public class SSHConnectionUtil {
             sftpChannel.cd(remoteWorkDir);
 
             if (transferExecutable) {
-                sftpChannel.put(new FileInputStream(executable), executable.getName(), ChannelSftp.OVERWRITE);
-                sftpChannel.chmod(0755, executable.getName());
+                sftpChannel.put(new FileInputStream(executable.toFile()), executable.getFileName().toString(),
+                        ChannelSftp.OVERWRITE);
+                sftpChannel.chmod(0755, executable.getFileName().toString());
             }
 
             if (transferInputs && inputFileList != null && inputFileList.size() > 0) {
@@ -215,8 +217,9 @@ public class SSHConnectionUtil {
                 }
             }
 
-            sftpChannel.put(new FileInputStream(submitFile), submitFile.getName(), ChannelSftp.OVERWRITE);
-            sftpChannel.chmod(0644, submitFile.getName());
+            sftpChannel.put(new FileInputStream(submitFile.toFile()), submitFile.getFileName().toString(),
+                    ChannelSftp.OVERWRITE);
+            sftpChannel.chmod(0644, submitFile.getFileName().toString());
 
         } catch (FileNotFoundException e) {
             log.error("FileNotFoundException", e);

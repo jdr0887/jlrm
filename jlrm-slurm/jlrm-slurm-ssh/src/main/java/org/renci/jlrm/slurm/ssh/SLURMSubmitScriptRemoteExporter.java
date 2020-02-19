@@ -2,7 +2,9 @@ package org.renci.jlrm.slurm.ssh;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.lang3.Range;
@@ -21,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SLURMSubmitScriptRemoteExporter implements Callable<SLURMSSHJob> {
 
-    private File workDir;
+    private Path workDir;
 
     private String remoteWorkDir;
 
@@ -29,9 +31,9 @@ public class SLURMSubmitScriptRemoteExporter implements Callable<SLURMSSHJob> {
 
     @Override
     public SLURMSSHJob call() throws Exception {
-        File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
-        log.info("writing: {}", submitFile.getAbsolutePath());
-        try (FileWriter fw = new FileWriter(submitFile); BufferedWriter bw = new BufferedWriter(fw)) {
+        Path submitFile = Paths.get(workDir.toAbsolutePath().toString(), String.format("%s.sub", job.getName()));
+        log.info("writing: {}", submitFile.toAbsolutePath().toString());
+        try (BufferedWriter bw = Files.newBufferedWriter(submitFile)) {
 
             bw.write("#!/bin/bash\n\n");
             bw.write(String.format("#SBATCH -J %s%n", job.getName()));
@@ -68,8 +70,8 @@ public class SLURMSubmitScriptRemoteExporter implements Callable<SLURMSSHJob> {
 
             bw.write(String.format("#SBATCH -i %s%n", "/dev/null"));
 
-            bw.write(String.format("#SBATCH -o %s%n", job.getOutput().getAbsolutePath()));
-            bw.write(String.format("#SBATCH -e %s%n", job.getError().getAbsolutePath()));
+            bw.write(String.format("#SBATCH -o %s%n", job.getOutput().toAbsolutePath().toString()));
+            bw.write(String.format("#SBATCH -e %s%n", job.getError().toAbsolutePath().toString()));
 
             if (job.getHostCount() != null) {
                 bw.write(String.format("#SBATCH -N %d%n", job.getHostCount()));
@@ -80,9 +82,9 @@ public class SLURMSubmitScriptRemoteExporter implements Callable<SLURMSSHJob> {
             }
 
             if (job.getTransferExecutable()) {
-                bw.write(remoteWorkDir + File.separator + job.getExecutable().getName());
+                bw.write(remoteWorkDir + File.separator + job.getExecutable().getFileName().toString());
             } else {
-                bw.write(job.getExecutable().getAbsolutePath());
+                bw.write(job.getExecutable().toAbsolutePath().toString());
             }
             bw.flush();
         }

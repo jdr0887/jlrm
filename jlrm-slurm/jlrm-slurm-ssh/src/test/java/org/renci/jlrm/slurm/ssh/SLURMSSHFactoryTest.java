@@ -1,6 +1,7 @@
 package org.renci.jlrm.slurm.ssh;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.Set;
 
 import org.junit.Test;
@@ -28,11 +29,11 @@ public class SLURMSSHFactoryTest {
             queue.setName("batch");
             queue.setRunTime(2880L);
 
-            SLURMSSHJob job = SLURMSSHJob.builder().name("test").executable(new File("/bin/hostname")).hostCount(1)
-                    .numberOfProcessors(1).project("TCGA").queueName("batch").output(new File("test.out"))
-                    .error(new File("test.err")).build();
+            SLURMSSHJob job = SLURMSSHJob.builder().name("test").executable(Paths.get("/bin/hostname")).hostCount(1)
+                    .numberOfProcessors(1).project("TCGA").queueName("batch").output(Paths.get("test.out"))
+                    .error(Paths.get("test.err")).build();
 
-            job = new SLURMSSHSubmitCallable(site, job, new File("/tmp")).call();
+            job = new SLURMSSHSubmitCallable(site, job, Paths.get("/tmp")).call();
             System.out.println(job.getId());
         } catch (Exception e) {
             e.printStackTrace();

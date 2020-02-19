@@ -1,6 +1,7 @@
 package org.renci.jlrm.pbs.ssh;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.Set;
 import java.util.concurrent.Executors;
 
@@ -23,11 +24,11 @@ public class PBSSSHFactoryTest {
             site.setSubmitHost("br0.renci.org");
             site.setUsername("mapseq");
 
-            PBSSSHJob job = PBSSSHJob.builder().name("test").executable(new File("/bin/hostname")).hostCount(1)
-                    .numberOfProcessors(1).project("RENCI").queueName("serial").output(new File("test.out"))
-                    .error(new File("test.err")).build();
+            PBSSSHJob job = PBSSSHJob.builder().name("test").executable(Paths.get("/bin/hostname")).hostCount(1)
+                    .numberOfProcessors(1).project("RENCI").queueName("serial").output(Paths.get("test.out"))
+                    .error(Paths.get("test.err")).build();
 
-            job = Executors.newSingleThreadExecutor().submit(new PBSSSHSubmitCallable(site, job, new File("/tmp")))
+            job = Executors.newSingleThreadExecutor().submit(new PBSSSHSubmitCallable(site, job, Paths.get("/tmp")))
                     .get();
             System.out.println(job.getId());
         } catch (Exception e) {

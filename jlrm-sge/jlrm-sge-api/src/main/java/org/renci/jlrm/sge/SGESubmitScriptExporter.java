@@ -1,8 +1,10 @@
 package org.renci.jlrm.sge;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,20 +18,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SGESubmitScriptExporter<T extends SGEJob> implements Callable<T> {
 
-    private File workDir;
+    private Path workDir;
 
     private T job;
 
-    public SGESubmitScriptExporter(File workDir, T job) {
+    public SGESubmitScriptExporter(Path workDir, T job) {
         super();
         this.workDir = workDir;
         this.job = job;
     }
 
     public T call() throws Exception {
-        File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
-        log.info("writing: {}", submitFile.getAbsolutePath());
-        try (FileWriter submitFileWriter = new FileWriter(submitFile)) {
+        Path submitFile = Paths.get(workDir.toAbsolutePath().toString(), String.format("%s.sub", job.getName()));
+        log.info("writing: {}", submitFile.toAbsolutePath().toString());
+        try (BufferedWriter submitFileWriter = Files.newBufferedWriter(submitFile)) {
 
             submitFileWriter.write("#!/bin/bash\n\n");
             submitFileWriter.write("set -e\n\n");
@@ -49,12 +51,14 @@ public class SGESubmitScriptExporter<T extends SGEJob> implements Callable<T> {
                 submitFileWriter.write(String.format("#$ -l mf=%s%n", job.getMemory()));
             }
             submitFileWriter.write(String.format("#$ -i %s%n", "/dev/null"));
-            job.setOutput(new File(String.format("%s/%s.out", workDir.getAbsolutePath(), job.getOutput().getName())));
-            job.setError(new File(String.format("%s/%s.err", workDir.getAbsolutePath(), job.getError().getName())));
-            submitFileWriter.write(String.format("#$ -o %s%n", job.getOutput().getAbsolutePath()));
-            submitFileWriter.write(String.format("#$ -e %s%n", job.getError().getAbsolutePath()));
+            job.setOutput(Paths.get(workDir.toAbsolutePath().toString(),
+                    String.format("%s.out", job.getOutput().getFileName().toString())));
+            job.setError(Paths.get(workDir.toAbsolutePath().toString(),
+                    String.format("%s.err", job.getError().getFileName().toString())));
+            submitFileWriter.write(String.format("#$ -o %s%n", job.getOutput().toAbsolutePath()));
+            submitFileWriter.write(String.format("#$ -e %s%n", job.getError().toAbsolutePath()));
             submitFileWriter.write(String.format("#$ -pe threads %d%n", job.getNumberOfProcessors()));
-            submitFileWriter.write(job.getExecutable().getAbsolutePath());
+            submitFileWriter.write(job.getExecutable().toAbsolutePath().toString());
             submitFileWriter.flush();
             job.setSubmitFile(submitFile);
         } catch (IOException e) {

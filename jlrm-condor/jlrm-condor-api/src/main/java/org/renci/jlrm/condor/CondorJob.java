@@ -1,6 +1,6 @@
 package org.renci.jlrm.condor;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -65,7 +65,7 @@ public class CondorJob extends Job {
             ClassAdvertisementFactory.CLASS_AD_KEY_REQUIREMENTS, ClassAdvertisementType.EXPRESSION);
 
     @Builder
-    public CondorJob(String id, String name, File executable, File submitFile, File output, File error,
+    public CondorJob(String id, String name, Path executable, Path submitFile, Path output, Path error,
             Integer numberOfProcessors, String memory, String disk, long duration, TimeUnit durationTimeUnit,
             Integer cluster, Integer jobId, Integer retry, String preScript, String postScript, String siteName,
             String initialDirectory, Integer priority, Set<ClassAdvertisement> classAdvertisments,

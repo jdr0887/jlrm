@@ -1,9 +1,10 @@
 package org.renci.jlrm.slurm.ssh;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.lang3.StringUtils;
@@ -21,14 +22,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SLURMSubmitScriptExporter implements Callable<SLURMSSHJob> {
 
-    private File workDir;
+    private Path workDir;
 
     private SLURMSSHJob job;
 
     public SLURMSSHJob call() throws IOException {
-        File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
-        log.info("writing: {}", submitFile.getAbsolutePath());
-        try (FileWriter fw = new FileWriter(submitFile); BufferedWriter bw = new BufferedWriter(fw)) {
+        Path submitFile = Paths.get(workDir.toAbsolutePath().toString(), String.format("%s.sub", job.getName()));
+        log.info("writing: {}", submitFile.toAbsolutePath().toString());
+        try (BufferedWriter bw = Files.newBufferedWriter(submitFile)) {
 
             bw.write("#!/bin/bash\n\n");
             bw.write("set -e\n\n");
@@ -52,13 +53,13 @@ public class SLURMSubmitScriptExporter implements Callable<SLURMSSHJob> {
 
             bw.write(String.format("#SBATCH -i %s%n", "/dev/null"));
 
-            bw.write(String.format("#SBATCH -o %s%n", job.getOutput().getAbsolutePath()));
-            bw.write(String.format("#SBATCH -e %s%n", job.getError().getAbsolutePath()));
+            bw.write(String.format("#SBATCH -o %s%n", job.getOutput().toAbsolutePath().toString()));
+            bw.write(String.format("#SBATCH -e %s%n", job.getError().toAbsolutePath().toString()));
 
             bw.write(String.format("#SBATCH -N %d%n", job.getHostCount()));
             bw.write(String.format("#SBATCH -n %d%n", job.getNumberOfProcessors()));
 
-            bw.write(job.getExecutable().getAbsolutePath());
+            bw.write(job.getExecutable().toAbsolutePath().toString());
 
             bw.flush();
 

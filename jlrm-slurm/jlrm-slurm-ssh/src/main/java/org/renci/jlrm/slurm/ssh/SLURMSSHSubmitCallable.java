@@ -1,8 +1,10 @@
 package org.renci.jlrm.slurm.ssh;
 
-import java.io.File;
 import java.io.LineNumberReader;
 import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -32,7 +34,7 @@ public class SLURMSSHSubmitCallable implements Callable<SLURMSSHJob> {
 
     private SLURMSSHJob job;
 
-    private File submitDir;
+    private Path submitDir;
 
     @Override
     public SLURMSSHJob call() throws Exception {
@@ -47,11 +49,9 @@ public class SLURMSSHSubmitCallable implements Callable<SLURMSSHJob> {
             String remoteWorkDir = String.format("%s/%s", remoteHome, remoteWorkDirSuffix);
             log.info("remoteWorkDir: {}", remoteWorkDir);
 
-            File tmpDir = new File(System.getProperty("java.io.tmpdir"));
-            File myDir = new File(tmpDir, System.getProperty("user.name"));
-            File localWorkDir = new File(myDir, UUID.randomUUID().toString());
-            localWorkDir.mkdirs();
-            log.info("localWorkDir: {}", localWorkDir.getAbsolutePath());
+            Path localWorkDir = Paths.get(System.getProperty("java.io.tmpdir"), System.getProperty("user.name"), UUID.randomUUID().toString());
+            Files.createDirectories(localWorkDir);
+            log.info("localWorkDir: {}", localWorkDir.toAbsolutePath().toString());
 
             this.job = Executors.newSingleThreadExecutor()
                     .submit(new SLURMSubmitScriptRemoteExporter(localWorkDir, remoteWorkDir, this.job)).get();
@@ -60,7 +60,7 @@ public class SLURMSSHSubmitCallable implements Callable<SLURMSSHJob> {
                     this.job.getExecutable(), this.job.getTransferInputs(), this.job.getInputFiles(),
                     job.getSubmitFile());
 
-            command = String.format("sbatch %s/%s", remoteWorkDir, job.getSubmitFile().getName());
+            command = String.format("sbatch %s/%s", remoteWorkDir, job.getSubmitFile().getFileName().toString());
             String submitOutput = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
 
             try (StringReader sr = new StringReader(submitOutput); LineNumberReader lnr = new LineNumberReader(sr)) {

@@ -56,7 +56,7 @@ public class SLURMLookupStatusCallable implements Callable<Set<JobStatusInfo>> {
 
         try {
 
-            CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
+            CommandInput input = new CommandInput(command, job.getSubmitFile().getParent().toFile());
             input.setExitImmediately(Boolean.FALSE);
             Executor executor = BashExecutor.getInstance();
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));

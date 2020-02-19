@@ -3,6 +3,7 @@ package org.renci.jlrm.slurm.cli;
 import java.io.File;
 import java.io.LineNumberReader;
 import java.io.StringReader;
+import java.nio.file.Path;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
@@ -32,11 +33,11 @@ public class SLURMSubmitJobCallable implements Callable<SLURMJob> {
 
     private SLURMJob job;
 
-    private File submitDir;
+    private Path submitDir;
 
     private Boolean dryRun = Boolean.FALSE;
 
-    public SLURMSubmitJobCallable(SLURMJob job, File submitDir) {
+    public SLURMSubmitJobCallable(SLURMJob job, Path submitDir) {
         super();
         this.job = job;
         this.submitDir = submitDir;
@@ -51,7 +52,7 @@ public class SLURMSubmitJobCallable implements Callable<SLURMJob> {
                 submitDir = JLRMUtil.createSubmitDirectory(job.getProject());
             }
 
-            File submitScript = Executors.newSingleThreadExecutor()
+            Path submitScript = Executors.newSingleThreadExecutor()
                     .submit(new SLURMSubmitScriptExporter(submitDir, job)).get();
             this.job.setSubmitFile(submitScript);
 
@@ -59,9 +60,9 @@ public class SLURMSubmitJobCallable implements Callable<SLURMJob> {
                 return this.job;
             }
 
-            String command = String.format("sbatch %s", job.getSubmitFile().getAbsolutePath());
+            String command = String.format("sbatch %s", job.getSubmitFile().toAbsolutePath().toString());
 
-            CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
+            CommandInput input = new CommandInput(command, job.getSubmitFile().getParent().toFile());
             input.setExitImmediately(Boolean.FALSE);
             Executor executor = BashExecutor.getInstance();
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));

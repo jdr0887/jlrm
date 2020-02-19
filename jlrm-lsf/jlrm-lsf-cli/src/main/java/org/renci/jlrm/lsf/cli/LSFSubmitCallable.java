@@ -3,6 +3,7 @@ package org.renci.jlrm.lsf.cli;
 import java.io.File;
 import java.io.LineNumberReader;
 import java.io.StringReader;
+import java.nio.file.Path;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
@@ -32,11 +33,11 @@ public class LSFSubmitCallable implements Callable<LSFJob> {
 
     private LSFJob job;
 
-    private File submitDir;
+    private Path submitDir;
 
     private Boolean dryRun = Boolean.FALSE;
 
-    public LSFSubmitCallable(LSFJob job, File submitDir) {
+    public LSFSubmitCallable(LSFJob job, Path submitDir) {
         super();
         this.job = job;
         this.submitDir = submitDir;
@@ -46,13 +47,13 @@ public class LSFSubmitCallable implements Callable<LSFJob> {
     public LSFJob call() throws Exception {
 
         try {
-            File workDir = JLRMUtil.createWorkDirectory(this.submitDir, job.getName());
+            Path workDir = JLRMUtil.createWorkDirectory(this.submitDir, job.getName());
 
             this.job = Executors.newSingleThreadExecutor().submit(new LSFSubmitScriptExporter<LSFJob>(workDir, job))
                     .get();
 
-            String command = String.format("bsub < %s", job.getSubmitFile().getAbsolutePath());
-            CommandInput input = new CommandInput(command, job.getSubmitFile().getParentFile());
+            String command = String.format("bsub < %s", job.getSubmitFile().toAbsolutePath().toString());
+            CommandInput input = new CommandInput(command, job.getSubmitFile().getParent().toFile());
             input.setExitImmediately(Boolean.FALSE);
             Executor executor = BashExecutor.getInstance();
             CommandOutput output = executor.execute(input, new File(System.getProperty("user.home"), ".bashrc"));

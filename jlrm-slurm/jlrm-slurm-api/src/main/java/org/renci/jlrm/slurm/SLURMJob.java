@@ -1,6 +1,7 @@
 package org.renci.jlrm.slurm;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.Range;
@@ -35,7 +36,7 @@ public class SLURMJob extends Job {
     private Integer maxRunning;
 
     @Builder
-    public SLURMJob(String id, String name, File executable, File submitFile, File output, File error,
+    public SLURMJob(String id, String name, Path executable, Path submitFile, Path output, Path error,
             Integer numberOfProcessors, String memory, String disk, long duration, TimeUnit durationTimeUnit,
             String queueName, String project, Long wallTime, Integer hostCount, String constraint, Range<Integer> array,
             Integer maxRunning) {

@@ -1,6 +1,6 @@
 package org.renci.jlrm.sge.ssh;
 
-import java.io.File;
+import java.nio.file.Paths;
 import java.util.Set;
 
 import org.junit.Test;
@@ -26,12 +26,12 @@ public class SGESSHFactoryTest {
         queue.setName("all.q");
         queue.setRunTime(2880L);
 
-        SGESSHJob job = SGESSHJob.builder().name("test").executable(new File("/bin/hostname")).hostCount(1)
-                .numberOfProcessors(1).project("TCGA").queueName("all.q").output(new File("test.out"))
-                .error(new File("test.err")).build();
+        SGESSHJob job = SGESSHJob.builder().name("test").executable(Paths.get("/bin/hostname")).hostCount(1)
+                .numberOfProcessors(1).project("TCGA").queueName("all.q").output(Paths.get("test.out"))
+                .error(Paths.get("test.err")).build();
 
         try {
-            job = new SGESSHSubmitCallable(site, job, new File("/tmp")).call();
+            job = new SGESSHSubmitCallable(site, job, Paths.get("/tmp")).call();
             System.out.println(job.getId());
         } catch (JLRMException e) {
             e.printStackTrace();

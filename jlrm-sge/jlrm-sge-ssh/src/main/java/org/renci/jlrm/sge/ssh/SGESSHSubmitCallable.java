@@ -1,9 +1,11 @@
 package org.renci.jlrm.sge.ssh;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -14,24 +16,25 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.renci.jlrm.JLRMException;
 import org.renci.jlrm.Site;
 import org.renci.jlrm.commons.ssh.SSHConnectionUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+@NoArgsConstructor
+@Getter
+@Setter
+@Slf4j
 public class SGESSHSubmitCallable implements Callable<SGESSHJob> {
-
-    private static final Logger logger = LoggerFactory.getLogger(SGESSHSubmitCallable.class);
 
     private Site site;
 
     private SGESSHJob job;
 
-    private File submitDir;
+    private Path submitDir;
 
-    public SGESSHSubmitCallable() {
-        super();
-    }
-
-    public SGESSHSubmitCallable(Site site, SGESSHJob job, File submitDir) {
+    public SGESSHSubmitCallable(Site site, SGESSHJob job, Path submitDir) {
         super();
         this.site = site;
         this.job = job;
@@ -49,15 +52,14 @@ public class SGESSHSubmitCallable implements Callable<SGESSHJob> {
 
             String remoteHome = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
 
-            logger.info("remoteHome: {}", remoteHome);
+            log.info("remoteHome: {}", remoteHome);
             String remoteWorkDir = String.format("%s/%s", remoteHome, remoteWorkDirSuffix);
-            logger.info("remoteWorkDir: {}", remoteWorkDir);
+            log.info("remoteWorkDir: {}", remoteWorkDir);
 
-            File tmpDir = new File(System.getProperty("java.io.tmpdir"));
-            File myDir = new File(tmpDir, System.getProperty("user.name"));
-            File localWorkDir = new File(myDir, UUID.randomUUID().toString());
-            localWorkDir.mkdirs();
-            logger.info("localWorkDir: {}", localWorkDir.getAbsolutePath());
+            Path localWorkDir = Paths.get(System.getProperty("java.io.tmpdir"), System.getProperty("user.name"),
+                    UUID.randomUUID().toString());
+            Files.createDirectories(localWorkDir);
+            log.info("localWorkDir: {}", localWorkDir.toAbsolutePath().toString());
 
             SGESubmitScriptExporter<SGESSHJob> exporter = new SGESubmitScriptExporter<SGESSHJob>();
             this.job = exporter.export(localWorkDir, remoteWorkDir, this.job);
@@ -66,7 +68,7 @@ public class SGESSHSubmitCallable implements Callable<SGESSHJob> {
                     this.job.getExecutable(), this.job.getTransferInputs(), this.job.getInputFiles(),
                     job.getSubmitFile());
 
-            String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getName());
+            String targetFile = String.format("%s/%s", remoteWorkDir, job.getSubmitFile().getFileName().toString());
 
             command = String.format("qsub %s", targetFile);
             String submitOutput = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
@@ -75,7 +77,7 @@ public class SGESSHSubmitCallable implements Callable<SGESSHJob> {
             String line;
             while ((line = lnr.readLine()) != null) {
                 if (line.indexOf("submitted") != -1) {
-                    logger.info("line = " + line);
+                    log.info("line = " + line);
                     Pattern pattern = Pattern.compile("^.+job (\\d+) .+has been submitted$");
                     Matcher matcher = pattern.matcher(line);
                     if (!matcher.matches()) {
@@ -87,34 +89,10 @@ public class SGESSHSubmitCallable implements Callable<SGESSHJob> {
                 }
             }
         } catch (IOException e) {
-            logger.error("IOException: {}", e.getMessage());
+            log.error("IOException: {}", e.getMessage());
             throw new JLRMException("IOException: " + e.getMessage());
         }
         return job;
-    }
-
-    public Site getSite() {
-        return site;
-    }
-
-    public void setSite(Site site) {
-        this.site = site;
-    }
-
-    public SGESSHJob getJob() {
-        return job;
-    }
-
-    public void setJob(SGESSHJob job) {
-        this.job = job;
-    }
-
-    public File getSubmitDir() {
-        return submitDir;
-    }
-
-    public void setSubmitDir(File submitDir) {
-        this.submitDir = submitDir;
     }
 
 }

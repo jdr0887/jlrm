@@ -1,7 +1,9 @@
 package org.renci.jlrm.slurm;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.lang3.Range;
@@ -18,18 +20,18 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Setter
 @Slf4j
-public class SLURMSubmitScriptExporter implements Callable<File> {
+public class SLURMSubmitScriptExporter implements Callable<Path> {
 
-    private File workDir;
+    private Path workDir;
 
     private SLURMJob job;
 
     @Override
-    public File call() throws Exception {
+    public Path call() throws Exception {
 
-        File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
-        log.info("writing: {}", submitFile.getAbsolutePath());
-        try (FileWriter submitFileWriter = new FileWriter(submitFile)) {
+        Path submitFile = Paths.get(workDir.toAbsolutePath().toString(), String.format("%s.sub", job.getName()));
+        log.info("writing: {}", submitFile.toAbsolutePath().toString());
+        try (BufferedWriter submitFileWriter = Files.newBufferedWriter(submitFile)) {
 
             submitFileWriter.write("#!/bin/bash\n\n");
             submitFileWriter.write(String.format("#SBATCH -J %s%n", job.getName()));
@@ -71,13 +73,13 @@ public class SLURMSubmitScriptExporter implements Callable<File> {
 
             submitFileWriter.write(String.format("#SBATCH -i %s%n", "/dev/null"));
 
-            submitFileWriter.write(String.format("#SBATCH -o %s%n", job.getOutput().getAbsolutePath()));
-            submitFileWriter.write(String.format("#SBATCH -e %s%n", job.getError().getAbsolutePath()));
+            submitFileWriter.write(String.format("#SBATCH -o %s%n", job.getOutput().toAbsolutePath().toString()));
+            submitFileWriter.write(String.format("#SBATCH -e %s%n", job.getError().toAbsolutePath().toString()));
 
             submitFileWriter.write(String.format("#SBATCH -N %d%n", job.getHostCount()));
             submitFileWriter.write(String.format("#SBATCH -n %d%n", job.getNumberOfProcessors()));
 
-            submitFileWriter.write(job.getExecutable().getAbsolutePath());
+            submitFileWriter.write(job.getExecutable().toAbsolutePath().toString());
 
             submitFileWriter.flush();
 

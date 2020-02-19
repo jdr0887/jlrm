@@ -1,8 +1,11 @@
 package org.renci.jlrm.pbs.ssh;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,13 +19,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PBSSubmitScriptExporter<T extends PBSSSHJob> implements Callable<T> {
 
-    private File workDir;
+    private Path workDir;
 
     private String remoteWorkDir;
 
     private T job;
 
-    public PBSSubmitScriptExporter(File workDir, String remoteWorkDir, T job) {
+    public PBSSubmitScriptExporter(Path workDir, String remoteWorkDir, T job) {
         super();
         this.workDir = workDir;
         this.remoteWorkDir = remoteWorkDir;
@@ -31,9 +34,9 @@ public class PBSSubmitScriptExporter<T extends PBSSSHJob> implements Callable<T>
 
     @Override
     public T call() throws Exception {
-        File submitFile = new File(workDir, String.format("%s.sub", job.getName()));
-        log.info("writing: {}", submitFile.getAbsolutePath());
-        try (FileWriter submitFileWriter = new FileWriter(submitFile)) {
+        Path submitFile = Paths.get(workDir.toAbsolutePath().toString(), String.format("%s.sub", job.getName()));
+        log.info("writing: {}", submitFile.toAbsolutePath().toString());
+        try (BufferedWriter submitFileWriter = Files.newBufferedWriter(submitFile)) {
             submitFileWriter.write("#!/bin/bash\n\n");
             submitFileWriter.write(String.format("#PBS -N %s%n", job.getName()));
             if (StringUtils.isNotEmpty(job.getQueueName())) {
@@ -48,18 +51,18 @@ public class PBSSubmitScriptExporter<T extends PBSSSHJob> implements Callable<T>
             if (job.getMemory() != null) {
                 submitFileWriter.write(String.format("#PBS -l mem=%smb%n", job.getMemory()));
             }
-            job.setOutput(new File(String.format("%s/%s.out", remoteWorkDir, job.getOutput().getName())));
-            job.setError(new File(String.format("%s/%s.err", remoteWorkDir, job.getError().getName())));
-            submitFileWriter.write(String.format("#PBS -o %s%n", job.getOutput().getAbsolutePath()));
-            submitFileWriter.write(String.format("#PBS -e %s%n", job.getError().getAbsolutePath()));
+            job.setOutput(Paths.get(remoteWorkDir, String.format("%s.out", job.getOutput().getFileName().toString())));
+            job.setError(Paths.get(remoteWorkDir, String.format("%s.err", job.getError().getFileName().toString())));
+            submitFileWriter.write(String.format("#PBS -o %s%n", job.getOutput().toAbsolutePath().toString()));
+            submitFileWriter.write(String.format("#PBS -e %s%n", job.getError().toAbsolutePath().toString()));
             if (job.getHostCount() != null && job.getNumberOfProcessors() != null) {
                 submitFileWriter.write(
                         String.format("#PBS -l nodes=%s:ppn=%s%n", job.getHostCount(), job.getNumberOfProcessors()));
             }
             if (job.getTransferExecutable()) {
-                submitFileWriter.write(remoteWorkDir + File.separator + job.getExecutable().getName());
+                submitFileWriter.write(remoteWorkDir + File.separator + job.getExecutable().getFileName().toString());
             } else {
-                submitFileWriter.write(job.getExecutable().getAbsolutePath());
+                submitFileWriter.write(job.getExecutable().toAbsolutePath().toString());
             }
             submitFileWriter.flush();
             job.setSubmitFile(submitFile);
