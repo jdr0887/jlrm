@@ -2,6 +2,7 @@ package org.renci.jlrm.slurm.ssh;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -17,10 +18,10 @@ import lombok.Setter;
 import lombok.ToString;
 
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true, exclude = { "array" })
 @Getter
 @Setter
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = { "array" })
 public class SLURMSSHJob extends Job {
 
     private static final long serialVersionUID = -4585163763638553836L;
@@ -56,9 +57,9 @@ public class SLURMSSHJob extends Job {
         this.hostCount = hostCount;
         this.constraint = constraint;
         this.array = array;
-        this.transferInputs = transferInputs;
-        this.transferExecutable = transferExecutable;
-        this.inputFiles = inputFiles;
+        this.transferInputs = transferInputs != null ? transferInputs : Boolean.FALSE;
+        this.transferExecutable = transferExecutable != null ? transferExecutable : Boolean.FALSE;
+        this.inputFiles = inputFiles != null ? inputFiles : new ArrayList<File>();
     }
 
 }

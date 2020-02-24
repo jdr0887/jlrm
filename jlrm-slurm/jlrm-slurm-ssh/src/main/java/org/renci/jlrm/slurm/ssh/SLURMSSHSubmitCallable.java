@@ -42,10 +42,12 @@ public class SLURMSSHSubmitCallable implements Callable<SLURMSSHJob> {
         try {
             String remoteWorkDirSuffix = String.format(".jlrm/jobs/%s/%s",
                     DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.format(new Date()), UUID.randomUUID().toString());
+            
             String command = String.format("(mkdir -p $HOME/%s && echo $HOME)", remoteWorkDirSuffix);
+            
             String remoteHome = SSHConnectionUtil.execute(command, site.getUsername(), getSite().getSubmitHost());
-
             log.info("remoteHome: {}", remoteHome);
+            
             String remoteWorkDir = String.format("%s/%s", remoteHome, remoteWorkDirSuffix);
             log.info("remoteWorkDir: {}", remoteWorkDir);
 

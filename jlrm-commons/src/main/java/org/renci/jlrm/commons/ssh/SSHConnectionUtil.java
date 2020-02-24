@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -102,14 +101,9 @@ public class SSHConnectionUtil {
                 log.warn("stderr: {}", new String(err.toByteArray()));
             }
 
-        } catch (InterruptedException e) {
-            // e.printStackTrace();
-        } catch (JSchException e) {
-            log.error("JSchException", e);
-            throw new JLRMException("JSchException: " + e.getMessage());
-        } catch (IOException e) {
-            log.error("IOException", e);
-            throw new JLRMException("IOException: " + e.getMessage());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new JLRMException(e.getMessage());
         } finally {
 
             if (execChannel != null) {
@@ -162,7 +156,7 @@ public class SSHConnectionUtil {
             }
 
         } catch (Exception e) {
-            log.error("Exception", e);
+            log.error(e.getMessage(), e);
             throw new JLRMException(e);
         } finally {
             if (sftpChannel != null) {
@@ -221,15 +215,9 @@ public class SSHConnectionUtil {
                     ChannelSftp.OVERWRITE);
             sftpChannel.chmod(0644, submitFile.getFileName().toString());
 
-        } catch (FileNotFoundException e) {
-            log.error("FileNotFoundException", e);
-            throw new JLRMException("FileNotFoundException: " + e.getMessage());
-        } catch (JSchException e) {
-            log.error("JSchException", e);
-            throw new JLRMException("JSchException: " + e.getMessage());
-        } catch (SftpException e) {
-            log.error("SftpException", e);
-            throw new JLRMException("SftpException: " + e.getMessage());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new JLRMException(e.getMessage());
         } finally {
             if (sftpChannel != null) {
                 sftpChannel.disconnect();

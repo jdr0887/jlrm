@@ -22,15 +22,15 @@ public class SLURMSSHFactoryTest {
 
         try {
             Site site = new Site();
-            site.setSubmitHost("ht0.renci.org");
-            site.setUsername("mapseq");
+            site.setSubmitHost("ht4.renci.org");
+            site.setUsername("jdr0887");
 
             Queue queue = new Queue();
             queue.setName("batch");
             queue.setRunTime(2880L);
 
             SLURMSSHJob job = SLURMSSHJob.builder().name("test").executable(Paths.get("/bin/hostname")).hostCount(1)
-                    .numberOfProcessors(1).project("TCGA").queueName("batch").output(Paths.get("test.out"))
+                    .numberOfProcessors(1).project("CHAT").queueName("batch").output(Paths.get("test.out"))
                     .error(Paths.get("test.err")).build();
 
             job = new SLURMSSHSubmitCallable(site, job, Paths.get("/tmp")).call();

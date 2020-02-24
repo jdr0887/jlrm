@@ -70,8 +70,8 @@ public class SLURMSubmitScriptRemoteExporter implements Callable<SLURMSSHJob> {
 
             bw.write(String.format("#SBATCH -i %s%n", "/dev/null"));
 
-            bw.write(String.format("#SBATCH -o %s%n", job.getOutput().toAbsolutePath().toString()));
-            bw.write(String.format("#SBATCH -e %s%n", job.getError().toAbsolutePath().toString()));
+            bw.write(String.format("#SBATCH -o %s/%s%n", remoteWorkDir, job.getOutput().getFileName().toString()));
+            bw.write(String.format("#SBATCH -e %s/%s%n", remoteWorkDir, job.getError().getFileName().toString()));
 
             if (job.getHostCount() != null) {
                 bw.write(String.format("#SBATCH -N %d%n", job.getHostCount()));
