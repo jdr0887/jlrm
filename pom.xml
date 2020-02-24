@@ -49,7 +49,7 @@
       </dependency>
       <dependency>
 	<groupId>org.renci.osgi.bundles</groupId>
-	<artifactId>jsch-0.1.54-bundle</artifactId>
+	<artifactId>jsch-0.1.55-bundle</artifactId>
 	<version>0.0.1</version>
       </dependency>
       <dependency>
