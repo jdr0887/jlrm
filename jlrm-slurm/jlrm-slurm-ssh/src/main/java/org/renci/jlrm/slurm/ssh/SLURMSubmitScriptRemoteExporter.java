@@ -48,12 +48,18 @@ public class SLURMSubmitScriptRemoteExporter implements Callable<SLURMSSHJob> {
 
             if (job.getArray() != null) {
                 Range<Integer> arrayRange = job.getArray();
+                String tmp = "#SBATCH --array=";
                 if (arrayRange.getMinimum().equals(arrayRange.getMaximum())) {
-                    bw.write(String.format("#SBATCH --array=%s%n", job.getArray().getMinimum()));
+                    tmp += job.getArray().getMinimum().toString();
                 } else {
-                    bw.write(String.format("#SBATCH --array=%s-%s%n", job.getArray().getMinimum(),
-                            job.getArray().getMaximum()));
+                    tmp += String.format("%s-%s", job.getArray().getMinimum(), job.getArray().getMaximum());
                 }
+
+                if (job.getMaxRunning() != null) {
+                    tmp += "%" + job.getMaxRunning();
+                }
+
+                bw.write(String.format("%s%n", tmp));
             }
 
             if (job.getWallTime() != null) {
