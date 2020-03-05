@@ -41,7 +41,7 @@ public class PBSSubmitScriptExporter<T extends PBSJob> implements Callable<T> {
                 submitFileWriter.write(String.format("#PBS -l walltime=%s:00%n", job.getWallTime()));
             }
             if (job.getMemory() != null) {
-                submitFileWriter.write(String.format("#PBS -l mem=%smb%n", job.getMemory()));
+                submitFileWriter.write(String.format("#PBS -l mem=%sGB%n", job.getMemory()));
             }
             job.setOutput(Paths.get(workDir.toAbsolutePath().toString(),
                     String.format("%s.out", job.getOutput().getFileName().toString())));

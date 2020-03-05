@@ -39,7 +39,7 @@ public class LSFSubmitScriptExporter<T extends LSFSSHJob> implements Callable<T>
             if (job.getWallTime() != null) {
                 submitFileWriter.write(String.format("#BSUB -W %s%n", job.getWallTime()));
             }
-            submitFileWriter.write(String.format("#BSUB -M %s%n", job.getMemory()));
+            submitFileWriter.write(String.format("#BSUB -M %sGB%n", job.getMemory()));
             submitFileWriter.write(String.format("#BSUB -i %s%n", "/dev/null"));
             job.setOutput(Paths.get(workDir.toAbsolutePath().toString(),
                     String.format("%s.out", job.getOutput().getFileName().toString())));

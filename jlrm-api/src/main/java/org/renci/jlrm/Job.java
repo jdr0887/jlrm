@@ -46,7 +46,7 @@ public class Job implements Serializable {
 
     protected Integer numberOfProcessors = 1;
 
-    protected String memory = "2048";
+    protected Integer memory = 2; // in GB
 
     protected String disk;
 

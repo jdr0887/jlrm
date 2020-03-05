@@ -66,7 +66,7 @@ public class CondorJob extends Job {
 
     @Builder
     public CondorJob(String id, String name, Path executable, Path submitFile, Path output, Path error,
-            Integer numberOfProcessors, String memory, String disk, long duration, TimeUnit durationTimeUnit,
+            Integer numberOfProcessors, Integer memory, String disk, long duration, TimeUnit durationTimeUnit,
             Integer cluster, Integer jobId, Integer retry, String preScript, String postScript, String siteName,
             String initialDirectory, Integer priority, Set<ClassAdvertisement> classAdvertisments,
             ClassAdvertisement argumentsClassAd, ClassAdvertisement requirementsClassAd) {
@@ -250,13 +250,13 @@ public class CondorJob extends Job {
         return this;
     }
 
-    public CondorJob memory(String memory) {
+    public CondorJob memory(Integer memory) {
         this.memory = memory;
         ClassAdvertisement requestMemoryClassAd = new ClassAdvertisement(
                 ClassAdvertisementFactory.CLASS_AD_KEY_REQUEST_MEMORY, ClassAdvertisementType.INTEGER);
         for (ClassAdvertisement classAd : this.classAdvertisments) {
             if (classAd.equals(requestMemoryClassAd)) {
-                classAd.setValue(memory.toString());
+                classAd.setValue(String.format("%sGB", memory.toString()));
                 break;
             }
         }

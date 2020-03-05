@@ -47,7 +47,7 @@ public class LSFSubmitScriptRemoteExporter<T extends LSFSSHJob> implements Calla
                 submitFileWriter.write(String.format("#BSUB -W %d%n", job.getWallTime()));
             }
             if (job.getMemory() != null) {
-                submitFileWriter.write(String.format("#BSUB -M %s%n", job.getMemory()));
+                submitFileWriter.write(String.format("#BSUB -M %sGB%n", job.getMemory()));
             }
             submitFileWriter.write(String.format("#BSUB -i %s%n", "/dev/null"));
             job.setOutput(Paths.get(remoteWorkDir, String.format("%s.out", job.getOutput().getFileName().toString())));

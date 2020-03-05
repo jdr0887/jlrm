@@ -48,7 +48,7 @@ public class SGESubmitScriptExporter<T extends SGEJob> implements Callable<T> {
                         (job.getWallTime() % 60)));
             }
             if (job.getMemory() != null) {
-                submitFileWriter.write(String.format("#$ -l mf=%s%n", job.getMemory()));
+                submitFileWriter.write(String.format("#$ -l mf=%sGB%n", job.getMemory()));
             }
             submitFileWriter.write(String.format("#$ -i %s%n", "/dev/null"));
             job.setOutput(Paths.get(workDir.toAbsolutePath().toString(),

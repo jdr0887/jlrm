@@ -40,7 +40,7 @@ public class SGESubmitScriptExporter<T extends SGESSHJob> {
             }
 
             if (job.getMemory() != null) {
-                bw.write(String.format("#$ -l mf=%s%n", job.getMemory()));
+                bw.write(String.format("#$ -l mf=%sGB%n", job.getMemory()));
             }
 
             bw.write(String.format("#$ -i %s%n", "/dev/null"));
@@ -97,7 +97,7 @@ public class SGESubmitScriptExporter<T extends SGESSHJob> {
             }
 
             if (job.getMemory() != null) {
-                bw.write(String.format("#$ -l mf=%s%n", job.getMemory()));
+                bw.write(String.format("#$ -l mf=%sGB%n", job.getMemory()));
             }
             bw.write(String.format("#$ -i %s%n", "/dev/null"));
 

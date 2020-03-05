@@ -32,7 +32,7 @@ public class JobTest {
     public void multiArgumentTest() {
 
         CondorJob job = CondorJob.builder().name(String.format("%s_%d", "GATKDepthOfCoverageCLI", 1)).retry(3)
-                .memory("2GB").numberOfProcessors(8).siteName("Kure").initialDirectory("/tmp")
+                .memory(2).numberOfProcessors(8).siteName("Kure").initialDirectory("/tmp")
                 .executable(Paths.get("$HOME/bin/run-mapseq.sh")).build();
 
         // condor attributes

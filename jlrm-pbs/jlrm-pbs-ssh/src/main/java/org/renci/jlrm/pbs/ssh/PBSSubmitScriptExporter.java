@@ -49,7 +49,7 @@ public class PBSSubmitScriptExporter<T extends PBSSSHJob> implements Callable<T>
                 submitFileWriter.write(String.format("#PBS -l walltime=%s:00%n", job.getWallTime()));
             }
             if (job.getMemory() != null) {
-                submitFileWriter.write(String.format("#PBS -l mem=%smb%n", job.getMemory()));
+                submitFileWriter.write(String.format("#PBS -l mem=%sGB%n", job.getMemory()));
             }
             job.setOutput(Paths.get(remoteWorkDir, String.format("%s.out", job.getOutput().getFileName().toString())));
             job.setError(Paths.get(remoteWorkDir, String.format("%s.err", job.getError().getFileName().toString())));

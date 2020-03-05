@@ -64,7 +64,7 @@ public class SLURMSubmitScriptExporter implements Callable<Path> {
             }
 
             if (job.getMemory() != null) {
-                submitFileWriter.write(String.format("#SBATCH --mem %s%n", job.getMemory()));
+                submitFileWriter.write(String.format("#SBATCH --mem %sGB%n", job.getMemory()));
             }
 
             if (StringUtils.isNotEmpty(job.getConstraint())) {

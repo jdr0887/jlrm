@@ -71,7 +71,7 @@ public class SLURMSubmitScriptRemoteExporter implements Callable<SLURMSSHJob> {
             }
 
             if (job.getMemory() != null) {
-                bw.write(String.format("#SBATCH --mem=%s%n", job.getMemory()));
+                bw.write(String.format("#SBATCH --mem=%sGB%n", job.getMemory()));
             }
 
             bw.write(String.format("#SBATCH -i %s%n", "/dev/null"));

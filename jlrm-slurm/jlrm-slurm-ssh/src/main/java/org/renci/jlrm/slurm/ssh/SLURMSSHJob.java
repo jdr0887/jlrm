@@ -48,7 +48,7 @@ public class SLURMSSHJob extends Job {
 
     @Builder
     public SLURMSSHJob(String id, String name, Path executable, Path submitFile, Path output, Path error,
-            Integer numberOfProcessors, String memory, String disk, long duration, TimeUnit durationTimeUnit,
+            Integer numberOfProcessors, Integer memory, String disk, long duration, TimeUnit durationTimeUnit,
             String queueName, String project, Long wallTime, Integer hostCount, String constraint, Range<Integer> array,
             Integer maxRunning, Boolean transferInputs, Boolean transferExecutable, List<File> inputFiles) {
         super(id, name, executable, submitFile, output, error, numberOfProcessors, memory, disk, duration,
