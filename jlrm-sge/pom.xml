@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.renci</groupId>
     <artifactId>jlrm</artifactId>
-    <version>0.4.34-SNAPSHOT</version>
+    <version>0.4.34</version>
   </parent>
   <name>jLRM :: SGE</name>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.renci.jlrm</groupId>
   <artifactId>jlrm-sge</artifactId>
-  <version>0.4.34-SNAPSHOT</version>
+  <version>0.4.34</version>
   <packaging>pom</packaging>
   <properties>
     <maven.site.plugin.skip>true</maven.site.plugin.skip>        
